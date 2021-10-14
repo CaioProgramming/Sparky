@@ -1,0 +1,4 @@
+
+rootProject.name = "Sparky"
+include ':app'
+include ':core'

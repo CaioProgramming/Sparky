@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "146683019199",
+    "project_id": "flowfy-podcast",
+    "storage_bucket": "flowfy-podcast.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:146683019199:android:978f99a2810b775212ab0a",
+        "android_client_info": {
+          "package_name": "com.silent.sparky"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "146683019199-q4ib73hhm93tv1idacnbb8q0hqp08rle.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.silent.sparky",
+            "certificate_hash": "e52ea948ad8eb3370c325822e60b1550052192ac"
+          }
+        },
+        {
+          "client_id": "146683019199-vgp51g5amarbkhacaau3p4vk9uu62fh7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgmxVYMiENQomcYJzEnxTztWB0gEXGSCQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "146683019199-vgp51g5amarbkhacaau3p4vk9uu62fh7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
