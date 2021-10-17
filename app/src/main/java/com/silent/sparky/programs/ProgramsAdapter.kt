@@ -5,11 +5,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.silent.core.Program
+import com.silent.core.program.Program
 import com.silent.core.databinding.ProgramIconLayoutBinding
 import com.silent.sparky.R
 
-class ProgramsAdapter(val programs: List<Program>): RecyclerView.Adapter<ProgramsAdapter.ProgramViewHolder>() {
+class ProgramsAdapter(val programs: List<Program>,
+                      private val onSelectProgram: (Program) -> Unit): RecyclerView.Adapter<ProgramsAdapter.ProgramViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProgramViewHolder {
         val programIconLayoutBinding: ProgramIconLayoutBinding = DataBindingUtil.inflate(
@@ -31,6 +32,9 @@ class ProgramsAdapter(val programs: List<Program>): RecyclerView.Adapter<Program
             programs[adapterPosition].run {
                 Glide.with(context).load(iconURL).into(programIconLayoutBinding.programIcon)
                 programIconLayoutBinding.programName.text = name
+                programIconLayoutBinding.programIcon.setOnClickListener {
+                    onSelectProgram(this)
+                }
             }
         }
 

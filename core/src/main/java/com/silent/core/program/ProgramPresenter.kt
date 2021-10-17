@@ -1,6 +1,5 @@
-package com.silent.core
+package com.silent.core.program
 
-import com.silent.ilustriscore.core.model.BaseModel
 import com.silent.ilustriscore.core.presenter.BasePresenter
 import com.silent.ilustriscore.core.view.BaseView
 

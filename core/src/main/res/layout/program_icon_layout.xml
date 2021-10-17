@@ -11,11 +11,12 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/program_icon"
+            android:stateListAnimator="@animator/list_animator"
             app:civ_border_width="2dp"
             app:civ_border_color="?android:textColorPrimary"
             app:civ_circle_background_color="@color/md_black"
             android:src="@drawable/ic_round_podcasts_24"
-            style="@style/Theme.ProgramIcon" />
+            style="@style/Theme.Sparky.ProgramIcon" />
 
         <TextView
             android:id="@+id/program_name"

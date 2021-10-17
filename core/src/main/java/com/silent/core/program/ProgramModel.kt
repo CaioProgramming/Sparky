@@ -1,4 +1,4 @@
-package com.silent.core
+package com.silent.core.program
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QueryDocumentSnapshot
