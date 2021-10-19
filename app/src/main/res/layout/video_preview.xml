@@ -11,24 +11,30 @@
         android:id="@+id/video_card"
         app:cardBackgroundColor="@color/black"
         android:stateListAnimator="@animator/list_animator"
-        app:cardCornerRadius="@dimen/radius_small_5dp"
-        app:cardElevation="0dp"
+        app:cardCornerRadius="0dp"
         app:strokeWidth="1dp"
-        app:strokeColor="?android:textColorPrimary"
-        android:layout_margin="@dimen/margin_default_10dp"
-        android:layout_width="180dp"
-        android:layout_height="180dp">
+        app:strokeColor="@color/material_grey800"
+        android:layout_marginVertical="@dimen/margin_default_10dp"
+        android:layout_marginStart="@dimen/margin_small_4dp"
+        android:layout_marginEnd="@dimen/margin_big_16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/video_thumb"
-            android:scaleType="fitCenter"
+            android:scaleType="centerCrop"
+            android:background="@color/black"
             tools:src="@drawable/ic_baseline_wechat_24"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="200dp" />
+
+        <View
+            android:background="@drawable/faded_gradient"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"/>
 
         <LinearLayout
-            android:padding="@dimen/margin_default_10dp"
-            android:background="@drawable/faded_gradient"
+            android:padding="@dimen/padding_default_16dp"
             android:layout_gravity="bottom"
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -39,6 +45,7 @@
                 android:textColor="@color/white"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                 android:textStyle="bold"
+                android:maxLines="1"
                 tools:text="Flows podcre #1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

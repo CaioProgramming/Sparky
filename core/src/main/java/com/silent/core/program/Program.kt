@@ -7,4 +7,4 @@ data class Program(override var id: String = "",
                    var iconURL: String = "",
                    var hosts: List<String> = emptyList(),
                    var youtubeID: String = "",
-                   var instagram: String = ""): BaseBean(id)
+                   var cuts: String = ""): BaseBean(id)

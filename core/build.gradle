@@ -5,13 +5,15 @@ plugins {
 
 android {
     compileSdk 30
-
+    def apikeyPropertiesFile = rootProject.file("apikey.properties")
+    def apikeyProperties = new Properties()
+    apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
     defaultConfig {
         minSdk 26
         targetSdk 30
         versionCode 1
         versionName "1.0"
-
+        buildConfigField("String", "YOUTUBE_KEY", apikeyProperties['YOUTUBE_KEY'])
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
@@ -65,6 +67,7 @@ dependencies {
     api 'com.google.firebase:firebase-messaging:21.0.1'
     api 'com.google.firebase:firebase-crashlytics-ktx'
     api 'com.google.firebase:firebase-analytics-ktx'
+    api 'com.google.firebase:firebase-config'
 
     api 'com.squareup.retrofit2:retrofit:2.9.0'
     api 'com.squareup.okhttp3:logging-interceptor:4.9.2'

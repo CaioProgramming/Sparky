@@ -3,10 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-    </data>
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,14 +10,14 @@
 
         <com.google.android.material.appbar.AppBarLayout
             app:elevation="0dp"
-            app:expanded="false"
+            android:background="?android:colorBackground"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="300dp">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:contentScrim="?android:colorBackground"
+                app:contentScrim="@color/black"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <com.airbnb.lottie.LottieAnimationView
@@ -29,13 +25,14 @@
                     app:lottie_autoPlay="true"
                     app:lottie_rawRes="@raw/lightning"
                     app:lottie_colorFilter="?attr/colorPrimary"
-                    android:layout_marginBottom="?attr/actionBarSize"
                     android:layout_gravity="center"
-                    android:layout_width="300dp"
-                    android:layout_height="300dp" />
+                    android:layout_marginBottom="@dimen/margin_default_10dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp" />
 
                 <androidx.appcompat.widget.Toolbar
-                    android:layout_gravity="bottom"
+                    android:id="@+id/home_toolbar"
+                    android:layout_gravity="top"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize">
 
@@ -43,25 +40,39 @@
                         android:textStyle="italic"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/cabin_semibold"
+                        android:fontFamily="@font/kaushan_script"
                         android:text="@string/app_name"
                         android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
                 </androidx.appcompat.widget.Toolbar>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_gravity="bottom"
+                    android:id="@+id/programs_recycler"
+                    app:layout_collapseMode="pin"
+                    android:clipToPadding="false"
+                    tools:listitem="@layout/program_icon_layout"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="?attr/actionBarSize"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
 
         </com.google.android.material.appbar.AppBarLayout>
 
+
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/programs_recycler"
-            tools:listitem="@layout/program_icon_layout"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="3"
+            android:id="@+id/channel_eps_recycler"
+           tools:listitem="@layout/video_group_layout"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
+
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

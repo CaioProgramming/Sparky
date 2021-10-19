@@ -31,6 +31,8 @@
                     android:layout_height="wrap_content">
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/program_icon"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         style="@style/Theme.Sparky.ProgramIcon"
                         android:src="@drawable/ic_round_podcasts_24"
                         android:layout_gravity="center" />
@@ -54,15 +56,15 @@
                 </androidx.appcompat.widget.Toolbar>
 
                 <TextView
-                    android:background="?android:colorBackground"
-                    app:layout_collapseMode="pin"
                     android:id="@+id/program_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/cabin_semibold"
+                    android:background="?android:colorBackground"
+                    android:fontFamily="@font/kaushan_script"
                     android:text="@string/app_name"
                     android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                    app:layout_collapseMode="pin" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -85,8 +87,8 @@
         <androidx.recyclerview.widget.RecyclerView
             tools:listitem="@layout/video_preview"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="2"
-            android:id="@+id/lastest_videos"
+            app:spanCount="1"
+            android:id="@+id/channel_videos"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

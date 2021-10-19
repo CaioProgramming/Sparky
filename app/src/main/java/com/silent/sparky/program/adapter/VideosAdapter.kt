@@ -1,4 +1,4 @@
-package com.silent.sparky.program
+package com.silent.sparky.program.adapter
 
 import android.content.Intent
 import android.net.Uri
@@ -22,10 +22,9 @@ class VideosAdapter(val playlistVideos: List<PlaylistResource>): RecyclerView.Ad
             videoPreviewsBinding.run {
                 val video = playlistVideos[adapterPosition].snippet
                 videoCard.setOnClickListener {
-                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(WebUtils.getYoutubeUrl(video.resourceId.videoId)))
-                    root.context.startActivity(browserIntent)
+                    WebUtils(root.context).openYoutubeVideo(video.resourceId.videoId)
                 }
-                Glide.with(root).load(video.thumbnails.standard.url).into(videoThumb)
+                Glide.with(root.context).load(video.thumbnails.standard.url).into(videoThumb)
                 title.text = video.title
                 publishDate.text = video.publishedAt.formatDate(video.publishedAt, DateFormats.DD_OF_MM_FROM_YYYY.format)
             }
