@@ -3,9 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/drawable/faded_gradient.xml" value="0.203125" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/activity_program.xml" value="0.22" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/channel_group_layout.xml" value="0.16869300911854104" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/new_program_layout.xml" value="0.16869300911854104" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/program_frame_layout.xml" value="0.16869300911854104" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/video_group_layout.xml" value="0.33" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/video_preview.xml" value="0.25" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/video_previews.xml" value="0.25" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/core/src/main/res/layout/program_icon_layout.xml" value="0.25" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/core/src/main/res/xml/remote_config_defaults.xml" value="0.18704710144927536" />
       </map>
     </option>
   </component>

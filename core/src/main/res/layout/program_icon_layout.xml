@@ -19,6 +19,7 @@
             style="@style/Theme.Sparky.ProgramIcon" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/program_name"
             android:paddingVertical="@dimen/padding_small_8dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"

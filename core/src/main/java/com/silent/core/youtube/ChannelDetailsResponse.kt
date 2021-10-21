@@ -7,7 +7,7 @@ data class ChannelDetailsResponse(
     val items: List<ChannelResource>
 )
 
-data class ChannelResource(val snippet: ChannelDetails,val contentDetails: ChannelContent, )
+data class ChannelResource(val snippet: ChannelDetails,val contentDetails: ChannelContent)
 
 data class ChannelContent(val relatedPlaylists: ChannelPlaylists)
 

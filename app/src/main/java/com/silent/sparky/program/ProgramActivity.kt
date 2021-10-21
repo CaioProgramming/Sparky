@@ -8,14 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.silent.core.program.Program
 import com.silent.core.utils.WebUtils
-import com.silent.core.youtube.PlaylistResource
 import com.silent.ilustriscore.core.utilities.getView
 import com.silent.ilustriscore.core.utilities.gone
 import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.ilustriscore.core.utilities.visible
 import com.silent.sparky.R
 import com.silent.sparky.program.adapter.VideoHeaderAdapter
-import com.silent.sparky.program.adapter.VideosAdapter
 import com.silent.sparky.program.data.ProgramHeader
 import kotlinx.android.synthetic.main.activity_program.*
 

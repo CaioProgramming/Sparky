@@ -28,7 +28,7 @@
                     style="@style/Theme.Sparky.ProgramIcon"/>
 
                 <TextView
-                    android:id="@+id/title"
+                    android:id="@+id/group_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/padding_default_16dp"
@@ -40,12 +40,12 @@
 
             <ImageButton
                 android:id="@+id/see_more_button"
-                android:src="@drawable/ic_round_chevron_right_24"
-                android:background="@color/transparent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerInParent="true"
+                android:background="@color/transparent"
+                android:src="@drawable/ic_round_chevron_right_24"
                 android:stateListAnimator="@animator/list_animator"
                 app:tint="?attr/colorAccent" />
         </RelativeLayout>
@@ -53,13 +53,19 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/videos_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:clipToPadding="false"
-            android:paddingHorizontal="@dimen/padding_small_8dp"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            tools:listitem="@layout/video_preview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:padding="@dimen/padding_default_16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/video_preview" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/loading"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 </layout>
