@@ -84,6 +84,13 @@
             android:layout_width="200dp"
             android:layout_height="200dp"/>
 
+
+        <Button
+            android:id="@+id/id_btn_player"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Player Videos" />
+
         <androidx.recyclerview.widget.RecyclerView
             tools:listitem="@layout/video_preview"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"

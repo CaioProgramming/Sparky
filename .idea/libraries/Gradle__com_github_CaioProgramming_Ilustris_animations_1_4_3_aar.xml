@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.CaioProgramming.Ilustris:animations:1.4.3@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/8a9548ececaf5041e288d47965583428/transformed/jetified-animations-1.4.3/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/8a9548ececaf5041e288d47965583428/transformed/jetified-animations-1.4.3/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/8a9548ececaf5041e288d47965583428/transformed/jetified-animations-1.4.3/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.CaioProgramming.Ilustris/animations/1.4.3/1a30e081a40df6da233d3abe7f8966a9afc57f32/animations-1.4.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

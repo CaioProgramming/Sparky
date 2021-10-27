@@ -14,6 +14,7 @@ import com.silent.ilustriscore.core.utilities.gone
 import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.ilustriscore.core.utilities.visible
 import com.silent.sparky.R
+import com.silent.sparky.features.player.view.PlayerVideosActivity
 import com.silent.sparky.program.adapter.VideoHeaderAdapter
 import com.silent.sparky.program.adapter.VideosAdapter
 import com.silent.sparky.program.data.ProgramHeader
@@ -35,6 +36,13 @@ class ProgramActivity : AppCompatActivity(R.layout.activity_program) {
             }
             programViewModel.getChannelData(it)
             channel_videos.adapter = channelSectionsAdapter
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        id_btn_player.setOnClickListener {
+            startActivity(Intent(this, PlayerVideosActivity::class.java))
         }
     }
 
