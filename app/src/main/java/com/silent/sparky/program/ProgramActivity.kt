@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.ilustris.animations.fadeIn
+import com.ilustris.animations.fadeOut
 import com.silent.core.program.Program
 import com.silent.core.utils.WebUtils
 import com.silent.ilustriscore.core.utilities.getView
@@ -33,6 +35,21 @@ class ProgramActivity : AppCompatActivity(R.layout.activity_program) {
             }
             programViewModel.getChannelData(it)
             channel_videos.adapter = channelSectionsAdapter
+            instagram_link.setOnClickListener { _ ->
+                WebUtils(this).openInstagram(it.instagram)
+            }
+            twitch_link.setOnClickListener { _ ->
+                WebUtils(this).openTwitch(it.twitch)
+
+            }
+            twitter_link.setOnClickListener { _ ->
+                WebUtils(this).openTwitter(it.twitter)
+
+            }
+            if (it.hosts.isNotEmpty()) {
+                Glide.with(this).load(it.hosts[0]).into(host_one_pic)
+                Glide.with(this).load(it.hosts[1]).into(host_two_pic)
+            }
         }
     }
 
@@ -40,13 +57,12 @@ class ProgramActivity : AppCompatActivity(R.layout.activity_program) {
         programViewModel.channelState.observe(this, {
             when(it) {
                 is ProgramViewModel.ChannelState.ChannelDataRetrieved -> {
-                    program_description.text = it.channelDetails.snippet.description
                     programViewModel.getChannelVideos(it.channelDetails.contentDetails.relatedPlaylists.uploads)
                 }
                 ProgramViewModel.ChannelState.ChannelFailedState -> {
                     getView().showSnackBar("Ocorreu um erro ao obter os vídeos")
-                    error_view.visible()
-                    loading.gone()
+                    error_view.fadeIn()
+                    loading.fadeOut()
                 }
                 is ProgramViewModel.ChannelState.ChannelUploadsRetrieved -> {
                     channelSectionsAdapter.updateSection(ProgramHeader("Últimos episódios",
@@ -54,7 +70,8 @@ class ProgramActivity : AppCompatActivity(R.layout.activity_program) {
                         it.playlistId,
                         RecyclerView.HORIZONTAL))
                     programViewModel.getChannelCuts(program!!.cuts)
-                    loading.gone()
+                    loading.fadeOut()
+                    channel_videos.fadeIn()
                 }
                 is ProgramViewModel.ChannelState.ChannelCutsRetrieved -> {
                     channelSectionsAdapter.updateSection(ProgramHeader("Últimos cortes",

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_margin="@dimen/margin_small_4dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/video_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:colorBackground"
+            android:gravity="center"
+            android:padding="@dimen/padding_default_16dp"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Monark enlouqueceu"
+            tools:visibility="visible" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/video_card"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:stateListAnimator="@animator/list_animator"
+            app:cardCornerRadius="@dimen/radius_small_5dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/material_grey900"
+            app:strokeWidth="2dp">
+
+            <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                android:id="@+id/cut_player"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:stateListAnimator="@animator/list_animator"
+                app:enableAutomaticInitialization="false"
+                app:showSeekBar="false"
+                app:showFullScreenButton="false"
+                app:showVideoCurrentTime="false"
+                app:showVideoDuration="false"
+                app:useWebUi="false" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/video_progress"
+                app:trackCornerRadius="@dimen/radius_small_5dp"
+                app:trackColor="@color/transparent"
+                app:trackThickness="5dp"
+                tools:progress="50"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+    </LinearLayout>
+
+
+
+
+</layout>

@@ -16,4 +16,4 @@ data class ItemContent(val videoId: String)
 
 data class ThumbnailData(val standard: DefaultThumbnail)
 
-data class DefaultThumbnail(val url: String)
+data class DefaultThumbnail(val url: String? = null)

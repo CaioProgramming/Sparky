@@ -7,11 +7,15 @@ data class ChannelDetailsResponse(
     val items: List<ChannelResource>
 )
 
-data class ChannelResource(val snippet: ChannelDetails,val contentDetails: ChannelContent)
+data class ChannelResource(val snippet: ChannelDetails,val contentDetails: ChannelContent, val brandingSettings: BrandingSettings)
 
 data class ChannelContent(val relatedPlaylists: ChannelPlaylists)
 
 data class ChannelPlaylists(val likes: String, val favorites: String, val uploads: String)
+
+data class BrandingSettings(val image: BrandingImage)
+
+data class BrandingImage(val bannerExternalUrl: String)
 
 data class ChannelDetails(
     val type: String,

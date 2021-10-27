@@ -27,7 +27,6 @@ class ProgramViewModel: ViewModel() {
     fun getChannelData(program: Program) {
         GlobalScope.launch(Dispatchers.IO) {
             val channelsResponse = youtubeService.getChannelDetails(program.youtubeID)
-            print("Channel Data -> $channelsResponse")
             channelState.postValue(ChannelState.ChannelDataRetrieved(channelsResponse.items[0]))
         }
     }
@@ -36,7 +35,6 @@ class ProgramViewModel: ViewModel() {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val channelUploads = youtubeService.getChannelUploads(cutsID)
-                print("Videos data -> $channelUploads" )
                 channelState.postValue(ChannelState.ChannelCutsRetrieved(channelUploads.items, cutsID))
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -45,13 +43,12 @@ class ProgramViewModel: ViewModel() {
         }
     }
 
-    fun getChannelVideos(playlistId: String, onGetVideos: ((List<PlaylistResource>) -> Unit)? = null) {
+    fun getChannelVideos(playlistId: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val channelUploads = youtubeService.getChannelUploads(playlistId)
                 print("Videos data -> $channelUploads" )
                 channelState.postValue(ChannelState.ChannelUploadsRetrieved(channelUploads.items, playlistId))
-                onGetVideos?.invoke(channelUploads.items)
             } catch (e: Exception) {
                 e.printStackTrace()
                 channelState.postValue(ChannelState.ChannelFailedState)

@@ -8,6 +8,7 @@ import retrofit2.http.Query
 
 private const val DATA_SNIPPET_QUERY = "snippet"
 private const val DATA_CONTENT_DETAILS_QUERY = "contentDetails"
+private const val DATA_BRANDING_QUERY = "brandingSettings"
 private const val MAX_UPLOADS_REQUIRED = 20
 interface YoutubeApi {
 
@@ -15,6 +16,7 @@ interface YoutubeApi {
     suspend fun getChannelDetails(
         @Query("part") snippetData: String? = DATA_SNIPPET_QUERY,
         @Query("part") contentDetails: String? = DATA_CONTENT_DETAILS_QUERY,
+        @Query("part") brandingDetails: String? = DATA_BRANDING_QUERY,
         @Query("id") channelId: String,
         @Query("key") apiKey: String? = BuildConfig.YOUTUBE_KEY) : ChannelDetailsResponse
 

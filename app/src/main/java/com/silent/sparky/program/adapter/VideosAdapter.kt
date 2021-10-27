@@ -2,6 +2,7 @@ package com.silent.sparky.program.adapter
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -24,7 +25,12 @@ class VideosAdapter(val playlistVideos: List<PlaylistResource>): RecyclerView.Ad
                 videoCard.setOnClickListener {
                     WebUtils(root.context).openYoutubeVideo(video.resourceId.videoId)
                 }
-                Glide.with(root.context).load(video.thumbnails.standard.url).into(videoThumb)
+                try {
+                    Glide.with(root.context).load(video.thumbnails.standard.url).into(videoThumb)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Log.e(javaClass.simpleName, "bind: erro ao carregar thumbnail de vídeo $video" )
+                }
                 title.text = video.title
                 publishDate.text = video.publishedAt.formatDate(video.publishedAt, DateFormats.DD_OF_MM_FROM_YYYY.format)
             }
