@@ -1,15 +1,12 @@
 package com.silent.sparky.programs
 
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import com.silent.core.program.Program
 import com.silent.core.program.ProgramPresenter
 import com.silent.ilustriscore.core.view.BaseView
-import com.silent.sparky.databinding.ActivityMainBinding
 import com.silent.sparky.databinding.HomeFragmentBinding
 import com.silent.sparky.program.ProgramActivity
 import com.silent.sparky.program.ProgramViewModel
-import com.silent.sparky.program.adapter.ChannelHeaderAdapter
 import com.silent.sparky.program.adapter.VideoHeaderAdapter
 import com.silent.sparky.program.data.ProgramHeader
 

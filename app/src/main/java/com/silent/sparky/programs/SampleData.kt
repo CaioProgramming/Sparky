@@ -1,5 +1,6 @@
 package com.silent.sparky.programs
 
+import com.silent.core.program.Host
 import com.silent.core.program.Program
 
 object SampleData {
@@ -9,8 +10,10 @@ object SampleData {
             Program(
                 name = "Flow",
                 youtubeID = "UC4ncvgh5hFr5O83MH7-jRJg",
-                hosts = listOf("https://instagram.fcgh2-1.fna.fbcdn.net/v/t51.2885-19/s320x320/240662484_374011570975137_6489892659504550454_n.jpg?_nc_ht=instagram.fcgh2-1.fna.fbcdn.net&_nc_ohc=6l7k_DiaxtcAX9U1TMf&edm=ABfd0MgBAAAA&ccb=7-4&oh=67537333f4f0ad4e5fed0f62a7c14093&oe=6178E062&_nc_sid=7bff83",
-                "https://instagram.fcgh2-1.fna.fbcdn.net/v/t51.2885-19/s320x320/192332834_2496302097180258_3781854935235845887_n.jpg?_nc_ht=instagram.fcgh2-1.fna.fbcdn.net&_nc_ohc=TUlN2f9iaxIAX_lAYiI&edm=ABfd0MgBAAAA&ccb=7-4&oh=713be97df82802d40e53036c7ac6309e&oe=6179DA63&_nc_sid=7bff83"),
+                hosts = listOf(
+                    Host(name = "Igor 3k", profilePic = "https://instagram.fcgh2-1.fna.fbcdn.net/v/t51.2885-19/s320x320/192332834_2496302097180258_3781854935235845887_n.jpg?_nc_ht=instagram.fcgh2-1.fna.fbcdn.net&_nc_ohc=TUlN2f9iaxIAX_lAYiI&edm=ABfd0MgBAAAA&ccb=7-4&oh=713be97df82802d40e53036c7ac6309e&oe=6179DA63&_nc_sid=7bff83"),
+                    Host(name = "Monark", profilePic = "https://instagram.fcgh2-1.fna.fbcdn.net/v/t51.2885-19/s320x320/240662484_374011570975137_6489892659504550454_n.jpg?_nc_ht=instagram.fcgh2-1.fna.fbcdn.net&_nc_ohc=6l7k_DiaxtcAX9U1TMf&edm=ABfd0MgBAAAA&ccb=7-4&oh=67537333f4f0ad4e5fed0f62a7c14093&oe=6178E062&_nc_sid=7bff83")
+                ),
                 instagram = "flowpdc",
                 twitch = "flowpodcast",
                 cuts = "UU3uYvpJ3J6oNoNYRXfZXjEw",

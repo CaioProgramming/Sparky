@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ilustris.animations.fadeIn
@@ -15,6 +17,7 @@ import com.silent.ilustriscore.core.utilities.gone
 import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.ilustriscore.core.utilities.visible
 import com.silent.sparky.R
+import com.silent.sparky.program.adapter.HostAdapter
 import com.silent.sparky.program.adapter.VideoHeaderAdapter
 import com.silent.sparky.program.data.ProgramHeader
 import kotlinx.android.synthetic.main.activity_program.*
@@ -26,30 +29,50 @@ class ProgramActivity : AppCompatActivity(R.layout.activity_program) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         observeViewModel()
+        setSupportActionBar(program_toolbar)
         program?.let {
             program_name.text = it.name
             Glide.with(this).load(it.iconURL).into(program_icon)
-            program_icon.setOnLongClickListener { v ->
+            program_icon.setOnLongClickListener {  _ ->
                 WebUtils(this).openYoutubeChannel(it.youtubeID)
                 false
             }
             programViewModel.getChannelData(it)
             channel_videos.adapter = channelSectionsAdapter
-            instagram_link.setOnClickListener { _ ->
-                WebUtils(this).openInstagram(it.instagram)
-            }
-            twitch_link.setOnClickListener { _ ->
-                WebUtils(this).openTwitch(it.twitch)
-
-            }
-            twitter_link.setOnClickListener { _ ->
-                WebUtils(this).openTwitter(it.twitter)
-
-            }
             if (it.hosts.isNotEmpty()) {
-                Glide.with(this).load(it.hosts[0]).into(host_one_pic)
-                Glide.with(this).load(it.hosts[1]).into(host_two_pic)
+                hosts_title.visible()
+                hosts_recycler_view.adapter = HostAdapter(it.hosts)
             }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.program_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.twitch_link -> {
+                program?.let {
+                    WebUtils(this).openTwitch(it.twitch)
+                }
+                return false
+            }
+            R.id.twitter_link -> {
+                program?.let {
+                    WebUtils(this).openTwitter(it.twitter)
+                }
+                return false
+            }
+            R.id.instagram_link -> {
+                program?.let {
+                    WebUtils(this).openInstagram(it.instagram)
+                }
+               return false
+            }
+            else -> return false
         }
     }
 
