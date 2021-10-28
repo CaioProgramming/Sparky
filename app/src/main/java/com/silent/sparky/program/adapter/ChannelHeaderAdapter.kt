@@ -3,37 +3,30 @@ package com.silent.sparky.program.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.silent.ilustriscore.core.utilities.visible
+import com.silent.core.program.Program
 import com.silent.sparky.R
-import com.silent.sparky.databinding.VideoGroupLayoutBinding
-import com.silent.sparky.program.ProgramActivity
-import com.silent.sparky.program.data.ChannelHeader
-import com.silent.sparky.program.data.channelsHeadings
+import com.silent.sparky.databinding.ChannelGroupLayoutBinding
+import com.silent.sparky.program.ProgramItemFragment
 
-class ChannelHeaderAdapter(val channelSections: channelsHeadings): RecyclerView.Adapter<ChannelHeaderAdapter.ChannelHeaderViewHolder>() {
+private const val CHANNEL_HEADER_TAG = "CHANNEL_TAG_"
+class ChannelHeaderAdapter(val programs: List<Program>,
+                           val fragmentManager: FragmentManager): RecyclerView.Adapter<ChannelHeaderAdapter.ChannelHeaderViewHolder>() {
 
-    inner class ChannelHeaderViewHolder(private val videoGroupLayoutBinding: VideoGroupLayoutBinding) : RecyclerView.ViewHolder(videoGroupLayoutBinding.root) {
-
+    inner class ChannelHeaderViewHolder(private val videoGroupLayoutBinding: ChannelGroupLayoutBinding) : RecyclerView.ViewHolder(videoGroupLayoutBinding.root) {
         fun bind() {
-            channelSections[adapterPosition].run {
-                videoGroupLayoutBinding.title.text = program.name
-                videoGroupLayoutBinding.seeMoreButton.setOnClickListener {
-                    ProgramActivity.getLaunchIntent(program, itemView.context)
-                }
-                videoGroupLayoutBinding.programIcon.visible()
-                Glide.with(itemView.context).load(program.iconURL).into(videoGroupLayoutBinding.programIcon)
-                videoGroupLayoutBinding.videosRecycler.adapter = VideosAdapter(uploads)
-                videoGroupLayoutBinding.videosRecycler.layoutManager = LinearLayoutManager(videoGroupLayoutBinding.root.context,
-                    RecyclerView.HORIZONTAL, false)
+            programs[adapterPosition].run {
+                fragmentManager
+                    .beginTransaction()
+                    .replace(videoGroupLayoutBinding.root.id,ProgramItemFragment.createFragment(this), CHANNEL_HEADER_TAG + this.name)
+                    .commit()
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelHeaderViewHolder {
-        val bind = DataBindingUtil.inflate<VideoGroupLayoutBinding>(LayoutInflater.from(parent.context), R.layout.video_group_layout, parent, false)
+        val bind = DataBindingUtil.inflate<ChannelGroupLayoutBinding>(LayoutInflater.from(parent.context), R.layout.channel_group_layout, parent, false)
         return ChannelHeaderViewHolder(bind)
     }
 
@@ -41,11 +34,6 @@ class ChannelHeaderAdapter(val channelSections: channelsHeadings): RecyclerView.
        holder.bind()
     }
 
-    override fun getItemCount() = channelSections.count()
-
-    fun updateSection(programHeader: ChannelHeader) {
-        channelSections.add(programHeader)
-        notifyItemInserted(itemCount)
-    }
+    override fun getItemCount() = programs.count()
 
 }

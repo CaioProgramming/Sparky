@@ -3,77 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".programs.MainActivity">
-
-        <com.google.android.material.appbar.AppBarLayout
-            app:elevation="0dp"
-            android:background="?android:colorBackground"
-            android:layout_width="match_parent"
-            android:layout_height="300dp">
-
-            <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:contentScrim="@color/black"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-                <com.airbnb.lottie.LottieAnimationView
-                    app:lottie_loop="true"
-                    app:lottie_autoPlay="true"
-                    app:lottie_rawRes="@raw/lightning"
-                    app:lottie_colorFilter="?attr/colorPrimary"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="@dimen/margin_default_10dp"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp" />
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/home_toolbar"
-                    android:layout_gravity="top"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize">
-
-                    <TextView
-                        android:textStyle="italic"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/kaushan_script"
-                        android:text="@string/app_name"
-                        android:textAlignment="center"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
-                </androidx.appcompat.widget.Toolbar>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_gravity="bottom"
-                    android:id="@+id/programs_recycler"
-                    app:layout_collapseMode="pin"
-                    android:clipToPadding="false"
-                    tools:listitem="@layout/program_icon_layout"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="?attr/actionBarSize"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/channel_eps_recycler"
-           tools:listitem="@layout/video_group_layout"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        android:layout_height="match_parent">
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/home_pager"
+            android:layout_above="@id/main_tabs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/main_tabs"
+            android:layout_margin="@dimen/margin_default_10dp"
+            android:background="?android:colorBackground"
+            app:tabGravity="center"
+            app:tabIndicatorFullWidth="false"
+            app:tabMode="auto"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="?android:textColorHint"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.google.android.material.tabs.TabItem
+                android:text="Home"
 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.tabs.TabLayout>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </RelativeLayout>
+
 </layout>
