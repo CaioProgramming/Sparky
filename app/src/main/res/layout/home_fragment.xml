@@ -5,8 +5,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="?attr/actionBarSize"
-        tools:context=".programs.MainActivity">
+        android:paddingBottom="?attr/actionBarSize">
 
         <com.google.android.material.appbar.AppBarLayout
             app:elevation="0dp"

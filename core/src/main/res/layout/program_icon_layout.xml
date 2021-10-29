@@ -10,6 +10,7 @@
         android:layout_height="wrap_content">
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_gravity="center"
             android:id="@+id/program_icon"
             android:stateListAnimator="@animator/list_animator"
             app:civ_border_width="2dp"
@@ -19,9 +20,10 @@
             style="@style/Theme.Sparky.ProgramIcon" />
 
         <TextView
-            android:visibility="gone"
+            android:visibility="invisible"
             android:id="@+id/program_name"
             android:paddingVertical="@dimen/padding_small_8dp"
+            android:textStyle="bold"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             tools:text="Android cast"
             android:layout_gravity="center"

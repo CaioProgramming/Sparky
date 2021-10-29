@@ -6,4 +6,6 @@
     <string name="title_home">Home</string>
     <string name="title_cuts">Cortes</string>
     <string name="nav_cuts">Cortes</string>
+    <string name="new_podcast_button">Adicionar novo podcast</string>
+    <string name="podcasts_fragment_title">Podcasts</string>
 </resources>
