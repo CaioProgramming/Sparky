@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ilustris.animations.fadeIn
-import com.silent.core.data.program.Podcast
+import com.silent.core.data.podcast.Podcast
 import com.silent.core.databinding.ProgramIconLayoutBinding
 import com.silent.sparky.R
 

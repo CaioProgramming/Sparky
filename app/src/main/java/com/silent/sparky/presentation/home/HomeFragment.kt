@@ -21,7 +21,7 @@ class HomeFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        DataBindingUtil.bind<HomeFragmentBinding>(view)?.let { HomeBinder(it, this).initView() }
+        DataBindingUtil.bind<HomeFragmentBinding>(view)?.let { HomeBinder(it).initView() }
     }
 
 }

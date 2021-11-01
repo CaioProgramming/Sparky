@@ -25,6 +25,14 @@ class PodcastViewModel: ViewModel() {
 
    val podcastState = MutableLiveData<PodcastState>()
 
+    fun getChannelHome(channelID: String, videosRetrieved: (List<PlaylistResource>, String) -> Unit) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val channelResponse = youtubeService.getChannelDetails(channelID)
+            val channelUploads = youtubeService.getChannelUploads(channelResponse.items[0].contentDetails.relatedPlaylists.uploads)
+            videosRetrieved(channelUploads.items, channelResponse.items[0].contentDetails.relatedPlaylists.uploads)
+        }
+    }
+
     fun getChannelData(channelID: String) {
         GlobalScope.launch(Dispatchers.IO) {
             val channelsResponse = youtubeService.getChannelDetails(channelID)

@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
-import com.silent.core.data.program.Podcast
-import com.silent.core.data.program.ProgramHeader
+import com.silent.core.data.model.podcast.PodcastHeader
+import com.silent.core.data.podcast.Podcast
 import com.silent.core.utils.WebUtils
 import com.silent.ilustriscore.core.utilities.getView
 import com.silent.ilustriscore.core.utilities.invisible
@@ -87,7 +87,7 @@ class ProgramActivity : AppCompatActivity(R.layout.activity_program) {
                 }
                 is PodcastViewModel.PodcastState.PodcastUploadsRetrieved -> {
                     channelSectionsAdapter.updateSection(
-                        ProgramHeader("Últimos episódios",
+                        PodcastHeader("Últimos episódios", null,
                         it.videos,
                         it.playlistId,
                         RecyclerView.HORIZONTAL)
@@ -97,7 +97,7 @@ class ProgramActivity : AppCompatActivity(R.layout.activity_program) {
                     channel_videos.fadeIn()
                 }
                 is PodcastViewModel.PodcastState.PodcastCutsRetrieved -> {
-                    channelSectionsAdapter.updateSection(ProgramHeader("Últimos cortes",
+                    channelSectionsAdapter.updateSection(PodcastHeader("Últimos cortes", null,
                         it.videos,
                         it.playlistId,
                         RecyclerView.VERTICAL))

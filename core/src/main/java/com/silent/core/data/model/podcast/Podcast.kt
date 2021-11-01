@@ -1,4 +1,4 @@
-package com.silent.core.data.program
+package com.silent.core.data.podcast
 
 import com.silent.ilustriscore.core.bean.BaseBean
 import java.io.Serializable

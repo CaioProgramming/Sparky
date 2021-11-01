@@ -1,34 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.silent.newpodcasts.NewPodcastActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-
-
-    <fragment
-        android:layout_above="@id/new_podcast_button"
-        android:id="@+id/new_podcast_fragment"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/newpodcast_navigation"
-        android:name="androidx.navigation.fragment.NavHostFragment"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/new_podcast_button"
-        style="@style/Theme.Sparky.BottomButton"
-        android:layout_alignParentBottom="true"
-        android:text="Continuar"
-        app:icon="@drawable/ic_arrow_right_24"
-        app:iconGravity="end"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        android:layout_height="match_parent"
+        tools:context="com.silent.newpodcasts.NewPodcastActivity">
 
 
-</RelativeLayout>
+        <com.google.android.material.appbar.MaterialToolbar
+            app:title="Sparky"
+            android:id="@+id/new_podcast_toolbar"
+            app:titleTextAppearance="@style/Theme.Sparky.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <fragment
+            android:id="@+id/new_podcast_fragment"
+            app:defaultNavHost="true"
+            android:layout_below="@id/new_podcast_toolbar"
+            app:navGraph="@navigation/newpodcast_navigation"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+    </RelativeLayout>
+</layout>

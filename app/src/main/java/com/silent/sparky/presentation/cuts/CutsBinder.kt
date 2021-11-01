@@ -4,7 +4,7 @@ import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
-import com.silent.core.data.program.Podcast
+import com.silent.core.data.podcast.Podcast
 import com.silent.core.data.presenter.PodcastPresenter
 import com.silent.core.youtube.PlaylistResource
 import com.silent.ilustriscore.core.utilities.delayedFunction

@@ -1,6 +1,7 @@
 package com.silent.core.api
 
 import com.silent.core.BuildConfig
+import com.silent.core.data.model.youtube.ChannelSectionListResponse
 import com.silent.core.data.model.youtube.SearchResponse
 import com.silent.core.twitch.ChannelDetailsResponse
 import com.silent.core.youtube.PlaylistItemResponse
@@ -40,4 +41,10 @@ interface YoutubeApi {
         @Query("maxResults") maxResults: Int = MAX_UPLOADS_REQUIRED,
         @Query("key") apiKey: String? = BuildConfig.YOUTUBE_KEY) : PlaylistItemResponse
 
+    @GET("channelSections")
+    suspend fun getRelatedChannels(
+        @Query("part") snippet: String? = DATA_SNIPPET_QUERY,
+        @Query("part") contentDetails: String? = DATA_CONTENT_DETAILS_QUERY,
+        @Query("channelId") channelId: String
+    ) : ChannelSectionListResponse
 }

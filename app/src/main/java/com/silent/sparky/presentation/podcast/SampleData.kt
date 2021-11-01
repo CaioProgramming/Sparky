@@ -1,7 +1,7 @@
 package com.silent.sparky.presentation.podcast
 
-import com.silent.core.data.program.Host
-import com.silent.core.data.program.Podcast
+import com.silent.core.data.podcast.Host
+import com.silent.core.data.podcast.Podcast
 
 object SampleData {
 

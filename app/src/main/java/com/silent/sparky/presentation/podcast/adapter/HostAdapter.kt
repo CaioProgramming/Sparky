@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.silent.core.data.program.Host
-import com.silent.sparky.databinding.HostLayoutBinding
+import com.silent.core.data.podcast.Host
+import com.silent.core.databinding.HostLayoutBinding
 
 class HostAdapter(val hosts: List<Host>) : RecyclerView.Adapter<HostAdapter.HostViewHolder>(){
 

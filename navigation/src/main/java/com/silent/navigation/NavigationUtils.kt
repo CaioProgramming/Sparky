@@ -1,4 +1,4 @@
-package com.silent.core.utils
+package com.silent.navigation
 
 import android.content.Context
 import android.content.Intent

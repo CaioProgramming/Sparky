@@ -7,7 +7,19 @@
 
     <fragment
         android:id="@+id/podcastGetYoutubeDataFragment"
-        tools:layout="@layout/podcast_youtubedata_fragment"
+        tools:layout="@layout/fragment_podcast_youtubedata"
         android:name="com.silent.newpodcasts.fragments.PodcastGetYoutubeDataFragment"
-        android:label="PodcastGetYoutubeDataFragment" />
+        android:label="Encontrar podcasts" >
+        <action
+            android:id="@+id/action_podcastGetYoutubeDataFragment_to_podcastGetHostsFragment"
+            app:destination="@id/podcastGetHostsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/podcastGetHostsFragment"
+        android:label="Hosts"
+        android:name="com.silent.newpodcasts.fragments.PodcastGetHostsFragment"
+        tools:layout="@layout/fragment_hosts_data" />
+
+
 </navigation>

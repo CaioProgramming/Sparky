@@ -1,10 +1,10 @@
 package com.silent.sparky.presentation.podcasts
 
 import com.silent.core.data.presenter.PodcastPresenter
-import com.silent.core.data.program.Podcast
-import com.silent.core.utils.ModuleNavigator
-import com.silent.core.utils.NavigationUtils
+import com.silent.core.data.podcast.Podcast
 import com.silent.ilustriscore.core.view.BaseView
+import com.silent.navigation.ModuleNavigator
+import com.silent.navigation.NavigationUtils
 import com.silent.sparky.databinding.PodcastsFragmentBinding
 import com.silent.sparky.presentation.podcast.ProgramActivity
 import com.silent.sparky.presentation.podcast.SampleData

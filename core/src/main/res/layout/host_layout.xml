@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            tools:src="@drawable/ic_baseline_tag_faces_24" />
+            tools:src="@drawable/ic_microphone" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:background="@color/nblack"
@@ -29,7 +29,7 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@color/oblack"
-            tools:src="@drawable/ic_baseline_tag_faces_24" />
+             />
 
         <TextView
             android:id="@+id/host_name"

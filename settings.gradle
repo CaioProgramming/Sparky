@@ -3,3 +3,4 @@ rootProject.name = "Sparky"
 include ':app'
 include ':core'
 include ':newpodcasts'
+include ':navigation'
