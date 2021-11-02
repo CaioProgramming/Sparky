@@ -50,7 +50,7 @@ class VideoHeaderAdapter(val programSections: podcastSections, val headerSelecte
        holder.bind()
     }
 
-    override fun getItemCount() = programSections.count()
+    override fun getItemCount() = programSections.size
 
     fun updateSection(programHeader: PodcastHeader) {
         programSections.add(programHeader)
