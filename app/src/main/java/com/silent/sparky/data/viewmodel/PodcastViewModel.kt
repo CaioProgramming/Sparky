@@ -3,7 +3,7 @@ package com.silent.sparky.data.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.silent.core.service.YoutubeService
-import com.silent.core.twitch.ChannelResource
+import com.silent.core.data.model.youtube.ChannelResource
 import com.silent.core.youtube.PlaylistResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -85,5 +85,4 @@ class PodcastViewModel: ViewModel() {
             }
         }
     }
-
 }

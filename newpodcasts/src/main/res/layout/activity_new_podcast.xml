@@ -12,7 +12,7 @@
         <com.google.android.material.appbar.MaterialToolbar
             app:title="Sparky"
             android:id="@+id/new_podcast_toolbar"
-            app:titleTextAppearance="@style/Theme.Sparky.Title"
+            app:titleTextAppearance="@style/Ilustris.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <fragment

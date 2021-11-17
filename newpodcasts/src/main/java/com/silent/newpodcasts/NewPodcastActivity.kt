@@ -5,9 +5,11 @@ import android.os.Bundle
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.silent.newpodcasts.data.viewmodel.NewPodcastViewModel
 import kotlinx.android.synthetic.main.activity_new_podcast.*
 
 class NewPodcastActivity : AppCompatActivity() {
+    val viewModel = NewPodcastViewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_podcast)

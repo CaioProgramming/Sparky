@@ -4,6 +4,6 @@ typealias relatedChannels  = List<String>
 
 data class ChannelSectionListResponse(val items: List<SectionItem>)
 
-data class SectionItem(val snippet: SectionSnippet)
+data class SectionItem(val snippet: SectionSnippet, val contentDetails: HashMap<String, Any>)
 
-data class SectionSnippet(val type: String, val contentDetails: Any)
+data class SectionSnippet(val type: String)

@@ -9,7 +9,7 @@ import com.silent.ilustriscore.core.presenter.BasePresenter
 class PodcastModel(presenter: BasePresenter<Podcast>) : BaseModel<Podcast>(
     presenter
 ) {
-    override val path = "Podcast"
+    override val path = "Podcasts"
 
     override fun deserializeDataSnapshot(dataSnapshot: DocumentSnapshot): Podcast {
        return dataSnapshot.toObject(Podcast::class.java)!!.apply {

@@ -39,6 +39,7 @@
                     android:layout_height="wrap_content" />
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/flow_related_channels"
                     tools:listitem="@layout/program_icon_layout"
                     android:clipToPadding="true"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -54,6 +55,7 @@
                     android:layout_height="wrap_content" />
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/search_results"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clipToPadding="true"

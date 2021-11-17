@@ -3,7 +3,7 @@ package com.silent.core.service
 import com.silent.core.api.YoutubeApi
 import com.silent.core.data.model.youtube.ChannelSectionListResponse
 import com.silent.core.data.model.youtube.SearchResponse
-import com.silent.core.twitch.ChannelDetailsResponse
+import com.silent.core.data.model.youtube.ChannelDetailsResponse
 import com.silent.core.youtube.PlaylistItemResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

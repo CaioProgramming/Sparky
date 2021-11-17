@@ -3,7 +3,7 @@ package com.silent.core.api
 import com.silent.core.BuildConfig
 import com.silent.core.data.model.youtube.ChannelSectionListResponse
 import com.silent.core.data.model.youtube.SearchResponse
-import com.silent.core.twitch.ChannelDetailsResponse
+import com.silent.core.data.model.youtube.ChannelDetailsResponse
 import com.silent.core.youtube.PlaylistItemResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -45,6 +45,7 @@ interface YoutubeApi {
     suspend fun getRelatedChannels(
         @Query("part") snippet: String? = DATA_SNIPPET_QUERY,
         @Query("part") contentDetails: String? = DATA_CONTENT_DETAILS_QUERY,
-        @Query("channelId") channelId: String
+        @Query("channelId") channelId: String,
+        @Query("key") apiKey: String? = BuildConfig.YOUTUBE_KEY
     ) : ChannelSectionListResponse
 }
