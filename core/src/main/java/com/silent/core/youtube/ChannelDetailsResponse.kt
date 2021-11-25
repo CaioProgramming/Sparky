@@ -22,5 +22,10 @@ data class ChannelDetails(
     val channelId: String,
     val title: String,
     val description: String,
-    val position: Int
+    val position: Int,
+    val thumbnails: Thumbnails
 )
+
+data class Thumbnails(val high: ThumbSettings)
+
+data class ThumbSettings(val url: String, val width: Int, val height: Int)
