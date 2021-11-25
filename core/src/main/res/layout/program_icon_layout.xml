@@ -1,32 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:layout_margin="@dimen/margin_default_10dp"
-        android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_default_10dp"
+    android:orientation="vertical">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/program_icon"
+        style="@style/Theme.Sparky.ProgramIcon"
+        android:src="@drawable/ic_round_podcasts_24"
+        app:civ_border_color="?android:textColorPrimary"
+        app:civ_border_width="2dp"
+        app:civ_circle_background_color="@color/md_black" />
+
+    <TextView
+        android:id="@+id/program_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingVertical="@dimen/padding_small_8dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:visibility="gone"
+        tools:text="Android cast" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/program_icon"
-            android:stateListAnimator="@animator/list_animator"
-            app:civ_border_width="2dp"
-            app:civ_border_color="?android:textColorPrimary"
-            app:civ_circle_background_color="@color/md_black"
-            android:src="@drawable/ic_round_podcasts_24"
-            style="@style/Theme.Sparky.ProgramIcon" />
-
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/program_name"
-            android:paddingVertical="@dimen/padding_small_8dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-            tools:text="Android cast"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
-</layout>
+</LinearLayout>
