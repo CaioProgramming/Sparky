@@ -1,4 +1,4 @@
-package com.silent.sparky.fragments.cuts
+package com.silent.sparky.features.cuts
 
 import android.view.View
 import androidx.viewpager.widget.ViewPager

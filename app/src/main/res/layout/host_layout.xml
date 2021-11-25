@@ -1,50 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:layout_margin="@dimen/margin_default_10dp">
 
-    <data>
-
-    </data>
-
-
-    <RelativeLayout
-        android:layout_margin="@dimen/margin_default_10dp"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/host_photo"
         android:layout_width="match_parent"
-        android:layout_height="150dp">
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        app:civ_border_color="?attr/colorPrimaryDark"
+        app:civ_border_width="2dp"
+        app:civ_circle_background_color="@color/material_grey900"
+        tools:src="@drawable/ic_baseline_tag_faces_24" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/host_photo"
-            app:civ_border_color="?attr/colorPrimaryDark"
-            app:civ_border_width="2dp"
-            app:civ_circle_background_color="@color/material_grey900"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            tools:src="@drawable/ic_baseline_tag_faces_24" />
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/nblack"
+        android:scaleType="centerCrop"
+        android:src="@color/oblack"
+        tools:src="@drawable/ic_baseline_tag_faces_24" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:background="@color/nblack"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@color/oblack"
-            tools:src="@drawable/ic_baseline_tag_faces_24" />
+    <TextView
+        android:id="@+id/host_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:lines="2"
+        android:padding="@dimen/padding_default_16dp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        android:textStyle="bold"
+        tools:text="Igor 3k" />
 
-        <TextView
-            android:id="@+id/host_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:lines="2"
-            android:padding="@dimen/padding_default_16dp"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            android:textStyle="bold"
-            tools:text="Igor 3k" />
-
-    </RelativeLayout>
+</RelativeLayout>
 
 
-</layout>
