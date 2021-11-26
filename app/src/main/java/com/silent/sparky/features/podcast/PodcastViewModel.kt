@@ -8,7 +8,7 @@ import com.silent.core.program.PodcastService
 import com.silent.core.youtube.PlaylistResource
 import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
-import com.silent.sparky.features.podcast.data.PodcastHeader
+import com.silent.sparky.data.PodcastHeader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -68,7 +68,7 @@ class PodcastViewModel : BaseViewModel<Podcast>() {
                     "Úlitmos cortes",
                     podcast.cuts,
                     cuts.items,
-                    RecyclerView.HORIZONTAL
+                    RecyclerView.VERTICAL
                 )
                 channelState.postValue(
                     ChannelState.ChannelDataRetrieved(

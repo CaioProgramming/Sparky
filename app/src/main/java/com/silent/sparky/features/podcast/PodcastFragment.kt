@@ -10,15 +10,17 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
+import com.ilustris.animations.slideInRight
 import com.silent.core.program.Podcast
 import com.silent.core.utils.WebUtils
+import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.silent.ilustriscore.core.utilities.gone
 import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.ilustriscore.core.utilities.visible
 import com.silent.sparky.R
+import com.silent.sparky.data.PodcastHeader
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
 import com.silent.sparky.features.podcast.adapter.HostAdapter
-import com.silent.sparky.features.podcast.data.PodcastHeader
 import kotlinx.android.synthetic.main.fragment_podcast.*
 
 class PodcastFragment : Fragment() {
@@ -69,6 +71,10 @@ class PodcastFragment : Fragment() {
         }
         program = podcast
         loading.fadeOut()
+        delayedFunction {
+            app_bar.fadeIn()
+            channel_videos.slideInRight()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
