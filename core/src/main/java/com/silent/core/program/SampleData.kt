@@ -12,11 +12,11 @@ object SampleData {
                     hosts = listOf(
                         Host(
                             name = "Igor 3k",
-                            profilePic = "https://instagram.fcgh2-1.fna.fbcdn.net/v/t51.2885-19/s320x320/192332834_2496302097180258_3781854935235845887_n.jpg?_nc_ht=instagram.fcgh2-1.fna.fbcdn.net&_nc_ohc=TUlN2f9iaxIAX_lAYiI&edm=ABfd0MgBAAAA&ccb=7-4&oh=713be97df82802d40e53036c7ac6309e&oe=6179DA63&_nc_sid=7bff83"
+                            profilePic = "https://instagram.fcgh2-1.fna.fbcdn.net/v/t51.2885-19/s320x320/192332834_2496302097180258_3781854935235845887_n.jpg?_nc_ht=instagram.fcgh2-1.fna.fbcdn.net&_nc_cat=106&_nc_ohc=cKXmn7x131oAX-g9O3q&edm=ABfd0MgBAAAA&ccb=7-4&oh=3a275f36a343629f8ea166a35f6f0098&oe=61A75623&_nc_sid=7bff83"
                         ),
                         Host(
                             name = "Monark",
-                            profilePic = "https://instagram.fcgh2-1.fna.fbcdn.net/v/t51.2885-19/s320x320/240662484_374011570975137_6489892659504550454_n.jpg?_nc_ht=instagram.fcgh2-1.fna.fbcdn.net&_nc_ohc=6l7k_DiaxtcAX9U1TMf&edm=ABfd0MgBAAAA&ccb=7-4&oh=67537333f4f0ad4e5fed0f62a7c14093&oe=6178E062&_nc_sid=7bff83"
+                            profilePic = "https://instagram.fcgh2-1.fna.fbcdn.net/v/t51.2885-19/s320x320/240662484_374011570975137_6489892659504550454_n.jpg?_nc_ht=instagram.fcgh2-1.fna.fbcdn.net&_nc_cat=109&_nc_ohc=Tu05TCZfkXMAX_bDvZ4&edm=ABfd0MgBAAAA&ccb=7-4&oh=8d8a9505158d716208594bf7f93a16a6&oe=61A85662&_nc_sid=7bff83"
                         )
                     ),
                     instagram = "flowpdc",

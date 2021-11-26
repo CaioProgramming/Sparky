@@ -22,7 +22,6 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/program_icon"
                 style="@style/Theme.Sparky.ProgramIcon"
-                android:visibility="gone"
                 tools:src="@drawable/ic_round_podcasts_24" />
 
             <TextView

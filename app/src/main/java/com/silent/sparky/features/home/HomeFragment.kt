@@ -8,18 +8,23 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.silent.core.utils.WebUtils
 import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.sparky.R
+import com.silent.sparky.data.PodcastHeader
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
 import com.silent.sparky.features.home.viewmodel.HomeState
 import com.silent.sparky.features.home.viewmodel.HomeViewModel
-import com.silent.sparky.features.podcast.data.PodcastHeader
 import kotlinx.android.synthetic.main.home_fragment.*
 
-class HomeFragment: Fragment() {
+class HomeFragment : Fragment() {
 
     private val homeViewModel = HomeViewModel()
-    private val videoHeaderAdapter = VideoHeaderAdapter(ArrayList(), ::openPodcast)
+    private val videoHeaderAdapter = VideoHeaderAdapter(
+        ArrayList(),
+        ::openPodcast,
+        ::openChannel
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,15 +39,20 @@ class HomeFragment: Fragment() {
         findNavController().navigate(R.id.action_navigation_home_to_podcastFragment, bundle)
     }
 
+    private fun openChannel(url: String) {
+        WebUtils(requireContext()).openYoutubeChannel(url)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
-        homeViewModel.getHome()
         setupView()
+        homeViewModel.getHome()
     }
 
     private fun setupView() {
         podcasts_resume_recycler.adapter = videoHeaderAdapter
+        videoHeaderAdapter.clearAdapter()
     }
 
     private fun observeViewModel() {

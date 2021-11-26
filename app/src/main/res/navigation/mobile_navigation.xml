@@ -12,6 +12,10 @@
         tools:layout="@layout/home_fragment">
         <action
             android:id="@+id/action_navigation_home_to_podcastFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/nav_default_exit_anim"
             app:destination="@id/podcastFragment" />
 
 
@@ -28,7 +32,8 @@
         android:label=" "
         tools:layout="@layout/fragment_podcast">
 
-        <argument
+
+    <argument
             android:name="podcast_id"
             app:argType="string" />
     </fragment>
