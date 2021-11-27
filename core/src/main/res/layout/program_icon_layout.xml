@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:layout_margin="@dimen/margin_default_10dp"
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="80dp"
+    android:layout_height="80dp"
+    android:orientation="vertical">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_gravity="center"
-            android:id="@+id/program_icon"
-            android:stateListAnimator="@animator/list_animator"
-            app:civ_border_width="2dp"
-            app:civ_border_color="?android:textColorPrimary"
-            app:civ_circle_background_color="@color/md_black"
-            android:src="@drawable/ic_round_podcasts_24"
-            style="@style/Theme.Sparky.ProgramIcon" />
 
-        <TextView
-            android:visibility="invisible"
-            android:id="@+id/program_name"
-            android:paddingVertical="@dimen/padding_small_8dp"
-            android:textStyle="bold"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-            tools:text="Android cast"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+    <ProgressBar
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/material_red500"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
-</layout>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/program_icon"
+        style="@style/Theme.Sparky.ProgramIcon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/padding_small_8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_round_podcasts_24"
+        app:civ_border_color="?android:textColorPrimary"
+        app:civ_border_width="2dp"
+        app:civ_circle_background_color="@color/md_black" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

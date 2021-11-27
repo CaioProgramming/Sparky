@@ -3,21 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="horizontal"
     android:layout_height="150dp"
-    android:layout_margin="@dimen/padding_default_16dp">
+    android:layout_margin="@dimen/margin_default_10dp"
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/host_name"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_toStartOf="@id/host_photo"
+        android:layout_toEndOf="@id/host_photo"
         android:background="@color/black"
         android:gravity="center"
         android:lines="2"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-        android:textColor="@color/white"
         android:textStyle="bold|italic"
         tools:text="Igor 3k" />
 
@@ -27,7 +26,7 @@
         style="@style/Theme.Sparky.ProgramIcon"
         android:layout_height="120dp"
         android:layout_centerInParent="true"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
         app:civ_border_color="?attr/colorPrimaryDark"
         tools:src="@drawable/ic_baseline_tag_faces_24" />
 

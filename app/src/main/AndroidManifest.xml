@@ -10,10 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Sparky">
         <activity
-            android:name="com.silent.newpodcasts.NewPodcastActivity"
-            android:exported="false" />
-        <activity
-            android:name=".presentation.home.HomeActivity"
+            android:name=".features.home.HomeActivity"
             android:exported="true"
             android:label="@string/app_name">
             <intent-filter>
@@ -22,9 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".presentation.podcast.ProgramActivity"
-            android:exported="false" />
+
     </application>
 
 </manifest>

@@ -14,12 +14,10 @@
     </style>
 
     <style name="Theme.Sparky.ProgramIcon">
-        <item name="android:stateListAnimator">@animator/list_animator</item>
+        <item name="android:stateListAnimator">@animator/scale_down_animator</item>
         <item name="civ_circle_background_color">@color/md_black</item>
         <item name="civ_border_width">2dp</item>
         <item name="civ_border_color">?android:textColorPrimary</item>
-        <item name="android:layout_width">70dp</item>
-        <item name="android:layout_height">70dp</item>
     </style>
 
     <style name="Theme.Sparky.BottomButton" parent="Widget.MaterialComponents.Button.TextButton">
