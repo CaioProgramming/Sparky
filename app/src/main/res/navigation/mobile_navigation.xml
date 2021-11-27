@@ -17,6 +17,13 @@
             app:popEnterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/nav_default_exit_anim"
             app:destination="@id/podcastFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_liveFragment"
+            app:destination="@id/liveFragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/slide_in_bottom"
+            app:popExitAnim="@anim/slide_out" />
 
 
     </fragment>
@@ -31,11 +38,25 @@
         android:name="com.silent.sparky.features.podcast.PodcastFragment"
         android:label=" "
         tools:layout="@layout/fragment_podcast">
-
-
-    <argument
+        <argument
             android:name="podcast_id"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/liveFragment"
+        android:name="com.silent.sparky.features.live.LiveFragment"
+        android:label="LiveFragment"
+        tools:layout="@layout/live_podcast_expanded_layout">
+        <argument
+            android:name="live_object"
+            app:argType="com.silent.sparky.features.home.data.LiveHeader" />
+        <action
+            android:id="@+id/action_liveFragment_to_podcastFragment"
+            app:destination="@id/podcastFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/nav_default_exit_anim" />
     </fragment>
 
 </navigation>

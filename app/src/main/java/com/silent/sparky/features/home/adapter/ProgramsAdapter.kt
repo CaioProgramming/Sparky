@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.fragment_podcast.view.*
 
 class ProgramsAdapter(
     val podcasts: List<Podcast>,
-    private val onSelectProgram: (Podcast) -> Unit
+    private val onSelectProgram: (Podcast, Int) -> Unit
 ) : RecyclerView.Adapter<ProgramsAdapter.ProgramViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProgramViewHolder {
@@ -33,9 +33,9 @@ class ProgramsAdapter(
             val context = itemView.context
             podcasts[adapterPosition].run {
                 Glide.with(context).load(iconURL).into(itemView.program_icon)
-                itemView.program_name.text = name
+                //itemView.program_name.text = name
                 itemView.program_icon.setOnClickListener {
-                    onSelectProgram(this)
+                    onSelectProgram(this, adapterPosition)
                 }
             }
         }

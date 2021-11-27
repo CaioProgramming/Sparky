@@ -5,26 +5,28 @@
     android:layout_width="match_parent"
     android:orientation="horizontal"
     android:layout_height="150dp"
-    android:layout_margin="@dimen/margin_default_10dp">
+    android:layout_margin="@dimen/padding_default_16dp">
 
     <TextView
         android:id="@+id/host_name"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_toStartOf="@id/host_photo"
-        android:gravity="center"
         android:background="@color/black"
+        android:gravity="center"
         android:lines="2"
         android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        android:textColor="@color/white"
+        android:textStyle="bold|italic"
         tools:text="Igor 3k" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/host_photo"
+        android:layout_width="120dp"
         style="@style/Theme.Sparky.ProgramIcon"
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
+        android:layout_height="120dp"
+        android:layout_centerInParent="true"
         android:layout_alignParentEnd="true"
         app:civ_border_color="?attr/colorPrimaryDark"
         tools:src="@drawable/ic_baseline_tag_faces_24" />

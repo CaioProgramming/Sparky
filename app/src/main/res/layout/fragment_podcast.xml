@@ -107,7 +107,6 @@
         app:lottie_speed="0.5" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:paddingBottom="?attr/actionBarSize"
         android:visibility="gone"
         android:id="@+id/channel_videos"
         android:layout_width="match_parent"

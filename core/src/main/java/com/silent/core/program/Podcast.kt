@@ -16,7 +16,7 @@ data class Podcast(
     var twitch: String = "",
     var twitter: String = "",
     var youtubeID: String = "",
-    var cuts: String = ""
+    var cuts: String = "",
 ) : BaseBean(id)
 
 data class Host(val name: String, val profilePic: String) : Serializable

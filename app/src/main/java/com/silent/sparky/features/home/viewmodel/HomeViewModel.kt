@@ -9,6 +9,7 @@ import com.silent.core.youtube.PlaylistResource
 import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
 import com.silent.sparky.data.PodcastHeader
+import com.silent.sparky.features.home.data.LiveHeader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -32,10 +33,28 @@ class HomeViewModel : BaseViewModel<Podcast>() {
                     val header = createHeader(it, uploads, it.id)
                     homeState.postValue(HomeState.HomeChannelRetrieved(header))
                 }
+                checkLives(podcasts)
             } catch (e: Exception) {
                 homeState.postValue(HomeState.HomeError)
             }
 
+        }
+    }
+
+    private fun checkLives(podcasts: ArrayList<Podcast>) {
+        viewModelScope.launch {
+            try {
+                val livePodcasts = ArrayList<LiveHeader>()
+                podcasts.forEach {
+                    val searchLive = youtubeService.getChannelLiveStatus(it.youtubeID)
+                    if (searchLive.items.isNotEmpty()) {
+                        livePodcasts.add(LiveHeader(it, searchLive.items[0]))
+                    }
+                }
+                homeState.postValue(HomeState.HomeLivesRetrieved(livePodcasts))
+            } catch (e: Exception) {
+                homeState.postValue(HomeState.HomeLiveError)
+            }
         }
     }
 

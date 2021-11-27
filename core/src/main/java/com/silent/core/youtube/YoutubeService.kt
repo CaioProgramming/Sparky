@@ -35,5 +35,9 @@ class YoutubeService {
         return youtubeApi.getChannelUploads(playlistId = playlistId)
     }
 
+    suspend fun getChannelLiveStatus(channelID: String): SearchResponse {
+        val youtubeApi = retroFitService.create(YoutubeApi::class.java)
+        return youtubeApi.searchChannelLive(channelId = channelID)
+    }
 
 }
