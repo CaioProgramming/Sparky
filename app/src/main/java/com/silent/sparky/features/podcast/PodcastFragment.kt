@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
 import com.ilustris.animations.slideInRight
-import com.silent.core.program.Podcast
+import com.silent.core.podcast.Podcast
 import com.silent.core.utils.WebUtils
 import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.silent.ilustriscore.core.utilities.gone

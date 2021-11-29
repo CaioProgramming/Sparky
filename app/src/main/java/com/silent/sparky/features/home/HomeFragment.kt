@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
-import com.silent.core.program.Podcast
+import com.silent.core.podcast.Podcast
 import com.silent.core.utils.WebUtils
 import com.silent.ilustriscore.core.utilities.gone
 import com.silent.ilustriscore.core.utilities.showSnackBar

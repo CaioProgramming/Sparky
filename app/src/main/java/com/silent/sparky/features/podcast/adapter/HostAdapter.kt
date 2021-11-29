@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.silent.core.program.Host
+import com.silent.core.podcast.Host
 import com.silent.sparky.R
 import kotlinx.android.synthetic.main.host_layout.view.*
 

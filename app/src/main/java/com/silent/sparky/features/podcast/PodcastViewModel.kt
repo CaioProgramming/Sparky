@@ -3,8 +3,8 @@ package com.silent.sparky.features.podcast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
-import com.silent.core.program.Podcast
-import com.silent.core.program.PodcastService
+import com.silent.core.podcast.Podcast
+import com.silent.core.podcast.PodcastService
 import com.silent.core.youtube.PlaylistResource
 import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
