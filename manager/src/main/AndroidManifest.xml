@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.silent.manager">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.silent.manager">
+
+    <application>
+        <activity
+            android:name=".ManagerActivity"
+            android:exported="false" />
+    </application>
 
 </manifest>
