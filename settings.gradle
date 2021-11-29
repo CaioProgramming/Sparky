@@ -3,3 +3,4 @@ rootProject.name = "Sparky"
 include ':app'
 include ':core'
 include ':manager'
+include ':navigation'
