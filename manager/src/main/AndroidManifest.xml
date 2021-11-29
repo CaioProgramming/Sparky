@@ -4,7 +4,10 @@
 
     <application>
         <activity
-            android:name=".ManagerActivity"
+            android:name=".features.newpodcast.NewPodcastActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.manager.ManagerActivity"
             android:exported="false" />
     </application>
 

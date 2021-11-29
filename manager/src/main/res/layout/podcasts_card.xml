@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_default_10dp"
     android:orientation="vertical">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/podcast_card"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="120dp"
         android:layout_gravity="center"
-        app:cardCornerRadius="@dimen/radius_default_10dp">
+        app:cardCornerRadius="0dp"
+        app:strokeColor="?attr/colorPrimaryDark"
+        app:strokeWidth="1dp">
 
         <ImageView
             android:id="@+id/podcast_icon"
@@ -28,6 +29,7 @@
             android:layout_height="match_parent"
             android:background="@color/nblack"
             android:gravity="center|bottom"
+            android:padding="@dimen/padding_small_8dp"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             tools:text="Flow podcast" />

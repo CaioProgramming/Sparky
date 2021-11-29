@@ -28,6 +28,18 @@ class YoutubeService {
         return youtubeApi.getChannelDetails(channelId = programID)
     }
 
+    suspend fun getChannelDetailsForUserName(channelName: String): ChannelDetailsResponse {
+        val youtubeApi = retroFitService.create(YoutubeApi::class.java)
+        return youtubeApi.getChannelDetailsForUserName(channelName = channelName)
+    }
+
+    suspend fun getChannelSections(
+        channelID: String
+    ): ChannelSectionResponse {
+        val youtubeApi = retroFitService.create(YoutubeApi::class.java)
+        return youtubeApi.getChannelSections(channelID)
+    }
+
     suspend fun getChannelUploads(
         playlistId: String
     ): PlaylistItemResponse {

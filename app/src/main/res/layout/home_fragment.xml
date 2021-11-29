@@ -25,15 +25,17 @@
                 android:layout_marginTop="?attr/actionBarSize"
                 android:orientation="vertical"
                 android:visibility="gone"
+                tools:visibility="visible"
                 app:layout_collapseMode="parallax">
 
                 <TextView
+                    android:id="@+id/live_message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/padding_default_16dp"
                     android:text="Ao vivo agora"
                     android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/lives_recycler_view"
@@ -80,15 +82,49 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/podcasts_resume_recycler"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:itemCount="1"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        tools:listitem="@layout/video_group_layout" />
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/material_grey900" />
+
+        <TextView
+            android:id="@+id/manager_warning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bottom_line"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center|start"
+            android:padding="@dimen/padding_default_16dp"
+            android:text="Gerenciar podcasts"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:textColor="?attr/colorPrimaryDark"
+            app:drawableEndCompat="@drawable/ic_round_settings_suggest_24"
+            app:drawableTint="?attr/colorPrimaryDark" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/material_grey900" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/podcasts_resume_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="4"
+            tools:listitem="@layout/video_group_layout" />
+
+
+    </LinearLayout>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

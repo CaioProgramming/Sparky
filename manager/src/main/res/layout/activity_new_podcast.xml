@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/padding_default_16dp"
+    tools:context="com.silent.manager.features.newpodcast.NewPodcastActivity">
+
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/new_podcast_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="Sparky"
+        app:titleTextAppearance="@style/Ilustris.Title" />
+
+    <fragment
+        android:id="@+id/new_podcast_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/next_button"
+        android:layout_below="@id/new_podcast_toolbar"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/newpodcast_navigation" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/next_button"
+        style="@style/Theme.Sparky.BottomButton"
+        android:layout_alignParentBottom="true"
+        android:text="Continuar"
+        android:visibility="gone"
+        app:icon="@drawable/ic_arrow_right_24"
+        app:iconGravity="end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</RelativeLayout>

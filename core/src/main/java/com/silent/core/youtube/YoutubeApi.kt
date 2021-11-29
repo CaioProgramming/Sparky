@@ -33,11 +33,29 @@ interface YoutubeApi {
         @Query("key") apiKey: String? = BuildConfig.YOUTUBE_KEY
     ): ChannelDetailsResponse
 
+    @GET("channels")
+    suspend fun getChannelDetailsForUserName(
+        @Query("part") snippetData: String? = DATA_SNIPPET_QUERY,
+        @Query("part") contentDetails: String? = DATA_CONTENT_DETAILS_QUERY,
+        @Query("part") brandingDetails: String? = DATA_BRANDING_QUERY,
+        @Query("forUsername") channelName: String,
+        @Query("key") apiKey: String? = BuildConfig.YOUTUBE_KEY
+    ): ChannelDetailsResponse
+
     @GET("playlistItems")
     suspend fun getChannelUploads(
         @Query("part") snippet: String? = DATA_SNIPPET_QUERY,
         @Query("playlistId") playlistId: String,
         @Query("maxResults") maxResults: Int = MAX_UPLOADS_REQUIRED,
-        @Query("key") apiKey: String? = BuildConfig.YOUTUBE_KEY) : PlaylistItemResponse
+        @Query("key") apiKey: String? = BuildConfig.YOUTUBE_KEY
+    ): PlaylistItemResponse
+
+    @GET("channelSections")
+    suspend fun getChannelSections(
+        @Query("channelId") channelId: String,
+        @Query("part") snippet: String? = DATA_SNIPPET_QUERY,
+        @Query("part") contentDetails: String? = DATA_CONTENT_DETAILS_QUERY,
+        @Query("key") apiKey: String? = BuildConfig.YOUTUBE_KEY
+    ): ChannelSectionResponse
 
 }

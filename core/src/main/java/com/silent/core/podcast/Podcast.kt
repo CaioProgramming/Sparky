@@ -1,9 +1,10 @@
-package com.silent.core.program
+package com.silent.core.podcast
 
 import com.google.gson.annotations.SerializedName
 import com.silent.ilustriscore.core.bean.BaseBean
 import java.io.Serializable
 
+typealias podcasts = ArrayList<Podcast>
 data class Podcast(
     override var id: String = "",
     var name: String = "",

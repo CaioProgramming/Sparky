@@ -1,4 +1,4 @@
-package com.silent.core.program
+package com.silent.core.podcast
 
 object SampleData {
 
