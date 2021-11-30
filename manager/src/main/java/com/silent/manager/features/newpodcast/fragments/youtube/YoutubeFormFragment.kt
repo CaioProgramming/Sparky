@@ -57,8 +57,7 @@ class YoutubeFormFragment : Fragment() {
                 is NewPodcastState.RelatedChannelRetrieved -> {
                     relatedChannelsAdapter.updateAdapter(it.podcast)
                 }
-                is NewPodcastState.ChannelSearchRetrieved -> {
-                }
+
                 NewPodcastState.InvalidPodcast -> {
                     view?.showSnackBar(
                         "Esse podcast já foi cadastrado, selecione outro",
@@ -70,9 +69,7 @@ class YoutubeFormFragment : Fragment() {
                 }
 
                 is NewPodcastState.ValidPodcast -> {
-                    PodcastDialog.newInstance(it.podcast) {
-                        newPodcastViewModel.updatePodcast(it.podcast)
-                    }.show(requireActivity().supportFragmentManager, "SELECT_PODCAST")
+                    confirmPodcast(it.podcast)
                 }
 
                 is NewPodcastState.PodcastUpdated -> {
@@ -80,5 +77,18 @@ class YoutubeFormFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun confirmPodcast(podcast: Podcast) {
+        PodcastDialog.newInstance(podcast) {
+            selectCutChannel(podcast)
+        }.show(requireActivity().supportFragmentManager, "SELECT_PODCAST")
+    }
+
+    private fun selectCutChannel(savedPodcast: Podcast) {
+        CutsDialog.getInstance { cutPodcast ->
+            savedPodcast.cuts = cutPodcast.cuts
+            newPodcastViewModel.updatePodcast(savedPodcast)
+        }.show(childFragmentManager, "SELECT_CUT")
     }
 }

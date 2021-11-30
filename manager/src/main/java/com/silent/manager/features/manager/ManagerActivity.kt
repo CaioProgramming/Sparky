@@ -53,6 +53,7 @@ class ManagerActivity : AppCompatActivity() {
                 }
                 ViewModelBaseState.DataDeletedState -> {
                     showSnackBar("Podcast removido com sucesso")
+                    viewModel.dispatchViewAction(ViewModelBaseActions.GetAllDataAction)
                 }
                 is ViewModelBaseState.DataListRetrievedState -> {
                     podcasts_recycler.adapter = PodcastManagerAdapter(it.dataList as podcasts) {

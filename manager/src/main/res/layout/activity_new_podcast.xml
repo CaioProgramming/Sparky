@@ -26,7 +26,7 @@
         app:indicatorColor="?attr/colorPrimaryDark"
         app:trackColor="@color/material_grey900"
         app:trackCornerRadius="@dimen/radius_small_5dp"
-        tools:progress="1" />
+        android:progress="1" />
 
     <fragment
         android:id="@+id/new_podcast_fragment"

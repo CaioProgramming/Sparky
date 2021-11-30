@@ -35,7 +35,7 @@ class HostInstagramDialog : BottomSheetDialogFragment() {
         observeViewModel()
         confirm_insta_button.setOnClickListener {
             loading.fadeIn()
-            username_editText.fadeOut()
+            username_input_layout.fadeOut()
             confirm_insta_button.fadeOut()
             newPodcastViewModel.getInstagramData(username_editText.text.toString())
         }
@@ -50,9 +50,9 @@ class HostInstagramDialog : BottomSheetDialogFragment() {
                 }
                 HostState.ErrorFetchInstagram -> {
                     loading.fadeOut()
-                    username_editText.fadeIn()
+                    username_input_layout.fadeIn()
                     confirm_insta_button.fadeIn()
-                    username_editText.error = "Erro ao encontrar usuário, tente novamente."
+                    username_input_layout.error = "Erro ao encontrar usuário, tente novamente."
                 }
                 else -> {
 

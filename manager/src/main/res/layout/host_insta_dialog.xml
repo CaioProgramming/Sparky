@@ -32,20 +32,35 @@
         app:trackCornerRadius="@dimen/radius_small_5dp" />
 
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/username_editText"
-        android:layout_width="match_parent"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/username_input_layout"
         android:layout_height="wrap_content"
-        android:background="@color/transparent"
-        android:digits="abcdefghijklmnopqrstuvwxyz1234567890_"
-        android:gravity="center"
-        android:hint="Nome do host"
-        android:maxLength="30"
-        android:maxLines="1"
         android:padding="@dimen/padding_default_16dp"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-        tools:text="Igor 3k" />
+        app:boxBackgroundColor="@color/transparent"
+        app:helperText="Lembre-se que este é o @ do apresentador no instagram"
+        app:hintEnabled="false"
+        android:layout_width="match_parent"
+        app:prefixText="&#64;">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/username_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:capitalize="none"
+            android:digits="abcdefghijklmnopqrstuvwxyz1234567890_"
+            android:gravity="center"
+            android:hint="Nome do host"
+            android:inputType="textPersonName"
+            android:maxLength="30"
+            android:maxLines="1"
+            android:padding="@dimen/padding_default_16dp"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            tools:text="igor.3k" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/confirm_insta_button"

@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 private const val VENUS_CHANNEL_ID = "UCTBhsXf_XRxk8w4rMj6WBOA"
+private const val FLOW_STUDIOS_ID = "UCmw6h7iv_A_nHA1nlnhkAAA"
 
 class NewPodcastViewModel : BaseViewModel<Podcast>() {
 
@@ -47,12 +48,16 @@ class NewPodcastViewModel : BaseViewModel<Podcast>() {
 
     fun checkPodcast(newPodcast: Podcast) {
         viewModelScope.launch(Dispatchers.IO) {
-            val actualPodcasts = service.getAllData().success.data
-            if (actualPodcasts.any {
-                    it.youtubeID == newPodcast.youtubeID
-                }) {
-                newPodcastState.postValue(NewPodcastState.InvalidPodcast)
-            } else {
+            try {
+                val actualPodcasts = service.getAllData().success.data
+                if (actualPodcasts.any {
+                        it.youtubeID == newPodcast.youtubeID
+                    }) {
+                    newPodcastState.postValue(NewPodcastState.InvalidPodcast)
+                } else {
+                    newPodcastState.postValue(NewPodcastState.ValidPodcast(newPodcast))
+                }
+            } catch (e: Exception) {
                 newPodcastState.postValue(NewPodcastState.ValidPodcast(newPodcast))
             }
         }
@@ -71,25 +76,18 @@ class NewPodcastViewModel : BaseViewModel<Podcast>() {
         }
     }
 
-    fun searchChannel(channel: String) {
+    fun getRelatedCuts() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val channels = youtubeService.getChannelDetailsForUserName(channel)
-                val podcasts = ArrayList<Podcast>()
-                channels.items.forEach { channel ->
-                    val podcast = Podcast(
-                        youtubeID = channel.id,
-                        iconURL = channel.snippet.thumbnails.high.url,
-                        name = channel.snippet.title
-                    )
-                    podcasts.add(podcast)
-                }
-                newPodcastState.postValue(NewPodcastState.ChannelSearchRetrieved(podcasts))
+                val channelSections = youtubeService.getChannelSections(FLOW_STUDIOS_ID)
+                filterRelatedChannels(channelSections.items, true)
             } catch (e: Exception) {
-                viewModelState.postValue(ViewModelBaseState.ErrorState(DataException()))
+                e.printStackTrace()
+                viewModelState.postValue(ViewModelBaseState.ErrorState(DataException(ErrorType.UNKNOWN)))
             }
         }
     }
+
 
     fun getInstagramData(userName: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -103,7 +101,10 @@ class NewPodcastViewModel : BaseViewModel<Podcast>() {
         }
     }
 
-    private suspend fun filterRelatedChannels(sectionItem: List<SectionItem>) {
+    private suspend fun filterRelatedChannels(
+        sectionItem: List<SectionItem>,
+        cuts: Boolean = false
+    ) {
         val relatedChannelsSection = sectionItem.find { it.snippet.type == "multiplechannels" }
         val channels = relatedChannelsSection!!.contentDetails["channels"] as List<String>
         channels.forEach {
@@ -113,7 +114,13 @@ class NewPodcastViewModel : BaseViewModel<Podcast>() {
                 name = channel.snippet.title,
                 iconURL = channel.snippet.thumbnails.high.url
             )
-            newPodcastState.postValue(NewPodcastState.RelatedChannelRetrieved(podcast))
+            if (!cuts) {
+                newPodcastState.postValue(NewPodcastState.RelatedChannelRetrieved(podcast))
+            } else {
+                podcast.cuts = channel.contentDetails.relatedPlaylists.uploads
+                newPodcastState.postValue(NewPodcastState.RelatedCutsRetrieved(podcast))
+
+            }
         }
     }
 
