@@ -20,11 +20,6 @@ class PodcastService : BaseService<Podcast>() {
         }
     }
 
-    //TODO REMOVE SAMPLE DATA RETURN
-    override suspend fun getAllData(): ServiceResult<DataException, ArrayList<Podcast>> {
-        return ServiceResult.Success(SampleData.programs())
-    }
-
     override val dataPath = "Podcasts"
 
     override suspend fun getSingleData(id: String): ServiceResult<DataException, Podcast> {

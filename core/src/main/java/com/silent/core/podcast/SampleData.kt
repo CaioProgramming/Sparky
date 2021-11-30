@@ -9,12 +9,14 @@ object SampleData {
                     id = "0",
                     name = "Flow",
                     youtubeID = "UC4ncvgh5hFr5O83MH7-jRJg",
-                    hosts = listOf(
+                    hosts = arrayListOf(
                         Host(
+                            user = "igor.3k",
                             name = "Igor 3k",
                             profilePic = "https://instagram.fcgh2-1.fna.fbcdn.net/v/t51.2885-19/s320x320/192332834_2496302097180258_3781854935235845887_n.jpg?_nc_ht=instagram.fcgh2-1.fna.fbcdn.net&_nc_cat=106&_nc_ohc=cKXmn7x131oAX-g9O3q&edm=ABfd0MgBAAAA&ccb=7-4&oh=3a275f36a343629f8ea166a35f6f0098&oe=61A75623&_nc_sid=7bff83"
                         ),
                         Host(
+                            user = "monarkoficial",
                             name = "Monark",
                             profilePic = "https://instagram.fcgh2-1.fna.fbcdn.net/v/t51.2885-19/s320x320/240662484_374011570975137_6489892659504550454_n.jpg?_nc_ht=instagram.fcgh2-1.fna.fbcdn.net&_nc_cat=109&_nc_ohc=Tu05TCZfkXMAX_bDvZ4&edm=ABfd0MgBAAAA&ccb=7-4&oh=8d8a9505158d716208594bf7f93a16a6&oe=61A85662&_nc_sid=7bff83"
                         )

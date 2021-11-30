@@ -12,12 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_toStartOf="@id/host_photo"
-        android:background="@color/md_black"
         android:gravity="center"
         android:lines="2"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-        android:textColor="@color/md_white"
         android:textStyle="bold|italic"
         tools:text="Igor 3k" />
 

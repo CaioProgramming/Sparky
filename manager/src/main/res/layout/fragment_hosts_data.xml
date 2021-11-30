@@ -5,26 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/instagram_search_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_default_10dp"
-        android:background="@drawable/searchview_background"
-        app:iconifiedByDefault="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:queryBackground="@color/transparent"
-        app:queryHint="Buscar instagram dos hosts" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/instagram_hosts_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/instagram_search_view"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/host_next_button"
+        app:layout_constraintTop_toTopOf="parent"
         app:spanCount="3"
         tools:listitem="@layout/host_layout" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/host_next_button"
+        style="@style/Theme.Sparky.BottomButton"
+        android:layout_alignParentBottom="true"
+        android:text="Continuar"
+        app:icon="@drawable/ic_arrow_right_24"
+        app:iconGravity="end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

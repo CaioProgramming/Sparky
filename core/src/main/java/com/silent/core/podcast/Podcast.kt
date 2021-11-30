@@ -12,7 +12,7 @@ data class Podcast(
     @SerializedName("thumbnail_url")
     var iconURL: String = "",
     var views: Int = 0,
-    var hosts: List<Host> = emptyList(),
+    var hosts: ArrayList<Host> = ArrayList(),
     var instagram: String = "",
     var twitch: String = "",
     var twitter: String = "",
@@ -20,4 +20,8 @@ data class Podcast(
     var cuts: String = "",
 ) : BaseBean(id)
 
-data class Host(val name: String, val profilePic: String) : Serializable
+
+const val NEW_HOST = "NEWHOST"
+
+data class Host(val name: String = "", val profilePic: String = "", val user: String = "") :
+    Serializable

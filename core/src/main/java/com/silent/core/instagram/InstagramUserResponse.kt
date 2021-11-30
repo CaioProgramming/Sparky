@@ -1,7 +1,7 @@
 package com.silent.core.instagram
 
 
-data class InstagramResponse(val graphQL: InstagramGraph)
+data class InstagramResponse(val graphql: InstagramGraph)
 
 data class InstagramGraph(val user: InstagramUserResponse)
 

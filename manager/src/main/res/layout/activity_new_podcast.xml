@@ -16,27 +16,26 @@
         app:title="Sparky"
         app:titleTextAppearance="@style/Ilustris.Title" />
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/new_podcast_progress"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/new_podcast_toolbar"
+        android:layout_marginHorizontal="@dimen/margin_default_10dp"
+        android:max="3"
+        app:indicatorColor="?attr/colorPrimaryDark"
+        app:trackColor="@color/material_grey900"
+        app:trackCornerRadius="@dimen/radius_small_5dp"
+        tools:progress="1" />
+
     <fragment
         android:id="@+id/new_podcast_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/next_button"
         android:layout_below="@id/new_podcast_toolbar"
         app:defaultNavHost="true"
         app:navGraph="@navigation/newpodcast_navigation" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/next_button"
-        style="@style/Theme.Sparky.BottomButton"
-        android:layout_alignParentBottom="true"
-        android:text="Continuar"
-        android:visibility="gone"
-        app:icon="@drawable/ic_arrow_right_24"
-        app:iconGravity="end"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 
 </RelativeLayout>

@@ -1,6 +1,7 @@
 package com.silent.manager.states
 
 import com.silent.core.instagram.InstagramUserResponse
+import com.silent.core.podcast.Host
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.podcasts
 
@@ -13,5 +14,8 @@ sealed class NewPodcastState {
 }
 
 sealed class HostState {
-    data class HostInstagramRetrieve(val instagramUserResponse: InstagramUserResponse) : HostState()
+    data class HostInstagramRetrieve(val instagramUser: InstagramUserResponse) : HostState()
+    data class HostDeleted(val hosts: ArrayList<Host>) : HostState()
+    data class HostUpdated(val host: Host) : HostState()
+    object ErrorFetchInstagram : HostState()
 }

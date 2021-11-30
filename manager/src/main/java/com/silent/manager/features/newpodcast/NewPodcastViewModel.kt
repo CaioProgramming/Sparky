@@ -3,6 +3,7 @@ package com.silent.manager.features.newpodcast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.silent.core.instagram.InstagramService
+import com.silent.core.podcast.Host
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastService
 import com.silent.core.youtube.SectionItem
@@ -27,11 +28,21 @@ class NewPodcastViewModel : BaseViewModel<Podcast>() {
     val newPodcastState = MutableLiveData<NewPodcastState>()
     val hostState = MutableLiveData<HostState>()
 
-    private var podcast = Podcast()
+    var podcast = Podcast()
 
     fun updatePodcast(newPodcast: Podcast) {
         this.podcast = newPodcast
         newPodcastState.value = NewPodcastState.PodcastUpdated
+    }
+
+    fun updateHosts(host: Host) {
+        this.podcast.hosts.add(host)
+        hostState.value = HostState.HostUpdated(host)
+    }
+
+    fun deleteHost(host: Host) {
+        podcast.hosts.remove(host)
+        hostState.postValue(HostState.HostDeleted(podcast.hosts))
     }
 
     fun checkPodcast(newPodcast: Podcast) {
@@ -82,8 +93,13 @@ class NewPodcastViewModel : BaseViewModel<Podcast>() {
 
     fun getInstagramData(userName: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val instagramUser = instagramService.getUserInfo(userName)
-            hostState.postValue(HostState.HostInstagramRetrieve(instagramUser.graphQL.user))
+            try {
+                val instagramUser = instagramService.getUserInfo(userName)
+                hostState.postValue(HostState.HostInstagramRetrieve(instagramUser.graphql.user))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                hostState.postValue(HostState.ErrorFetchInstagram)
+            }
         }
     }
 

@@ -44,10 +44,10 @@ class NewPodcastActivity : AppCompatActivity() {
                     continue_button.setOnClickListener {
                         findNavController(R.id.new_podcast_fragment).navigate(R.id.action_podcastGetYoutubeFormFragment_to_GetHostsFragment)
                     }
+                    new_podcast_progress.setProgress(2, true)
                 }
-
                 else -> {
-
+                    //DO NOTHING
                 }
             }
         })

@@ -17,7 +17,7 @@ import com.silent.manager.features.newpodcast.NewPodcastActivity
 import kotlinx.android.synthetic.main.activity_manager.*
 
 class ManagerActivity : AppCompatActivity() {
-    val viewModel = ManagerViewModel()
+    private val viewModel = ManagerViewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manager)
@@ -30,6 +30,11 @@ class ManagerActivity : AppCompatActivity() {
         new_podcast_button.setOnClickListener {
             NewPodcastActivity.launchIntent(this)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.dispatchViewAction(ViewModelBaseActions.GetAllDataAction)
     }
 
     private fun showSnackBar(message: String) {

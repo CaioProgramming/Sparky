@@ -23,6 +23,15 @@
         android:id="@+id/podcastGetHostsFragment"
         android:name="com.silent.manager.features.newpodcast.fragments.hosts.HostsFormFragment"
         android:label="Hosts"
-        tools:layout="@layout/fragment_hosts_data" />
+        tools:layout="@layout/fragment_hosts_data">
+        <action
+            android:id="@+id/action_podcastGetHostsFragment_to_completeFragment"
+            app:destination="@id/completeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/completeFragment"
+        android:name="com.silent.manager.features.newpodcast.fragments.CompleteFragment"
+        android:label="Finalizando..."
+        tools:layout="@layout/fragment_create_complete" />
 
 </navigation>

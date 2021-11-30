@@ -20,6 +20,7 @@ interface YoutubeApi {
         @Query("channelId") channelId: String,
         @Query("type") searchType: String? = DATA_VIDEO_TYPE_QUERY,
         @Query("eventType") eventType: String? = DATA_EVENT_TYPE_LIVE_QUERY,
+        @Query("maxResults") maxResults: Int = 1,
         @Query("key") apiKey: String? = BuildConfig.YOUTUBE_KEY
 
     ): SearchResponse

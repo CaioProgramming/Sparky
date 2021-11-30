@@ -4,21 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.silent.core.podcast.Podcast
 import com.silent.manager.R
-import com.silent.manager.features.newpodcast.NewPodcastViewModel
 import kotlinx.android.synthetic.main.podcast_dialog.*
 
 class PodcastDialog : BottomSheetDialogFragment() {
 
     lateinit var podcast: Podcast
     lateinit var onContinue: () -> Unit
-    val newPodcastViewModel: NewPodcastViewModel by lazy {
-        ViewModelProvider(requireActivity())[NewPodcastViewModel::class.java]
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

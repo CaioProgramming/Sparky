@@ -3,7 +3,9 @@ package com.silent.sparky.features.podcast
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
@@ -11,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
 import com.ilustris.animations.slideInRight
+import com.silent.core.component.HostAdapter
 import com.silent.core.podcast.Podcast
 import com.silent.core.utils.WebUtils
 import com.silent.ilustriscore.core.utilities.delayedFunction
@@ -20,7 +23,6 @@ import com.silent.ilustriscore.core.utilities.visible
 import com.silent.sparky.R
 import com.silent.sparky.data.PodcastHeader
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
-import com.silent.sparky.features.podcast.adapter.HostAdapter
 import kotlinx.android.synthetic.main.fragment_podcast.*
 
 class PodcastFragment : Fragment() {
@@ -42,12 +44,6 @@ class PodcastFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_podcast, container, false)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.program_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity?)?.setSupportActionBar(program_toolbar)
@@ -65,7 +61,9 @@ class PodcastFragment : Fragment() {
         channel_videos.adapter = channelSectionsAdapter
         if (podcast.hosts.isNotEmpty()) {
             hosts_title.visible()
-            hosts_recycler_view.adapter = HostAdapter(podcast.hosts)
+            hosts_recycler_view.adapter = HostAdapter(podcast.hosts) {
+                WebUtils(requireContext()).openInstagram(it.user)
+            }
         } else {
             hosts_title.gone()
         }
@@ -76,31 +74,6 @@ class PodcastFragment : Fragment() {
             channel_videos.slideInRight()
         }
     }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.twitch_link -> {
-                program?.let {
-                    WebUtils(requireContext()).openTwitch(it.twitch)
-                }
-                return false
-            }
-            R.id.twitter_link -> {
-                program?.let {
-                    WebUtils(requireContext()).openTwitter(it.twitter)
-                }
-                return false
-            }
-            R.id.instagram_link -> {
-                program?.let {
-                    WebUtils(requireContext()).openInstagram(it.instagram)
-                }
-               return false
-            }
-            else -> return false
-        }
-    }
-
 
     private fun observeViewModel() {
         programViewModel.channelState.observe(this, {
