@@ -8,6 +8,8 @@ import com.silent.ilustriscore.core.model.ServiceResult
 
 class PodcastService : BaseService<Podcast>() {
 
+    override var requireAuth = false
+
     override fun deserializeDataSnapshot(dataSnapshot: DocumentSnapshot): Podcast {
         return dataSnapshot.toObject(Podcast::class.java)!!.apply {
             id = dataSnapshot.id

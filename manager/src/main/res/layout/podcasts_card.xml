@@ -1,40 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/podcast_card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="200dp"
+    android:layout_margin="@dimen/margin_small_4dp"
+    app:cardCornerRadius="@dimen/radius_small_5dp"
+    app:strokeColor="@color/material_grey700"
+    app:strokeWidth="1dp">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/podcast_card"
+    <ImageView
+        android:id="@+id/podcast_icon"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_gravity="center"
-        app:cardCornerRadius="0dp"
-        app:strokeColor="?attr/colorPrimaryDark"
-        app:strokeWidth="1dp">
+        android:layout_height="match_parent"
+        android:scaleType="center"
+        tools:src="@drawable/ic_round_podcasts_24"
+        tools:tint="@color/material_yellowA700" />
 
-        <ImageView
-            android:id="@+id/podcast_icon"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="center"
-            tools:src="@drawable/ic_round_podcasts_24"
-            tools:tint="@color/material_yellowA700" />
+    <TextView
+        android:id="@+id/podcast_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/double_faded_gradient"
+        android:gravity="center|bottom"
+        android:padding="@dimen/padding_small_8dp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        tools:text="Flow podcast" />
 
-        <TextView
-            android:id="@+id/podcast_name"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/nblack"
-            android:gravity="center|bottom"
-            android:padding="@dimen/padding_small_8dp"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-            tools:text="Flow podcast" />
-
-    </com.google.android.material.card.MaterialCardView>
+</com.google.android.material.card.MaterialCardView>
 
 
-</LinearLayout>

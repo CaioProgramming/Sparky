@@ -53,11 +53,30 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (videoHeaderAdapter.programSections.isNullOrEmpty()) {
-            observeViewModel()
-            setupView()
-            homeViewModel.getHome()
-        }
+        observeViewModel()
+        setupView()
+        homeViewModel.getHome()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        clearFragment()
+    }
+
+    private fun clearFragment() {
+        homeViewModel.homeState.removeObservers(this)
+        videoHeaderAdapter.clearAdapter()
+        podcasts_resume_recycler.adapter = null
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        clearFragment()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        clearFragment()
     }
 
     private fun setupView() {
@@ -73,7 +92,6 @@ class HomeFragment : Fragment() {
             when (it) {
                 is HomeState.HomeChannelRetrieved -> {
                     videoHeaderAdapter.updateSection(it.podcastHeader)
-
                 }
                 HomeState.HomeError -> {
                     view?.showSnackBar(
@@ -101,7 +119,7 @@ class HomeFragment : Fragment() {
                                 )
                             }
                     }
-                    view?.showSnackBar("${it.podcasts.size} lives no momento")
+                    //view?.showSnackBar("${it.podcasts.size} lives no momento")
                 }
             }
         })

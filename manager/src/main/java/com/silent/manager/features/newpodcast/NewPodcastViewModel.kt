@@ -92,8 +92,8 @@ class NewPodcastViewModel : BaseViewModel<Podcast>() {
     fun getInstagramData(userName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val instagramUser = instagramService.getUserInfo(userName)
-                hostState.postValue(HostState.HostInstagramRetrieve(instagramUser.graphql.user))
+                val instagramResponse = instagramService.getUserInfo(userName)
+                hostState.postValue(HostState.HostInstagramRetrieve(instagramResponse.graphql.user))
             } catch (e: Exception) {
                 e.printStackTrace()
                 hostState.postValue(HostState.ErrorFetchInstagram)

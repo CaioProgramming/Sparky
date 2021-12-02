@@ -49,16 +49,14 @@ dependencies {
     api 'androidx.legacy:legacy-support-v4:1.0.0'
     api 'androidx.constraintlayout:constraintlayout:2.1.2'
     api 'com.android.support:multidex:2.0.1'
-
-
-    api 'com.github.CaioProgramming:Ilustris:2.1.0'
-    api 'com.github.CaioProgramming.Ilustris:animations:2.1.0'
-
+    api 'com.github.CaioProgramming:Ilustris:2.1.2'
+    api 'com.github.CaioProgramming.Ilustris:animations:2.1.2'
     api 'de.hdodenhof:circleimageview:3.1.0'
     api 'com.github.mmin18:realtimeblurview:1.1.2'
     api 'com.android.support:multidex:1.0.3'
     api 'androidx.legacy:legacy-support-v4:1.0.0'
     api 'cat.ereza:customactivityoncrash:2.3.0'
+    implementation 'org.jsoup:jsoup:1.11.1'
 
 
     api platform('com.google.firebase:firebase-bom:25.12.0')

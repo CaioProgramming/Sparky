@@ -5,6 +5,7 @@ import com.silent.ilustriscore.core.bean.BaseBean
 import java.io.Serializable
 
 typealias podcasts = ArrayList<Podcast>
+
 data class Podcast(
     override var id: String = "",
     var name: String = "",
