@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/md_grey900"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_default_16dp">
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/divider"
+        android:layout_width="50dp"
+        android:layout_height="5dp"
+        app:cardBackgroundColor="?attr/colorPrimaryDark"
+        app:cardCornerRadius="@dimen/radius_small_5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:indeterminate="true"
+        android:padding="@dimen/padding_big_24"
+        android:visibility="gone"
+        app:trackColor="@color/transparent"
+        app:trackCornerRadius="@dimen/radius_small_5dp" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/username_input_layout"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_default_16dp"
+        app:boxBackgroundColor="@color/transparent"
+        app:helperText="Lembre-se que este é o @ do apresentador no instagram"
+        app:hintEnabled="false"
+        android:layout_width="match_parent"
+        app:prefixText="&#64;">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/username_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:capitalize="none"
+            android:digits="abcdefghijklmnopqrstuvwxyz1234567890_"
+            android:gravity="center"
+            android:hint="Nome do host"
+            android:inputType="textPersonName"
+            android:maxLength="30"
+            android:maxLines="1"
+            android:padding="@dimen/padding_default_16dp"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            tools:text="igor.3k" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/confirm_insta_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_default_16dp"
+        android:text="Confirmar"
+        android:textColor="@color/md_white"
+        app:backgroundTint="@color/material_blue500"
+        app:cornerRadius="@dimen/radius_default_10dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+</LinearLayout>

@@ -8,6 +8,7 @@
     android:background="?android:colorBackground"
     android:orientation="vertical"
     android:visibility="gone"
+    tools:visibility="visible"
     app:behavior_peekHeight="150dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 

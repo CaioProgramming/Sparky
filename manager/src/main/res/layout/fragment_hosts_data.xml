@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/instagram_hosts_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/host_next_button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:spanCount="3"
+        tools:listitem="@layout/host_layout" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/host_next_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_default_10dp"
+        android:padding="@dimen/padding_default_16dp"
+        app:backgroundTint="?attr/colorPrimaryDark"
+        app:cornerRadius="@dimen/radius_small_5dp"
+        android:layout_alignParentBottom="true"
+        android:text="Continuar"
+        app:icon="@drawable/ic_arrow_right_24"
+        app:iconGravity="end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

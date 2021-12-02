@@ -3,8 +3,8 @@ package com.silent.sparky.features.home.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
-import com.silent.core.program.Podcast
-import com.silent.core.program.PodcastService
+import com.silent.core.podcast.Podcast
+import com.silent.core.podcast.PodcastService
 import com.silent.core.youtube.PlaylistResource
 import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
@@ -23,7 +23,7 @@ class HomeViewModel : BaseViewModel<Podcast>() {
     fun getHome() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val podcasts = service.getAllData().success.data
+                val podcasts = service.getAllData().success.data.reversed()
                 podcasts.forEach {
                     val podcastData = youtubeService.getChannelDetails(it.youtubeID).items[0]
                     val uploads =
@@ -33,7 +33,7 @@ class HomeViewModel : BaseViewModel<Podcast>() {
                     val header = createHeader(it, uploads, it.id)
                     homeState.postValue(HomeState.HomeChannelRetrieved(header))
                 }
-                checkLives(podcasts)
+                checkLives(ArrayList(podcasts))
             } catch (e: Exception) {
                 homeState.postValue(HomeState.HomeError)
             }

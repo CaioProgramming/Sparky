@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/newpodcast_navigation"
+    app:startDestination="@id/podcastGetYoutubeDataFragment">
+
+    <fragment
+        android:id="@+id/podcastGetYoutubeDataFragment"
+        android:name="com.silent.manager.features.newpodcast.fragments.youtube.YoutubeFormFragment"
+        android:label="Encontrar podcasts"
+        tools:layout="@layout/fragment_podcast_youtubedata">
+        <action
+            android:id="@+id/action_podcastGetYoutubeFormFragment_to_GetHostsFragment"
+            app:destination="@id/podcastGetHostsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/podcastGetHostsFragment"
+        android:name="com.silent.manager.features.newpodcast.fragments.hosts.HostsFormFragment"
+        android:label="Hosts"
+        tools:layout="@layout/fragment_hosts_data">
+        <action
+            android:id="@+id/action_podcastGetHostsFragment_to_completeFragment"
+            app:destination="@id/completeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/completeFragment"
+        android:name="com.silent.manager.features.newpodcast.fragments.CompleteFragment"
+        android:label="Finalizando..."
+        tools:layout="@layout/fragment_create_complete" />
+
+</navigation>

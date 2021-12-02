@@ -10,10 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
-import com.silent.core.program.Podcast
+import com.silent.core.podcast.Podcast
 import com.silent.core.utils.WebUtils
-import com.silent.ilustriscore.core.utilities.gone
 import com.silent.ilustriscore.core.utilities.showSnackBar
+import com.silent.navigation.ModuleNavigator
+import com.silent.navigation.NavigationUtils
 import com.silent.sparky.R
 import com.silent.sparky.data.PodcastHeader
 import com.silent.sparky.features.home.adapter.ProgramsAdapter
@@ -22,7 +23,6 @@ import com.silent.sparky.features.home.data.LiveHeader
 import com.silent.sparky.features.home.viewmodel.HomeState
 import com.silent.sparky.features.home.viewmodel.HomeViewModel
 import kotlinx.android.synthetic.main.home_fragment.*
-import kotlinx.android.synthetic.main.live_bottom_sheet.*
 
 class HomeFragment : Fragment() {
 
@@ -58,9 +58,33 @@ class HomeFragment : Fragment() {
         homeViewModel.getHome()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        clearFragment()
+    }
+
+    private fun clearFragment() {
+        homeViewModel.homeState.removeObservers(this)
+        videoHeaderAdapter.clearAdapter()
+        podcasts_resume_recycler.adapter = null
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        clearFragment()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        clearFragment()
+    }
+
     private fun setupView() {
         podcasts_resume_recycler.adapter = videoHeaderAdapter
         videoHeaderAdapter.clearAdapter()
+        manager_warning.setOnClickListener {
+            NavigationUtils(requireContext()).startModule(ModuleNavigator.MANAGER)
+        }
     }
 
     private fun observeViewModel() {
@@ -68,7 +92,6 @@ class HomeFragment : Fragment() {
             when (it) {
                 is HomeState.HomeChannelRetrieved -> {
                     videoHeaderAdapter.updateSection(it.podcastHeader)
-
                 }
                 HomeState.HomeError -> {
                     view?.showSnackBar(
@@ -84,7 +107,6 @@ class HomeFragment : Fragment() {
                 }
                 is HomeState.HomeLivesRetrieved -> {
                     if (it.podcasts.isEmpty()) {
-                        lives_sheet.gone()
                         live_container.fadeOut()
                     } else {
                         live_container.fadeIn()
@@ -97,7 +119,7 @@ class HomeFragment : Fragment() {
                                 )
                             }
                     }
-                    view?.showSnackBar("${it.podcasts.size} lives no momento")
+                    //view?.showSnackBar("${it.podcasts.size} lives no momento")
                 }
             }
         })

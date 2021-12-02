@@ -5,9 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.silent.core.program.Podcast
+import com.ilustris.animations.fadeIn
+import com.silent.core.podcast.Podcast
 import com.silent.sparky.R
-import kotlinx.android.synthetic.main.fragment_podcast.view.*
+import kotlinx.android.synthetic.main.program_icon_layout.view.*
 
 class ProgramsAdapter(
     val podcasts: List<Podcast>,
@@ -37,6 +38,7 @@ class ProgramsAdapter(
                 itemView.program_icon.setOnClickListener {
                     onSelectProgram(this, adapterPosition)
                 }
+                itemView.live_status.fadeIn()
             }
         }
 

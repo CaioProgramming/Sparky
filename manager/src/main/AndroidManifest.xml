@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.silent.manager">
+
+    <application android:theme="@style/Theme.Sparky">
+        <activity
+            android:name=".features.newpodcast.NewPodcastActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.manager.ManagerActivity"
+            android:exported="false" />
+    </application>
+
+</manifest>

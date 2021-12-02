@@ -2,8 +2,8 @@ package com.silent.sparky.features.cuts.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.silent.core.program.Podcast
-import com.silent.core.program.PodcastService
+import com.silent.core.podcast.Podcast
+import com.silent.core.podcast.PodcastService
 import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
 import kotlinx.coroutines.Dispatchers
