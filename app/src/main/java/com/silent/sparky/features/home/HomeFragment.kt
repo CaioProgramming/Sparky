@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.home_fragment.*
 class HomeFragment : Fragment() {
 
     private val homeViewModel = HomeViewModel()
-    private val videoHeaderAdapter = VideoHeaderAdapter(
+    private var videoHeaderAdapter: VideoHeaderAdapter? = VideoHeaderAdapter(
         ArrayList(),
         ::openPodcast,
         ::openChannel
@@ -50,48 +50,49 @@ class HomeFragment : Fragment() {
         WebUtils(requireContext()).openYoutubeChannel(url)
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
         setupView()
-        homeViewModel.getHome()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        clearFragment()
     }
 
     private fun clearFragment() {
         homeViewModel.homeState.removeObservers(this)
-        videoHeaderAdapter.clearAdapter()
+        videoHeaderAdapter?.clearAdapter()
         podcasts_resume_recycler.adapter = null
+        videoHeaderAdapter = null
+    }
+
+    override fun onStart() {
+        setupView()
+        super.onStart()
     }
 
     override fun onDetach() {
-        super.onDetach()
         clearFragment()
+        super.onDetach()
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onResume() {
+        super.onResume()
         clearFragment()
+        setupView()
     }
 
     private fun setupView() {
         podcasts_resume_recycler.adapter = videoHeaderAdapter
-        videoHeaderAdapter.clearAdapter()
+        videoHeaderAdapter?.clearAdapter()
         manager_warning.setOnClickListener {
             NavigationUtils(requireContext()).startModule(ModuleNavigator.MANAGER)
         }
+        homeViewModel.getHome()
     }
 
     private fun observeViewModel() {
         homeViewModel.homeState.observe(this, {
             when (it) {
                 is HomeState.HomeChannelRetrieved -> {
-                    videoHeaderAdapter.updateSection(it.podcastHeader)
+                    videoHeaderAdapter?.updateSection(it.podcastHeader)
                 }
                 HomeState.HomeError -> {
                     view?.showSnackBar(

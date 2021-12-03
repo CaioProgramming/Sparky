@@ -19,6 +19,7 @@ data class Podcast(
     var twitter: String = "",
     var youtubeID: String = "",
     var cuts: String = "",
+    var uploads: String = ""
 ) : BaseBean(id)
 
 

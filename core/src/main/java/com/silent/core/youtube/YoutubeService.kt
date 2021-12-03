@@ -40,7 +40,7 @@ class YoutubeService {
         return youtubeApi.getChannelSections(channelID)
     }
 
-    suspend fun getChannelUploads(
+    suspend fun getPlaylistVideos(
         playlistId: String
     ): PlaylistItemResponse {
         val youtubeApi = retroFitService.create(YoutubeApi::class.java)

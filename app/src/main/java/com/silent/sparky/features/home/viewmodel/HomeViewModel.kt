@@ -23,13 +23,9 @@ class HomeViewModel : BaseViewModel<Podcast>() {
     fun getHome() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val podcasts = service.getAllData().success.data.reversed()
+                val podcasts = service.getAllData().success.data.sortedByDescending { it.subscribe }
                 podcasts.forEach {
-                    val podcastData = youtubeService.getChannelDetails(it.youtubeID).items[0]
-                    val uploads =
-                        youtubeService.getChannelUploads(podcastData.contentDetails.relatedPlaylists.uploads).items
-                    it.name = podcastData.snippet.title
-                    it.iconURL = podcastData.snippet.thumbnails.high.url
+                    val uploads = youtubeService.getPlaylistVideos(it.uploads).items
                     val header = createHeader(it, uploads, it.id)
                     homeState.postValue(HomeState.HomeChannelRetrieved(header))
                 }

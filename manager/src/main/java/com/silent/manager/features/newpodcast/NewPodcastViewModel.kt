@@ -112,7 +112,10 @@ class NewPodcastViewModel : BaseViewModel<Podcast>() {
             val podcast = Podcast(
                 youtubeID = channel.id,
                 name = channel.snippet.title,
-                iconURL = channel.snippet.thumbnails.high.url
+                iconURL = channel.snippet.thumbnails.high.url,
+                subscribe = channel.statistics.subscriberCount,
+                views = channel.statistics.viewCount,
+                uploads = channel.contentDetails.relatedPlaylists.uploads
             )
             if (!cuts) {
                 newPodcastState.postValue(NewPodcastState.RelatedChannelRetrieved(podcast))

@@ -51,16 +51,11 @@ class PodcastViewModel : BaseViewModel<Podcast>() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val podcast = service.getSingleData(podcastID).success.data
-                val channelsResponse = youtubeService.getChannelDetails(podcast.youtubeID).items[0]
-                val uploads =
-                    youtubeService.getChannelUploads(channelsResponse.contentDetails.relatedPlaylists.uploads)
-                val cuts = youtubeService.getChannelUploads(podcast.cuts)
-                podcast.apply {
-                    iconURL = channelsResponse.snippet.thumbnails.high.url
-                }
+                val uploads = youtubeService.getPlaylistVideos(podcast.uploads)
+                val cuts = youtubeService.getPlaylistVideos(podcast.cuts)
                 val uploadHeader = getHeader(
                     "Últimos episódios",
-                    channelsResponse.contentDetails.relatedPlaylists.uploads,
+                    podcast.uploads,
                     uploads.items,
                     RecyclerView.HORIZONTAL
                 )
@@ -88,7 +83,7 @@ class PodcastViewModel : BaseViewModel<Podcast>() {
     fun getChannelVideos(playlistId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val channelUploads = youtubeService.getChannelUploads(playlistId)
+                val channelUploads = youtubeService.getPlaylistVideos(playlistId)
                 print("Videos data -> $channelUploads")
                 channelState.postValue(
                     ChannelState.ChannelUploadsRetrieved(

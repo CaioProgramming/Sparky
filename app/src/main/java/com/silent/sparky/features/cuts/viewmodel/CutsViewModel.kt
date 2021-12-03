@@ -19,7 +19,7 @@ class CutsViewModel : BaseViewModel<Podcast>() {
             try {
                 val podcasts = service.getAllData().success.data
                 podcasts.forEach {
-                    val channelUploads = youtubeService.getChannelUploads(it.cuts)
+                    val channelUploads = youtubeService.getPlaylistVideos(it.cuts)
                     cutsState.postValue(
                         CutsState.CutsRetrieved(
                             it.cuts,

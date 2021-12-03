@@ -93,7 +93,7 @@ class VideoHeaderAdapter(
 
     fun updateSection(podcastHeader: PodcastHeader) {
         programSections.add(podcastHeader)
-        notifyItemInserted(itemCount)
+        notifyDataSetChanged()
     }
 
     fun clearAdapter() {
