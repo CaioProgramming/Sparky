@@ -63,20 +63,9 @@ class HomeFragment : Fragment() {
         videoHeaderAdapter = null
     }
 
-    override fun onStart() {
-        setupView()
-        super.onStart()
-    }
-
     override fun onDetach() {
         clearFragment()
         super.onDetach()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        clearFragment()
-        setupView()
     }
 
     private fun setupView() {

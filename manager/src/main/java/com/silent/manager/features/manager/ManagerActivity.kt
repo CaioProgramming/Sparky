@@ -56,7 +56,8 @@ class ManagerActivity : AppCompatActivity() {
                     viewModel.dispatchViewAction(ViewModelBaseActions.GetAllDataAction)
                 }
                 is ViewModelBaseState.DataListRetrievedState -> {
-                    podcasts_recycler.adapter = PodcastManagerAdapter(it.dataList as podcasts) {
+                    val podcasts = (it.dataList as podcasts).sortedByDescending { p -> p.subscribe }
+                    podcasts_recycler.adapter = PodcastManagerAdapter(ArrayList(podcasts)) {
                         MaterialAlertDialogBuilder(this)
                             .setTitle("O que deseja fazer?")
                             .setItems(arrayOf("Editar", "Excluir")) { dialog, wich ->
