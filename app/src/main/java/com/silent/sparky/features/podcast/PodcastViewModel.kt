@@ -79,24 +79,4 @@ class PodcastViewModel : BaseViewModel<Podcast>() {
         }
     }
 
-
-    fun getChannelVideos(playlistId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val channelUploads = youtubeService.getPlaylistVideos(playlistId)
-                print("Videos data -> $channelUploads")
-                channelState.postValue(
-                    ChannelState.ChannelUploadsRetrieved(
-                        channelUploads.items,
-                        playlistId
-                    )
-                )
-            } catch (e: Exception) {
-                e.printStackTrace()
-                channelState.postValue(ChannelState.ChannelFailedState)
-            }
-        }
-    }
-
-
 }

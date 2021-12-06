@@ -27,6 +27,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/double_faded_gradient" />
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -42,6 +43,26 @@
                     android:layout_gravity="center"
                     android:layout_marginVertical="@dimen/margin_default_10dp"
                     android:src="@drawable/ic_round_podcasts_24" />
+
+                <TextView
+                    android:id="@+id/subscriber_count"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                    android:textColor="@color/md_white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="inscritos"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:textColor="@color/md_white" />
 
                 <TextView
                     android:id="@+id/hosts_title"

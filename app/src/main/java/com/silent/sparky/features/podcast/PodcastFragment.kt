@@ -1,5 +1,6 @@
 package com.silent.sparky.features.podcast
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -24,6 +25,7 @@ import com.silent.sparky.R
 import com.silent.sparky.data.PodcastHeader
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
 import kotlinx.android.synthetic.main.fragment_podcast.*
+import java.text.NumberFormat
 
 class PodcastFragment : Fragment() {
     private val programViewModel = PodcastViewModel()
@@ -51,6 +53,20 @@ class PodcastFragment : Fragment() {
         programViewModel.getChannelData(args.podcastId)
     }
 
+    private fun animateSubscriberCount(count: Int) {
+        val animator = ValueAnimator()
+        animator.run {
+            setObjectValues(0, count)
+            addUpdateListener {
+                subscriber_count.text =
+                    NumberFormat.getInstance().format(it.animatedValue.toString().toInt())
+            }
+            duration = 5000
+            start()
+        }
+
+    }
+
     private fun setupPodcast(podcast: Podcast) {
         program_name.text = podcast.name
         Glide.with(this).load(podcast.iconURL).into(program_icon)
@@ -73,6 +89,7 @@ class PodcastFragment : Fragment() {
             app_bar.fadeIn()
             channel_videos.slideInRight()
         }
+        animateSubscriberCount(podcast.subscribe)
     }
 
     private fun observeViewModel() {
