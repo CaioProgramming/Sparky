@@ -10,11 +10,22 @@
     </style>
 
     <style name="Theme.Sparky.ProgramIcon">
-        <item name="android:stateListAnimator">@animator/list_animator</item>
+        <item name="android:stateListAnimator">@animator/scale_down_animator</item>
         <item name="civ_circle_background_color">@color/md_black</item>
         <item name="civ_border_width">2dp</item>
         <item name="civ_border_color">?android:textColorPrimary</item>
-        <item name="android:layout_width">50dp</item>
-        <item name="android:layout_height">50dp</item>
+    </style>
+
+    <style name="Theme.Sparky.BottomButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:textColor">@color/md_black</item>
+        <item name="iconTint">@color/md_black</item>
+        <item name="background">@color/md_white</item>
+        <item name="android:background">@color/md_white</item>
+        <item name="android:foreground">?selectableItemBackground</item>
+        <item name="iconGravity">end</item>
+        <item name="icon">@drawable/ic_arrow_right_24</item>
+        <item name="backgroundTint">?attr/colorPrimaryDark</item>
     </style>
 </resources>

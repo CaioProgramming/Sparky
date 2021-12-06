@@ -28,12 +28,28 @@ class YoutubeService {
         return youtubeApi.getChannelDetails(channelId = programID)
     }
 
-    suspend fun getChannelUploads(
+    suspend fun getChannelDetailsForUserName(channelName: String): ChannelDetailsResponse {
+        val youtubeApi = retroFitService.create(YoutubeApi::class.java)
+        return youtubeApi.getChannelDetailsForUserName(channelName = channelName)
+    }
+
+    suspend fun getChannelSections(
+        channelID: String
+    ): ChannelSectionResponse {
+        val youtubeApi = retroFitService.create(YoutubeApi::class.java)
+        return youtubeApi.getChannelSections(channelID)
+    }
+
+    suspend fun getPlaylistVideos(
         playlistId: String
     ): PlaylistItemResponse {
         val youtubeApi = retroFitService.create(YoutubeApi::class.java)
         return youtubeApi.getChannelUploads(playlistId = playlistId)
     }
 
+    suspend fun getChannelLiveStatus(channelID: String): SearchResponse {
+        val youtubeApi = retroFitService.create(YoutubeApi::class.java)
+        return youtubeApi.searchChannelLive(channelId = channelID)
+    }
 
 }

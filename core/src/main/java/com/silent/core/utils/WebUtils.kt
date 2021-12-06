@@ -21,5 +21,22 @@ class WebUtils(val context: Context) {
         context.startActivity(browserIntent)
     }
 
+    fun openInstagram(userID: String) {
+        val browserIntent = Intent(Intent.ACTION_VIEW,
+            Uri.parse(INSTAGRAM_PREFIX + userID))
+        context.startActivity(browserIntent)
+    }
+
+    fun openTwitch(twitchID: String) {
+        val browserIntent = Intent(Intent.ACTION_VIEW,
+            Uri.parse(TWITCH_PREFIX + twitchID))
+        context.startActivity(browserIntent)
+    }
+
+    fun openTwitter(twitterID: String) {
+        val browserIntent = Intent(Intent.ACTION_VIEW,
+            Uri.parse(TWITTER_PREFIX + twitterID))
+        context.startActivity(browserIntent)
+    }
 
 }
