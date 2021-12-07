@@ -1,0 +1,6 @@
+<resources>
+    <declare-styleable name="ErrorView">
+        <attr name="message" format="string" />
+        <attr name="animation" format="reference" />
+    </declare-styleable>
+</resources>

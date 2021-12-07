@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Sparky" parent="Theme.MaterialComponents.NoActionBar">
+
+<style name="Theme.Sparky" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:colorBackground">@color/md_black</item>
         <item name="colorPrimary">@color/material_yellow500</item>
         <item name="colorPrimaryDark">@color/material_yellow800</item>
@@ -28,4 +29,5 @@
         <item name="icon">@drawable/ic_arrow_right_24</item>
         <item name="backgroundTint">?attr/colorPrimaryDark</item>
     </style>
+
 </resources>

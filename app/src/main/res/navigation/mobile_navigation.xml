@@ -46,7 +46,7 @@
         android:id="@+id/liveFragment"
         android:name="com.silent.sparky.features.live.LiveFragment"
         android:label="LiveFragment"
-        tools:layout="@layout/live_podcast_expanded_layout">
+        tools:layout="@layout/podcast_live_fragment">
         <argument
             android:name="live_object"
             app:argType="com.silent.sparky.features.home.data.LiveHeader" />

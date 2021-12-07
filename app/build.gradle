@@ -44,7 +44,6 @@ dependencies {
 
     implementation project(':core')
     implementation project(':navigation')
-    implementation 'com.airbnb.android:lottie:3.6.0'
     implementation 'com.github.PierfrancescoSoffritti:AndroidYouTubePlayer:10.0.5'
 
     testImplementation 'junit:junit:4.+'

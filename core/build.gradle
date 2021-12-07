@@ -56,6 +56,8 @@ dependencies {
     api 'com.android.support:multidex:1.0.3'
     api 'androidx.legacy:legacy-support-v4:1.0.0'
     api 'cat.ereza:customactivityoncrash:2.3.0'
+    api 'com.airbnb.android:lottie:3.6.0'
+
     implementation 'org.jsoup:jsoup:1.11.1'
 
 

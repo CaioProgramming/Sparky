@@ -6,9 +6,10 @@
     android:id="@+id/podcast_card"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:layout_margin="@dimen/margin_small_4dp"
-    app:cardCornerRadius="@dimen/radius_small_5dp"
-    app:strokeColor="@color/material_grey700"
+    android:layout_margin="1dp"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/material_grey900"
     app:strokeWidth="1dp">
 
     <ImageView
@@ -23,9 +24,9 @@
         android:id="@+id/podcast_name"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/double_faded_gradient"
+        android:background="@drawable/faded_gradient"
         android:gravity="center|bottom"
-        android:padding="@dimen/padding_small_8dp"
+        android:padding="@dimen/padding_default_16dp"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         tools:text="Flow podcast" />

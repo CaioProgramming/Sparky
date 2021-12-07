@@ -12,7 +12,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstan
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
 import com.silent.sparky.R
-import kotlinx.android.synthetic.main.live_podcast_expanded_layout.*
+import kotlinx.android.synthetic.main.podcast_live_fragment.*
 
 class LiveFragment : Fragment() {
 
@@ -24,7 +24,7 @@ class LiveFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.live_podcast_expanded_layout, container, false)
+        return inflater.inflate(R.layout.podcast_live_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
