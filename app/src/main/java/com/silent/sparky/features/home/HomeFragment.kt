@@ -20,6 +20,7 @@ import com.silent.ilustriscore.core.utilities.gone
 import com.silent.navigation.ModuleNavigator
 import com.silent.navigation.NavigationUtils
 import com.silent.sparky.R
+import com.silent.sparky.data.PodcastHeader
 import com.silent.sparky.features.home.adapter.ProgramsAdapter
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
 import com.silent.sparky.features.home.data.LiveHeader
@@ -113,7 +114,7 @@ class HomeFragment : Fragment() {
         homeViewModel.homeState.observe(this, {
             when (it) {
                 is HomeState.HomeChannelRetrieved -> {
-                    videoHeaderAdapter?.updateSection(it.podcastHeader)
+                    setupHome(it.podcastHeader)
                 }
                 HomeState.HomeError -> {
                     homeViewModel.getAllData()
@@ -121,19 +122,7 @@ class HomeFragment : Fragment() {
                 HomeState.HomeLiveError -> {
                 }
                 is HomeState.HomeLivesRetrieved -> {
-                    if (it.podcasts.isEmpty()) {
-                        lives_recycler_view.gone()
-                    } else {
-                        lives_recycler_view.fadeIn()
-                        lives_recycler_view.adapter =
-                            ProgramsAdapter(extractPodcasts(it.podcasts), true) { podcast, index ->
-                                val bundle = bundleOf("live_object" to it.podcasts[index])
-                                findNavController().navigate(
-                                    R.id.action_navigation_home_to_liveFragment,
-                                    bundle
-                                )
-                            }
-                    }
+                    setupLive(it.podcasts)
                     //view?.showSnackBar("${it.podcasts.size} lives no momento")
                 }
                 HomeState.InvalidManager -> {
@@ -165,6 +154,26 @@ class HomeFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun setupHome(podcastHeader: PodcastHeader) {
+        videoHeaderAdapter?.updateSection(podcastHeader)
+    }
+
+    private fun setupLive(podcasts: ArrayList<LiveHeader>) {
+        if (podcasts.isEmpty()) {
+            lives_recycler_view.gone()
+        } else {
+            lives_recycler_view.fadeIn()
+            lives_recycler_view.adapter =
+                ProgramsAdapter(extractPodcasts(podcasts), true) { podcast, index ->
+                    val bundle = bundleOf("live_object" to podcasts[index])
+                    findNavController().navigate(
+                        R.id.action_navigation_home_to_liveFragment,
+                        bundle
+                    )
+                }
+        }
     }
 
     private fun extractPodcasts(liveHeader: ArrayList<LiveHeader>): ArrayList<Podcast> {
