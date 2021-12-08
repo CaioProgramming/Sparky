@@ -40,13 +40,13 @@
 
         <TextView
             android:id="@+id/channel_name"
+            android:fontFamily="@font/kaushan_script"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_toEndOf="@id/collapseButton"
             android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-            android:textStyle="bold"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             tools:text="Flow podcast" />
 
 

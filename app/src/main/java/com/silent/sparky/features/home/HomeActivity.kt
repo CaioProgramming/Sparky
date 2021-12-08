@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.firebase.ui.auth.AuthUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.silent.ilustriscore.core.utilities.LoginHelper
 import com.silent.sparky.R
 import kotlinx.android.synthetic.main.activity_home.*
 
@@ -25,5 +27,11 @@ class HomeActivity : AppCompatActivity(R.layout.activity_home) {
             )
         )*/
         navView.setupWithNavController(navController)
+        LoginHelper.signIn(
+            this,
+            arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build()),
+            R.style.Theme_Sparky,
+            R.mipmap.ic_launcher
+        )
     }
 }

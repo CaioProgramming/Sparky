@@ -6,6 +6,8 @@ import com.silent.sparky.features.home.data.LiveHeader
 sealed class HomeState {
     data class HomeChannelRetrieved(val podcastHeader: PodcastHeader) : HomeState()
     data class HomeLivesRetrieved(val podcasts: ArrayList<LiveHeader>) : HomeState()
+    object ValidManager : HomeState()
+    object InvalidManager : HomeState()
     object HomeError : HomeState()
     object HomeLiveError : HomeState()
 }

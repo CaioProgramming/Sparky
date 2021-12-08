@@ -61,7 +61,7 @@ class PodcastFragment : Fragment() {
                 subscriber_count.text =
                     NumberFormat.getInstance().format(it.animatedValue.toString().toInt())
             }
-            duration = 5000
+            duration = 10000
             start()
         }
 
