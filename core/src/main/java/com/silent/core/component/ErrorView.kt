@@ -41,14 +41,11 @@ class ErrorView : FrameLayout {
 
     fun showError() {
         if (ViewCompat.isAttachedToWindow(this)) {
+            visible()
             val x = width / 2
             val y = height / 2
-
             val radius = width.coerceAtLeast(height) / 2
-
             val anim = ViewAnimationUtils.createCircularReveal(this, x, y, 0f, radius.toFloat())
-
-            visible()
             anim.start()
         } else {
             fadeIn()
@@ -63,7 +60,7 @@ class ErrorView : FrameLayout {
         )
         try {
             val message = attributes.getString(R.styleable.ErrorView_message)
-            val animation = attributes.getResourceId(R.styleable.ErrorView_animation, R.raw.sleep)
+            val animation = attributes.getInt(R.styleable.ErrorView_animation, R.raw.sleep)
             error_message.text = message
             error_animation.setAnimation(animation)
         } catch (e: Exception) {

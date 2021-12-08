@@ -2,7 +2,6 @@ package com.silent.sparky.features.home
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +17,6 @@ import com.silent.core.utils.WebUtils
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.ilustriscore.core.utilities.RC_SIGN_IN
 import com.silent.ilustriscore.core.utilities.gone
-import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.navigation.ModuleNavigator
 import com.silent.navigation.NavigationUtils
 import com.silent.sparky.R
@@ -119,10 +117,6 @@ class HomeFragment : Fragment() {
                 }
                 HomeState.HomeError -> {
                     homeViewModel.getAllData()
-                    view?.showSnackBar(
-                        "Ocorreu um erro inesperado ao obter videos dos programas",
-                        backColor = Color.RED
-                    )
                 }
                 HomeState.HomeLiveError -> {
                 }
@@ -143,7 +137,7 @@ class HomeFragment : Fragment() {
                     //view?.showSnackBar("${it.podcasts.size} lives no momento")
                 }
                 HomeState.InvalidManager -> {
-
+                    setMenuVisibility(false)
                 }
                 HomeState.ValidManager -> {
                     setMenuVisibility(true)
@@ -164,7 +158,7 @@ class HomeFragment : Fragment() {
                             openPodcast(podcast.id)
                         }
                     podcasts_resume_recycler.layoutManager =
-                        GridLayoutManager(requireContext(), 3, RecyclerView.VERTICAL, false)
+                        GridLayoutManager(requireContext(), 4, RecyclerView.VERTICAL, false)
                 }
                 is ViewModelBaseState.ErrorState -> {
                     error_view.showError()
