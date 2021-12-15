@@ -50,7 +50,7 @@ class PodcastViewModel : BaseViewModel<Podcast>() {
     fun getChannelData(podcastID: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val podcast = service.getSingleData(podcastID).success.data
+                val podcast = service.getSingleData(podcastID).success.data as Podcast
                 val uploads = youtubeService.getPlaylistVideos(podcast.uploads)
                 val cuts = youtubeService.getPlaylistVideos(podcast.cuts)
                 val uploadHeader = getHeader(

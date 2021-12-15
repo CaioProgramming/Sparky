@@ -51,10 +51,12 @@ class NewPodcastViewModel : BaseViewModel<Podcast>() {
             try {
                 val actualPodcasts = service.getAllData().success.data
                 if (actualPodcasts.any {
-                        it.youtubeID == newPodcast.youtubeID
+                        val podcast = it as Podcast
+                        podcast.youtubeID == newPodcast.youtubeID
                     }) {
                     newPodcastState.postValue(NewPodcastState.InvalidPodcast)
                 } else {
+                    podcast = newPodcast
                     newPodcastState.postValue(NewPodcastState.ValidPodcast(newPodcast))
                 }
             } catch (e: Exception) {
@@ -62,7 +64,6 @@ class NewPodcastViewModel : BaseViewModel<Podcast>() {
             }
         }
     }
-
 
     fun getRelatedChannels() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -79,7 +80,8 @@ class NewPodcastViewModel : BaseViewModel<Podcast>() {
     fun getRelatedCuts() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val channelSections = youtubeService.getChannelSections(FLOW_STUDIOS_ID)
+                val channelID = podcast.youtubeID
+                val channelSections = youtubeService.getChannelSections(channelID)
                 filterRelatedChannels(channelSections.items, true)
             } catch (e: Exception) {
                 e.printStackTrace()

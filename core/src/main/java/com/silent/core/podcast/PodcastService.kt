@@ -2,11 +2,12 @@ package com.silent.core.podcast
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.silent.ilustriscore.core.bean.BaseBean
 import com.silent.ilustriscore.core.model.BaseService
 import com.silent.ilustriscore.core.model.DataException
 import com.silent.ilustriscore.core.model.ServiceResult
 
-class PodcastService : BaseService<Podcast>() {
+class PodcastService : BaseService() {
 
     override var requireAuth = false
 
@@ -24,7 +25,7 @@ class PodcastService : BaseService<Podcast>() {
 
     override val dataPath = "Podcasts"
 
-    override suspend fun getSingleData(id: String): ServiceResult<DataException, Podcast> {
+    override suspend fun getSingleData(id: String): ServiceResult<DataException, BaseBean> {
         val isInt = id.toIntOrNull() != null
         return if (!isInt) {
             super.getSingleData(id)
