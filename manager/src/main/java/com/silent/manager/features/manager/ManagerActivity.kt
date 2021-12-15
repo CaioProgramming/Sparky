@@ -6,7 +6,6 @@ import com.firebase.ui.auth.AuthUI
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.podcasts
-import com.silent.ilustriscore.core.model.ViewModelBaseActions
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.ilustriscore.core.utilities.LoginHelper
 import com.silent.ilustriscore.core.utilities.getView
@@ -23,7 +22,7 @@ class ManagerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_manager)
         setupView()
         observeViewModel()
-        viewModel.dispatchViewAction(ViewModelBaseActions.GetAllDataAction)
+        viewModel.getAllData()
     }
 
     private fun setupView() {
@@ -34,7 +33,7 @@ class ManagerActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.dispatchViewAction(ViewModelBaseActions.GetAllDataAction)
+        viewModel.getAllData()
     }
 
     private fun showSnackBar(message: String) {
@@ -53,7 +52,7 @@ class ManagerActivity : AppCompatActivity() {
                 }
                 ViewModelBaseState.DataDeletedState -> {
                     showSnackBar("Podcast removido com sucesso")
-                    viewModel.dispatchViewAction(ViewModelBaseActions.GetAllDataAction)
+                    viewModel.getAllData()
                 }
                 is ViewModelBaseState.DataListRetrievedState -> {
                     val podcasts = (it.dataList as podcasts).sortedByDescending { p -> p.subscribe }
@@ -86,7 +85,7 @@ class ManagerActivity : AppCompatActivity() {
     }
 
     private fun deletePodcast(podcast: Podcast) {
-        viewModel.dispatchViewAction(ViewModelBaseActions.DeleteDataAction(podcast.id))
+        viewModel.deleteData(podcast.id)
     }
 
     private fun editPodcast(podcast: Podcast) {

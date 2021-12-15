@@ -2,15 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/navigation_cuts"
+        android:icon="@drawable/ic_baseline_movie_creation_24"
+        android:title="@string/nav_cuts" />
+
+    <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/ic_round_home_24"
         android:title="@string/title_home" />
 
     <item
-        android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/ic_baseline_movie_creation_24"
-        android:title="@string/nav_cuts" />
-
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_baseline_local_florist_24"
+        android:title="Conta" />
 
 
 </menu>

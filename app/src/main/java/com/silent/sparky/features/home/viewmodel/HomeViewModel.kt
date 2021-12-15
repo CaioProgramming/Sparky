@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastService
+import com.silent.core.podcast.podcasts
 import com.silent.core.users.UsersService
 import com.silent.core.youtube.PlaylistResource
 import com.silent.core.youtube.YoutubeService
@@ -28,8 +29,10 @@ class HomeViewModel : BaseViewModel<Podcast>() {
                 service.currentUser?.let {
                     checkManager(it.uid)
                 }
-                val podcasts = service.getAllData().success.data.sortedByDescending { it.subscribe }
-                podcasts.forEach {
+                val podcasts = service.getAllData().success.data as podcasts
+
+                val sortedPodcasts = podcasts.sortedByDescending { it.subscribe }
+                sortedPodcasts.forEach {
                     val uploads = youtubeService.getPlaylistVideos(it.uploads).items
                     val header = createHeader(it, uploads, it.id)
                     homeState.postValue(HomeState.HomeChannelRetrieved(header))

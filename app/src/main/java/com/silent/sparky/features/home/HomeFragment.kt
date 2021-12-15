@@ -74,7 +74,6 @@ class HomeFragment : Fragment() {
         super.onDetach()
     }
 
-
     private fun setupView() {
         podcasts_resume_recycler.adapter = videoHeaderAdapter
         (requireActivity() as AppCompatActivity?)?.run {

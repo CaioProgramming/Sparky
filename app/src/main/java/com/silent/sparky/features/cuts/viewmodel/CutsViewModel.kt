@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastService
+import com.silent.core.podcast.podcasts
 import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +18,7 @@ class CutsViewModel : BaseViewModel<Podcast>() {
     fun fetchCuts() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val podcasts = service.getAllData().success.data
+                val podcasts = service.getAllData().success.data as podcasts
                 podcasts.forEach {
                     val channelUploads = youtubeService.getPlaylistVideos(it.cuts)
                     cutsState.postValue(

@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.ilustris.animations.fadeIn
-import com.silent.ilustriscore.core.model.ViewModelBaseActions
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.silent.manager.R
@@ -32,11 +31,7 @@ class CompleteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
-        newPodcastViewModel.dispatchViewAction(
-            ViewModelBaseActions.SaveDataAction(
-                newPodcastViewModel.podcast
-            )
-        )
+        newPodcastViewModel.saveData(newPodcastViewModel.podcast)
     }
 
     private fun observeViewModel() {
