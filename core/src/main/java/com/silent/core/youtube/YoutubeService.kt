@@ -1,6 +1,7 @@
 package com.silent.core.youtube
 
 import com.silent.core.twitch.ChannelDetailsResponse
+import com.silent.core.youtube.data.YoutubeVideoResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -28,11 +29,6 @@ class YoutubeService {
         return youtubeApi.getChannelDetails(channelId = programID)
     }
 
-    suspend fun getChannelDetailsForUserName(channelName: String): ChannelDetailsResponse {
-        val youtubeApi = retroFitService.create(YoutubeApi::class.java)
-        return youtubeApi.getChannelDetailsForUserName(channelName = channelName)
-    }
-
     suspend fun getChannelSections(
         channelID: String
     ): ChannelSectionResponse {
@@ -50,6 +46,11 @@ class YoutubeService {
     suspend fun getChannelLiveStatus(channelID: String): SearchResponse {
         val youtubeApi = retroFitService.create(YoutubeApi::class.java)
         return youtubeApi.searchChannelLive(channelId = channelID)
+    }
+
+    suspend fun getVideoDetails(videoID: String): YoutubeVideoResponse {
+        val youtubeApi = retroFitService.create(YoutubeApi::class.java)
+        return youtubeApi.getVideoDetails(videoID = videoID)
     }
 
 }

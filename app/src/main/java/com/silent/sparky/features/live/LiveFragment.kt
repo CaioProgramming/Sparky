@@ -5,19 +5,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.ilustris.animations.popOut
+import com.ilustris.animations.slideInBottom
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
+import com.silent.core.podcast.Podcast
 import com.silent.sparky.R
+import com.silent.sparky.features.live.viewmodel.LiveViewModel
+import com.silent.sparky.features.live.viewmodel.LiveViewState
 import kotlinx.android.synthetic.main.podcast_live_fragment.*
 
 class LiveFragment : Fragment() {
 
     private val args by navArgs<LiveFragmentArgs>()
-
+    private val liveViewModel = LiveViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,27 +35,44 @@ class LiveFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeViewModel()
         setupView()
     }
 
     private fun setupView() {
         val live = args.liveObject
-        loadVideo(live.video.id.videoId)
-        live_title.text = live.video.snippet.title
-        channel_name.text = live.podcast.name
-        channel_name.setOnClickListener {
-            val bundle = bundleOf("podcast_id" to live.podcast.id)
-            findNavController().navigate(R.id.action_liveFragment_to_podcastFragment, bundle)
-        }
-
+        live_title.text = live.title
         collapseButton.setOnClickListener {
             findNavController().popBackStack()
         }
+        loadVideo(live.feed.youtube)
+        liveViewModel.getPodcastInfo(live.feed.youtube)
     }
+
+    private fun observeViewModel() {
+        liveViewModel.liveViewState.observe(this, {
+            when (it) {
+                is LiveViewState.PodcastData -> {
+                    setupPodcast(it.podcast)
+                }
+            }
+        })
+    }
+
+    private fun setupPodcast(podcast: Podcast) {
+        channel_name.text = podcast.name
+        channel_name.setOnClickListener {
+            val bundle = bundleOf("podcast_id" to podcast.id)
+            findNavController().navigate(R.id.action_liveFragment_to_podcastFragment, bundle)
+        }
+        live_top.slideInBottom()
+    }
+
 
     fun loadVideo(videoID: String) {
         live_player.initialize(object : YouTubePlayerListener {
             override fun onApiChange(youTubePlayer: YouTubePlayer) {
+
             }
 
             override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
@@ -74,16 +97,23 @@ class LiveFragment : Fragment() {
             }
 
             override fun onReady(youTubePlayer: YouTubePlayer) {
-                youTubePlayer.cueVideo(videoID, 0f)
+                youTubePlayer.loadVideo(videoID, 0f)
             }
 
             override fun onStateChange(
                 youTubePlayer: YouTubePlayer,
                 state: PlayerConstants.PlayerState
             ) {
+                if (state == PlayerConstants.PlayerState.PLAYING) {
+                    if (loading.isVisible) {
+                        loading.pauseAnimation()
+                        loading.popOut()
+                    }
+                }
             }
 
             override fun onVideoDuration(youTubePlayer: YouTubePlayer, duration: Float) {
+
             }
 
             override fun onVideoId(youTubePlayer: YouTubePlayer, videoId: String) {

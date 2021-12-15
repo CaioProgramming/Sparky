@@ -3,6 +3,7 @@ package com.silent.sparky.features.home.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
+import com.silent.core.flow.FlowService
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastService
 import com.silent.core.podcast.podcasts
@@ -10,8 +11,9 @@ import com.silent.core.users.UsersService
 import com.silent.core.youtube.PlaylistResource
 import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
+import com.silent.ilustriscore.core.model.DataException
+import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.sparky.data.PodcastHeader
-import com.silent.sparky.features.home.data.LiveHeader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -19,6 +21,7 @@ class HomeViewModel : BaseViewModel<Podcast>() {
 
     override val service = PodcastService()
     private val youtubeService = YoutubeService()
+    private val flowService = FlowService()
     private val userService = UsersService()
     val homeState = MutableLiveData<HomeState>()
 
@@ -37,28 +40,25 @@ class HomeViewModel : BaseViewModel<Podcast>() {
                     val header = createHeader(it, uploads, it.id)
                     homeState.postValue(HomeState.HomeChannelRetrieved(header))
                 }
-                checkLives(ArrayList(podcasts))
+                getLives()
             } catch (e: Exception) {
+                e.printStackTrace()
                 homeState.postValue(HomeState.HomeError)
             }
         }
     }
 
-    private fun checkLives(podcasts: ArrayList<Podcast>) {
+    private fun getLives() {
         viewModelScope.launch {
             try {
-                val livePodcasts = ArrayList<LiveHeader>()
-                podcasts.forEach {
-                    val searchLive = youtubeService.getChannelLiveStatus(it.youtubeID)
-                    if (searchLive.items.isNotEmpty()) {
-                        livePodcasts.add(LiveHeader(it, searchLive.items[0]))
-                    }
-                }
-                homeState.postValue(HomeState.HomeLivesRetrieved(livePodcasts))
+                val flowLive = flowService.getLives()
+                homeState.postValue(HomeState.HomeLivesRetrieved(flowLive.lives))
             } catch (e: Exception) {
-                homeState.postValue(HomeState.HomeLiveError)
+                e.printStackTrace()
+                viewModelState.postValue(ViewModelBaseState.ErrorState(DataException()))
             }
         }
+
     }
 
     private fun checkManager(uid: String) {

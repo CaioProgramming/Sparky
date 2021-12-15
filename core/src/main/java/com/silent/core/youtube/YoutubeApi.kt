@@ -2,6 +2,7 @@ package com.silent.core.youtube
 
 import com.silent.core.BuildConfig
 import com.silent.core.twitch.ChannelDetailsResponse
+import com.silent.core.youtube.data.YoutubeVideoResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -60,5 +61,13 @@ interface YoutubeApi {
         @Query("part") contentDetails: String? = DATA_CONTENT_DETAILS_QUERY,
         @Query("key") apiKey: String? = BuildConfig.YOUTUBE_KEY
     ): ChannelSectionResponse
+
+    @GET("videos")
+    suspend fun getVideoDetails(
+        @Query("id") videoID: String,
+        @Query("part") snippet: String? = DATA_SNIPPET_QUERY,
+        @Query("part") contentDetails: String? = DATA_CONTENT_DETAILS_QUERY,
+        @Query("key") apiKey: String? = BuildConfig.YOUTUBE_KEY
+    ): YoutubeVideoResponse
 
 }

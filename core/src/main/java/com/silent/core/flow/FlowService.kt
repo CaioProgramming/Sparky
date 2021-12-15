@@ -1,5 +1,6 @@
 package com.silent.core.flow
 
+import com.silent.core.flow.data.FlowLivesResponse
 import com.silent.core.flow.data.FlowProfileResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -24,6 +25,11 @@ class FlowService {
     suspend fun getProfile(username: String): FlowProfileResponse {
         val flowApi = retroFitService.create(FlowApi::class.java)
         return flowApi.getFlowProfile(username)
+    }
+
+    suspend fun getLives(): FlowLivesResponse {
+        val flowApi = retroFitService.create(FlowApi::class.java)
+        return flowApi.getLives()
     }
 
 

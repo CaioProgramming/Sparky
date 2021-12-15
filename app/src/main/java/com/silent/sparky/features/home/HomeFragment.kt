@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ilustris.animations.fadeIn
-import com.silent.core.podcast.Podcast
+import com.silent.core.flow.data.FlowLive
 import com.silent.core.podcast.podcasts
 import com.silent.core.utils.WebUtils
 import com.silent.ilustriscore.core.model.ViewModelBaseState
@@ -21,9 +21,9 @@ import com.silent.navigation.ModuleNavigator
 import com.silent.navigation.NavigationUtils
 import com.silent.sparky.R
 import com.silent.sparky.data.PodcastHeader
+import com.silent.sparky.features.home.adapter.LiveAdapter
 import com.silent.sparky.features.home.adapter.ProgramsAdapter
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
-import com.silent.sparky.features.home.data.LiveHeader
 import com.silent.sparky.features.home.viewmodel.HomeState
 import com.silent.sparky.features.home.viewmodel.HomeViewModel
 import kotlinx.android.synthetic.main.home_fragment.*
@@ -159,28 +159,19 @@ class HomeFragment : Fragment() {
         videoHeaderAdapter?.updateSection(podcastHeader)
     }
 
-    private fun setupLive(podcasts: ArrayList<LiveHeader>) {
+    private fun setupLive(podcasts: List<FlowLive>) {
         if (podcasts.isEmpty()) {
             lives_recycler_view.gone()
         } else {
             lives_recycler_view.fadeIn()
-            lives_recycler_view.adapter =
-                ProgramsAdapter(extractPodcasts(podcasts), true) { podcast, index ->
-                    val bundle = bundleOf("live_object" to podcasts[index])
-                    findNavController().navigate(
-                        R.id.action_navigation_home_to_liveFragment,
-                        bundle
-                    )
-                }
+            lives_recycler_view.adapter = LiveAdapter(podcasts) {
+                val bundle = bundleOf("live_object" to it)
+                findNavController().navigate(
+                    R.id.action_navigation_home_to_liveFragment,
+                    bundle
+                )
+            }
         }
-    }
-
-    private fun extractPodcasts(liveHeader: ArrayList<LiveHeader>): ArrayList<Podcast> {
-        val podcasts = ArrayList<Podcast>()
-        liveHeader.forEach {
-            podcasts.add(it.podcast)
-        }
-        return podcasts
     }
 
 }

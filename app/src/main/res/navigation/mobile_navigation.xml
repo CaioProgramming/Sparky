@@ -49,7 +49,7 @@
         tools:layout="@layout/podcast_live_fragment">
         <argument
             android:name="live_object"
-            app:argType="com.silent.sparky.features.home.data.LiveHeader" />
+            app:argType="com.silent.core.flow.data.FlowLive" />
         <action
             android:id="@+id/action_liveFragment_to_podcastFragment"
             app:destination="@id/podcastFragment"
