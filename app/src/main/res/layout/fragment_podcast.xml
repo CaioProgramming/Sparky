@@ -139,12 +139,11 @@
         app:spanCount="1"
         tools:listitem="@layout/video_preview" />
 
-    <TextView
+    <com.silent.core.component.ErrorView
         android:id="@+id/error_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Ocorreu um erro ao recuperar os dados :("
         android:textAlignment="center"
         android:visibility="gone" />
 
