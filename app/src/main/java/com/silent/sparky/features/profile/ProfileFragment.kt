@@ -15,6 +15,7 @@ import com.ilustris.animations.slideInBottom
 import com.ilustris.animations.slideInRight
 import com.silent.core.flow.data.FlowProfile
 import com.silent.core.users.User
+import com.silent.core.utils.ImageUtils
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.ilustriscore.core.utilities.RC_SIGN_IN
 import com.silent.ilustriscore.core.utilities.showSnackBar
@@ -85,7 +86,7 @@ class ProfileFragment : Fragment() {
         name.text = user.name
         Glide.with(requireContext())
             .load(user.profilePic)
-            .error(R.drawable.kitekat)
+            .error(ImageUtils.getRandomIcon())
             .into(profile_image)
     }
 

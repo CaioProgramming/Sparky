@@ -32,6 +32,9 @@ class PodcastFragment : Fragment() {
     private val args by navArgs<PodcastFragmentArgs>()
     private val channelSectionsAdapter = VideoHeaderAdapter(ArrayList(), ::onSelectHeader)
     private var program: Podcast? = null
+    private val hostAdapter = HostAdapter(ArrayList()) {
+        WebUtils(requireContext()).openInstagram(it.user)
+    }
 
     private fun onSelectHeader(podcastHeader: PodcastHeader) {
         WebUtils(requireContext()).openYoutubePlaylist(podcastHeader.playlistId)
@@ -109,8 +112,8 @@ class PodcastFragment : Fragment() {
                     error_view.fadeIn()
                     loading.fadeOut()
                 }
-                else -> {
-
+                is PodcastViewModel.ChannelState.ChannelHostRetrieved -> {
+                    hostAdapter.updateHost(it.host)
                 }
             }
         })

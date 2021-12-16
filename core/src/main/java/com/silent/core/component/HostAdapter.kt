@@ -1,6 +1,5 @@
 package com.silent.core.component
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,8 @@ import com.bumptech.glide.Glide
 import com.silent.core.R
 import com.silent.core.podcast.Host
 import com.silent.core.podcast.NEW_HOST
-import kotlinx.android.synthetic.main.host_layout.view.*
+import com.silent.core.utils.ImageUtils
+import kotlinx.android.synthetic.main.host_card.view.*
 
 
 class HostAdapter(val hosts: ArrayList<Host>, val hostSelected: (Host) -> Unit) :
@@ -27,10 +27,12 @@ class HostAdapter(val hosts: ArrayList<Host>, val hostSelected: (Host) -> Unit) 
                 hostSelected(host)
             }
             if (host.name != NEW_HOST) {
-                Glide.with(context).load(host.profilePic).into(itemView.host_photo)
+                Glide.with(context)
+                    .load(host.profilePic)
+                    .error(ImageUtils.getRandomIcon())
+                    .into(itemView.host_photo)
                 itemView.host_name.text = host.name
             } else {
-                itemView.host_photo.borderColor = Color.TRANSPARENT
                 itemView.host_photo.setImageDrawable(
                     ContextCompat.getDrawable(
                         itemView.context,
@@ -47,11 +49,12 @@ class HostAdapter(val hosts: ArrayList<Host>, val hostSelected: (Host) -> Unit) 
             val context = itemView.context
             val host = hosts[adapterPosition]
             if (host.name != NEW_HOST) {
-                Glide.with(context).load(host.profilePic).into(itemView.host_photo)
+                Glide.with(context)
+                    .load(host.profilePic)
+                    .error(ImageUtils.getRandomIcon())
+                    .into(itemView.host_photo)
                 itemView.host_name.text = host.name
             } else {
-                itemView.host_photo.borderColor =
-                    ContextCompat.getColor(itemView.context, R.color.md_blue500)
                 itemView.host_photo.setImageDrawable(
                     ContextCompat.getDrawable(
                         itemView.context,
@@ -69,7 +72,7 @@ class HostAdapter(val hosts: ArrayList<Host>, val hostSelected: (Host) -> Unit) 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HostViewHolder {
         val layout =
-            if (viewType == REVERSE_VIEW) R.layout.host_layout_reverse else R.layout.host_layout
+            if (viewType == REVERSE_VIEW) R.layout.host_card_reverse else R.layout.host_card
         val view =
             LayoutInflater.from(parent.context).inflate(layout, parent, false)
         return HostViewHolder(view)

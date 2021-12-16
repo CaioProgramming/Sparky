@@ -3,6 +3,8 @@ package com.silent.sparky.features.podcast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
+import com.silent.core.instagram.InstagramService
+import com.silent.core.podcast.Host
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastService
 import com.silent.core.youtube.PlaylistResource
@@ -16,14 +18,14 @@ import kotlinx.coroutines.launch
 class PodcastViewModel : BaseViewModel<Podcast>() {
 
     private val youtubeService = YoutubeService()
+    private val instagramService = InstagramService()
     override val service = PodcastService()
 
 
     sealed class ChannelState {
         object ChannelFailedState : ChannelState()
-        data class ChannelUploadsRetrieved(
-            val videos: List<PlaylistResource>,
-            val playlistId: String
+        data class ChannelHostRetrieved(
+            val host: Host
         ) : ChannelState()
 
         data class ChannelDataRetrieved(
@@ -46,6 +48,25 @@ class PodcastViewModel : BaseViewModel<Podcast>() {
         videos = videos,
         orientation = orientation
     )
+
+    fun getHostsData(hosts: List<Host>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                hosts.forEach {
+                    val instaUser = instagramService.getUserInfo(it.user)
+                    it.apply {
+                        profilePic = instaUser.graphql.user.profile_pic_url
+                        name = instaUser.graphql.user.full_name
+                        user = instaUser.graphql.user.username
+                    }
+                    channelState.postValue(ChannelState.ChannelHostRetrieved(it))
+                }
+            } catch (e: Exception) {
+
+            }
+        }
+
+    }
 
     fun getChannelData(podcastID: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -72,6 +93,7 @@ class PodcastViewModel : BaseViewModel<Podcast>() {
                         cutsHeader
                     )
                 )
+                getHostsData(podcast.hosts)
             } catch (e: Exception) {
                 e.printStackTrace()
                 channelState.postValue(ChannelState.ChannelFailedState)
