@@ -25,5 +25,5 @@ data class Podcast(
 
 const val NEW_HOST = "NEWHOST"
 
-data class Host(val name: String = "", val profilePic: String = "", val user: String = "") :
+data class Host(var name: String = "", var profilePic: String = "", var user: String = "") :
     Serializable

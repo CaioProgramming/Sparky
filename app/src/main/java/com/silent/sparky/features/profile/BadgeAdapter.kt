@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.silent.core.flow.data.FlowBadge
+import com.silent.core.utils.ImageUtils
 import com.silent.sparky.R
 import kotlinx.android.synthetic.main.badge_layout.view.*
 
@@ -18,7 +19,7 @@ class BadgeAdapter(val selectedBadges: List<FlowBadge>) :
             selectedBadges[absoluteAdapterPosition].run {
                 Glide.with(itemView.context)
                     .load(src)
-                    .error(R.drawable.kitekat_worry)
+                    .error(ImageUtils.getRandomIcon())
                     .into(itemView.badge_image)
             }
         }

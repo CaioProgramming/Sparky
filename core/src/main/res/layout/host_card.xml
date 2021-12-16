@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/padding_default_16dp"
+    android:orientation="horizontal">
+
+    <View
+        android:layout_width="150dp"
+        android:layout_height="155dp"
+        android:layout_marginTop="@dimen/margin_small_4dp"
+        android:background="@drawable/faded_gradient"
+        android:backgroundTint="?attr/colorPrimaryDark" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/host_card"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginHorizontal="@dimen/margin_default_10dp"
+        app:cardCornerRadius="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="?android:textColorPrimary"
+        app:strokeWidth="2dp">
+
+        <ImageView
+            android:id="@+id/host_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?android:colorBackground"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/ic_baseline_tag_faces_24" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        app:layout_anchor="@id/host_card"
+        app:layout_anchorGravity="bottom|right">
+
+        <View
+
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="@dimen/margin_big_16dp"
+            android:background="@color/md_white"
+            android:gravity="center"
+            android:lines="2"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:textStyle="bold|italic"
+            app:layout_anchorGravity="bottom|right"
+            tools:text="Igor 3k" />
+
+        <TextView
+            android:id="@+id/host_name"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="@dimen/margin_default_10dp"
+            android:layout_marginTop="@dimen/margin_default_10dp"
+            android:layout_marginEnd="@dimen/margin_default_10dp"
+            android:layout_marginBottom="@dimen/margin_default_10dp"
+            android:background="@drawable/stroked_retangle"
+            android:gravity="center"
+            android:lines="2"
+            android:padding="@dimen/padding_small_8dp"
+            android:paddingHorizontal="@dimen/padding_default_16dp"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textStyle="bold"
+            tools:text="Igor 3k" />
+
+    </RelativeLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
