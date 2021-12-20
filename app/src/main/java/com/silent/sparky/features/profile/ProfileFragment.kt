@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.google.android.material.appbar.AppBarLayout
 import com.ilustris.animations.popOut
 import com.ilustris.animations.slideInBottom
 import com.ilustris.animations.slideInRight
@@ -83,16 +84,25 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupUser(user: User) {
-        name.text = user.name
+        userNameTitle.text = user.name
+        username.text = user.name
         Glide.with(requireContext())
             .load(user.profilePic)
             .error(ImageUtils.getRandomIcon())
-            .into(profile_image)
+            .into(profile_pic)
+        profile_appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            run {
+                val percentage = Math.abs(verticalOffset).toFloat() / appBarLayout.totalScrollRange
+                userNameTitle.alpha = percentage
+                profile_toolbar.alpha = percentage
+            }
+        })
     }
 
     private fun setupFlowProfile(flowProfile: FlowProfile) {
         loading.popOut()
-        user_name.text = flowProfile.username
+        username.text = flowProfile.username
+        userNameTitle.text = flowProfile.username
         profile_appbar.slideInRight()
         user_badges.adapter = BadgeAdapter(flowProfile.selected_badges)
         user_badges.slideInBottom()
