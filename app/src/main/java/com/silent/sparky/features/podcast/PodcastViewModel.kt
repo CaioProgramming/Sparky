@@ -53,16 +53,16 @@ class PodcastViewModel : BaseViewModel<Podcast>() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 hosts.forEach {
-                    val instaUser = instagramService.getUserInfo(it.user)
-                    it.apply {
+                    //val instaUser = instagramService.getUserInfo(it.user)
+                    /*it.apply {
                         profilePic = instaUser.graphql.user.profile_pic_url
                         name = instaUser.graphql.user.full_name
                         user = instaUser.graphql.user.username
-                    }
+                    }*/
                     channelState.postValue(ChannelState.ChannelHostRetrieved(it))
                 }
             } catch (e: Exception) {
-
+                e.printStackTrace()
             }
         }
 

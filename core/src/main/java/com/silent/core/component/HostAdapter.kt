@@ -32,6 +32,7 @@ class HostAdapter(val hosts: ArrayList<Host>, val hostSelected: (Host) -> Unit) 
                     .error(ImageUtils.getRandomIcon())
                     .into(itemView.host_photo)
                 itemView.host_name.text = host.name
+                itemView.host_description.text = "@${host.user}"
             } else {
                 itemView.host_photo.setImageDrawable(
                     ContextCompat.getDrawable(
@@ -54,6 +55,8 @@ class HostAdapter(val hosts: ArrayList<Host>, val hostSelected: (Host) -> Unit) 
                     .error(ImageUtils.getRandomIcon())
                     .into(itemView.host_photo)
                 itemView.host_name.text = host.name
+                itemView.host_description.text = "@${host.user}"
+
             } else {
                 itemView.host_photo.setImageDrawable(
                     ContextCompat.getDrawable(
