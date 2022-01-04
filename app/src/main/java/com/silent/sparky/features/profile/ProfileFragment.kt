@@ -8,15 +8,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
-import com.ilustris.animations.popOut
-import com.ilustris.animations.slideInBottom
-import com.ilustris.animations.slideInRight
+import com.ilustris.animations.*
 import com.silent.core.flow.data.FlowProfile
 import com.silent.core.users.User
 import com.silent.core.utils.ImageUtils
+import com.silent.ilustriscore.core.model.ErrorType
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.ilustriscore.core.utilities.RC_SIGN_IN
 import com.silent.ilustriscore.core.utilities.showSnackBar
@@ -24,12 +24,13 @@ import com.silent.sparky.R
 import com.silent.sparky.features.profile.viewmodel.ProfileState
 import com.silent.sparky.features.profile.viewmodel.ProfileViewModel
 import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.profile_card.*
 import java.text.NumberFormat
 
 class ProfileFragment : Fragment() {
 
     val viewModel = ProfileViewModel()
-
+    var flowDialog: FlowLinkDialog? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -61,16 +62,28 @@ class ProfileFragment : Fragment() {
                     viewModel.getFlowProfile(user.flowUserName)
                 }
                 is ViewModelBaseState.DataSavedState -> {
-
+                    viewModel.findUser()
                 }
                 is ViewModelBaseState.DataUpdateState -> {
-
+                    flowDialog?.dismiss()
+                    viewModel.findUser()
                 }
                 is ViewModelBaseState.FileUploadedState -> {
 
                 }
                 is ViewModelBaseState.ErrorState -> {
-                    view?.showSnackBar("Ocorreu um erro inesperado", backColor = Color.RED)
+                    if (it.dataException.code == ErrorType.NOT_FOUND) {
+                        viewModel.saveFirebaseUser()
+                    } else {
+                        view?.showSnackBar("Ocorreu um erro inesperado", backColor = Color.RED)
+                    }
+                }
+                ViewModelBaseState.LoadingState -> {
+                    if (loading.isGone) {
+                        loading.popIn()
+                        profile_appbar.fadeOut()
+                        user_badges.fadeOut()
+                    }
                 }
             }
         })
@@ -79,11 +92,16 @@ class ProfileFragment : Fragment() {
                 is ProfileState.FlowUserRetrieve -> {
                     setupFlowProfile(it.flowProfile)
                 }
+                ProfileState.FlowUserError -> {
+                    link_flow.text = "Vincular conta flow"
+
+                }
             }
         })
     }
 
     private fun setupUser(user: User) {
+        loading.popOut()
         userNameTitle.text = user.name
         username.text = user.name
         Glide.with(requireContext())
@@ -97,13 +115,18 @@ class ProfileFragment : Fragment() {
                 profile_toolbar.alpha = percentage
             }
         })
+        link_flow.setOnClickListener {
+            flowDialog = FlowLinkDialog(user)
+            flowDialog?.show(requireActivity().supportFragmentManager, "FLOWLINKDIALOG")
+        }
+        profile_appbar.slideInRight()
+
     }
 
     private fun setupFlowProfile(flowProfile: FlowProfile) {
-        loading.popOut()
         username.text = flowProfile.username
         userNameTitle.text = flowProfile.username
-        profile_appbar.slideInRight()
+        link_flow.text = "Alterar conta flow"
         user_badges.adapter = BadgeAdapter(flowProfile.selected_badges)
         user_badges.slideInBottom()
         animateBadgeCount(flowProfile.selected_badges.size)
