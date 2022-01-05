@@ -2,7 +2,6 @@ package com.silent.manager.features.newpodcast
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.silent.core.instagram.InstagramService
 import com.silent.core.podcast.Host
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastService
@@ -24,7 +23,6 @@ class NewPodcastViewModel : BaseViewModel<Podcast>() {
 
     override val service = PodcastService()
     private val youtubeService = YoutubeService()
-    private val instagramService = InstagramService()
 
     val newPodcastState = MutableLiveData<NewPodcastState>()
     val hostState = MutableLiveData<HostState>()
@@ -86,19 +84,6 @@ class NewPodcastViewModel : BaseViewModel<Podcast>() {
             } catch (e: Exception) {
                 e.printStackTrace()
                 viewModelState.postValue(ViewModelBaseState.ErrorState(DataException(ErrorType.UNKNOWN)))
-            }
-        }
-    }
-
-
-    fun getInstagramData(userName: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val instagramResponse = instagramService.getUserInfo(userName)
-                hostState.postValue(HostState.HostInstagramRetrieve(instagramResponse.graphql.user))
-            } catch (e: Exception) {
-                e.printStackTrace()
-                hostState.postValue(HostState.ErrorFetchInstagram)
             }
         }
     }

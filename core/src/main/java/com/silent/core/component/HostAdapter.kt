@@ -13,11 +13,19 @@ import com.silent.core.utils.ImageUtils
 import kotlinx.android.synthetic.main.host_card.view.*
 
 
-class HostAdapter(val hosts: ArrayList<Host>, val hostSelected: (Host) -> Unit) :
+class HostAdapter(
+    val hosts: ArrayList<Host>,
+    val isEdit: Boolean = false,
+    val hostSelected: (Host) -> Unit
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val NORMAL_VIEW = 2
     val REVERSE_VIEW = 1
+
+    init {
+        if (isEdit) hosts.add(Host.NEWHOST)
+    }
 
     inner class HostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind() {
@@ -99,6 +107,7 @@ class HostAdapter(val hosts: ArrayList<Host>, val hostSelected: (Host) -> Unit) 
     fun refresh(hosts: ArrayList<Host>) {
         hosts.clear()
         hosts.addAll(hosts)
+        if (isEdit) hosts.add(Host.NEWHOST)
         notifyDataSetChanged()
     }
 

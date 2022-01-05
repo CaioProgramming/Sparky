@@ -143,7 +143,7 @@ class HomeFragment : Fragment() {
                 is ViewModelBaseState.DataListRetrievedState -> {
                     podcasts_resume_recycler.adapter =
                         ProgramsAdapter((it.dataList as podcasts).sortedByDescending { p -> p.subscribe }) { podcast, index ->
-                            openPodcast(podcast.id)
+                            WebUtils(requireContext()).openYoutubeChannel(podcast.youtubeID)
                         }
                     podcasts_resume_recycler.layoutManager =
                         GridLayoutManager(requireContext(), 4, RecyclerView.VERTICAL, false)

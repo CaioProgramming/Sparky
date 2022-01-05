@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.silent.core.podcast.Host
 import com.silent.manager.R
-import kotlinx.android.synthetic.main.host_dialog.*
+import com.silent.manager.databinding.HostDialogBinding
 
 class HostDialog : BottomSheetDialogFragment() {
 
@@ -25,12 +25,15 @@ class HostDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Glide.with(requireContext()).load(host.profilePic).into(host_icon)
-        username.text = "${host.name}(${host.user})"
-        confirm_host_button.setOnClickListener {
-            continueClick.invoke()
-            dialog?.dismiss()
+        HostDialogBinding.bind(view).run {
+            Glide.with(requireContext()).load(host.profilePic).into(hostIcon)
+            username.text = "${host.name}(${host.user})"
+            confirmHostButton.setOnClickListener {
+                continueClick.invoke()
+                dialog?.dismiss()
+            }
         }
+
     }
 
     companion object {

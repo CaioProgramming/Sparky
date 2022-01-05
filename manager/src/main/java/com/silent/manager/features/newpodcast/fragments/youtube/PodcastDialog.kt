@@ -8,12 +8,15 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.silent.core.podcast.Podcast
 import com.silent.manager.R
-import kotlinx.android.synthetic.main.podcast_dialog.*
+import com.silent.manager.databinding.PodcastDialogBinding
 
 class PodcastDialog : BottomSheetDialogFragment() {
 
     lateinit var podcast: Podcast
     lateinit var onContinue: () -> Unit
+    private val podcastDialogBinding by lazy {
+        view?.let { PodcastDialogBinding.bind(it) }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,16 +28,23 @@ class PodcastDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        continue_button.setOnClickListener {
-            onContinue.invoke()
-            dialog?.dismiss()
+        podcastDialogBinding?.run {
+            continueButton.setOnClickListener {
+                onContinue.invoke()
+                dialog?.dismiss()
+            }
         }
+
         setupPodcast()
     }
 
     private fun setupPodcast() {
-        Glide.with(requireContext()).load(podcast.iconURL).into(podcast_icon)
-        podcast_name.text = podcast.name
+        podcastDialogBinding?.podcastIcon?.let {
+            Glide.with(requireContext()).load(podcast.iconURL).into(
+                it
+            )
+        }
+        podcastDialogBinding?.podcastName?.text = podcast.name
     }
 
     companion object {

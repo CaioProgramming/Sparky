@@ -5,9 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.ilustris.animations.fadeIn
+import com.ilustris.animations.slideInBottom
 import com.silent.core.podcast.Podcast
-import com.silent.ilustriscore.core.utilities.gone
 import com.silent.sparky.R
 import kotlinx.android.synthetic.main.program_icon_layout.view.*
 
@@ -41,10 +40,12 @@ class ProgramsAdapter(
                     onSelectProgram(this, adapterPosition)
                 }
                 if (isLive) {
-                    itemView.live_status.fadeIn()
+                    itemView.live_status.visible()
+                    itemView.live_status.progress = 100
                 } else {
                     itemView.live_status.gone()
                 }
+                itemView.slideInBottom()
             }
         }
 

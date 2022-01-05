@@ -1,34 +1,24 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/podcasts_recycler"
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/manager_toolbar"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:layout_constraintBottom_toTopOf="@id/new_podcast_button"
         app:layout_constraintTop_toTopOf="parent"
-        app:spanCount="2"
-        tools:listitem="@layout/podcasts_card" />
+        app:title="@string/app_name" />
 
-    <View
+    <fragment
+        android:id="@+id/manager_host"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/material_grey900"
-        app:layout_constraintBottom_toTopOf="@id/new_podcast_button" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/new_podcast_button"
-        style="@style/Theme.Sparky.BottomButton"
-        android:text="@string/new_podcast_button"
-        app:icon="@drawable/ic_arrow_right_24"
-        app:iconGravity="end"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/manager_toolbar"
+        app:navGraph="@navigation/manager_navigation" />
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

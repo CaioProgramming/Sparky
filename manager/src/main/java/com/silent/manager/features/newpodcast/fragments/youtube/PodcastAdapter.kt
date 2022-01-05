@@ -9,7 +9,7 @@ import com.ilustris.animations.slideInBottom
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.podcasts
 import com.silent.manager.R
-import kotlinx.android.synthetic.main.program_icon_layout.view.*
+import com.silent.manager.databinding.ProgramIconLayoutBinding
 
 class PodcastAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcast) -> Unit) :
     RecyclerView.Adapter<PodcastAdapter.PodcastViewHolder>() {
@@ -29,6 +29,10 @@ class PodcastAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcast) -> U
         notifyItemInserted(podcasts.lastIndex)
     }
 
+    fun clearAdapter() {
+        podcasts.clear()
+        notifyDataSetChanged()
+    }
 
     override fun getItemCount() = podcasts.size
 
@@ -36,14 +40,19 @@ class PodcastAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcast) -> U
         RecyclerView.ViewHolder(view) {
 
         fun bind() {
-            val context = itemView.context
-            podcasts[adapterPosition].run {
-                Glide.with(context).load(iconURL).into(itemView.program_icon)
+            ProgramIconLayoutBinding.bind(itemView).run {
+                val context = itemView.context
+                val podcast = podcasts[adapterPosition]
+                Glide.with(context).load(podcast.iconURL).into(programIcon)
                 //itemView.program_name.text = name
-                itemView.program_icon.setOnClickListener {
-                    onSelectPodcast(this)
+                programIcon.setOnClickListener {
+                    onSelectPodcast(podcast)
                 }
-                itemView.program_icon.slideInBottom()
+                programIcon.slideInBottom()
+
+            }
+            podcasts[adapterPosition].run {
+
             }
         }
 

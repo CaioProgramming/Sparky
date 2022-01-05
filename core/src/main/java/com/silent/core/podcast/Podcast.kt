@@ -26,4 +26,9 @@ data class Podcast(
 const val NEW_HOST = "NEWHOST"
 
 data class Host(var name: String = "", var profilePic: String = "", var user: String = "") :
-    Serializable
+    Serializable {
+
+    companion object {
+        val NEWHOST = Host(NEW_HOST)
+    }
+}
