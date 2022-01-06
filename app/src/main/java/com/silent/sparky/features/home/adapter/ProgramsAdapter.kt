@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ilustris.animations.slideInBottom
 import com.silent.core.podcast.Podcast
+import com.silent.ilustriscore.core.utilities.gone
+import com.silent.ilustriscore.core.utilities.visible
 import com.silent.sparky.R
 import kotlinx.android.synthetic.main.program_icon_layout.view.*
 

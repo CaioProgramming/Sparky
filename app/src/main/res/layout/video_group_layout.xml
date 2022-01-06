@@ -15,6 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:paddingVertical="@dimen/padding_small_8dp"
             android:layout_toStartOf="@id/see_more_button"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -22,8 +23,7 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/program_icon"
                 android:visibility="gone"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                tools:visibility="visible"
                 style="@style/Theme.Sparky.ProgramIcon"
                 tools:src="@drawable/ic_round_podcasts_24" />
 

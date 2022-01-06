@@ -40,7 +40,6 @@ class PodcastFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // podcastFragmentBinding = FragmentPodcastBinding.inflate(inflater, container, false)
         return inflater.inflate(R.layout.fragment_manage_podcast, container, false)
     }
 
@@ -113,8 +112,7 @@ class PodcastFragment : Fragment() {
         val hosts = ArrayList<Host>()
         hosts.addAll(podcast.hosts)
         podcastFragmentBinding?.hostsRecyclerview?.adapter = HostAdapter(hosts, true, ::selectHost)
-        podcastFragmentBinding?.editPodcastButton?.isEnabled =
-            podcast.hosts != getArgPodcast().hosts
+        podcastFragmentBinding?.editPodcastButton?.isEnabled = true
     }
 
     private fun confirmUser(instagramUser: InstagramUserResponse) {

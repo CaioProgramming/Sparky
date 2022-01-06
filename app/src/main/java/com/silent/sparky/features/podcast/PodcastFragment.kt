@@ -109,7 +109,6 @@ class PodcastFragment : Fragment() {
                 }
                 PodcastViewModel.ChannelState.ChannelFailedState -> {
                     view?.showSnackBar("Ocorreu um erro ao obter os vídeos")
-                    error_view.fadeIn()
                     loading.fadeOut()
                 }
                 is PodcastViewModel.ChannelState.ChannelHostRetrieved -> {

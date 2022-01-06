@@ -9,4 +9,9 @@ object ImageUtils {
         return pics.random()
     }
 
+    fun getRandomHostPlaceHolder(): Int {
+        val pics = listOf(R.drawable.man, R.drawable.teacher, R.drawable.woman)
+        return pics.random()
+    }
+
 }

@@ -17,11 +17,14 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:contentScrim="@color/md_black"
+            app:contentScrim="?android:colorBackground"
+            app:scrimAnimationDuration="100"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/lives_recycler_view"
+                android:background="@drawable/bottom_line"
+                android:backgroundTint="@color/material_grey900"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="?attr/actionBarSize"
@@ -88,12 +91,5 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         tools:itemCount="4"
         tools:listitem="@layout/video_group_layout" />
-
-    <com.silent.core.component.ErrorView
-        android:id="@+id/error_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        app:animation="@raw/music" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

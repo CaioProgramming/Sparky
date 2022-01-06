@@ -139,12 +139,4 @@
         app:spanCount="1"
         tools:listitem="@layout/video_preview" />
 
-    <com.silent.core.component.ErrorView
-        android:id="@+id/error_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textAlignment="center"
-        android:visibility="gone" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
