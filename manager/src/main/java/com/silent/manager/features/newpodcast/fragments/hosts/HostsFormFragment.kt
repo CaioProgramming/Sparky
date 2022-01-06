@@ -14,9 +14,9 @@ import com.silent.core.podcast.Host
 import com.silent.core.podcast.NEW_HOST
 import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.manager.R
+import com.silent.manager.databinding.FragmentHostsDataBinding
 import com.silent.manager.features.newpodcast.NewPodcastViewModel
 import com.silent.manager.states.HostState
-import kotlinx.android.synthetic.main.fragment_hosts_data.*
 
 class HostsFormFragment : Fragment() {
 
@@ -24,7 +24,7 @@ class HostsFormFragment : Fragment() {
         ViewModelProvider(requireActivity())[NewPodcastViewModel::class.java]
     }
 
-    private val hostAdapter = HostAdapter(arrayListOf(Host(NEW_HOST, "", "")), ::selectHost)
+    private val hostAdapter = HostAdapter(arrayListOf(Host(NEW_HOST, "", "")), true, ::selectHost)
 
     private fun selectHost(host: Host) {
         if (host.name == NEW_HOST) {
@@ -57,10 +57,13 @@ class HostsFormFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
-        instagram_hosts_recyclerview.adapter = hostAdapter
-        host_next_button.setOnClickListener {
-            findNavController().navigate(R.id.action_podcastGetHostsFragment_to_completeFragment)
+        FragmentHostsDataBinding.bind(view).run {
+            instagramHostsRecyclerview.adapter = hostAdapter
+            hostNextButton.setOnClickListener {
+                findNavController().navigate(R.id.action_podcastGetHostsFragment_to_completeFragment)
+            }
         }
+
     }
 
     private fun observeViewModel() {

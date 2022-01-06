@@ -2,42 +2,38 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="70dp"
-    android:layout_height="70dp"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_margin="@dimen/margin_default_10dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/program_icon"
         style="@style/Theme.Sparky.ProgramIcon"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="@dimen/padding_small_8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="@dimen/margin_small_4dp"
         android:src="@drawable/ic_round_podcasts_24"
         app:civ_border_color="?android:textColorPrimary"
         app:civ_border_width="2dp"
-        app:civ_circle_background_color="@color/md_black" />
+        app:civ_circle_background_color="@color/md_black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.hmomeni.progresscircula.ProgressCircula
         android:id="@+id/live_status"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:pgc_indeterminate="true"
-        app:pgc_rimColor="?attr/colorPrimaryDark"
-        app:pgc_rimWidth="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:pgc_showProgress="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:pgc_speed="0.4"
+        app:pgc_indeterminate="false"
+        app:pgc_rimColor="@color/material_red500"
+        app:pgc_rimWidth="2dp"
+        app:pgc_showProgress="false"
+        app:pgc_speed="1"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -115,12 +115,4 @@
         tools:listitem="@layout/badge_layout"
         tools:visibility="visible" />
 
-    <com.silent.core.component.ErrorView
-        android:id="@+id/error_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        app:message="Ocorreu um erro ao carregar as informações do seu perfil" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

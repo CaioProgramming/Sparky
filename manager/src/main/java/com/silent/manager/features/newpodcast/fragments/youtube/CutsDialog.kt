@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.silent.core.podcast.Podcast
 import com.silent.manager.R
+import com.silent.manager.databinding.CutsDialogBinding
 import com.silent.manager.features.newpodcast.NewPodcastViewModel
 import com.silent.manager.states.NewPodcastState
-import kotlinx.android.synthetic.main.cuts_dialog.*
 
 class CutsDialog : BottomSheetDialogFragment() {
 
@@ -34,7 +34,7 @@ class CutsDialog : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
-        flow_cuts_channels.adapter = podcastAdapter
+        CutsDialogBinding.bind(view).flowCutsChannels.adapter = podcastAdapter
         newPodcastViewModel.getRelatedCuts()
     }
 

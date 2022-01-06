@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.podcasts
 import com.silent.manager.R
-import kotlinx.android.synthetic.main.podcasts_card.view.*
+import com.silent.manager.databinding.PodcastsCardBinding
 
 class PodcastManagerAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcast) -> Unit) :
     RecyclerView.Adapter<PodcastManagerAdapter.PodcastViewHolder>() {
@@ -16,12 +16,17 @@ class PodcastManagerAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcas
     inner class PodcastViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind() {
-            podcasts[bindingAdapterPosition].run {
-                itemView.podcast_name.text = name
-                Glide.with(itemView.context).load(iconURL).into(itemView.podcast_icon)
-                itemView.podcast_card.setOnClickListener {
-                    onSelectPodcast(this)
+            PodcastsCardBinding.bind(itemView).run {
+                val podcast = podcasts[bindingAdapterPosition]
+                podcastName.text = podcast.name
+                Glide.with(itemView.context).load(podcast.iconURL).into(podcastIcon)
+                podcastCard.setOnClickListener {
+                    onSelectPodcast(podcast)
                 }
+
+            }
+            podcasts[bindingAdapterPosition].run {
+
             }
         }
 

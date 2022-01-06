@@ -11,13 +11,12 @@ import androidx.navigation.fragment.findNavController
 import com.silent.core.podcast.Podcast
 import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.manager.R
+import com.silent.manager.databinding.FragmentPodcastYoutubedataBinding
 import com.silent.manager.features.newpodcast.NewPodcastViewModel
 import com.silent.manager.states.NewPodcastState
-import kotlinx.android.synthetic.main.fragment_podcast_youtubedata.*
 
 class YoutubeFormFragment : Fragment() {
 
-    private lateinit var contentView: View
     private val relatedChannelsAdapter = PodcastAdapter(ArrayList(), ::selectPodcast)
     private val newPodcastViewModel: NewPodcastViewModel by lazy {
         ViewModelProvider(requireActivity())[NewPodcastViewModel::class.java]
@@ -32,23 +31,20 @@ class YoutubeFormFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (!::contentView.isInitialized) {
-            contentView = inflater.inflate(R.layout.fragment_podcast_youtubedata, container, false)
-        }
-        return contentView
+        return inflater.inflate(R.layout.fragment_podcast_youtubedata, container, false)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (relatedChannelsAdapter.itemCount == 0) {
-            newPodcastViewModel.getRelatedChannels()
-            observeViewModel()
-            setupView()
-        }
+        FragmentPodcastYoutubedataBinding.bind(view).setupView()
+        relatedChannelsAdapter.clearAdapter()
+        newPodcastViewModel.getRelatedChannels()
+        observeViewModel()
     }
 
-    private fun setupView() {
-        flow_related_channels.adapter = relatedChannelsAdapter
+    private fun FragmentPodcastYoutubedataBinding.setupView() {
+        flowRelatedChannels.adapter = relatedChannelsAdapter
     }
 
     private fun observeViewModel() {
@@ -60,7 +56,7 @@ class YoutubeFormFragment : Fragment() {
 
                 NewPodcastState.InvalidPodcast -> {
                     view?.showSnackBar(
-                        "Esse podcast já foi cadastrado, selecione outro",
+                        "Esse podcast já foi cadastrado, selecione outro.",
                         backColor = ContextCompat.getColor(
                             requireContext(),
                             R.color.material_red500
