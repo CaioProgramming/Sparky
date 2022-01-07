@@ -1,5 +1,6 @@
 package com.silent.manager.features.manager.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,9 +24,9 @@ class PodcastManagerAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcas
                 podcastCard.setOnClickListener {
                     onSelectPodcast(podcast)
                 }
-
-            }
-            podcasts[bindingAdapterPosition].run {
+                if (podcast.highLightColor.isNotEmpty()) {
+                    podcastIcon.borderColor = Color.parseColor(podcast.highLightColor)
+                }
 
             }
         }

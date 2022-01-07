@@ -124,7 +124,7 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/audio"
+        app:lottie_rawRes="@raw/daisy"
         app:lottie_repeatMode="reverse"
         app:lottie_speed="0.5" />
 

@@ -1,5 +1,7 @@
 package com.silent.manager.features.podcast
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,9 +18,12 @@ import com.silent.core.podcast.Host
 import com.silent.core.podcast.NEW_HOST
 import com.silent.core.podcast.Podcast
 import com.silent.ilustriscore.core.model.ViewModelBaseState
+import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.manager.R
 import com.silent.manager.databinding.FragmentManagePodcastBinding
 import com.silent.manager.features.manager.PodcastsManagerFragmentArgs
+import com.silent.manager.features.newpodcast.fragments.highlight.HIGHLIGHT_TAG
+import com.silent.manager.features.newpodcast.fragments.highlight.HighlightColorFragment
 import com.silent.manager.features.newpodcast.fragments.hosts.HostDialog
 import com.silent.manager.features.newpodcast.fragments.hosts.HostInstagramDialog
 
@@ -67,6 +72,12 @@ class PodcastFragment : Fragment() {
                     }
                     .show()
             }
+            highlightColor.setOnClickListener {
+                HighlightColorFragment.getInstance {
+                    podcast.highLightColor = it
+                    setupPodcast(podcast)
+                }.show(parentFragmentManager, HIGHLIGHT_TAG)
+            }
         }
         setupPodcast(args.podcast)
         observeViewModel()
@@ -79,7 +90,13 @@ class PodcastFragment : Fragment() {
                     findNavController().popBackStack()
                 }
                 is ViewModelBaseState.DataUpdateState -> {
-                    findNavController().popBackStack()
+                    view?.showSnackBar(
+                        "Podcast Atualizado com sucesso!",
+                        Color.GREEN,
+                        actionText = "Ok",
+                        action = {
+                            findNavController().popBackStack()
+                        })
                 }
                 else -> {
 
@@ -93,10 +110,14 @@ class PodcastFragment : Fragment() {
         podcastFragmentBinding?.podcastEditText?.setText(podcast.name)
         podcastFragmentBinding?.programIcon?.let {
             Glide.with(requireContext()).load(podcast.iconURL).into(it)
+            if (podcast.highLightColor.isNotEmpty()) {
+                it.borderColor = Color.parseColor(podcast.highLightColor)
+                podcastFragmentBinding?.highlightColor?.backgroundTintList =
+                    ColorStateList.valueOf(Color.parseColor(podcast.highLightColor))
+            }
         }
         updateHosts()
     }
-
 
     private fun selectHost(host: Host) {
         if (host.name == NEW_HOST) {

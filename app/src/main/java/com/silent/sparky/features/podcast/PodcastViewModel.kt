@@ -41,12 +41,14 @@ class PodcastViewModel : BaseViewModel<Podcast>() {
         title: String,
         playlistId: String,
         videos: List<PlaylistResource>,
-        orientation: Int
+        orientation: Int,
+        highlightColor: String
     ) = PodcastHeader(
         title = title,
         playlistId = playlistId,
         videos = videos,
-        orientation = orientation
+        orientation = orientation,
+        highLightColor = highlightColor
     )
 
     fun getHostsData(hosts: List<Host>) {
@@ -78,13 +80,15 @@ class PodcastViewModel : BaseViewModel<Podcast>() {
                     "Últimos episódios",
                     podcast.uploads,
                     uploads.items,
-                    RecyclerView.HORIZONTAL
+                    RecyclerView.HORIZONTAL,
+                    podcast.highLightColor
                 )
                 val cutsHeader = getHeader(
                     "Úlitmos cortes",
                     podcast.cuts,
                     cuts.items,
-                    RecyclerView.VERTICAL
+                    RecyclerView.VERTICAL,
+                    podcast.highLightColor
                 )
                 channelState.postValue(
                     ChannelState.ChannelDataRetrieved(
@@ -93,7 +97,7 @@ class PodcastViewModel : BaseViewModel<Podcast>() {
                         cutsHeader
                     )
                 )
-                getHostsData(podcast.hosts)
+                //getHostsData(podcast.hosts)
             } catch (e: Exception) {
                 e.printStackTrace()
                 channelState.postValue(ChannelState.ChannelFailedState)
