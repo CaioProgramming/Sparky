@@ -1,5 +1,6 @@
 package com.silent.sparky.features.home.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,7 +45,13 @@ class ProgramsAdapter(
                 if (isLive) {
                     itemView.live_status.visible()
                     itemView.live_status.progress = 100
+                    if (highLightColor.isNotEmpty()) {
+                        itemView.live_status.rimColor = Color.parseColor(highLightColor)
+                    }
                 } else {
+                    if (highLightColor.isNotEmpty()) {
+                        itemView.program_icon.borderColor = Color.parseColor(highLightColor)
+                    }
                     itemView.live_status.gone()
                 }
                 itemView.slideInBottom()

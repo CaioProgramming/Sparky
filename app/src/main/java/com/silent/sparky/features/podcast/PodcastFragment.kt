@@ -3,6 +3,7 @@ package com.silent.sparky.features.podcast
 import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,9 +33,7 @@ class PodcastFragment : Fragment() {
     private val args by navArgs<PodcastFragmentArgs>()
     private val channelSectionsAdapter = VideoHeaderAdapter(ArrayList(), ::onSelectHeader)
     private var program: Podcast? = null
-    private val hostAdapter = HostAdapter(ArrayList()) {
-        WebUtils(requireContext()).openInstagram(it.user)
-    }
+
 
     private fun onSelectHeader(podcastHeader: PodcastHeader) {
         WebUtils(requireContext()).openYoutubePlaylist(podcastHeader.playlistId)
@@ -71,7 +70,11 @@ class PodcastFragment : Fragment() {
     }
 
     private fun setupPodcast(podcast: Podcast) {
+        program = podcast
         program_name.text = podcast.name
+        if (podcast.highLightColor.isNotEmpty()) {
+            program_icon.borderColor = Color.parseColor(podcast.highLightColor)
+        }
         Glide.with(this).load(podcast.iconURL).into(program_icon)
         program_icon.setOnLongClickListener { _ ->
             WebUtils(requireContext()).openYoutubeChannel(podcast.youtubeID)
@@ -80,13 +83,15 @@ class PodcastFragment : Fragment() {
         channel_videos.adapter = channelSectionsAdapter
         if (podcast.hosts.isNotEmpty()) {
             hosts_title.visible()
-            hosts_recycler_view.adapter = HostAdapter(podcast.hosts) {
-                WebUtils(requireContext()).openInstagram(it.user)
-            }
+            hosts_recycler_view.adapter = HostAdapter(
+                podcast.hosts, highLightColor = podcast.highLightColor, isEdit = false,
+                hostSelected = {
+                    WebUtils(requireContext()).openInstagram(it.user)
+                },
+            )
         } else {
             hosts_title.gone()
         }
-        program = podcast
         loading.fadeOut()
         delayedFunction {
             app_bar.fadeIn()
@@ -112,7 +117,6 @@ class PodcastFragment : Fragment() {
                     loading.fadeOut()
                 }
                 is PodcastViewModel.ChannelState.ChannelHostRetrieved -> {
-                    hostAdapter.updateHost(it.host)
                 }
             }
         })

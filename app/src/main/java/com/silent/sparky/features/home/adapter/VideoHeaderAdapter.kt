@@ -1,5 +1,7 @@
 package com.silent.sparky.features.home.adapter
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +32,11 @@ class VideoHeaderAdapter(
 
         fun bind() {
             programSections[adapterPosition].run {
+                highLightColor?.let {
+                    itemView.see_more_button.imageTintList =
+                        ColorStateList.valueOf(Color.parseColor(it))
+                    itemView.program_icon.borderColor = Color.parseColor(it)
+                }
                 itemView.group_title.text = title
                 itemView.group_title.setOnClickListener {
                     headerSelected(this)
@@ -42,7 +49,7 @@ class VideoHeaderAdapter(
                         it.invoke(channelURL!!)
                     }
                 }
-                itemView.videos_recycler.adapter = VideosAdapter(videos)
+                itemView.videos_recycler.adapter = VideosAdapter(videos, highLightColor)
                 Glide.with(itemView.context)
                     .load(icon)
                     .listener(object : RequestListener<Drawable> {

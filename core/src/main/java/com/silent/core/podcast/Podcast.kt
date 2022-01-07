@@ -14,12 +14,10 @@ data class Podcast(
     var iconURL: String = "",
     var views: Int = 0,
     var hosts: ArrayList<Host> = ArrayList(),
-    var instagram: String = "",
-    var twitch: String = "",
-    var twitter: String = "",
     var youtubeID: String = "",
     var cuts: String = "",
-    var uploads: String = ""
+    var uploads: String = "",
+    var highLightColor: String = ""
 ) : BaseBean(id)
 
 

@@ -16,6 +16,8 @@ import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.manager.R
 import com.silent.manager.databinding.FragmentHostsDataBinding
 import com.silent.manager.features.newpodcast.NewPodcastViewModel
+import com.silent.manager.features.newpodcast.fragments.highlight.HIGHLIGHT_TAG
+import com.silent.manager.features.newpodcast.fragments.highlight.HighlightColorFragment
 import com.silent.manager.states.HostState
 
 class HostsFormFragment : Fragment() {
@@ -60,7 +62,10 @@ class HostsFormFragment : Fragment() {
         FragmentHostsDataBinding.bind(view).run {
             instagramHostsRecyclerview.adapter = hostAdapter
             hostNextButton.setOnClickListener {
-                findNavController().navigate(R.id.action_podcastGetHostsFragment_to_completeFragment)
+                HighlightColorFragment.getInstance {
+                    newPodcastViewModel.podcast.highLightColor = it
+                    findNavController().navigate(R.id.action_podcastGetHostsFragment_to_completeFragment)
+                }.show(childFragmentManager, HIGHLIGHT_TAG)
             }
         }
 

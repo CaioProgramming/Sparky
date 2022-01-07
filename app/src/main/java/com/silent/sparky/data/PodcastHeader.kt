@@ -8,6 +8,7 @@ typealias programSections = ArrayList<PodcastHeader>
 data class PodcastHeader(
     val title: String,
     val icon: String? = null,
+    val highLightColor: String? = null,
     val videos: List<PlaylistResource>,
     val playlistId: String,
     val channelURL: String? = null,

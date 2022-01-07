@@ -1,5 +1,7 @@
 package com.silent.core.component
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +19,8 @@ import com.silent.core.utils.ImageUtils
 class HostAdapter(
     val hosts: ArrayList<Host>,
     val isEdit: Boolean = false,
-    val hostSelected: (Host) -> Unit
+    val hostSelected: (Host) -> Unit,
+    val highLightColor: String? = null
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -37,6 +40,12 @@ class HostAdapter(
                 itemView.setOnClickListener {
                     hostSelected(hosts[bindingAdapterPosition])
                 }
+                if (!highLightColor.isNullOrEmpty()) {
+                    hostPlaceHolder.backgroundTintList =
+                        ColorStateList.valueOf(Color.parseColor(highLightColor))
+                    addHostButton.backgroundTintList =
+                        ColorStateList.valueOf(Color.parseColor(highLightColor))
+                }
             }
         }
     }
@@ -55,6 +64,12 @@ class HostAdapter(
                     .into(hostPhoto)
                 hostName.text = host.name
                 hostDescription.text = "@${host.user}"
+                if (!highLightColor.isNullOrEmpty()) {
+                    hostDescription.backgroundTintList =
+                        ColorStateList.valueOf(Color.parseColor(highLightColor))
+                    fadedShadow.backgroundTintList =
+                        ColorStateList.valueOf(Color.parseColor(highLightColor))
+                }
             }
 
         }
@@ -71,9 +86,13 @@ class HostAdapter(
                     .into(hostPhoto)
                 hostName.text = host.name
                 hostDescription.text = "@${host.user}"
+                if (!highLightColor.isNullOrEmpty()) {
+                    hostDescription.backgroundTintList =
+                        ColorStateList.valueOf(Color.parseColor(highLightColor))
+                    fadedShadow.backgroundTintList =
+                        ColorStateList.valueOf(Color.parseColor(highLightColor))
+                }
             }
-
-
         }
 
     }
