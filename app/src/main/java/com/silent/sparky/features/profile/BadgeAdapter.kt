@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.silent.core.flow.data.FlowBadge
 import com.silent.core.utils.ImageUtils
 import com.silent.sparky.R
-import kotlinx.android.synthetic.main.badge_layout.view.*
+import com.silent.sparky.databinding.BadgeLayoutBinding
 
 class BadgeAdapter(val selectedBadges: List<FlowBadge>) :
     RecyclerView.Adapter<BadgeAdapter.BadgeViewHolder>() {
@@ -16,12 +16,14 @@ class BadgeAdapter(val selectedBadges: List<FlowBadge>) :
     inner class BadgeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind() {
-            selectedBadges[absoluteAdapterPosition].run {
+            val badge = selectedBadges[absoluteAdapterPosition]
+            BadgeLayoutBinding.bind(itemView).run {
                 Glide.with(itemView.context)
-                    .load(src)
+                    .load(badge.src)
                     .error(ImageUtils.getRandomIcon())
-                    .into(itemView.badge_image)
+                    .into(badgeImage)
             }
+
         }
 
     }

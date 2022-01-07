@@ -13,7 +13,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.You
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.silent.core.youtube.PlaylistResource
 import com.silent.sparky.R
-import kotlinx.android.synthetic.main.cut_player_layout.view.*
+import com.silent.sparky.databinding.CutPlayerLayoutBinding
 
 class CutsAdapter(val cuts: ArrayList<PlaylistResource>): PagerAdapter() {
 
@@ -24,84 +24,88 @@ class CutsAdapter(val cuts: ArrayList<PlaylistResource>): PagerAdapter() {
         val view = LayoutInflater.from(container.context)
             .inflate(R.layout.cut_player_layout, container, false)
         val cut = cuts[position]
-        view.video_title.text = cut.snippet.title
-        view.cut_player.apply {
-            initialize(object : YouTubePlayerListener {
-                override fun onApiChange(youTubePlayer: YouTubePlayer) {
-                }
-
-                override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
-                    view.video_progress.setProgress(second.toInt(), true)
-                }
-
-                override fun onError(
-                    youTubePlayer: YouTubePlayer,
-                    error: PlayerConstants.PlayerError
-                ) {
-                }
-
-                override fun onPlaybackQualityChange(
-                    youTubePlayer: YouTubePlayer,
-                    playbackQuality: PlayerConstants.PlaybackQuality
-                ) {
-                }
-
-                override fun onPlaybackRateChange(
-                    youTubePlayer: YouTubePlayer,
-                    playbackRate: PlayerConstants.PlaybackRate
-                ) {
-                }
-
-                override fun onReady(youTubePlayer: YouTubePlayer) {
-                    youTubePlayer.cueVideo(cut.snippet.resourceId.videoId, 0f)
-                    view.cut_player.setOnClickListener {
-                        youTubePlayer.play()
+        CutPlayerLayoutBinding.bind(view).run {
+            videoTitle.text = cut.snippet.title
+            cutPlayer.apply {
+                initialize(object : YouTubePlayerListener {
+                    override fun onApiChange(youTubePlayer: YouTubePlayer) {
                     }
-                    view.video_card.setOnClickListener {
-                        youTubePlayer.play()
-                    }
-                }
 
-                override fun onStateChange(
-                    youTubePlayer: YouTubePlayer,
-                    state: PlayerConstants.PlayerState
-                ) {
-                    if (state == PlayerConstants.PlayerState.PLAYING) {
-                        val color = MaterialColors.getColor(
-                            context,
-                            R.attr.colorAccent,
-                            ContextCompat.getColor(view.context, R.color.material_grey900)
-                        )
-                        view.video_card.strokeColor = color
-                        if (view.video_title.visibility == View.INVISIBLE) {
-                            view.video_title.fadeIn()
+                    override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
+                        videoProgress.setProgress(second.toInt(), true)
+                    }
+
+                    override fun onError(
+                        youTubePlayer: YouTubePlayer,
+                        error: PlayerConstants.PlayerError
+                    ) {
+                    }
+
+                    override fun onPlaybackQualityChange(
+                        youTubePlayer: YouTubePlayer,
+                        playbackQuality: PlayerConstants.PlaybackQuality
+                    ) {
+                    }
+
+                    override fun onPlaybackRateChange(
+                        youTubePlayer: YouTubePlayer,
+                        playbackRate: PlayerConstants.PlaybackRate
+                    ) {
+                    }
+
+                    override fun onReady(youTubePlayer: YouTubePlayer) {
+                        youTubePlayer.cueVideo(cut.snippet.resourceId.videoId, 0f)
+                        cutPlayer.setOnClickListener {
+                            youTubePlayer.play()
                         }
-                        view.video_card.setOnClickListener {
-                            youTubePlayer.pause()
-                        }
-                    } else {
-                        val color = ContextCompat.getColor(view.context, R.color.material_grey900)
-                        view.video_card.strokeColor = color
-                        view.video_card.setOnClickListener {
+                        videoCard.setOnClickListener {
                             youTubePlayer.play()
                         }
                     }
-                }
 
-                override fun onVideoDuration(youTubePlayer: YouTubePlayer, duration: Float) {
-                    view.video_progress.max = duration.toInt()
-                }
+                    override fun onStateChange(
+                        youTubePlayer: YouTubePlayer,
+                        state: PlayerConstants.PlayerState
+                    ) {
+                        if (state == PlayerConstants.PlayerState.PLAYING) {
+                            val color = MaterialColors.getColor(
+                                context,
+                                R.attr.colorAccent,
+                                ContextCompat.getColor(view.context, R.color.material_grey900)
+                            )
+                            videoCard.strokeColor = color
+                            if (videoTitle.visibility == View.INVISIBLE) {
+                                videoTitle.fadeIn()
+                            }
+                            videoCard.setOnClickListener {
+                                youTubePlayer.pause()
+                            }
+                        } else {
+                            val color =
+                                ContextCompat.getColor(view.context, R.color.material_grey900)
+                            videoCard.strokeColor = color
+                            videoCard.setOnClickListener {
+                                youTubePlayer.play()
+                            }
+                        }
+                    }
 
-                override fun onVideoId(youTubePlayer: YouTubePlayer, videoId: String) {
-                }
+                    override fun onVideoDuration(youTubePlayer: YouTubePlayer, duration: Float) {
+                        videoProgress.max = duration.toInt()
+                    }
 
-                override fun onVideoLoadedFraction(
-                    youTubePlayer: YouTubePlayer,
-                    loadedFraction: Float
-                ) {
-                }
-            })
+                    override fun onVideoId(youTubePlayer: YouTubePlayer, videoId: String) {
+                    }
+
+                    override fun onVideoLoadedFraction(
+                        youTubePlayer: YouTubePlayer,
+                        loadedFraction: Float
+                    ) {
+                    }
+                })
+            }
         }
+
         view.fadeIn()
         container.addView(view)
         return view

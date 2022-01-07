@@ -20,15 +20,14 @@ import com.silent.ilustriscore.core.model.ErrorType
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.ilustriscore.core.utilities.RC_SIGN_IN
 import com.silent.ilustriscore.core.utilities.showSnackBar
-import com.silent.sparky.R
+import com.silent.sparky.databinding.FragmentProfileBinding
 import com.silent.sparky.features.profile.viewmodel.ProfileState
 import com.silent.sparky.features.profile.viewmodel.ProfileViewModel
-import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.profile_card.*
 import java.text.NumberFormat
 
 class ProfileFragment : Fragment() {
 
+    var profileBinding: FragmentProfileBinding? = null
     val viewModel = ProfileViewModel()
     var flowDialog: FlowLinkDialog? = null
     override fun onCreateView(
@@ -36,7 +35,8 @@ class ProfileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        profileBinding = FragmentProfileBinding.inflate(inflater)
+        return profileBinding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,11 +79,14 @@ class ProfileFragment : Fragment() {
                     }
                 }
                 ViewModelBaseState.LoadingState -> {
-                    if (loading.isGone) {
-                        loading.popIn()
-                        profile_appbar.fadeOut()
-                        user_badges.fadeOut()
+                    profileBinding?.run {
+                        if (loading.isGone) {
+                            loading.popIn()
+                            profileAppbar.fadeOut()
+                            userBadges.fadeOut()
+                        }
                     }
+
                 }
             }
         })
@@ -93,7 +96,7 @@ class ProfileFragment : Fragment() {
                     setupFlowProfile(it.flowProfile)
                 }
                 ProfileState.FlowUserError -> {
-                    link_flow.text = "Vincular conta flow"
+                    profileBinding?.linkFlow?.text = "Vincular conta flow"
 
                 }
             }
@@ -101,34 +104,42 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupUser(user: User) {
-        loading.popOut()
-        userNameTitle.text = user.name
-        username.text = user.name
-        Glide.with(requireContext())
-            .load(user.profilePic)
-            .error(ImageUtils.getRandomIcon())
-            .into(profile_pic)
-        profile_appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
-            run {
-                val percentage = Math.abs(verticalOffset).toFloat() / appBarLayout.totalScrollRange
-                userNameTitle.alpha = percentage
-                profile_toolbar.alpha = percentage
+        profileBinding?.run {
+            loading.popOut()
+            userNameTitle.text = user.name
+            username.text = user.name
+            Glide.with(requireContext())
+                .load(user.profilePic)
+                .error(ImageUtils.getRandomIcon())
+                .into(profilePic)
+            profileAppbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+                run {
+                    val percentage =
+                        Math.abs(verticalOffset).toFloat() / appBarLayout.totalScrollRange
+                    userNameTitle.alpha = percentage
+                    profileToolbar.alpha = percentage
+                }
+            })
+            linkFlow.setOnClickListener {
+                flowDialog = FlowLinkDialog(user)
+                flowDialog?.show(requireActivity().supportFragmentManager, "FLOWLINKDIALOG")
             }
-        })
-        link_flow.setOnClickListener {
-            flowDialog = FlowLinkDialog(user)
-            flowDialog?.show(requireActivity().supportFragmentManager, "FLOWLINKDIALOG")
+            profileAppbar.slideInRight()
         }
-        profile_appbar.slideInRight()
+
 
     }
 
     private fun setupFlowProfile(flowProfile: FlowProfile) {
-        username.text = flowProfile.username
-        userNameTitle.text = flowProfile.username
-        link_flow.text = "Alterar conta flow"
-        user_badges.adapter = BadgeAdapter(flowProfile.selected_badges)
-        user_badges.slideInBottom()
+        profileBinding?.run {
+            username.text = flowProfile.username
+            userNameTitle.text = flowProfile.username
+            realName.text = flowProfile.bio
+            linkFlow.text = "Alterar conta flow"
+            userBadges.adapter = BadgeAdapter(flowProfile.selected_badges)
+            userBadges.slideInBottom()
+        }
+
         animateBadgeCount(flowProfile.selected_badges.size)
     }
 
@@ -137,7 +148,7 @@ class ProfileFragment : Fragment() {
         animator.run {
             setObjectValues(0, count)
             addUpdateListener {
-                badges_count.text =
+                profileBinding?.badgesCount?.text =
                     NumberFormat.getInstance().format(it.animatedValue.toString().toInt())
             }
             duration = (100 * count).toLong()

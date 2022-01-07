@@ -23,15 +23,16 @@ import com.silent.navigation.ModuleNavigator
 import com.silent.navigation.NavigationUtils
 import com.silent.sparky.R
 import com.silent.sparky.data.PodcastHeader
+import com.silent.sparky.databinding.HomeFragmentBinding
 import com.silent.sparky.features.home.adapter.ProgramsAdapter
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
 import com.silent.sparky.features.home.data.LiveHeader
 import com.silent.sparky.features.home.viewmodel.HomeState
 import com.silent.sparky.features.home.viewmodel.HomeViewModel
-import kotlinx.android.synthetic.main.home_fragment.*
 
 class HomeFragment : Fragment() {
 
+    var homeFragmentBinding: HomeFragmentBinding? = null
     private val homeViewModel = HomeViewModel()
     private var videoHeaderAdapter: VideoHeaderAdapter? = VideoHeaderAdapter(
         ArrayList(),
@@ -48,7 +49,8 @@ class HomeFragment : Fragment() {
     ): View? {
         setHasOptionsMenu(true)
         setMenuVisibility(false)
-        return inflater.inflate(R.layout.home_fragment, container, false)
+        homeFragmentBinding = HomeFragmentBinding.inflate(inflater)
+        return homeFragmentBinding?.root
     }
 
     private fun openPodcast(id: String) {
@@ -62,6 +64,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        homeFragmentBinding = HomeFragmentBinding.bind(view)
         observeViewModel()
         setupView()
     }
@@ -76,12 +79,20 @@ class HomeFragment : Fragment() {
         super.onDetach()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        homeFragmentBinding = null
+    }
+
     private fun setupView() {
-        podcasts_resume_recycler.adapter = videoHeaderAdapter
-        (requireActivity() as AppCompatActivity?)?.run {
-            setSupportActionBar(home_toolbar)
-            supportActionBar?.title = ""
+        homeFragmentBinding?.run {
+            podcastsResumeRecycler.adapter = videoHeaderAdapter
+            (requireActivity() as AppCompatActivity?)?.run {
+                setSupportActionBar(homeToolbar)
+                supportActionBar?.title = ""
+            }
         }
+
         videoHeaderAdapter?.clearAdapter()
         homeViewModel.getHome()
     }
@@ -131,7 +142,7 @@ class HomeFragment : Fragment() {
                 }
                 HomeState.ValidManager -> {
                     setMenuVisibility(true)
-                    home_animation.setOnClickListener {
+                    homeFragmentBinding?.homeAnimation?.setOnClickListener {
                         goToManager()
                     }
                 }
@@ -143,12 +154,14 @@ class HomeFragment : Fragment() {
 
                 }
                 is ViewModelBaseState.DataListRetrievedState -> {
-                    podcasts_resume_recycler.adapter =
-                        ProgramsAdapter((it.dataList as podcasts).sortedByDescending { p -> p.subscribe }) { podcast, index ->
-                            WebUtils(requireContext()).openYoutubeChannel(podcast.youtubeID)
-                        }
-                    podcasts_resume_recycler.layoutManager =
-                        GridLayoutManager(requireContext(), 4, RecyclerView.VERTICAL, false)
+                    homeFragmentBinding?.podcastsResumeRecycler?.run {
+                        adapter =
+                            ProgramsAdapter((it.dataList as podcasts).sortedByDescending { p -> p.subscribe }) { podcast, index ->
+                                WebUtils(requireContext()).openYoutubeChannel(podcast.youtubeID)
+                            }
+                        layoutManager =
+                            GridLayoutManager(requireContext(), 4, RecyclerView.VERTICAL, false)
+                    }
                 }
                 is ViewModelBaseState.ErrorState -> {
                     view?.showSnackBar("Ocorreu um erro inesperado", backColor = Color.RED)
@@ -162,19 +175,21 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupLive(podcasts: ArrayList<LiveHeader>) {
-        if (podcasts.isEmpty()) {
-            lives_recycler_view.gone()
-        } else {
-            lives_recycler_view.fadeIn()
-            lives_recycler_view.adapter =
-                ProgramsAdapter(extractPodcasts(podcasts), true) { podcast, index ->
+        homeFragmentBinding?.livesRecyclerView?.run {
+            if (podcasts.isEmpty()) {
+                gone()
+            } else {
+                fadeIn()
+                adapter = ProgramsAdapter(extractPodcasts(podcasts), true) { podcast, index ->
                     val bundle = bundleOf("live_object" to podcasts[index])
                     findNavController().navigate(
                         R.id.action_navigation_home_to_liveFragment,
                         bundle
                     )
                 }
+            }
         }
+
     }
 
     private fun extractPodcasts(liveHeader: ArrayList<LiveHeader>): ArrayList<Podcast> {

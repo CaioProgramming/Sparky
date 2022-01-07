@@ -1,8 +1,6 @@
 package com.silent.sparky.features.podcast
 
 import android.animation.ValueAnimator
-import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,18 +20,22 @@ import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.silent.ilustriscore.core.utilities.gone
 import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.ilustriscore.core.utilities.visible
-import com.silent.sparky.R
 import com.silent.sparky.data.PodcastHeader
+import com.silent.sparky.databinding.FragmentPodcastBinding
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
-import kotlinx.android.synthetic.main.fragment_podcast.*
 import java.text.NumberFormat
 
 class PodcastFragment : Fragment() {
+    private var podcastFragmentBinding: FragmentPodcastBinding? = null
     private val programViewModel = PodcastViewModel()
     private val args by navArgs<PodcastFragmentArgs>()
     private val channelSectionsAdapter = VideoHeaderAdapter(ArrayList(), ::onSelectHeader)
     private var program: Podcast? = null
 
+    override fun onDestroy() {
+        super.onDestroy()
+        podcastFragmentBinding = null
+    }
 
     private fun onSelectHeader(podcastHeader: PodcastHeader) {
         WebUtils(requireContext()).openYoutubePlaylist(podcastHeader.playlistId)
@@ -44,13 +46,17 @@ class PodcastFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        podcastFragmentBinding = FragmentPodcastBinding.inflate(inflater)
         setHasOptionsMenu(true)
-        return inflater.inflate(R.layout.fragment_podcast, container, false)
+        return podcastFragmentBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as AppCompatActivity?)?.setSupportActionBar(program_toolbar)
+        podcastFragmentBinding?.run {
+            (activity as AppCompatActivity?)?.setSupportActionBar(programToolbar)
+
+        }
         observeViewModel()
         programViewModel.getChannelData(args.podcastId)
     }
@@ -60,7 +66,7 @@ class PodcastFragment : Fragment() {
         animator.run {
             setObjectValues(0, count)
             addUpdateListener {
-                subscriber_count.text =
+                podcastFragmentBinding?.subscriberCount?.text =
                     NumberFormat.getInstance().format(it.animatedValue.toString().toInt())
             }
             duration = 10000
@@ -71,33 +77,36 @@ class PodcastFragment : Fragment() {
 
     private fun setupPodcast(podcast: Podcast) {
         program = podcast
-        program_name.text = podcast.name
-        if (podcast.highLightColor.isNotEmpty()) {
-            program_icon.borderColor = Color.parseColor(podcast.highLightColor)
+        podcastFragmentBinding?.run {
+            programName.text = podcast.name
+            if (podcast.highLightColor.isNotEmpty()) {
+                programIcon.borderColor = Color.parseColor(podcast.highLightColor)
+            }
+            Glide.with(requireContext()).load(podcast.iconURL).into(programIcon)
+            programIcon.setOnLongClickListener { _ ->
+                WebUtils(requireContext()).openYoutubeChannel(podcast.youtubeID)
+                false
+            }
+            channelVideos.adapter = channelSectionsAdapter
+            if (podcast.hosts.isNotEmpty()) {
+                hostsTitle.visible()
+                hostsRecyclerView.adapter = HostAdapter(
+                    podcast.hosts, highLightColor = podcast.highLightColor, isEdit = false,
+                    hostSelected = {
+                        WebUtils(requireContext()).openInstagram(it.user)
+                    },
+                )
+            } else {
+                hostsTitle.gone()
+            }
+            loading.fadeOut()
+            delayedFunction {
+                appBar.fadeIn()
+                channelVideos.slideInRight()
+            }
+            animateSubscriberCount(podcast.subscribe)
         }
-        Glide.with(this).load(podcast.iconURL).into(program_icon)
-        program_icon.setOnLongClickListener { _ ->
-            WebUtils(requireContext()).openYoutubeChannel(podcast.youtubeID)
-            false
-        }
-        channel_videos.adapter = channelSectionsAdapter
-        if (podcast.hosts.isNotEmpty()) {
-            hosts_title.visible()
-            hosts_recycler_view.adapter = HostAdapter(
-                podcast.hosts, highLightColor = podcast.highLightColor, isEdit = false,
-                hostSelected = {
-                    WebUtils(requireContext()).openInstagram(it.user)
-                },
-            )
-        } else {
-            hosts_title.gone()
-        }
-        loading.fadeOut()
-        delayedFunction {
-            app_bar.fadeIn()
-            channel_videos.slideInRight()
-        }
-        animateSubscriberCount(podcast.subscribe)
+
     }
 
     private fun observeViewModel() {
@@ -114,21 +123,11 @@ class PodcastFragment : Fragment() {
                 }
                 PodcastViewModel.ChannelState.ChannelFailedState -> {
                     view?.showSnackBar("Ocorreu um erro ao obter os vídeos")
-                    loading.fadeOut()
+                    podcastFragmentBinding?.loading?.fadeOut()
                 }
                 is PodcastViewModel.ChannelState.ChannelHostRetrieved -> {
                 }
             }
         })
-    }
-
-    companion object {
-        private const val PROGRAM = "PROGRAM"
-        fun getLaunchIntent(podcast: Podcast, context: Context) {
-            Intent(context, PodcastFragment::class.java).apply {
-                putExtra(PROGRAM, podcast)
-                context.startActivity(this)
-            }
-        }
     }
 }
