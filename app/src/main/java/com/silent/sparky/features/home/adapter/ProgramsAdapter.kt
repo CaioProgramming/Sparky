@@ -11,7 +11,7 @@ import com.silent.core.podcast.Podcast
 import com.silent.ilustriscore.core.utilities.gone
 import com.silent.ilustriscore.core.utilities.visible
 import com.silent.sparky.R
-import kotlinx.android.synthetic.main.program_icon_layout.view.*
+import com.silent.sparky.databinding.ProgramIconLayoutBinding
 
 class ProgramsAdapter(
     val podcasts: List<Podcast>,
@@ -36,26 +36,28 @@ class ProgramsAdapter(
 
         fun bind() {
             val context = itemView.context
-            podcasts[adapterPosition].run {
-                Glide.with(context).load(iconURL).into(itemView.program_icon)
+            val podcast = podcasts[adapterPosition]
+            ProgramIconLayoutBinding.bind(itemView).run {
+                Glide.with(context).load(podcast.iconURL).into(programIcon)
                 //itemView.program_name.text = name
-                itemView.program_icon.setOnClickListener {
-                    onSelectProgram(this, adapterPosition)
+                programIcon.setOnClickListener {
+                    onSelectProgram(podcast, bindingAdapterPosition)
                 }
                 if (isLive) {
-                    itemView.live_status.visible()
-                    itemView.live_status.progress = 100
-                    if (highLightColor.isNotEmpty()) {
-                        itemView.live_status.rimColor = Color.parseColor(highLightColor)
+                    liveStatus.visible()
+                    liveStatus.progress = 100
+                    if (podcast.highLightColor.isNotEmpty()) {
+                        liveStatus.rimColor = Color.parseColor(podcast.highLightColor)
                     }
                 } else {
-                    if (highLightColor.isNotEmpty()) {
-                        itemView.program_icon.borderColor = Color.parseColor(highLightColor)
+                    if (podcast.highLightColor.isNotEmpty()) {
+                        programIcon.borderColor = Color.parseColor(podcast.highLightColor)
                     }
-                    itemView.live_status.gone()
+                    liveStatus.gone()
+                    itemView.slideInBottom()
                 }
-                itemView.slideInBottom()
             }
+
         }
 
     }

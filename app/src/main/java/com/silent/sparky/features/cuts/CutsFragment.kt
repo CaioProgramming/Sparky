@@ -10,12 +10,13 @@ import com.ilustris.animations.fadeOut
 import com.silent.core.youtube.PlaylistResource
 import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.sparky.R
+import com.silent.sparky.databinding.FragmentCutsBinding
 import com.silent.sparky.features.cuts.viewmodel.CutsState
 import com.silent.sparky.features.cuts.viewmodel.CutsViewModel
-import kotlinx.android.synthetic.main.fragment_cuts.*
 
 class CutsFragment : Fragment() {
 
+    private var cutsBinding: FragmentCutsBinding? = null
     private val cutsViewModel = CutsViewModel()
     private val cutsAdapter = CutsAdapter(ArrayList())
 
@@ -23,6 +24,7 @@ class CutsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        cutsBinding = FragmentCutsBinding.inflate(inflater)
         return inflater.inflate(R.layout.fragment_cuts, container, false)
     }
 
@@ -34,18 +36,27 @@ class CutsFragment : Fragment() {
     }
 
     private fun setupView() {
-        cuts_pager.adapter = cutsAdapter
-        cuts_pager.offscreenPageLimit = 5
-        cuts_pager.setPageTransformer(true, PagerStack())
+        cutsBinding?.cutsPager?.run {
+            adapter = cutsAdapter
+            offscreenPageLimit = 5
+            setPageTransformer(true, PagerStack())
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cutsBinding = null
     }
 
     private fun updateCuts(videos: ArrayList<PlaylistResource>) {
         val cutsList = cutsAdapter.cuts
         cutsList.addAll(videos)
-        cuts_pager.adapter = cutsAdapter
-        cuts_pager.offscreenPageLimit = 5
-        cuts_pager.setPageTransformer(true, PagerStack())
-        cuts_animation.fadeOut()
+        cutsBinding?.cutsPager?.run {
+            adapter = cutsAdapter
+            offscreenPageLimit = 5
+            setPageTransformer(true, PagerStack())
+        }
+        cutsBinding?.cutsAnimation?.fadeOut()
     }
 
     private fun observeViewModel() {

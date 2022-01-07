@@ -19,8 +19,8 @@ import com.silent.ilustriscore.core.utilities.gone
 import com.silent.sparky.R
 import com.silent.sparky.data.PodcastHeader
 import com.silent.sparky.data.programSections
+import com.silent.sparky.databinding.VideoGroupLayoutBinding
 import com.silent.sparky.features.podcast.adapter.VideosAdapter
-import kotlinx.android.synthetic.main.video_group_layout.view.*
 
 class VideoHeaderAdapter(
     val programSections: programSections,
@@ -31,27 +31,28 @@ class VideoHeaderAdapter(
     inner class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind() {
-            programSections[adapterPosition].run {
-                highLightColor?.let {
-                    itemView.see_more_button.imageTintList =
+            VideoGroupLayoutBinding.bind(itemView).run {
+                val section = programSections[bindingAdapterPosition]
+                section.highLightColor?.let {
+                    seeMoreButton.imageTintList =
                         ColorStateList.valueOf(Color.parseColor(it))
-                    itemView.program_icon.borderColor = Color.parseColor(it)
+                    programIcon.borderColor = Color.parseColor(it)
                 }
-                itemView.group_title.text = title
-                itemView.group_title.setOnClickListener {
-                    headerSelected(this)
+                groupTitle.text = section.title
+                groupTitle.setOnClickListener {
+                    headerSelected(section)
                 }
-                itemView.see_more_button.setOnClickListener {
-                    headerSelected(this)
+                seeMoreButton.setOnClickListener {
+                    headerSelected(section)
                 }
                 iconClick?.let {
-                    itemView.program_icon.setOnClickListener { _ ->
-                        it.invoke(channelURL!!)
+                    programIcon.setOnClickListener { _ ->
+                        headerSelected(section)
                     }
                 }
-                itemView.videos_recycler.adapter = VideosAdapter(videos, highLightColor)
+                videosRecycler.adapter = VideosAdapter(section.videos, section.highLightColor)
                 Glide.with(itemView.context)
-                    .load(icon)
+                    .load(section.icon)
                     .listener(object : RequestListener<Drawable> {
                         override fun onLoadFailed(
                             e: GlideException?,
@@ -59,7 +60,7 @@ class VideoHeaderAdapter(
                             target: Target<Drawable>?,
                             isFirstResource: Boolean
                         ): Boolean {
-                            itemView.program_icon.gone()
+                            programIcon.gone()
                             return false
                         }
 
@@ -70,21 +71,22 @@ class VideoHeaderAdapter(
                             dataSource: DataSource?,
                             isFirstResource: Boolean
                         ): Boolean {
-                            itemView.program_icon.setImageDrawable(resource)
+                            programIcon.setImageDrawable(resource)
                             return false
                         }
                     })
-                    .into(itemView.program_icon)
-                icon?.let {
-                    if (!itemView.program_icon.isVisible) {
-                        itemView.program_icon.fadeIn()
+                    .into(programIcon)
+                section.icon?.let {
+                    if (!programIcon.isVisible) {
+                        programIcon.fadeIn()
                     }
                 } ?: run {
-                    itemView.program_icon.gone()
+                    programIcon.gone()
                 }
-                itemView.videos_recycler.layoutManager =
-                    LinearLayoutManager(itemView.context, orientation, false)
+                videosRecycler.layoutManager =
+                    LinearLayoutManager(itemView.context, section.orientation, false)
             }
+
         }
 
     }

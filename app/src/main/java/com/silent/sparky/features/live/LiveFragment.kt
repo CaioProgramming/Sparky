@@ -12,10 +12,11 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstan
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
 import com.silent.sparky.R
-import kotlinx.android.synthetic.main.podcast_live_fragment.*
+import com.silent.sparky.databinding.PodcastLiveFragmentBinding
 
 class LiveFragment : Fragment() {
 
+    private var podcastLiveFragmentBinding: PodcastLiveFragmentBinding? = null
     private val args by navArgs<LiveFragmentArgs>()
 
 
@@ -24,31 +25,35 @@ class LiveFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.podcast_live_fragment, container, false)
+        podcastLiveFragmentBinding = PodcastLiveFragmentBinding.inflate(inflater)
+        return podcastLiveFragmentBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        podcastLiveFragmentBinding = PodcastLiveFragmentBinding.bind(view)
         setupView()
     }
 
     private fun setupView() {
         val live = args.liveObject
         loadVideo(live.video.id.videoId)
-        live_title.text = live.video.snippet.title
-        channel_name.text = live.podcast.name
-        channel_name.setOnClickListener {
-            val bundle = bundleOf("podcast_id" to live.podcast.id)
-            findNavController().navigate(R.id.action_liveFragment_to_podcastFragment, bundle)
+        podcastLiveFragmentBinding?.run {
+            liveTitle.text = live.video.snippet.title
+            channelName.text = live.podcast.name
+            channelName.setOnClickListener {
+                val bundle = bundleOf("podcast_id" to live.podcast.id)
+                findNavController().navigate(R.id.action_liveFragment_to_podcastFragment, bundle)
+            }
+            collapseButton.setOnClickListener {
+                findNavController().popBackStack()
+            }
         }
 
-        collapseButton.setOnClickListener {
-            findNavController().popBackStack()
-        }
     }
 
     fun loadVideo(videoID: String) {
-        live_player.initialize(object : YouTubePlayerListener {
+        podcastLiveFragmentBinding?.livePlayer?.initialize(object : YouTubePlayerListener {
             override fun onApiChange(youTubePlayer: YouTubePlayer) {
             }
 
@@ -74,7 +79,7 @@ class LiveFragment : Fragment() {
             }
 
             override fun onReady(youTubePlayer: YouTubePlayer) {
-                youTubePlayer.cueVideo(videoID, 0f)
+                youTubePlayer.loadVideo(videoID, 0f)
             }
 
             override fun onStateChange(

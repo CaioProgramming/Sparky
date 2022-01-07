@@ -18,35 +18,37 @@ import com.silent.core.utils.ImageUtils
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.ilustriscore.core.utilities.gone
 import com.silent.sparky.R
+import com.silent.sparky.databinding.FlowLinkAlertBinding
 import com.silent.sparky.features.profile.viewmodel.ProfileState
 import com.silent.sparky.features.profile.viewmodel.ProfileViewModel
-import kotlinx.android.synthetic.main.flow_link_alert.*
-import kotlinx.android.synthetic.main.flow_link_alert.view.*
-import kotlinx.android.synthetic.main.profile_card.*
 
 class FlowLinkDialog(val user: User) : BottomSheetDialogFragment() {
 
+    private var flowLinkAlertBinding: FlowLinkAlertBinding? = null
 
     private val profileViewModel: ProfileViewModel by lazy {
         ViewModelProvider(this)[ProfileViewModel::class.java]
     }
 
     private fun View.configure() {
-        flow_account_name.editText?.addTextChangedListener {
-            flow_account_name.error = ""
-            if (search_account.isGone) {
-                if (it.isNullOrEmpty()) {
-                    search_account.gone()
-                } else {
-                    search_account.slideInBottom()
+        flowLinkAlertBinding = FlowLinkAlertBinding.bind(this).apply {
+            flowAccountName.editText?.addTextChangedListener {
+                flowAccountName.error = ""
+                if (searchAccount.isGone) {
+                    if (it.isNullOrEmpty()) {
+                        searchAccount.gone()
+                    } else {
+                        searchAccount.slideInBottom()
+                    }
+                }
+            }
+            searchAccount.setOnClickListener {
+                flowAccountName.editText?.let {
+                    profileViewModel.getFlowProfile(it.text.toString())
                 }
             }
         }
-        search_account.setOnClickListener {
-            flow_account_name.editText?.let {
-                profileViewModel.getFlowProfile(it.text.toString())
-            }
-        }
+
         observeViewModel()
     }
 
@@ -72,7 +74,8 @@ class FlowLinkDialog(val user: User) : BottomSheetDialogFragment() {
                     setupFlowUser(it.flowProfile)
                 }
                 ProfileState.FlowUserError -> {
-                    flow_account_name.error = "Usuário não encontrado, tente novamente"
+                    flowLinkAlertBinding?.flowAccountName?.error =
+                        "Usuário não encontrado, tente novamente"
 
                 }
             }
@@ -86,22 +89,25 @@ class FlowLinkDialog(val user: User) : BottomSheetDialogFragment() {
         })
     }
 
-    private fun setupFlowUser(flowProfile: FlowProfile) {
-        flow_profile.fadeIn()
-        save_link_button.fadeIn()
-        Glide.with(requireContext())
-            .load(flowProfile.profile_picture)
-            .error(ImageUtils.getRandomIcon())
-            .into(profile_pic)
-        username.text = flowProfile.username
-        realName.text = flowProfile.bio
-        save_link_button.setOnClickListener {
-            save_link_button.text = ""
-            loading.fadeIn()
-            user.flowUserName = flowProfile.username
-            user.profilePic = flowProfile.profile_picture
-            profileViewModel.editData(user)
+    private fun setupFlowUser(fProfile: FlowProfile) {
+        flowLinkAlertBinding?.run {
+            flowProfile.root.fadeIn()
+            flowLinkAlertBinding?.saveLinkButton?.fadeIn()
+            Glide.with(requireContext())
+                .load(fProfile.profile_picture)
+                .error(ImageUtils.getRandomIcon())
+                .into(flowProfile.profilePic)
+            flowProfile.username.text = fProfile.username
+            flowProfile.realName.text = fProfile.bio
+            saveLinkButton.setOnClickListener {
+                saveLinkButton.text = ""
+                loading.fadeIn()
+                user.flowUserName = fProfile.username
+                user.profilePic = fProfile.profile_picture
+                profileViewModel.editData(user)
+            }
         }
+
     }
 
 
