@@ -28,7 +28,7 @@ import java.text.NumberFormat
 class ProfileFragment : Fragment() {
 
     var profileBinding: FragmentProfileBinding? = null
-    val viewModel = ProfileViewModel()
+    val viewModel: ProfileViewModel by lazy { ProfileViewModel(requireActivity().application) }
     var flowDialog: FlowLinkDialog? = null
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,7 +46,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.viewModelState.observe(this, {
+        viewModel.viewModelState.observe(viewLifecycleOwner) {
             when (it) {
                 ViewModelBaseState.RequireAuth -> {
 
@@ -89,8 +89,8 @@ class ProfileFragment : Fragment() {
 
                 }
             }
-        })
-        viewModel.profileState.observe(this, {
+        }
+        viewModel.profileState.observe(viewLifecycleOwner) {
             when (it) {
                 is ProfileState.FlowUserRetrieve -> {
                     setupFlowProfile(it.flowProfile)
@@ -100,7 +100,7 @@ class ProfileFragment : Fragment() {
 
                 }
             }
-        })
+        }
     }
 
     private fun setupUser(user: User) {

@@ -16,8 +16,10 @@
         android:label="Podcasts"
         tools:layout="@layout/fragment_manager">
         <action
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/slide_down"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/nav_default_exit_anim"
             android:id="@+id/action_podcastsManagerFragment_to_podcastFragment"
             app:destination="@id/podcastFragment" />
         <argument

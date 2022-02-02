@@ -1,5 +1,6 @@
 package com.silent.sparky.features.home.viewmodel
 
+import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
@@ -7,7 +8,8 @@ import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastService
 import com.silent.core.podcast.podcasts
 import com.silent.core.users.UsersService
-import com.silent.core.youtube.PlaylistResource
+import com.silent.core.videos.Video
+import com.silent.core.videos.VideoService
 import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
 import com.silent.sparky.data.PodcastHeader
@@ -15,9 +17,10 @@ import com.silent.sparky.features.home.data.LiveHeader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class HomeViewModel : BaseViewModel<Podcast>() {
+class HomeViewModel(application: Application) : BaseViewModel<Podcast>(application) {
 
     override val service = PodcastService()
+    val videoService = VideoService()
     private val youtubeService = YoutubeService()
     private val userService = UsersService()
     val homeState = MutableLiveData<HomeState>()
@@ -26,19 +29,22 @@ class HomeViewModel : BaseViewModel<Podcast>() {
     fun getHome() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                service.currentUser?.let {
+                service.currentUser()?.let {
                     checkManager(it.uid)
                 }
                 val podcasts = service.getAllData().success.data as podcasts
-
                 val sortedPodcasts = podcasts.sortedByDescending { it.subscribe }
                 sortedPodcasts.forEach {
-                    val uploads = youtubeService.getPlaylistVideos(it.uploads).items
-                    val header = createHeader(it, uploads, it.id)
+                    val uploadRequest = videoService.getHomeVideos(it.youtubeID)
+                    print(uploadRequest)
+                    val uploads = uploadRequest.success.data
+                    val videos = uploads.sortedByDescending { v -> v.publishedAt }
+                    val header = createHeader(it, videos.subList(0, 10), it.id)
                     homeState.postValue(HomeState.HomeChannelRetrieved(header))
                 }
-                checkLives(ArrayList(podcasts))
+                //checkLives(ArrayList(podcasts))
             } catch (e: Exception) {
+                e.printStackTrace()
                 homeState.postValue(HomeState.HomeError)
             }
         }
@@ -75,7 +81,7 @@ class HomeViewModel : BaseViewModel<Podcast>() {
 
     private fun createHeader(
         podcast: Podcast,
-        uploads: List<PlaylistResource>,
+        uploads: List<Video>,
         playlistID: String
     ): PodcastHeader {
         return PodcastHeader(

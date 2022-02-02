@@ -13,7 +13,7 @@ import com.silent.manager.states.NewPodcastState
 
 class NewPodcastActivity : AppCompatActivity() {
 
-    private val newPodcastViewModel = NewPodcastViewModel()
+    private val newPodcastViewModel = NewPodcastViewModel(application)
     private var newPodcastBinding: ActivityNewPodcastBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

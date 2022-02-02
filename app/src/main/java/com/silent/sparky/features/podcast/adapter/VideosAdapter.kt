@@ -9,21 +9,22 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.silent.core.utils.WebUtils
-import com.silent.core.youtube.PlaylistResource
-import com.silent.ilustriscore.core.utilities.DateFormats
-import com.silent.ilustriscore.core.utilities.formatDate
+import com.silent.core.videos.Video
+import com.silent.ilustriscore.core.utilities.gone
 import com.silent.sparky.R
 import com.silent.sparky.databinding.VideoPreviewBinding
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class VideosAdapter(
-    val playlistVideos: List<PlaylistResource>,
+    val playlistVideos: List<Video>,
     private val highlightColor: String? = null
 ) : RecyclerView.Adapter<VideosAdapter.VideoViewHolder>() {
 
     inner class VideoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind() {
-            val video = playlistVideos[adapterPosition].snippet
+            val video = playlistVideos[adapterPosition]
             VideoPreviewBinding.bind(itemView).run {
                 if (highlightColor != null) {
                     videoCard.setStrokeColor(
@@ -35,20 +36,24 @@ class VideosAdapter(
                     )
                 }
                 videoCard.setOnClickListener {
-                    WebUtils(itemView.context).openYoutubeVideo(video.resourceId.videoId)
+                    WebUtils(itemView.context).openYoutubeVideo(video.youtubeID)
                 }
                 try {
-                    Glide.with(itemView.context).load(video.thumbnails.standard.url)
+                    Glide.with(itemView.context).load(video.thumbnail_url)
                         .into(videoThumb)
                 } catch (e: Exception) {
                     e.printStackTrace()
                     Log.e(javaClass.simpleName, "bind: erro ao carregar thumbnail de vídeo $video")
                 }
                 title.text = video.title
-                publishDate.text = video.publishedAt.formatDate(
-                    video.publishedAt,
-                    DateFormats.DD_OF_MM_FROM_YYYY.format
-                )
+                try {
+                    val date =
+                        LocalDate.parse(video.publishedAt, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                            .format(DateTimeFormatter.ofPattern("YYYY-MM-DDThh:mm:ss.sZ"))
+                    publishDate.text = date
+                } catch (e: Exception) {
+                    publishDate.gone()
+                }
             }
         }
     }

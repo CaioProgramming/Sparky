@@ -1,5 +1,6 @@
 package com.silent.sparky.features.cuts.viewmodel
 
+import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.silent.core.podcast.Podcast
@@ -8,9 +9,10 @@ import com.silent.core.podcast.podcasts
 import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class CutsViewModel : BaseViewModel<Podcast>() {
+class CutsViewModel(application: Application) : BaseViewModel<Podcast>(application) {
     override val service = PodcastService()
     private val youtubeService = YoutubeService()
     val cutsState = MutableLiveData<CutsState>()
@@ -19,11 +21,12 @@ class CutsViewModel : BaseViewModel<Podcast>() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val podcasts = service.getAllData().success.data as podcasts
-                podcasts.forEach {
-                    val channelUploads = youtubeService.getPlaylistVideos(it.cuts)
+                podcasts.forEachIndexed { index, podcast ->
+                    delay((100 * index).toLong())
+                    val channelUploads = youtubeService.getPlaylistVideos(podcast.cuts)
                     cutsState.postValue(
                         CutsState.CutsRetrieved(
-                            it.cuts,
+                            podcast.cuts,
                             ArrayList(channelUploads.items)
                         )
                     )

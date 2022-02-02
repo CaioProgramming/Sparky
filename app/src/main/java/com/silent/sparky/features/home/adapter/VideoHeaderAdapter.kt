@@ -110,6 +110,11 @@ class VideoHeaderAdapter(
         notifyDataSetChanged()
     }
 
+    fun addSections(headers: ArrayList<PodcastHeader>) {
+        programSections.addAll(headers)
+        notifyItemRangeChanged(0, programSections.size)
+    }
+
     fun clearAdapter() {
         programSections.clear()
         notifyDataSetChanged()

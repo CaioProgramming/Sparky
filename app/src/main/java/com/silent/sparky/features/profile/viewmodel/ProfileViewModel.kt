@@ -1,5 +1,6 @@
 package com.silent.sparky.features.profile.viewmodel
 
+import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.silent.core.flow.FlowService
@@ -12,7 +13,7 @@ import com.silent.ilustriscore.core.model.ViewModelBaseState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ProfileViewModel : BaseViewModel<User>() {
+class ProfileViewModel(application: Application) : BaseViewModel<User>(application) {
     private val flowService = FlowService()
     override val service = UsersService()
     val profileState = MutableLiveData<ProfileState>()
@@ -20,7 +21,7 @@ class ProfileViewModel : BaseViewModel<User>() {
 
     fun findUser() {
         try {
-            query(currentUser!!.uid, "id")
+            query(getUser()!!.uid, "id")
         } catch (e: Exception) {
             e.printStackTrace()
             viewModelState.postValue(ViewModelBaseState.RequireAuth)
@@ -44,10 +45,10 @@ class ProfileViewModel : BaseViewModel<User>() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val user = User().apply {
-                    name = currentUser!!.displayName.toString()
-                    profilePic = currentUser!!.photoUrl.toString()
-                    id = currentUser!!.uid
-                    uid = currentUser!!.uid
+                    name = getUser()!!.displayName.toString()
+                    profilePic = getUser()!!.photoUrl.toString()
+                    id = getUser()!!.uid
+                    uid = getUser()!!.uid
                 }
                 editData(user)
             } catch (e: Exception) {

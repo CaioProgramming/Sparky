@@ -1,5 +1,6 @@
 package com.silent.manager.features.newpodcast
 
+import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.silent.core.podcast.Host
@@ -19,7 +20,7 @@ import kotlinx.coroutines.launch
 private const val VENUS_CHANNEL_ID = "UCTBhsXf_XRxk8w4rMj6WBOA"
 private const val FLOW_STUDIOS_ID = "UCmw6h7iv_A_nHA1nlnhkAAA"
 
-class NewPodcastViewModel : BaseViewModel<Podcast>() {
+class NewPodcastViewModel(application: Application) : BaseViewModel<Podcast>(application) {
 
     override val service = PodcastService()
     private val youtubeService = YoutubeService()

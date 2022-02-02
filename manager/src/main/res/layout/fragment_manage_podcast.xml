@@ -41,8 +41,8 @@
 
                 <View
                     android:id="@+id/highlight_color"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:background="@drawable/ic_baseline_circle_24"
                     android:backgroundTint="?attr/colorPrimary"
                     android:stateListAnimator="@animator/scale_down_animator"
@@ -56,13 +56,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="bottom"
-                android:layout_marginTop="@dimen/margin_default_10dp" />
+                android:layout_marginTop="@dimen/margin_big_16dp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginTop="@dimen/margin_default_10dp"
+                android:layout_marginTop="@dimen/margin_big_16dp"
                 android:background="@drawable/bottom_line"
                 android:backgroundTint="@color/material_grey900"
                 android:padding="@dimen/padding_small_8dp">
@@ -76,7 +76,6 @@
                     android:focusedByDefault="true"
                     android:fontFamily="@font/kaushan_script"
                     android:text="@string/app_name"
-                    android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                     app:layout_collapseMode="pin" />
 

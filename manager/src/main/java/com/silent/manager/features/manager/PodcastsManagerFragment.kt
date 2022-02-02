@@ -17,19 +17,19 @@ import com.silent.manager.features.manager.adapter.PodcastManagerAdapter
 import com.silent.manager.features.newpodcast.NewPodcastActivity
 
 class PodcastsManagerFragment : Fragment() {
-    private val viewModel = ManagerViewModel()
+    private val viewModel by lazy { ManagerViewModel(requireActivity().application) }
     private var fragmentManagerBinding: FragmentManagerBinding? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_manager, container, false)
+        fragmentManagerBinding = FragmentManagerBinding.inflate(inflater)
+        return fragmentManagerBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fragmentManagerBinding = FragmentManagerBinding.bind(view)
         fragmentManagerBinding?.setupView()
     }
 
@@ -51,7 +51,7 @@ class PodcastsManagerFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.viewModelState.observe(this, {
+        viewModel.viewModelState.observe(viewLifecycleOwner) {
             when (it) {
                 ViewModelBaseState.RequireAuth -> {
                     val providers = listOf(
@@ -89,6 +89,6 @@ class PodcastsManagerFragment : Fragment() {
                     //DO NOTHING
                 }
             }
-        })
+        }
     }
 }

@@ -33,7 +33,7 @@ import com.silent.sparky.features.home.viewmodel.HomeViewModel
 class HomeFragment : Fragment() {
 
     var homeFragmentBinding: HomeFragmentBinding? = null
-    private val homeViewModel = HomeViewModel()
+    private val homeViewModel by lazy { HomeViewModel(requireActivity().application) }
     private var videoHeaderAdapter: VideoHeaderAdapter? = VideoHeaderAdapter(
         ArrayList(),
         {
@@ -123,7 +123,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        homeViewModel.homeState.observe(this, {
+        homeViewModel.homeState.observe(viewLifecycleOwner) {
             when (it) {
                 is HomeState.HomeChannelRetrieved -> {
                     setupHome(it.podcastHeader)
@@ -147,8 +147,8 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
-        })
-        homeViewModel.viewModelState.observe(this, {
+        }
+        homeViewModel.viewModelState.observe(viewLifecycleOwner) {
             when (it) {
                 ViewModelBaseState.RequireAuth -> {
 
@@ -167,7 +167,7 @@ class HomeFragment : Fragment() {
                     view?.showSnackBar("Ocorreu um erro inesperado", backColor = Color.RED)
                 }
             }
-        })
+        }
     }
 
     private fun setupHome(podcastHeader: PodcastHeader) {

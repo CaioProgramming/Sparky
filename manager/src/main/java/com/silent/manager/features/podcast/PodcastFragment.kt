@@ -19,7 +19,6 @@ import com.silent.core.podcast.NEW_HOST
 import com.silent.core.podcast.Podcast
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.ilustriscore.core.utilities.showSnackBar
-import com.silent.manager.R
 import com.silent.manager.databinding.FragmentManagePodcastBinding
 import com.silent.manager.features.manager.PodcastsManagerFragmentArgs
 import com.silent.manager.features.newpodcast.fragments.highlight.HIGHLIGHT_TAG
@@ -30,10 +29,8 @@ import com.silent.manager.features.newpodcast.fragments.hosts.HostInstagramDialo
 class PodcastFragment : Fragment() {
 
     private val args by navArgs<PodcastsManagerFragmentArgs>()
-    private val podcastViewModel = PodcastViewModel()
-    private val podcastFragmentBinding by lazy {
-        view?.let { FragmentManagePodcastBinding.bind(it) }
-    }
+    private val podcastViewModel by lazy { PodcastViewModel(requireActivity().application) }
+    private var podcastFragmentBinding: FragmentManagePodcastBinding? = null
 
     lateinit var podcast: Podcast
 
@@ -45,7 +42,8 @@ class PodcastFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_manage_podcast, container, false)
+        podcastFragmentBinding = FragmentManagePodcastBinding.inflate(inflater)
+        return podcastFragmentBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -84,7 +82,7 @@ class PodcastFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        podcastViewModel.viewModelState.observe(this, {
+        podcastViewModel.viewModelState.observe(viewLifecycleOwner) {
             when (it) {
                 ViewModelBaseState.DataDeletedState -> {
                     findNavController().popBackStack()
@@ -102,7 +100,7 @@ class PodcastFragment : Fragment() {
 
                 }
             }
-        })
+        }
     }
 
     private fun setupPodcast(argPodcast: Podcast) {

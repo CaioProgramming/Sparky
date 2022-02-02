@@ -27,7 +27,7 @@ import java.text.NumberFormat
 
 class PodcastFragment : Fragment() {
     private var podcastFragmentBinding: FragmentPodcastBinding? = null
-    private val programViewModel = PodcastViewModel()
+    private val programViewModel by lazy { PodcastViewModel(requireActivity().application) }
     private val args by navArgs<PodcastFragmentArgs>()
     private val channelSectionsAdapter = VideoHeaderAdapter(ArrayList(), ::onSelectHeader)
     private var program: Podcast? = null
@@ -110,16 +110,11 @@ class PodcastFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        programViewModel.channelState.observe(this, {
+        programViewModel.channelState.observe(viewLifecycleOwner) {
             when (it) {
                 is PodcastViewModel.ChannelState.ChannelDataRetrieved -> {
                     setupPodcast(it.podcast)
-                    channelSectionsAdapter.updateSection(
-                        it.uploads
-                    )
-                    channelSectionsAdapter.updateSection(
-                        it.cuts
-                    )
+                    channelSectionsAdapter.addSections(it.headers)
                 }
                 PodcastViewModel.ChannelState.ChannelFailedState -> {
                     view?.showSnackBar("Ocorreu um erro ao obter os vídeos")
@@ -128,6 +123,6 @@ class PodcastFragment : Fragment() {
                 is PodcastViewModel.ChannelState.ChannelHostRetrieved -> {
                 }
             }
-        })
+        }
     }
 }

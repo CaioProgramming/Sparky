@@ -17,7 +17,7 @@ import com.silent.sparky.features.cuts.viewmodel.CutsViewModel
 class CutsFragment : Fragment() {
 
     private var cutsBinding: FragmentCutsBinding? = null
-    private val cutsViewModel = CutsViewModel()
+    private val cutsViewModel by lazy { CutsViewModel(requireActivity().application) }
     private val cutsAdapter = CutsAdapter(ArrayList())
 
     override fun onCreateView(
@@ -57,10 +57,11 @@ class CutsFragment : Fragment() {
             setPageTransformer(true, PagerStack())
         }
         cutsBinding?.cutsAnimation?.fadeOut()
+
     }
 
     private fun observeViewModel() {
-        cutsViewModel.cutsState.observe(this, {
+        cutsViewModel.cutsState.observe(viewLifecycleOwner) {
             when (it) {
                 CutsState.CutsError -> view?.showSnackBar(
                     "Ocorre um erro inesperado ao obter os cortes",
@@ -70,6 +71,6 @@ class CutsFragment : Fragment() {
                     updateCuts(it.videos)
                 }
             }
-        })
+        }
     }
 }
