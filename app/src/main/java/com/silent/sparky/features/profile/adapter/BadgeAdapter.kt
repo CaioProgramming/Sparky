@@ -1,4 +1,4 @@
-package com.silent.sparky.features.profile
+package com.silent.sparky.features.profile.adapter
 
 import android.view.LayoutInflater
 import android.view.View

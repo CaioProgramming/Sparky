@@ -18,9 +18,13 @@ data class Podcast(
     var cuts: String = "",
     var uploads: String = "",
     var highLightColor: String = ""
-) : BaseBean(id)
+) : BaseBean(id) {
+    companion object {
+        val newPodcast = Podcast(id = NEW_PODCAST, name = "Adicionar podcast")
+    }
+}
 
-
+const val NEW_PODCAST = "NEWPODCAST"
 const val NEW_HOST = "NEWHOST"
 
 data class Host(var name: String = "", var profilePic: String = "", var user: String = "") :

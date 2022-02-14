@@ -29,6 +29,7 @@ import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
 import com.silent.sparky.features.home.data.LiveHeader
 import com.silent.sparky.features.home.viewmodel.HomeState
 import com.silent.sparky.features.home.viewmodel.HomeViewModel
+import com.silent.sparky.features.profile.dialog.PreferencesDialogFragment
 
 class HomeFragment : Fragment() {
 
@@ -145,6 +146,9 @@ class HomeFragment : Fragment() {
                     homeFragmentBinding?.homeAnimation?.setOnClickListener {
                         goToManager()
                     }
+                }
+                HomeState.PreferencesNotSet -> {
+                    PreferencesDialogFragment().show(childFragmentManager, "PREFERENCE_DIALOG")
                 }
             }
         }

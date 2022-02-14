@@ -310,8 +310,9 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_baseline_circle_24" />
+                            <entry key="outputName" value="ic_iconmonstr_flower" />
                             <entry key="sourceFile" value="C:\Users\cacai\Downloads\iconmonstr-flower-1.svg" />
                           </map>
                         </option>

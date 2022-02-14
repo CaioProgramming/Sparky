@@ -1,4 +1,4 @@
-package com.silent.manager.features.manager.adapter
+package com.silent.sparky.features.profile.adapter
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -11,8 +11,25 @@ import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.podcasts
 import com.silent.manager.R
 
-class PodcastManagerAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcast) -> Unit) :
-    RecyclerView.Adapter<PodcastManagerAdapter.PodcastViewHolder>() {
+class PodcastAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcast) -> Unit) :
+    RecyclerView.Adapter<PodcastAdapter.PodcastViewHolder>() {
+
+    var checkedPodcasts = ArrayList<String>()
+
+    fun updatePodcasts(podcsts: podcasts) {
+        podcasts.addAll(podcsts)
+        notifyDataSetChanged()
+    }
+
+    fun selectPodcast(podcast: String) {
+        checkedPodcasts.add(podcast)
+        notifyDataSetChanged()
+    }
+
+    fun removePodcast(podcast: String) {
+        checkedPodcasts.remove(podcast)
+        notifyDataSetChanged()
+    }
 
     inner class PodcastViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
@@ -24,8 +41,10 @@ class PodcastManagerAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcas
                 podcastCard.setOnClickListener {
                     onSelectPodcast(podcast)
                 }
-                if (podcast.highLightColor.isNotEmpty()) {
+                if (podcast.highLightColor.isNotEmpty() && checkedPodcasts.contains(podcast.id)) {
                     podcastIcon.borderColor = Color.parseColor(podcast.highLightColor)
+                } else {
+                    podcastIcon.borderColor = Color.WHITE
                 }
 
             }

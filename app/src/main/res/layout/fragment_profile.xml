@@ -175,6 +175,15 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                 app:layout_collapseMode="pin" />
 
+            <ImageButton
+                android:id="@+id/settingsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_margin="@dimen/padding_default_16dp"
+                android:background="@color/transparent"
+                android:src="@drawable/ic_round_more_horiz_24" />
+
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

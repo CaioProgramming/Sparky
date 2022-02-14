@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:layout_toStartOf="@id/see_more_button"
+    android:background="@drawable/bottom_line"
+    android:backgroundTint="@color/material_grey700"
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="@dimen/padding_default_16dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/program_icon"
+        style="@style/Theme.Sparky.ProgramIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="gone"
+        tools:src="@drawable/ic_round_podcasts_24"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/program_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_default_16dp"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        tools:text="Últimos episódios" />
+
+</LinearLayout>
+
+
