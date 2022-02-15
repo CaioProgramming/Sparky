@@ -8,8 +8,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.ilustris.animations.*
@@ -20,7 +22,10 @@ import com.silent.ilustriscore.core.model.ErrorType
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.ilustriscore.core.utilities.RC_SIGN_IN
 import com.silent.ilustriscore.core.utilities.showSnackBar
+import com.silent.sparky.R
 import com.silent.sparky.databinding.FragmentProfileBinding
+import com.silent.sparky.features.profile.adapter.BadgeAdapter
+import com.silent.sparky.features.profile.dialog.FlowLinkDialog
 import com.silent.sparky.features.profile.viewmodel.ProfileState
 import com.silent.sparky.features.profile.viewmodel.ProfileViewModel
 import java.text.NumberFormat
@@ -125,6 +130,13 @@ class ProfileFragment : Fragment() {
                 flowDialog?.show(requireActivity().supportFragmentManager, "FLOWLINKDIALOG")
             }
             profileAppbar.slideInRight()
+            settingsButton.setOnClickListener {
+                val bundle = bundleOf("user_object" to user)
+                findNavController().navigate(
+                    R.id.action_navigation_profile_to_settingsFragment,
+                    bundle
+                )
+            }
         }
 
 

@@ -4,7 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/cacai/.gradle/caches/transforms-3/ca4f12c6d07c7430fb973cfc7de04435/transformed/jetified-core-2.1.0/res/drawable-anydpi-v24/ic_launcher_foreground.xml" value="0.2046875" />
-        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/drawable/corner_shape.xml" value="0.3574074074074074" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/drawable/card_shape.xml" value="0.149" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/drawable/corner_shape.xml" value="0.16" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/drawable/faded_gradient.xml" value="0.25925925925925924" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/drawable/rounded_focus_retangle.xml" value="0.3574074074074074" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/drawable/triangle.xml" value="0.36302083333333335" />
@@ -18,7 +19,10 @@
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/flow_link_alert.xml" value="0.5" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/fragment_cuts.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/fragment_podcast.xml" value="0.22" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/fragment_preferences.xml" value="0.25" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/fragment_profile.xml" value="0.25" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/frgament_settings.xml" value="0.33" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/home_fragment.xml" value="0.33" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/host_layout.xml" value="0.21" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/host_layout_reverse.xml" value="0.19701086956521738" />
@@ -26,6 +30,7 @@
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/live_podcast_expanded_layout.xml" value="0.33" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/live_podcasts_layout.xml" value="0.33" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/new_program_layout.xml" value="0.19166666666666668" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/podcast_list_layout.xml" value="0.25" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/podcast_live_fragment.xml" value="0.2572463768115942" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/podcasts_fragment.xml" value="0.22" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/profile_card.xml" value="0.38022813688212925" />

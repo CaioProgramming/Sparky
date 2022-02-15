@@ -24,7 +24,6 @@
         android:id="@+id/podcast_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/faded_gradient"
         android:gravity="center|bottom"
         android:paddingVertical="@dimen/padding_default_16dp"
         android:textAlignment="center"

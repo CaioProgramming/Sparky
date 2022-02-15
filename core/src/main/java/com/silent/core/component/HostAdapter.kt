@@ -80,6 +80,9 @@ class HostAdapter(
             HostCardReverseBinding.bind(itemView).run {
                 val context = itemView.context
                 val host = hosts[adapterPosition]
+                itemView.setOnClickListener {
+                    hostSelected(host)
+                }
                 Glide.with(context)
                     .load(host.profilePic)
                     .error(ImageUtils.getRandomIcon())

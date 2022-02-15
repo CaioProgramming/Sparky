@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastService
 import com.silent.core.podcast.podcasts
+import com.silent.core.preferences.PreferencesService
 import com.silent.core.users.UsersService
+import com.silent.core.utils.PODCASTS_PREFERENCES
 import com.silent.core.videos.Video
 import com.silent.core.videos.VideoService
 import com.silent.core.youtube.YoutubeService
@@ -20,7 +22,8 @@ import kotlinx.coroutines.launch
 class HomeViewModel(application: Application) : BaseViewModel<Podcast>(application) {
 
     override val service = PodcastService()
-    val videoService = VideoService()
+    private val preferencesService = PreferencesService(application)
+    private val videoService = VideoService()
     private val youtubeService = YoutubeService()
     private val userService = UsersService()
     val homeState = MutableLiveData<HomeState>()
@@ -29,11 +32,19 @@ class HomeViewModel(application: Application) : BaseViewModel<Podcast>(applicati
     fun getHome() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                val podcastFilter = ArrayList<String>()
+                val preferencesPodcasts = preferencesService.getStringSetValue(PODCASTS_PREFERENCES)
+                if (preferencesPodcasts.isNullOrEmpty()) {
+                    homeState.postValue(HomeState.PreferencesNotSet)
+                } else {
+                    podcastFilter.addAll(preferencesPodcasts)
+                }
                 service.currentUser()?.let {
                     checkManager(it.uid)
                 }
                 val podcasts = service.getAllData().success.data as podcasts
-                val sortedPodcasts = podcasts.sortedByDescending { it.subscribe }
+                val filteredPodcasts = podcasts.filter { podcastFilter.contains(it.id) }
+                val sortedPodcasts = filteredPodcasts.sortedByDescending { it.subscribe }
                 sortedPodcasts.forEach {
                     val uploadRequest = videoService.getHomeVideos(it.youtubeID)
                     print(uploadRequest)

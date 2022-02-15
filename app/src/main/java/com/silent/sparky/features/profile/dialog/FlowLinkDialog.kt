@@ -1,4 +1,4 @@
-package com.silent.sparky.features.profile
+package com.silent.sparky.features.profile.dialog
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,6 +21,7 @@ import com.silent.sparky.R
 import com.silent.sparky.databinding.FlowLinkAlertBinding
 import com.silent.sparky.features.profile.viewmodel.ProfileState
 import com.silent.sparky.features.profile.viewmodel.ProfileViewModel
+
 
 class FlowLinkDialog(val user: User) : BottomSheetDialogFragment() {
 
@@ -68,7 +69,7 @@ class FlowLinkDialog(val user: User) : BottomSheetDialogFragment() {
 
 
     private fun observeViewModel() {
-        profileViewModel.profileState.observe(this, {
+        profileViewModel.profileState.observe(viewLifecycleOwner) {
             when (it) {
                 is ProfileState.FlowUserRetrieve -> {
                     setupFlowUser(it.flowProfile)
@@ -79,14 +80,14 @@ class FlowLinkDialog(val user: User) : BottomSheetDialogFragment() {
 
                 }
             }
-        })
-        profileViewModel.viewModelState.observe(this, {
+        }
+        profileViewModel.viewModelState.observe(viewLifecycleOwner) {
             when (it) {
                 is ViewModelBaseState.DataUpdateState -> {
                     dismiss()
                 }
             }
-        })
+        }
     }
 
     private fun setupFlowUser(fProfile: FlowProfile) {
