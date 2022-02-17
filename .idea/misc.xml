@@ -16,12 +16,12 @@
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/badge_layout.xml" value="0.2572463768115942" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/channel_group_layout.xml" value="0.20380434782608695" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/cut_player_layout.xml" value="0.2" />
-        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/flow_link_alert.xml" value="0.5" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/flow_link_alert.xml" value="0.25" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/fragment_cuts.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/fragment_podcast.xml" value="0.22" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/fragment_preferences.xml" value="0.25" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/fragment_profile.xml" value="0.25" />
-        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/fragment_settings.xml" value="0.18" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/frgament_settings.xml" value="0.33" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/home_fragment.xml" value="0.33" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/host_layout.xml" value="0.21" />
@@ -30,7 +30,7 @@
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/live_podcast_expanded_layout.xml" value="0.33" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/live_podcasts_layout.xml" value="0.33" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/new_program_layout.xml" value="0.19166666666666668" />
-        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/podcast_list_layout.xml" value="0.25" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/podcast_list_layout.xml" value="0.2" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/podcast_live_fragment.xml" value="0.2572463768115942" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/podcasts_fragment.xml" value="0.22" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/profile_card.xml" value="0.38022813688212925" />

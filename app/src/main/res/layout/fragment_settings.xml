@@ -29,15 +29,17 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/user_photo"
+                    android:layout_width="120dp"
                     style="@style/Theme.Sparky.ProgramIcon"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_height="120dp"
+                    android:layout_marginVertical="@dimen/margin_default_10dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_iconmonstr_flower" />
 
                 <TextView
                     android:id="@+id/username"
                     style="@style/TextAppearance.Material3.HeadlineMedium"
+                    android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/margin_small_4dp"
@@ -51,7 +53,7 @@
                     android:layout_marginVertical="@dimen/margin_small_4dp"
                     android:fontFamily="@font/kaushan_script"
                     android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                    android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
                     android:textStyle="italic"
                     tools:text="Caioxdr" />
 
@@ -63,7 +65,6 @@
                     android:drawableStart="@drawable/ic_baseline_flash_on_24"
                     android:padding="@dimen/padding_default_16dp"
                     android:text="Conta Flow"
-                    android:textStyle="bold"
                     app:icon="@drawable/ic_baseline_flash_on_24" />
 
             </LinearLayout>
@@ -88,18 +89,51 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/prefered_podcasts_recycler"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/padding_default_16dp"
-        android:background="@drawable/card_shape"
-        android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        tools:itemCount="4"
-        tools:listitem="@layout/podcast_list_layout" />
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_default_16dp"
+                android:text="Preferências por podcasts"
+                android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/prefered_podcasts_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_default_16dp"
+                android:background="@drawable/card_shape"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="2"
+                tools:listitem="@layout/podcast_list_layout" />
+
+            <TextView
+                android:id="@+id/sign_out_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_default_16dp"
+                android:background="@drawable/card_shape"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="@dimen/padding_default_16dp"
+                android:text="Desconectar"
+                android:textAlignment="center"
+                android:textColor="@color/material_red500" />
+
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

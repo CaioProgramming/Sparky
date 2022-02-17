@@ -17,7 +17,7 @@ import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.sparky.R
 import com.silent.sparky.databinding.FragmentSettingsBinding
-import com.silent.sparky.features.profile.dialog.FlowLinkDialog
+import com.silent.sparky.features.profile.dialog.PreferencesDialogFragment
 
 class SettingsFragment : Fragment() {
 
@@ -32,6 +32,12 @@ class SettingsFragment : Fragment() {
     ): View? {
         settingsBinding = FragmentSettingsBinding.inflate(inflater)
         return settingsBinding?.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupUser(args.userObject)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,7 +67,9 @@ class SettingsFragment : Fragment() {
             add(Podcast.newPodcast)
         }) { podcast, i ->
             if (podcast.id == NEW_PODCAST) {
-                findNavController().navigate(R.id.action_settingsFragment_to_preferencesDialogFragment)
+                PreferencesDialogFragment.buildDialog(childFragmentManager) {
+                    settingsViewModel.loadSettings()
+                }
             } else {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Tem certeza")
@@ -84,7 +92,7 @@ class SettingsFragment : Fragment() {
             Glide.with(requireContext()).load(user.profilePic)
                 .placeholder(R.drawable.ic_iconmonstr_flower).into(userPhoto)
             flowAccountButton.setOnClickListener {
-                FlowLinkDialog(user).show(childFragmentManager, "FLOWDIALOG")
+                findNavController().navigate(R.id.action_settingsFragment_to_flowLinkDialog)
             }
             settingsViewModel.loadSettings()
         }

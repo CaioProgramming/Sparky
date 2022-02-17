@@ -22,10 +22,11 @@
         tools:visibility="visible" />
 
     <TextView
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/margin_default_10dp"
         android:id="@+id/program_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/padding_default_16dp"
+        android:gravity="center_vertical"
         android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
         tools:text="Últimos episódios" />
 

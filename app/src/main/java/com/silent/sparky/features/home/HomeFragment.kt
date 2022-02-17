@@ -148,7 +148,9 @@ class HomeFragment : Fragment() {
                     }
                 }
                 HomeState.PreferencesNotSet -> {
-                    PreferencesDialogFragment().show(childFragmentManager, "PREFERENCE_DIALOG")
+                    PreferencesDialogFragment.buildDialog(childFragmentManager) {
+                        homeViewModel.getHome()
+                    }
                 }
             }
         }

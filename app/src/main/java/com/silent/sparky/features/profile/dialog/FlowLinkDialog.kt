@@ -9,8 +9,8 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ilustris.animations.fadeIn
+import com.ilustris.animations.fadeOut
 import com.ilustris.animations.slideInBottom
 import com.silent.core.flow.data.FlowProfile
 import com.silent.core.users.User
@@ -23,7 +23,7 @@ import com.silent.sparky.features.profile.viewmodel.ProfileState
 import com.silent.sparky.features.profile.viewmodel.ProfileViewModel
 
 
-class FlowLinkDialog(val user: User) : BottomSheetDialogFragment() {
+class FlowLinkDialog(val user: User) : DialogFragment() {
 
     private var flowLinkAlertBinding: FlowLinkAlertBinding? = null
 
@@ -45,12 +45,38 @@ class FlowLinkDialog(val user: User) : BottomSheetDialogFragment() {
             }
             searchAccount.setOnClickListener {
                 flowAccountName.editText?.let {
+                    toggleAccountSearchLoading()
                     profileViewModel.getFlowProfile(it.text.toString())
                 }
             }
         }
-
         observeViewModel()
+    }
+
+    private fun FlowLinkAlertBinding.toggleAccountSearchLoading() {
+        loading.fadeIn()
+        title.fadeOut()
+        subtitle.fadeOut()
+        flowAccountName.fadeOut()
+        searchAccount.fadeOut()
+    }
+
+    private fun FlowLinkAlertBinding.toggleFullLoading() {
+        loading.fadeIn()
+        title.fadeOut()
+        subtitle.fadeOut()
+        flowAccountName.fadeOut()
+        searchAccount.fadeOut()
+        flowProfile.root.fadeOut()
+        saveLinkButton.fadeOut()
+    }
+
+    private fun FlowLinkAlertBinding.disableAccountSearchLoading() {
+        loading.fadeOut()
+        title.fadeIn()
+        subtitle.fadeIn()
+        flowAccountName.fadeIn()
+        searchAccount.fadeIn()
     }
 
     override fun onCreateView(
@@ -58,8 +84,15 @@ class FlowLinkDialog(val user: User) : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        setStyle(DialogFragment.STYLE_NO_FRAME, R.style.Theme_Sparky)
         return inflater.inflate(R.layout.flow_link_alert, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(
+            DialogFragment.STYLE_NO_FRAME,
+            android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -78,6 +111,8 @@ class FlowLinkDialog(val user: User) : BottomSheetDialogFragment() {
                     flowLinkAlertBinding?.flowAccountName?.error =
                         "Usuário não encontrado, tente novamente"
 
+                    flowLinkAlertBinding?.disableAccountSearchLoading()
+
                 }
             }
         }
@@ -92,7 +127,11 @@ class FlowLinkDialog(val user: User) : BottomSheetDialogFragment() {
 
     private fun setupFlowUser(fProfile: FlowProfile) {
         flowLinkAlertBinding?.run {
+            loading.fadeOut()
             flowProfile.root.fadeIn()
+            title.fadeIn()
+            subtitle.fadeIn()
+            subtitle.text = "Verifique os dados de sua conta para continuar"
             flowLinkAlertBinding?.saveLinkButton?.fadeIn()
             Glide.with(requireContext())
                 .load(fProfile.profile_picture)
@@ -102,7 +141,7 @@ class FlowLinkDialog(val user: User) : BottomSheetDialogFragment() {
             flowProfile.realName.text = fProfile.bio
             saveLinkButton.setOnClickListener {
                 saveLinkButton.text = ""
-                loading.fadeIn()
+                toggleFullLoading()
                 user.flowUserName = fProfile.username
                 user.profilePic = fProfile.profile_picture
                 profileViewModel.editData(user)

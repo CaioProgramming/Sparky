@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.podcasts
@@ -15,18 +16,21 @@ import com.silent.sparky.databinding.FragmentPreferencesBinding
 import com.silent.sparky.features.profile.adapter.PodcastAdapter
 import com.silent.sparky.features.profile.viewmodel.PreferencesViewModel
 
+private const val TAG = "PREFERENCES_DIALOG"
+
 class PreferencesDialogFragment : BottomSheetDialogFragment() {
 
     private val preferencesViewModel by lazy { PreferencesViewModel(requireActivity().application) }
     private var fragmentPreferencesBinding: FragmentPreferencesBinding? = null
     private var podcastAdapter = PodcastAdapter(ArrayList(), ::selectPodcast)
     private val selectedPodcasts = ArrayList<String>()
+    private lateinit var onDismiss: () -> Unit
 
     private fun selectPodcast(podcast: Podcast) {
         addOrRemovePodcast(podcast)
     }
 
-    fun isEnable() = selectedPodcasts.size > 3
+    fun isEnable() = selectedPodcasts.size >= 3
 
     fun addOrRemovePodcast(podcast: Podcast) {
         if (!selectedPodcasts.contains(podcast.id)) {
@@ -89,7 +93,8 @@ class PreferencesDialogFragment : BottomSheetDialogFragment() {
                     )
                 }
                 PreferencesViewModel.PreferencesViewState.PreferencesSaved -> {
-                    view?.showSnackBar("Preferências salvas com sucesso", backColor = Color.BLACK)
+                    onDismiss()
+                    dismiss()
                 }
                 is PreferencesViewModel.PreferencesViewState.PodcastPreferencesRetrieved -> {
                     selectedPodcasts.addAll(it.favorites)
@@ -117,6 +122,14 @@ class PreferencesDialogFragment : BottomSheetDialogFragment() {
             podcastAdapter = PodcastAdapter(podcasts, ::selectPodcast)
             podcastsRecycler.adapter = podcastAdapter
         }
+    }
+
+
+    companion object {
+        fun buildDialog(fragmentManager: FragmentManager, onDismiss: () -> Unit) =
+            PreferencesDialogFragment().apply {
+                this.onDismiss = onDismiss
+            }.show(fragmentManager, TAG)
     }
 
 }
