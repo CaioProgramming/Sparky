@@ -93,7 +93,8 @@ class NewPodcastViewModel(application: Application) : BaseViewModel<Podcast>(app
         sectionItem: List<SectionItem>,
         cuts: Boolean = false
     ) {
-        val relatedChannelsSection = sectionItem.find { it.snippet.type == "multiplechannels" }
+        val relatedChannelsSection =
+            sectionItem.find { it.snippet.type == "multiplechannels" && it.snippet.title == "ESTÚDIOS FLOW" }
         val channels = relatedChannelsSection!!.contentDetails["channels"] as List<String>
         channels.forEach {
             val channel = youtubeService.getChannelDetails(it).items[0]

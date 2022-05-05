@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Interpolator
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -85,6 +86,11 @@ class VideoHeaderAdapter(
                 }
                 videosRecycler.layoutManager =
                     LinearLayoutManager(itemView.context, section.orientation, false)
+                if (section.scrollAnimation) {
+                    videosRecycler.smoothScrollBy(100, 100, Interpolator {
+                        50f
+                    }, 10000)
+                }
             }
 
         }
@@ -103,9 +109,13 @@ class VideoHeaderAdapter(
 
     override fun getItemCount() = programSections.count()
 
-    fun updateSection(podcastHeader: PodcastHeader) {
+    fun updateSection(podcastHeader: PodcastHeader, position: Int? = null) {
         if (programSections.none { it.title == podcastHeader.title }) {
-            programSections.add(podcastHeader)
+            if (position != null) {
+                programSections.add(position, podcastHeader)
+            } else {
+                programSections.add(podcastHeader)
+            }
         }
         notifyDataSetChanged()
     }

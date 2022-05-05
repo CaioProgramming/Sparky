@@ -2,12 +2,20 @@ package com.silent.sparky.features.podcast.adapter
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import com.ilustris.animations.fadeIn
+import com.ilustris.animations.fadeOut
 import com.silent.core.utils.WebUtils
 import com.silent.core.videos.Video
 import com.silent.ilustriscore.core.utilities.gone
@@ -39,7 +47,37 @@ class VideosAdapter(
                     WebUtils(itemView.context).openYoutubeVideo(video.youtubeID)
                 }
                 try {
-                    Glide.with(itemView.context).load(video.thumbnail_url)
+                    Glide.with(itemView.context).load(video.thumbnailUrl).listener(object :
+                        RequestListener<Drawable> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            videoCard.setCardBackgroundColor(
+                                ContextCompat.getColor(
+                                    itemView.context,
+                                    R.color.material_grey900
+                                )
+                            )
+                            iconPlaceholder.fadeIn()
+                            return false
+                        }
+
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            iconPlaceholder.fadeOut()
+                            videoThumb.fadeIn()
+                            videoThumb.setImageDrawable(resource)
+                            return false
+                        }
+                    })
                         .into(videoThumb)
                 } catch (e: Exception) {
                     e.printStackTrace()

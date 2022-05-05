@@ -13,5 +13,6 @@ data class PodcastHeader(
     val playlistId: String,
     val channelURL: String? = null,
     val orientation: Int = RecyclerView.VERTICAL,
-    val seeMore: Boolean = false
+    val seeMore: Boolean = false,
+    val scrollAnimation: Boolean = false
 )

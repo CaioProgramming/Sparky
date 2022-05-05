@@ -9,6 +9,7 @@ import com.silent.core.podcast.Host
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastService
 import com.silent.core.videos.Video
+import com.silent.core.videos.VideoMapper
 import com.silent.core.videos.VideoService
 import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
@@ -23,6 +24,7 @@ class PodcastViewModel(application: Application) : BaseViewModel<Podcast>(applic
     private val instagramService = InstagramService()
     override val service = PodcastService()
     private val videoService = VideoService()
+    private val videoMapper = VideoMapper()
 
 
     sealed class ChannelState {
@@ -80,7 +82,7 @@ class PodcastViewModel(application: Application) : BaseViewModel<Podcast>(applic
                     podcast.youtubeID,
                     "podcastId"
                 ).success.data as ArrayList<Video>
-                //val cuts = youtubeService.getPlaylistVideos(podcast.cuts)
+                val cuts = youtubeService.getPlaylistVideos(podcast.cuts)
                 val uploadHeader = getHeader(
                     "Últimos episódios",
                     podcast.uploads,
@@ -88,17 +90,21 @@ class PodcastViewModel(application: Application) : BaseViewModel<Podcast>(applic
                     RecyclerView.HORIZONTAL,
                     podcast.highLightColor
                 )
-                /*val cutsHeader = getHeader(
+                val mappedCuts = ArrayList<Video>()
+                cuts.items.forEach {
+                    mappedCuts.add(videoMapper.mapVideoSnippet(it.snippet, podcastID))
+                }
+                val cutsHeader = getHeader(
                     "Úlitmos cortes",
                     podcast.cuts,
-                    cuts.items,
+                    mappedCuts,
                     RecyclerView.VERTICAL,
                     podcast.highLightColor
-                )*/
+                )
                 channelState.postValue(
                     ChannelState.ChannelDataRetrieved(
                         podcast,
-                        arrayListOf(uploadHeader)
+                        arrayListOf(uploadHeader, cutsHeader)
                     )
                 )
                 //getHostsData(podcast.hosts)

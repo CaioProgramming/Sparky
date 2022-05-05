@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/video_card"
     android:layout_width="match_parent"
-    android:layout_height="190dp"
+    android:layout_height="wrap_content"
     android:layout_margin="@dimen/padding_small_8dp"
     android:stateListAnimator="@animator/scale_down_animator"
     app:cardBackgroundColor="?android:colorBackground"
@@ -17,9 +17,15 @@
         android:id="@+id/video_thumb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/md_black"
-        android:scaleType="centerCrop"
-        tools:src="@drawable/ic_baseline_wechat_24" />
+        android:scaleType="centerCrop" />
+
+    <ImageView
+        android:id="@+id/icon_placeholder"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_iconmonstr_flower" />
+
 
     <View
         android:layout_width="match_parent"

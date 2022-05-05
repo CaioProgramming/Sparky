@@ -11,13 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ilustris.animations.fadeIn
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.podcasts
 import com.silent.core.utils.WebUtils
+import com.silent.core.videos.Video
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.ilustriscore.core.utilities.RC_SIGN_IN
-import com.silent.ilustriscore.core.utilities.gone
 import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.navigation.ModuleNavigator
 import com.silent.navigation.NavigationUtils
@@ -132,8 +131,7 @@ class HomeFragment : Fragment() {
                 HomeState.HomeError -> {
                     homeViewModel.getAllData()
                 }
-                HomeState.HomeLiveError -> {
-                }
+
                 is HomeState.HomeLivesRetrieved -> {
                     setupLive(it.podcasts)
                     //view?.showSnackBar("${it.podcasts.size} lives no momento")
@@ -180,22 +178,19 @@ class HomeFragment : Fragment() {
         videoHeaderAdapter?.updateSection(podcastHeader)
     }
 
-    private fun setupLive(podcasts: ArrayList<LiveHeader>) {
-        homeFragmentBinding?.livesRecyclerView?.run {
-            if (podcasts.isEmpty()) {
-                gone()
-            } else {
-                fadeIn()
-                adapter = ProgramsAdapter(extractPodcasts(podcasts), true) { podcast, index ->
-                    val bundle = bundleOf("live_object" to podcasts[index])
-                    findNavController().navigate(
-                        R.id.action_navigation_home_to_liveFragment,
-                        bundle
-                    )
-                }
-            }
+    private fun setupLive(lives: ArrayList<Video>) {
+        if (lives.isNotEmpty()) {
+            videoHeaderAdapter?.updateSection(
+                PodcastHeader(
+                    "Ao vivo agora",
+                    orientation = RecyclerView.HORIZONTAL,
+                    seeMore = false,
+                    playlistId = "",
+                    videos = lives,
+                    scrollAnimation = true
+                )
+            )
         }
-
     }
 
     private fun extractPodcasts(liveHeader: ArrayList<LiveHeader>): ArrayList<Podcast> {

@@ -11,11 +11,11 @@ import com.silent.core.preferences.PreferencesService
 import com.silent.core.users.UsersService
 import com.silent.core.utils.PODCASTS_PREFERENCES
 import com.silent.core.videos.Video
+import com.silent.core.videos.VideoMapper
 import com.silent.core.videos.VideoService
 import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
 import com.silent.sparky.data.PodcastHeader
-import com.silent.sparky.features.home.data.LiveHeader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -27,6 +27,7 @@ class HomeViewModel(application: Application) : BaseViewModel<Podcast>(applicati
     private val youtubeService = YoutubeService()
     private val userService = UsersService()
     val homeState = MutableLiveData<HomeState>()
+    private val videoMapper = VideoMapper()
 
 
     fun getHome() {
@@ -45,15 +46,19 @@ class HomeViewModel(application: Application) : BaseViewModel<Podcast>(applicati
                 val podcasts = service.getAllData().success.data as podcasts
                 val filteredPodcasts = podcasts.filter { podcastFilter.contains(it.id) }
                 val sortedPodcasts = filteredPodcasts.sortedByDescending { it.subscribe }
-                sortedPodcasts.forEach {
-                    val uploadRequest = videoService.getHomeVideos(it.youtubeID)
+                sortedPodcasts.forEach { podcast ->
+                    val uploadRequest = youtubeService.getPlaylistVideos(podcast.uploads)
                     print(uploadRequest)
-                    val uploads = uploadRequest.success.data
-                    val videos = uploads.sortedByDescending { v -> v.publishedAt }
-                    val header = createHeader(it, videos.subList(0, 10), it.id)
+                    val uploads = uploadRequest.items
+                    val mappedVideos = ArrayList<Video>()
+                    uploads.forEach {
+                        mappedVideos.add(videoMapper.mapVideoSnippet(it.snippet, podcast.id))
+                    }
+                    val videos = mappedVideos.sortedByDescending { v -> v.publishedAt }
+                    val header = createHeader(podcast, videos.subList(0, 10), podcast.id)
                     homeState.postValue(HomeState.HomeChannelRetrieved(header))
                 }
-                //checkLives(ArrayList(podcasts))
+                checkLives(sortedPodcasts)
             } catch (e: Exception) {
                 e.printStackTrace()
                 homeState.postValue(HomeState.HomeError)
@@ -61,17 +66,18 @@ class HomeViewModel(application: Application) : BaseViewModel<Podcast>(applicati
         }
     }
 
-    private fun checkLives(podcasts: ArrayList<Podcast>) {
+
+    private fun checkLives(podcasts: List<Podcast>) {
         viewModelScope.launch {
             try {
-                val livePodcasts = ArrayList<LiveHeader>()
+                val lives = ArrayList<Video>()
                 podcasts.forEach {
                     val searchLive = youtubeService.getChannelLiveStatus(it.youtubeID)
                     if (searchLive.items.isNotEmpty()) {
-                        livePodcasts.add(LiveHeader(it, searchLive.items[0]))
+                        lives.add(videoMapper.mapVideoSnippet(searchLive.items[0].snippet, it.id))
                     }
                 }
-                homeState.postValue(HomeState.HomeLivesRetrieved(livePodcasts))
+                homeState.postValue(HomeState.HomeLivesRetrieved(lives))
             } catch (e: Exception) {
                 homeState.postValue(HomeState.HomeLiveError)
             }

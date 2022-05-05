@@ -9,7 +9,7 @@ data class Video(
     var podcastId: String = "",
     var publishedAt: String = "",
     @SerializedName("thumbnail_url")
-    var thumbnail_url: String = "",
+    var thumbnailUrl: String = "",
     @SerializedName("ytId")
     var youtubeID: String = "",
     var title: String = ""
