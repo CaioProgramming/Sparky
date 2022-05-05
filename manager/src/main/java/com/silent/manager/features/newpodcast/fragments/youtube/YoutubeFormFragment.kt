@@ -17,7 +17,8 @@ import com.silent.manager.states.NewPodcastState
 
 class YoutubeFormFragment : Fragment() {
 
-    private val relatedChannelsAdapter = PodcastAdapter(ArrayList(), ::selectPodcast)
+    private val relatedChannelsAdapter =
+        PodcastHeaderAdapter(ArrayList(), onSelectPodcast = ::selectPodcast)
     private val newPodcastViewModel: NewPodcastViewModel by lazy {
         ViewModelProvider(requireActivity())[NewPodcastViewModel::class.java]
     }
@@ -39,7 +40,7 @@ class YoutubeFormFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         FragmentPodcastYoutubedataBinding.bind(view).setupView()
         relatedChannelsAdapter.clearAdapter()
-        newPodcastViewModel.getRelatedChannels()
+        newPodcastViewModel.getRelatedChannels("ESTÚDIOS FLOW")
         observeViewModel()
     }
 
@@ -48,10 +49,10 @@ class YoutubeFormFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        newPodcastViewModel.newPodcastState.observe(this, {
+        newPodcastViewModel.newPodcastState.observe(viewLifecycleOwner) {
             when (it) {
-                is NewPodcastState.RelatedChannelRetrieved -> {
-                    relatedChannelsAdapter.updateAdapter(it.podcast)
+                is NewPodcastState.RelatedPodcastsRetrieved -> {
+                    relatedChannelsAdapter.updateHeaders(ArrayList(it.podcastsHeader))
                 }
 
                 NewPodcastState.InvalidPodcast -> {
@@ -72,7 +73,7 @@ class YoutubeFormFragment : Fragment() {
                     findNavController().navigate(R.id.action_podcastGetYoutubeFormFragment_to_GetHostsFragment)
                 }
             }
-        })
+        }
     }
 
     private fun confirmPodcast(podcast: Podcast) {

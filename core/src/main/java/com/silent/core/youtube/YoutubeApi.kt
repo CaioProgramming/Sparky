@@ -1,7 +1,6 @@
 package com.silent.core.youtube
 
 import com.silent.core.BuildConfig
-import com.silent.core.twitch.ChannelDetailsResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

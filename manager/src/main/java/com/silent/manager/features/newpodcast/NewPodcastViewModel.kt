@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.silent.core.podcast.Host
 import com.silent.core.podcast.Podcast
+import com.silent.core.podcast.PodcastMapper
 import com.silent.core.podcast.PodcastService
 import com.silent.core.youtube.SectionItem
 import com.silent.core.youtube.YoutubeService
@@ -12,6 +13,7 @@ import com.silent.ilustriscore.core.model.BaseViewModel
 import com.silent.ilustriscore.core.model.DataException
 import com.silent.ilustriscore.core.model.ErrorType
 import com.silent.ilustriscore.core.model.ViewModelBaseState
+import com.silent.manager.features.newpodcast.fragments.youtube.PodcastsHeader
 import com.silent.manager.states.HostState
 import com.silent.manager.states.NewPodcastState
 import kotlinx.coroutines.Dispatchers
@@ -24,9 +26,9 @@ class NewPodcastViewModel(application: Application) : BaseViewModel<Podcast>(app
 
     override val service = PodcastService()
     private val youtubeService = YoutubeService()
-
     val newPodcastState = MutableLiveData<NewPodcastState>()
     val hostState = MutableLiveData<HostState>()
+    val podcastMapper = PodcastMapper()
 
     var podcast = Podcast()
 
@@ -64,11 +66,11 @@ class NewPodcastViewModel(application: Application) : BaseViewModel<Podcast>(app
         }
     }
 
-    fun getRelatedChannels() {
+    fun getRelatedChannels(filter: String? = null) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val channelSections = youtubeService.getChannelSections(VENUS_CHANNEL_ID)
-                filterRelatedChannels(channelSections.items)
+                filterRelatedChannels(channelSections.items, filter)
             } catch (e: Exception) {
                 e.printStackTrace()
                 viewModelState.postValue(ViewModelBaseState.ErrorState(DataException(ErrorType.UNKNOWN)))
@@ -81,7 +83,7 @@ class NewPodcastViewModel(application: Application) : BaseViewModel<Podcast>(app
             try {
                 val channelID = podcast.youtubeID
                 val channelSections = youtubeService.getChannelSections(channelID)
-                filterRelatedChannels(channelSections.items, true)
+                filterRelatedChannels(channelSections.items)
             } catch (e: Exception) {
                 e.printStackTrace()
                 viewModelState.postValue(ViewModelBaseState.ErrorState(DataException(ErrorType.UNKNOWN)))
@@ -91,27 +93,33 @@ class NewPodcastViewModel(application: Application) : BaseViewModel<Podcast>(app
 
     private suspend fun filterRelatedChannels(
         sectionItem: List<SectionItem>,
-        cuts: Boolean = false
+        filter: String? = null
     ) {
-        val relatedChannelsSection =
-            sectionItem.find { it.snippet.type == "multiplechannels" && it.snippet.title == "ESTÚDIOS FLOW" }
-        val channels = relatedChannelsSection!!.contentDetails["channels"] as List<String>
-        channels.forEach {
-            val channel = youtubeService.getChannelDetails(it).items[0]
-            val podcast = Podcast(
-                youtubeID = channel.id,
-                name = channel.snippet.title,
-                iconURL = channel.snippet.thumbnails.high.url,
-                subscribe = channel.statistics.subscriberCount,
-                views = channel.statistics.viewCount,
-                uploads = channel.contentDetails.relatedPlaylists.uploads
-            )
-            if (!cuts) {
-                newPodcastState.postValue(NewPodcastState.RelatedChannelRetrieved(podcast))
-            } else {
-                podcast.cuts = channel.contentDetails.relatedPlaylists.uploads
-                newPodcastState.postValue(NewPodcastState.RelatedCutsRetrieved(podcast))
-
+        val podcastHeaders = ArrayList<PodcastsHeader>()
+        val multipleChannelsList = if (filter != null) {
+            sectionItem.filter { it.snippet.type == "multiplechannels" && it.snippet.title == filter }
+        } else {
+            sectionItem.filter { it.snippet.type == "multiplechannels" }
+        }
+        multipleChannelsList.forEachIndexed { index, sectionItem ->
+            val channels = sectionItem.contentDetails["channels"] as List<String>
+            val relatedPodcasts = ArrayList<Podcast>()
+            channels.forEach { podcastID ->
+                val channel = youtubeService.getChannelDetails(podcastID).items.first()
+                val podcast = podcastMapper.mapChannelResponse(channel)
+                relatedPodcasts.add(podcast)
+            }
+            podcastHeaders.add(PodcastsHeader(sectionItem.snippet.title, relatedPodcasts))
+            if (index == multipleChannelsList.lastIndex) {
+                if (podcast.id.isNotEmpty()) {
+                    newPodcastState.postValue(NewPodcastState.RelatedCutsRetrieved(podcastHeaders))
+                } else {
+                    newPodcastState.postValue(
+                        NewPodcastState.RelatedPodcastsRetrieved(
+                            podcastHeaders
+                        )
+                    )
+                }
             }
         }
     }

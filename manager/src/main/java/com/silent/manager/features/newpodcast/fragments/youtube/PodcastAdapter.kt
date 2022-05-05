@@ -9,14 +9,14 @@ import com.ilustris.animations.slideInBottom
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.podcasts
 import com.silent.manager.R
-import com.silent.manager.databinding.ProgramIconLayoutBinding
+import com.silent.manager.databinding.PodcastIconLayoutBinding
 
 class PodcastAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcast) -> Unit) :
     RecyclerView.Adapter<PodcastAdapter.PodcastViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PodcastViewHolder {
         val itemView =
-            LayoutInflater.from(parent.context).inflate(R.layout.program_icon_layout, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.podcast_icon_layout, parent, false)
         return PodcastViewHolder(itemView)
     }
 
@@ -40,11 +40,11 @@ class PodcastAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcast) -> U
         RecyclerView.ViewHolder(view) {
 
         fun bind() {
-            ProgramIconLayoutBinding.bind(itemView).run {
+            PodcastIconLayoutBinding.bind(itemView).run {
                 val context = itemView.context
                 val podcast = podcasts[adapterPosition]
                 Glide.with(context).load(podcast.iconURL).into(programIcon)
-                //itemView.program_name.text = name
+                podcastTitle.text = podcast.name
                 programIcon.setOnClickListener {
                     onSelectPodcast(podcast)
                 }
