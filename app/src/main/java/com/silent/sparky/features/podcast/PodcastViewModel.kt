@@ -82,7 +82,7 @@ class PodcastViewModel(application: Application) : BaseViewModel<Podcast>(applic
                     podcast.youtubeID,
                     "podcastId"
                 ).success.data as ArrayList<Video>
-                val cuts = youtubeService.getPlaylistVideos(podcast.cuts)
+                //val cuts = youtubeService.getPlaylistVideos(podcast.cuts)
                 val uploadHeader = getHeader(
                     "Últimos episódios",
                     podcast.uploads,
@@ -91,9 +91,9 @@ class PodcastViewModel(application: Application) : BaseViewModel<Podcast>(applic
                     podcast.highLightColor
                 )
                 val mappedCuts = ArrayList<Video>()
-                cuts.items.forEach {
-                    mappedCuts.add(videoMapper.mapVideoSnippet(it.snippet, podcastID))
-                }
+                /* cuts.items.forEach {
+                     mappedCuts.add(videoMapper.mapVideoSnippet(it.snippet, podcastID))
+                 }*/
                 val cutsHeader = getHeader(
                     "Úlitmos cortes",
                     podcast.cuts,

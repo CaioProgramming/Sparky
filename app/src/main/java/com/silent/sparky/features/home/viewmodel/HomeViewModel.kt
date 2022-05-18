@@ -47,18 +47,22 @@ class HomeViewModel(application: Application) : BaseViewModel<Podcast>(applicati
                 val filteredPodcasts = podcasts.filter { podcastFilter.contains(it.id) }
                 val sortedPodcasts = filteredPodcasts.sortedByDescending { it.subscribe }
                 sortedPodcasts.forEach { podcast ->
-                    val uploadRequest = youtubeService.getPlaylistVideos(podcast.uploads)
-                    print(uploadRequest)
-                    val uploads = uploadRequest.items
+                    //val uploadRequest = youtubeService.getPlaylistVideos(podcast.uploads)
+                    val uploadsData = videoService.query(
+                        podcast.youtubeID,
+                        "podcastId"
+                    ).success.data as ArrayList<Video>
+
                     val mappedVideos = ArrayList<Video>()
-                    uploads.forEach {
+                    mappedVideos.addAll(uploadsData)
+                    /*uploadsData.forEach {
                         mappedVideos.add(videoMapper.mapVideoSnippet(it.snippet, podcast.id))
-                    }
+                    }*/
                     val videos = mappedVideos.sortedByDescending { v -> v.publishedAt }
                     val header = createHeader(podcast, videos.subList(0, 10), podcast.id)
                     homeState.postValue(HomeState.HomeChannelRetrieved(header))
                 }
-                checkLives(sortedPodcasts)
+                // checkLives(sortedPodcasts)
             } catch (e: Exception) {
                 e.printStackTrace()
                 homeState.postValue(HomeState.HomeError)

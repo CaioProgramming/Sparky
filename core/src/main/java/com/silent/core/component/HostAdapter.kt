@@ -2,11 +2,17 @@ package com.silent.core.component
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import com.ilustris.animations.fadeIn
 import com.silent.core.R
 import com.silent.core.databinding.HostCardBinding
 import com.silent.core.databinding.HostCardReverseBinding
@@ -14,13 +20,17 @@ import com.silent.core.databinding.NewHostLayoutBinding
 import com.silent.core.podcast.Host
 import com.silent.core.podcast.NEW_HOST
 import com.silent.core.utils.ImageUtils
+import com.silent.ilustriscore.core.utilities.formatDate
+import com.silent.ilustriscore.core.utilities.gone
+import com.silent.ilustriscore.core.utilities.visible
 
 
 class HostAdapter(
     val hosts: ArrayList<Host>,
     val isEdit: Boolean = false,
     val hostSelected: (Host) -> Unit,
-    val highLightColor: String? = null
+    val highLightColor: String? = null,
+    val groupType: GroupType = GroupType.HOSTS
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -35,16 +45,23 @@ class HostAdapter(
     inner class NewHostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind() {
             NewHostLayoutBinding.bind(itemView).run {
+                addHostButton.text =
+                    if (groupType == GroupType.GUESTS) "Adicionar novo convidado" else "Adicionar novo Host"
                 Glide.with(itemView.context).load(ImageUtils.getRandomHostPlaceHolder())
                     .into(hostPlaceHolder)
-                itemView.setOnClickListener {
+                addHostButton.setOnClickListener {
                     hostSelected(hosts[bindingAdapterPosition])
                 }
                 if (!highLightColor.isNullOrEmpty()) {
                     hostPlaceHolder.backgroundTintList =
                         ColorStateList.valueOf(Color.parseColor(highLightColor))
-                    addHostButton.backgroundTintList =
-                        ColorStateList.valueOf(Color.parseColor(highLightColor))
+                    addHostButton.setTextColor(
+                        ColorStateList.valueOf(
+                            Color.parseColor(
+                                highLightColor
+                            )
+                        )
+                    )
                 }
             }
         }
@@ -53,22 +70,47 @@ class HostAdapter(
     inner class HostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind() {
             HostCardBinding.bind(itemView).run {
-                val context = itemView.context
                 val host = hosts[bindingAdapterPosition]
                 itemView.setOnClickListener {
                     hostSelected(host)
                 }
-                Glide.with(context)
-                    .load(host.profilePic)
-                    .error(ImageUtils.getRandomIcon())
+                Glide.with(itemView.context).load(host.profilePic).listener(object :
+                    RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        hostPhoto.gone()
+                        iconPlaceHolder.visible()
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        iconPlaceHolder.gone()
+                        hostPhoto.fadeIn()
+                        hostPhoto.setImageDrawable(resource)
+                        return false
+                    }
+                })
                     .into(hostPhoto)
                 hostName.text = host.name
-                hostDescription.text = "@${host.user}"
+                hostDescription.text = host.description
+                host.comingDate?.let {
+                    if (groupType == GroupType.GUESTS) eventDate.text =
+                        it.formatDate("dd.MM - HH") + "H"
+                }
                 if (!highLightColor.isNullOrEmpty()) {
-                    hostDescription.backgroundTintList =
-                        ColorStateList.valueOf(Color.parseColor(highLightColor))
-                    fadedShadow.backgroundTintList =
-                        ColorStateList.valueOf(Color.parseColor(highLightColor))
+                    hostNameCard.strokeColor = Color.parseColor(highLightColor)
+                    hostCard.strokeColor = Color.parseColor(highLightColor)
+                    hostName.setTextColor(Color.parseColor(highLightColor))
                 }
             }
 
@@ -85,15 +127,18 @@ class HostAdapter(
                 }
                 Glide.with(context)
                     .load(host.profilePic)
-                    .error(ImageUtils.getRandomIcon())
+                    .error(R.drawable.ic_iconmonstr_connection_1)
                     .into(hostPhoto)
+                host.comingDate?.let {
+                    if (groupType == GroupType.GUESTS) eventDate.text =
+                        it.formatDate("dd.MM - HH") + "H"
+                }
                 hostName.text = host.name
-                hostDescription.text = "@${host.user}"
+                hostDescription.text = host.description
                 if (!highLightColor.isNullOrEmpty()) {
-                    hostDescription.backgroundTintList =
-                        ColorStateList.valueOf(Color.parseColor(highLightColor))
-                    fadedShadow.backgroundTintList =
-                        ColorStateList.valueOf(Color.parseColor(highLightColor))
+                    hostNameCard.strokeColor = Color.parseColor(highLightColor)
+                    hostCard.strokeColor = Color.parseColor(highLightColor)
+                    hostName.setTextColor(Color.parseColor(highLightColor))
                 }
             }
         }

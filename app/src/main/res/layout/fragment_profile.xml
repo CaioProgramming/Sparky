@@ -39,10 +39,10 @@
 
                     <View
                         android:layout_width="205dp"
-                        android:layout_height="200dp"
+                        android:layout_height="210dp"
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/margin_default_10dp"
-                        android:layout_marginRight="@dimen/margin_default_10dp"
+                        android:layout_marginEnd="@dimen/margin_big_16dp"
                         android:alpha="0.5"
                         android:background="@drawable/faded_gradient"
                         android:backgroundTint="?attr/colorPrimaryDark" />
@@ -77,35 +77,37 @@
                         app:layout_anchor="@id/user_card"
                         app:layout_anchorGravity="bottom|right">
 
-                        <View
-                            android:layout_width="150dp"
-                            android:layout_height="60dp"
-                            android:layout_marginStart="@dimen/margin_big_16dp"
-                            android:layout_marginTop="@dimen/margin_big_16dp"
-                            android:background="@color/md_white"
-                            android:gravity="center"
-                            android:lines="2"
-                            app:layout_anchorGravity="bottom|right" />
 
-                        <TextView
-                            android:id="@+id/username"
-                            android:layout_width="150dp"
-                            android:layout_height="40dp"
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/username_card"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/margin_default_10dp"
                             android:layout_marginVertical="@dimen/margin_small_4dp"
-                            android:background="@drawable/stroked_retangle"
-                            android:gravity="center"
-                            android:lines="2"
-                            android:textAlignment="center"
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                            android:textStyle="bold"
-                            tools:text="Igor 3k" />
+                            app:cardBackgroundColor="@color/md_black"
+                            app:cardCornerRadius="0dp"
+                            app:strokeColor="?android:textColorPrimary"
+                            app:strokeWidth="2dp">
+
+                            <TextView
+                                android:id="@+id/username"
+                                android:layout_width="150dp"
+                                android:layout_height="40dp"
+                                android:gravity="center"
+                                android:lines="2"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                                android:textStyle="bold"
+                                tools:text="Igor 3k" />
+
+
+                        </com.google.android.material.card.MaterialCardView>
 
                         <TextView
                             android:id="@+id/realName"
                             android:layout_width="150dp"
-                            android:layout_height="25dp"
-                            android:layout_below="@id/username"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/username_card"
                             android:layout_marginHorizontal="@dimen/margin_default_10dp"
                             android:background="@drawable/stroked_retangle_primary"
                             android:gravity="center"
@@ -120,6 +122,15 @@
 
 
                 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+                <TextView
+                    android:id="@+id/userBio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/kaushan_script"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                    tools:text="Let it flow" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/link_flow"
@@ -137,7 +148,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="0"
+                    tools:text="0"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
                     android:textColor="@color/md_white"
