@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/padding_default_16dp"
         app:boxBackgroundColor="@color/transparent"
-        app:helperText="Lembre-se que este é o @ do apresentador no instagram"
+        app:helperText="@string/host_hint"
         app:hintEnabled="false"
         android:layout_width="match_parent"
         app:prefixText="&#64;">
@@ -70,6 +70,16 @@
         android:text="Confirmar"
         android:textColor="@color/md_white"
         app:backgroundTint="@color/material_blue500"
+        app:cornerRadius="@dimen/radius_default_10dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/continue_anyway_insta_button"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_default_16dp"
+        android:text="Continuar mesmo assim"
         app:cornerRadius="@dimen/radius_default_10dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 

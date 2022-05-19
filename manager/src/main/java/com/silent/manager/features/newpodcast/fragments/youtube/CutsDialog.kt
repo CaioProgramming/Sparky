@@ -1,5 +1,6 @@
 package com.silent.manager.features.newpodcast.fragments.youtube
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,8 +15,8 @@ import com.silent.manager.states.NewPodcastState
 
 class CutsDialog : BottomSheetDialogFragment() {
 
-    private val podcastAdapter = PodcastAdapter(arrayListOf()) {
-        onSelectCut.invoke(it)
+    private val podcastAdapter = PodcastHeaderAdapter(arrayListOf(), Color.BLACK) {
+        onSelectCut(it)
         dialog?.dismiss()
     }
     private val newPodcastViewModel: NewPodcastViewModel by lazy {
@@ -39,11 +40,11 @@ class CutsDialog : BottomSheetDialogFragment() {
     }
 
     private fun observeViewModel() {
-        newPodcastViewModel.newPodcastState.observe(this, {
-            if (it is NewPodcastState.RelatedCutsRetrieved) {
-                podcastAdapter.updateAdapter(it.podcast)
+        newPodcastViewModel.newPodcastState.observe(viewLifecycleOwner) {
+            if (it is NewPodcastState.RelatedPodcastsRetrieved) {
+                podcastAdapter.updateHeaders(ArrayList(it.podcastsHeader))
             }
-        })
+        }
     }
 
     companion object {

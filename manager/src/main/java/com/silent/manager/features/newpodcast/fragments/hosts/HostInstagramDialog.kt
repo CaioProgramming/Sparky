@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
+import com.silent.core.component.GroupType
 import com.silent.core.instagram.InstagramUserResponse
 import com.silent.manager.R
 import com.silent.manager.databinding.HostInstaDialogBinding
@@ -14,6 +15,7 @@ import com.silent.manager.states.HostState
 
 class HostInstagramDialog : BottomSheetDialogFragment() {
 
+    private lateinit var group: GroupType
     lateinit var onInstagramRetrieve: (InstagramUserResponse) -> Unit
 
     private val instagramHostViewModel = InstagramHostViewModel()
@@ -33,18 +35,27 @@ class HostInstagramDialog : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
         hostInstaDialogBinding?.run {
+            usernameInputLayout.helperText =
+                if (group == GroupType.HOSTS) requireContext().getString(R.string.host_hint) else requireContext().getString(
+                    R.string.guest_hint
+                )
+            usernameEditText.hint =
+                if (group == GroupType.HOSTS) "Nome do Host" else "Nome do convidado"
             confirmInstaButton.setOnClickListener {
                 loading.fadeIn()
                 usernameInputLayout.fadeOut()
                 confirmInstaButton.fadeOut()
                 instagramHostViewModel.getInstagramData(usernameEditText.text.toString())
             }
+            continueAnywayInstaButton.setOnClickListener {
+                onInstagramRetrieve(InstagramUserResponse(usernameEditText.text.toString(), "", ""))
+            }
         }
 
     }
 
     private fun observeViewModel() {
-        instagramHostViewModel.hostState.observe(this, {
+        instagramHostViewModel.hostState.observe(this) {
             when (it) {
                 is HostState.HostInstagramRetrieve -> {
                     onInstagramRetrieve(it.instagramUser)
@@ -53,11 +64,8 @@ class HostInstagramDialog : BottomSheetDialogFragment() {
                 HostState.ErrorFetchInstagram -> {
                     hostInstaDialogBinding?.showError()
                 }
-                else -> {
-
-                }
             }
-        })
+        }
     }
 
     private fun HostInstaDialogBinding.showError() {
@@ -69,9 +77,13 @@ class HostInstagramDialog : BottomSheetDialogFragment() {
 
     companion object {
 
-        fun getInstance(onInstaRetrieve: (InstagramUserResponse) -> Unit): HostInstagramDialog {
+        fun getInstance(
+            groupType: GroupType = GroupType.HOSTS,
+            onInstaRetrieve: (InstagramUserResponse) -> Unit
+        ): HostInstagramDialog {
             return HostInstagramDialog().apply {
                 onInstagramRetrieve = onInstaRetrieve
+                this.group = groupType
             }
         }
 

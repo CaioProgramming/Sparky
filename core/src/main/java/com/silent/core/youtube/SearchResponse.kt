@@ -6,7 +6,7 @@ data class SearchResponse(
 
 data class SearchItem(
     val id: IdDetails,
-    val snippet: Details
+    val snippet: VideoSnippet
 )
 
 data class Details(val title: String, val description: String)

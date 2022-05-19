@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.silent.core.component.GroupType
 import com.silent.core.component.HostAdapter
 import com.silent.core.instagram.InstagramUserResponse
 import com.silent.core.podcast.Host
@@ -30,7 +31,7 @@ class HostsFormFragment : Fragment() {
 
     private fun selectHost(host: Host) {
         if (host.name == NEW_HOST) {
-            HostInstagramDialog.getInstance(this::confirmUser)
+            HostInstagramDialog.getInstance(GroupType.HOSTS, this::confirmUser)
                 .show(childFragmentManager, "INSTAGRAMDIALOG")
         } else {
             newPodcastViewModel.deleteHost(host)
@@ -40,10 +41,9 @@ class HostsFormFragment : Fragment() {
     private fun confirmUser(instagramUser: InstagramUserResponse) {
         val host = Host(
             instagramUser.full_name,
-            instagramUser.profile_pic_url,
-            instagramUser.username
+            instagramUser.profile_pic_url
         )
-        HostDialog.getInstance(host) {
+        HostDialog.getInstance(GroupType.HOSTS, host) {
             newPodcastViewModel.updateHosts(host)
         }.show(childFragmentManager, "CONFIRMHOST")
     }
@@ -72,7 +72,7 @@ class HostsFormFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        newPodcastViewModel.hostState.observe(this, {
+        newPodcastViewModel.hostState.observe(viewLifecycleOwner) {
             when (it) {
                 is HostState.HostUpdated -> {
                     hostAdapter.updateHost(it.host)
@@ -91,7 +91,7 @@ class HostsFormFragment : Fragment() {
 
                 }
             }
-        })
+        }
     }
 
 }

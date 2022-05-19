@@ -13,7 +13,7 @@ import com.silent.manager.states.NewPodcastState
 
 class NewPodcastActivity : AppCompatActivity() {
 
-    private val newPodcastViewModel = NewPodcastViewModel(application)
+    private val newPodcastViewModel: NewPodcastViewModel by lazy { NewPodcastViewModel(application) }
     private var newPodcastBinding: ActivityNewPodcastBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +37,7 @@ class NewPodcastActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        newPodcastViewModel.newPodcastState.observe(this, {
+        newPodcastViewModel.newPodcastState.observe(this) {
             when (it) {
                 NewPodcastState.InvalidPodcast -> {
 
@@ -50,7 +50,7 @@ class NewPodcastActivity : AppCompatActivity() {
                     //DO NOTHING
                 }
             }
-        })
+        }
     }
 
     companion object {

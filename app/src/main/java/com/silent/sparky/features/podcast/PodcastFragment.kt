@@ -13,13 +13,13 @@ import com.bumptech.glide.Glide
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
 import com.ilustris.animations.slideInRight
-import com.silent.core.component.HostAdapter
+import com.silent.core.component.GroupType
+import com.silent.core.component.HostGroup
+import com.silent.core.component.HostGroupAdapter
 import com.silent.core.podcast.Podcast
 import com.silent.core.utils.WebUtils
 import com.silent.ilustriscore.core.utilities.delayedFunction
-import com.silent.ilustriscore.core.utilities.gone
 import com.silent.ilustriscore.core.utilities.showSnackBar
-import com.silent.ilustriscore.core.utilities.visible
 import com.silent.sparky.data.PodcastHeader
 import com.silent.sparky.databinding.FragmentPodcastBinding
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
@@ -83,22 +83,20 @@ class PodcastFragment : Fragment() {
                 programIcon.borderColor = Color.parseColor(podcast.highLightColor)
             }
             Glide.with(requireContext()).load(podcast.iconURL).into(programIcon)
+            Glide.with(requireContext()).load(podcast.cover).into(podcastCover)
             programIcon.setOnLongClickListener { _ ->
                 WebUtils(requireContext()).openYoutubeChannel(podcast.youtubeID)
                 false
             }
             channelVideos.adapter = channelSectionsAdapter
-            if (podcast.hosts.isNotEmpty()) {
-                hostsTitle.visible()
-                hostsRecyclerView.adapter = HostAdapter(
-                    podcast.hosts, highLightColor = podcast.highLightColor, isEdit = false,
-                    hostSelected = {
-                        WebUtils(requireContext()).openInstagram(it.user)
-                    },
-                )
-            } else {
-                hostsTitle.gone()
-            }
+            hostsRecyclerView.adapter = HostGroupAdapter(
+                listOf(
+                    HostGroup("Hosts", podcast.hosts),
+                    HostGroup("Próximos convidados", podcast.weeklyGuests, GroupType.GUESTS)
+                ), false, { host, groupType ->
+
+                }, podcast.highLightColor
+            )
             loading.fadeOut()
             delayedFunction {
                 appBar.fadeIn()

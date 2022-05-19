@@ -35,6 +35,7 @@ class ProfileFragment : Fragment() {
     var profileBinding: FragmentProfileBinding? = null
     val viewModel: ProfileViewModel by lazy { ProfileViewModel(requireActivity().application) }
     var flowDialog: FlowLinkDialog? = null
+    private lateinit var user: User
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,7 +63,8 @@ class ProfileFragment : Fragment() {
 
                 }
                 is ViewModelBaseState.DataListRetrievedState -> {
-                    val user = it.dataList[0] as User
+                    user = it.dataList[0] as User
+
                     setupUser(user)
                     viewModel.getFlowProfile(user.flowUserName)
                 }
@@ -146,7 +148,8 @@ class ProfileFragment : Fragment() {
         profileBinding?.run {
             username.text = flowProfile.username
             userNameTitle.text = flowProfile.username
-            realName.text = flowProfile.bio
+            realName.text = user.name
+            userBio.text = flowProfile.bio
             linkFlow.text = "Alterar conta flow"
             userBadges.adapter = BadgeAdapter(flowProfile.selected_badges)
             userBadges.slideInBottom()

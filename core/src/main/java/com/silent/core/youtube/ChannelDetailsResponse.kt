@@ -1,4 +1,4 @@
-package com.silent.core.twitch
+package com.silent.core.youtube
 
 data class ChannelDetailsResponse(
     val kind: String,

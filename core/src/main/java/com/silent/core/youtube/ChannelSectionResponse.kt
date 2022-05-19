@@ -4,4 +4,4 @@ data class ChannelSectionResponse(val items: List<SectionItem>)
 
 data class SectionItem(val snippet: SectionSnippet, val contentDetails: HashMap<String, Any>)
 
-data class SectionSnippet(val type: String)
+data class SectionSnippet(val type: String, val title: String)

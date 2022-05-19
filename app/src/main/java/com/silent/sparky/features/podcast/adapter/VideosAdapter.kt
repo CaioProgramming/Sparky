@@ -2,12 +2,16 @@ package com.silent.sparky.features.podcast.adapter
 
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.util.Log
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.silent.core.utils.WebUtils
 import com.silent.core.videos.Video
 import com.silent.ilustriscore.core.utilities.gone
@@ -24,27 +28,44 @@ class VideosAdapter(
     inner class VideoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind() {
-            val video = playlistVideos[adapterPosition]
+            val video = playlistVideos[bindingAdapterPosition]
             VideoPreviewBinding.bind(itemView).run {
-                if (highlightColor != null) {
+                highlightColor?.let {
                     videoCard.setStrokeColor(
                         ColorStateList.valueOf(
                             Color.parseColor(
-                                highlightColor
+                                it
                             )
                         )
                     )
                 }
+
                 videoCard.setOnClickListener {
                     WebUtils(itemView.context).openYoutubeVideo(video.youtubeID)
                 }
-                try {
-                    Glide.with(itemView.context).load(video.thumbnail_url)
-                        .into(videoThumb)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Log.e(javaClass.simpleName, "bind: erro ao carregar thumbnail de vídeo $video")
-                }
+                Glide.with(itemView.context).load(video.thumbnailUrl).addListener(object :
+                    RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+
+
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        TODO("Not yet implemented")
+                    }
+                }).into(videoThumb)
                 title.text = video.title
                 try {
                     val date =
