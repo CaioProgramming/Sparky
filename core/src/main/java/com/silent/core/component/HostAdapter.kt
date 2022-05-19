@@ -74,33 +74,7 @@ class HostAdapter(
                 itemView.setOnClickListener {
                     hostSelected(host)
                 }
-                Glide.with(itemView.context).load(host.profilePic).listener(object :
-                    RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        hostPhoto.gone()
-                        iconPlaceHolder.visible()
-                        return false
-                    }
-
-                    override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        iconPlaceHolder.gone()
-                        hostPhoto.fadeIn()
-                        hostPhoto.setImageDrawable(resource)
-                        return false
-                    }
-                })
-                    .into(hostPhoto)
+                Glide.with(itemView.context).load(host.profilePic).error(R.drawable.ic_iconmonstr_headphones_8).into(hostPhoto)
                 hostName.text = host.name
                 hostDescription.text = host.description
                 host.comingDate?.let {
@@ -127,7 +101,7 @@ class HostAdapter(
                 }
                 Glide.with(context)
                     .load(host.profilePic)
-                    .error(R.drawable.ic_iconmonstr_connection_1)
+                    .error(R.drawable.ic_iconmonstr_headphones_8)
                     .into(hostPhoto)
                 host.comingDate?.let {
                     if (groupType == GroupType.GUESTS) eventDate.text =
