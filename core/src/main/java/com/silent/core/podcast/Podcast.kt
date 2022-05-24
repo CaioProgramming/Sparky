@@ -1,8 +1,9 @@
 package com.silent.core.podcast
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.silent.ilustriscore.core.bean.BaseBean
-import java.io.Serializable
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 typealias podcasts = ArrayList<Podcast>
@@ -30,6 +31,7 @@ data class Podcast(
 const val NEW_PODCAST = "NEWPODCAST"
 const val NEW_HOST = "NEWHOST"
 
+@Parcelize
 data class Host(
     var name: String = "",
     var profilePic: String = "",
@@ -37,7 +39,17 @@ data class Host(
     var description: String = "",
     var socialUrl: String = "",
     var comingDate: Date? = null
-) : Serializable {
+) : Parcelable {
+
+    fun isComingToday(): Boolean {
+        comingDate?.let {
+            val calendar = Calendar.getInstance()
+            val dateCalendar = Calendar.getInstance()
+            dateCalendar.time = comingDate
+            return calendar[Calendar.DAY_OF_MONTH] == dateCalendar[Calendar.DAY_OF_MONTH]
+        }
+        return false
+    }
 
     companion object {
         val NEWHOST = Host(NEW_HOST)

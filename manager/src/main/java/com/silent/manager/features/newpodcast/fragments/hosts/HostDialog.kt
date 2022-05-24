@@ -17,6 +17,7 @@ import com.silent.core.component.GroupType
 import com.silent.core.podcast.Host
 import com.silent.ilustriscore.core.utilities.DateFormats
 import com.silent.ilustriscore.core.utilities.format
+import com.silent.ilustriscore.core.utilities.formatDate
 import com.silent.manager.R
 import com.silent.manager.databinding.HostDialogBinding
 import java.util.*
@@ -105,12 +106,12 @@ class HostDialog : BottomSheetDialogFragment() {
                     { view, hourOfDay, minute ->
                         hostDate.set(Calendar.HOUR_OF_DAY, hourOfDay)
                         hostDate.set(Calendar.MINUTE, minute)
-                        val dateFormated = hostDate.time.format(DateFormats.EE_D_MMM_YYY)
-                        guestDateButton.text = dateFormated
+                        hostDate.set(Calendar.SECOND, 0)
+                        val dateFormatted = hostDate.time.formatDate("dd.MM - HH") + "H"
+                        guestDateButton.text = dateFormatted
+                        host.comingDate = hostDate.time
                     }, hour, minute, android.text.format.DateFormat.is24HourFormat(requireContext())
-
                 ).show()
-                host.comingDate = hostDate.time
             }, year, month, day
         ).show()
 

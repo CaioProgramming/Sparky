@@ -2,11 +2,11 @@
 
 
     <item
-        android:bottom="-50dp"
-        android:left="-200dp"
-        android:right="25dp"
-        android:top="-120dp">
-        <rotate android:fromDegrees="10">
+        android:bottom="-100dp"
+        android:left="-100dp"
+        android:right="100dp"
+        android:top="-100dp">
+        <rotate android:fromDegrees="25">
             <shape android:shape="rectangle">
                 <padding
                     android:left="@dimen/padding_default_16dp"

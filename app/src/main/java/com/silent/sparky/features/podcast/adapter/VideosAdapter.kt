@@ -6,15 +6,18 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.ilustris.animations.fadeIn
 import com.silent.core.utils.WebUtils
 import com.silent.core.videos.Video
 import com.silent.ilustriscore.core.utilities.gone
+import com.silent.ilustriscore.core.utilities.visible
 import com.silent.sparky.R
 import com.silent.sparky.databinding.VideoPreviewBinding
 import java.time.LocalDate
@@ -31,41 +34,12 @@ class VideosAdapter(
             val video = playlistVideos[bindingAdapterPosition]
             VideoPreviewBinding.bind(itemView).run {
                 highlightColor?.let {
-                    videoCard.setStrokeColor(
-                        ColorStateList.valueOf(
-                            Color.parseColor(
-                                it
-                            )
-                        )
-                    )
+                    videoCard.setStrokeColor(ColorStateList.valueOf(Color.parseColor(it)))
                 }
-
                 videoCard.setOnClickListener {
                     WebUtils(itemView.context).openYoutubeVideo(video.youtubeID)
                 }
-                Glide.with(itemView.context).load(video.thumbnailUrl).addListener(object :
-                    RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-
-
-                        return false
-                    }
-
-                    override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        TODO("Not yet implemented")
-                    }
-                }).into(videoThumb)
+                Glide.with(itemView.context).load(video.thumbnailUrl).error(R.drawable.ic_iconmonstr_connection_1).into(videoThumb)
                 title.text = video.title
                 try {
                     val date =
@@ -74,6 +48,9 @@ class VideosAdapter(
                     publishDate.text = date
                 } catch (e: Exception) {
                     publishDate.gone()
+                }
+                if (!root.isVisible) {
+                    root.fadeIn()
                 }
             }
         }

@@ -8,12 +8,12 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
-        android:visibility="gone"
-        tools:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/md_black"
-        app:elevation="3dp">
+        android:visibility="gone"
+        app:elevation="3dp"
+        tools:visibility="visible">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/podcastCollapseBar"
@@ -67,8 +67,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="inscritos"
                     android:paddingVertical="@dimen/padding_small_8dp"
+                    android:text="inscritos"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                     android:textColor="@color/md_white" />
@@ -92,7 +92,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="top"
-                android:background="@color/transparent"
+                android:background="?android:colorBackground"
                 app:layout_collapseMode="pin"
                 app:menu="@menu/program_menu"
                 app:title=" " />
@@ -113,6 +113,19 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/channel_videos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        app:spanCount="1"
+        tools:listitem="@layout/video_preview"
+        tools:visibility="visible" />
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/loading"
         android:layout_width="200dp"
@@ -120,20 +133,10 @@
         android:layout_gravity="center"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         app:lottie_autoPlay="true"
+        app:lottie_speed="0.5"
+        android:visibility="visible"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/daisy"
-        app:lottie_repeatMode="reverse"
-        app:lottie_speed="0.5" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:visibility="gone"
-        android:id="@+id/channel_videos"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:visibility="visible"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        app:spanCount="1"
-        tools:listitem="@layout/video_preview" />
+        app:lottie_repeatMode="reverse" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

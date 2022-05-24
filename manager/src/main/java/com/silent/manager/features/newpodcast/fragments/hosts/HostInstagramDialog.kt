@@ -59,7 +59,7 @@ class HostInstagramDialog : BottomSheetDialogFragment() {
             when (it) {
                 is HostState.HostInstagramRetrieve -> {
                     onInstagramRetrieve(it.instagramUser)
-                    dialog?.dismiss()
+                    dismiss()
                 }
                 HostState.ErrorFetchInstagram -> {
                     hostInstaDialogBinding?.showError()

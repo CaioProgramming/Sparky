@@ -49,6 +49,7 @@ dependencies {
     implementation project(':navigation')
     implementation 'com.github.PierfrancescoSoffritti:AndroidYouTubePlayer:10.0.5'
     implementation 'com.hmomeni.progresscircula:progresscircula:0.2.1'
+    implementation 'com.github.CodeBoy722:ViewPager2_Transformers:1.0.0'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
