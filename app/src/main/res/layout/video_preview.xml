@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:visibility="visible"
-    android:visibility="gone"
     android:id="@+id/video_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_weight=".20"
+    android:animateLayoutChanges="true"
     android:layout_margin="@dimen/padding_small_8dp"
     android:stateListAnimator="@animator/scale_down_animator"
     app:cardBackgroundColor="?android:colorBackground"
@@ -18,7 +17,7 @@
 
     <ImageView
         android:id="@+id/video_thumb"
-        android:layout_height="200dp"
+        android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:background="@color/md_black"
         android:scaleType="centerCrop" />
@@ -39,7 +38,7 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
+            android:maxLines="2"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textColor="@color/md_white"
             android:textStyle="bold"

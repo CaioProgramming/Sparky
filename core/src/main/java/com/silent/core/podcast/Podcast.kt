@@ -51,6 +51,16 @@ data class Host(
         return false
     }
 
+    fun isLiveHour(): Boolean {
+        comingDate?.let {
+            val calendar = Calendar.getInstance()
+            val dateCalendar = Calendar.getInstance()
+            dateCalendar.time = it
+            return calendar[Calendar.HOUR_OF_DAY] >= dateCalendar[Calendar.HOUR_OF_DAY]
+        }
+        return false
+    }
+
     companion object {
         val NEWHOST = Host(NEW_HOST)
     }

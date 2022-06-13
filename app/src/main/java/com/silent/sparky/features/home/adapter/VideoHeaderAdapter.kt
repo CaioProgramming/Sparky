@@ -89,7 +89,7 @@ class VideoHeaderAdapter(
                 if (section.scrollAnimation) {
                     videosRecycler.smoothScrollBy(100, 100, Interpolator {
                         50f
-                    }, 10000)
+                    }, 1000)
                 }
             }
 
@@ -107,7 +107,7 @@ class VideoHeaderAdapter(
         holder.bind()
     }
 
-    override fun getItemCount() = programSections.count()
+    override fun getItemCount() = programSections.size
 
     fun updateSection(podcastHeader: PodcastHeader, position: Int? = null) {
         if (programSections.none { it.title == podcastHeader.title }) {
@@ -117,7 +117,7 @@ class VideoHeaderAdapter(
                 programSections.add(podcastHeader)
             }
         }
-        notifyDataSetChanged()
+        notifyItemInserted(position ?: programSections.size)
     }
 
     fun addSections(headers: ArrayList<PodcastHeader>) {

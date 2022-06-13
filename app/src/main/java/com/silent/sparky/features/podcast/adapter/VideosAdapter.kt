@@ -50,7 +50,7 @@ class VideosAdapter(
                     publishDate.gone()
                 }
                 if (!root.isVisible) {
-                    root.fadeIn()
+                    //root.fadeIn()
                 }
             }
         }

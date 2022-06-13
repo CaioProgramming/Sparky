@@ -73,21 +73,22 @@ class PodcastViewModel(application: Application) : BaseViewModel<Podcast>(applic
             try {
                 val headers = ArrayList<PodcastHeader>()
                 val podcast = service.getSingleData(podcastID).success.data as Podcast
-                val uploads = videoService.query(
-                    podcast.youtubeID,
-                    "podcastId"
-                ).success.data as ArrayList<Video>
-                //val cuts = youtubeService.getPlaylistVideos(podcast.cuts)
+                val uploads = youtubeService.getPlaylistVideos(podcast.uploads)
+                val cuts = youtubeService.getPlaylistVideos(podcast.cuts)
                 val mappedCuts = ArrayList<Video>()
-                /* cuts.items.forEach {
+                cuts.items.forEach {
                      mappedCuts.add(videoMapper.mapVideoSnippet(it.snippet, podcastID))
-                 }*/
-                if (uploads.isNotEmpty()) {
+                 }
+                val mappedUploads = ArrayList<Video>()
+                uploads.items.forEach {
+                    mappedUploads.add(videoMapper.mapVideoSnippet(it.snippet, podcastID))
+                }
+                if (mappedUploads.isNotEmpty()) {
                     headers.add(
                         getHeader(
                             "Últimos episódios",
                             podcast.uploads,
-                            uploads.sortedByDescending { it.publishedAt },
+                            mappedUploads.sortedByDescending { it.publishedAt },
                             if (mappedCuts.isEmpty()) RecyclerView.VERTICAL else RecyclerView.HORIZONTAL,
                             podcast.highLightColor
                         )
@@ -98,7 +99,7 @@ class PodcastViewModel(application: Application) : BaseViewModel<Podcast>(applic
                         getHeader(
                             "Cortes do ${podcast.name}",
                             podcast.cuts,
-                            mappedCuts,
+                            mappedCuts.sortedByDescending { it.publishedAt },
                             RecyclerView.VERTICAL,
                             podcast.highLightColor
                         )

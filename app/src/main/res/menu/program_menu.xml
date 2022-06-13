@@ -7,12 +7,7 @@
     android:id="@+id/twitch_link"
     android:title="twitch"
     android:icon="@drawable/ic_iconmonstr_twitch"/>
-<item
-    android:iconTint="?android:textColorPrimary"
-    app:showAsAction="always"
-    android:id="@+id/instagram_link"
-    android:title="twitch"
-    android:icon="@drawable/ic_iconmonstr_instagram_11"/>
+
 <item
     android:iconTint="?android:textColorPrimary"
     app:showAsAction="always"

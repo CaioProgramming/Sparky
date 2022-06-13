@@ -47,22 +47,22 @@ class HomeViewModel(application: Application) : BaseViewModel<Podcast>(applicati
                 val filteredPodcasts = podcasts.filter { podcastFilter.contains(it.id) }
                 val sortedPodcasts = filteredPodcasts.sortedByDescending { it.subscribe }
                 sortedPodcasts.forEach { podcast ->
-                    //val uploadRequest = youtubeService.getPlaylistVideos(podcast.uploads)
-                    val uploadsData = videoService.query(
+                    val uploadRequest = youtubeService.getPlaylistVideos(podcast.uploads)
+                    /*val uploadsData = videoService.query(
                         podcast.youtubeID,
                         "podcastId"
-                    ).success.data as ArrayList<Video>
+                    ).success.data as ArrayList<Video>*/
 
                     val mappedVideos = ArrayList<Video>()
-                    mappedVideos.addAll(uploadsData)
-                    /*uploadsData.forEach {
+                   // mappedVideos.addAll(uploadsData)
+                    uploadRequest.items.forEach {
                         mappedVideos.add(videoMapper.mapVideoSnippet(it.snippet, podcast.id))
-                    }*/
-                    val videos = mappedVideos.sortedByDescending { v -> v.publishedAt }
+                    }
+                    val videos = mappedVideos
                     val header = createHeader(podcast, videos.subList(0, 10), podcast.id)
                     homeState.postValue(HomeState.HomeChannelRetrieved(header))
                 }
-                // checkLives(sortedPodcasts)
+                checkLives(sortedPodcasts)
             } catch (e: Exception) {
                 e.printStackTrace()
                 homeState.postValue(HomeState.HomeError)
@@ -76,12 +76,16 @@ class HomeViewModel(application: Application) : BaseViewModel<Podcast>(applicati
             try {
                 val lives = ArrayList<Video>()
                 podcasts.forEach {
-                    val searchLive = youtubeService.getChannelLiveStatus(it.youtubeID)
-                    if (searchLive.items.isNotEmpty()) {
-                        lives.add(videoMapper.mapVideoSnippet(searchLive.items[0].snippet, it.id))
+                    if (it.weeklyGuests.any { guest -> guest.isComingToday() && guest.isLiveHour() }) {
+                        val searchLive = youtubeService.getChannelLiveStatus(it.youtubeID)
+                        if (searchLive.items.isNotEmpty()) {
+                            lives.add(videoMapper.mapVideoSnippet(searchLive.items[0].snippet, it.id))
+                        }
                     }
                 }
-                homeState.postValue(HomeState.HomeLivesRetrieved(lives))
+                if (lives.isNotEmpty()) {
+                    homeState.postValue(HomeState.HomeLivesRetrieved(lives))
+                }
             } catch (e: Exception) {
                 homeState.postValue(HomeState.HomeLiveError)
             }
