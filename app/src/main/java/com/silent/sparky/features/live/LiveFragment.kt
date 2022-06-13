@@ -37,9 +37,9 @@ class LiveFragment : Fragment() {
 
     private fun setupView() {
         val live = args.liveObject
-        loadVideo(live.video.id.videoId)
+        loadVideo(live.videoID)
         podcastLiveFragmentBinding?.run {
-            liveTitle.text = live.video.snippet.title
+            liveTitle.text = live.title
             channelName.text = live.podcast.name
             channelName.setOnClickListener {
                 val bundle = bundleOf("podcast_id" to live.podcast.id)
@@ -80,6 +80,7 @@ class LiveFragment : Fragment() {
 
             override fun onReady(youTubePlayer: YouTubePlayer) {
                 youTubePlayer.loadVideo(videoID, 0f)
+
             }
 
             override fun onStateChange(

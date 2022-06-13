@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.silent.core.databinding.PodcastsCardBinding
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.podcasts
-import com.silent.manager.R
+import com.silent.sparky.R
 
 class PodcastAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcast) -> Unit) :
     RecyclerView.Adapter<PodcastAdapter.PodcastViewHolder>() {

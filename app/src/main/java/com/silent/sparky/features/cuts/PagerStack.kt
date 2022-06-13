@@ -2,8 +2,9 @@ package com.silent.sparky.features.cuts
 
 import android.view.View
 import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 
-class PagerStack: ViewPager.PageTransformer {
+class PagerStack: ViewPager2.PageTransformer {
     override fun transformPage(page: View, position: Float) {
         if (position >= 0) {
             page.scaleX = 0.9f - 0.05f * position

@@ -49,7 +49,9 @@ class HomeFragment : Fragment() {
     ): View? {
         setHasOptionsMenu(true)
         setMenuVisibility(false)
-        homeFragmentBinding = HomeFragmentBinding.inflate(inflater)
+        if (homeFragmentBinding == null) {
+            homeFragmentBinding = HomeFragmentBinding.inflate(inflater)
+        }
         return homeFragmentBinding?.root
     }
 
@@ -62,9 +64,8 @@ class HomeFragment : Fragment() {
         WebUtils(requireContext()).openYoutubeChannel(url)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        homeFragmentBinding = HomeFragmentBinding.bind(view)
+    override fun onStart() {
+        super.onStart()
         observeViewModel()
         setupView()
     }
@@ -81,20 +82,25 @@ class HomeFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        videoHeaderAdapter?.clearAdapter()
         homeFragmentBinding = null
+    }
+
+    override fun onStop() {
+        super.onStop()
+        videoHeaderAdapter?.clearAdapter()
     }
 
     private fun setupView() {
         homeFragmentBinding?.run {
+            videoHeaderAdapter?.clearAdapter()
             podcastsResumeRecycler.adapter = videoHeaderAdapter
             (requireActivity() as AppCompatActivity?)?.run {
                 setSupportActionBar(homeToolbar)
                 supportActionBar?.title = ""
             }
+            homeViewModel.getHome()
         }
-
-        videoHeaderAdapter?.clearAdapter()
-        homeViewModel.getHome()
     }
 
     private fun goToManager() {

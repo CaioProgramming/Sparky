@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_margin="@dimen/padding_default_16dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/padding_default_16dp"
     android:orientation="horizontal">
 
     <TextView
@@ -14,7 +14,7 @@
         android:paddingVertical="@dimen/padding_small_8dp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/host_name_card"
+        app:layout_constraintEnd_toEndOf="@+id/host_card"
         app:layout_constraintStart_toStartOf="@id/host_card"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="20.05 - 20h" />
@@ -23,12 +23,12 @@
         android:id="@+id/host_card"
         android:layout_width="@dimen/host_card_size"
         android:layout_height="@dimen/host_card_size"
-        app:layout_constraintTop_toBottomOf="@id/event_date"
         android:layout_gravity="end"
-        app:cardBackgroundColor="@color/md_black"
         android:layout_marginHorizontal="@dimen/margin_default_10dp"
+        app:cardBackgroundColor="@color/md_black"
         app:cardCornerRadius="0dp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/event_date"
         app:strokeColor="?android:textColorPrimary"
         app:strokeWidth="2dp">
 
@@ -45,8 +45,8 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_gravity="center"
-            android:visibility="gone"
             android:scaleType="centerCrop"
+            android:visibility="gone"
             tools:src="@drawable/ic_iconmonstr_headphones_8" />
 
     </com.google.android.material.card.MaterialCardView>
@@ -54,6 +54,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/host_name_card"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_default_10dp"
         app:cardBackgroundColor="@color/md_black"
@@ -64,7 +65,6 @@
         app:layout_constraintTop_toTopOf="@id/host_card"
         app:strokeColor="?android:textColorPrimary"
         app:strokeWidth="2dp"
-        android:layout_width="wrap_content"
         tools:strokeColor="@color/material_yellow800">
 
         <TextView
@@ -87,7 +87,7 @@
 
     <TextView
         android:id="@+id/host_description"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/host_name_card"
         android:backgroundTint="@color/material_yellow800"

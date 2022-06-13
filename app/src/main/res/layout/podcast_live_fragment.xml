@@ -12,10 +12,6 @@
         android:layout_height="match_parent"
         app:enableAutomaticInitialization="false"
         app:showFullScreenButton="false"
-        app:showSeekBar="false"
-        app:showVideoCurrentTime="false"
-        app:showVideoDuration="false"
-        app:showYouTubeButton="false"
         app:useWebUi="false" />
 
     <View

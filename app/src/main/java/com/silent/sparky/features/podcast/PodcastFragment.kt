@@ -1,5 +1,6 @@
 package com.silent.sparky.features.podcast
 
+import android.animation.Animator
 import android.animation.ValueAnimator
 import android.graphics.Color
 import android.os.Bundle
@@ -7,22 +8,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.ilustris.animations.fadeIn
-import com.ilustris.animations.fadeOut
-import com.ilustris.animations.slideInRight
+import com.ilustris.animations.*
 import com.silent.core.component.GroupType
 import com.silent.core.component.HostGroup
 import com.silent.core.component.HostGroupAdapter
+import com.silent.core.podcast.Host
 import com.silent.core.podcast.Podcast
 import com.silent.core.utils.WebUtils
-import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.silent.ilustriscore.core.utilities.showSnackBar
+import com.silent.sparky.R
 import com.silent.sparky.data.PodcastHeader
 import com.silent.sparky.databinding.FragmentPodcastBinding
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
+import com.silent.sparky.features.home.data.LiveHeader
+import com.silent.sparky.features.podcast.schedule.PodcastScheduleDialog
 import java.text.NumberFormat
 
 class PodcastFragment : Fragment() {
@@ -51,12 +55,8 @@ class PodcastFragment : Fragment() {
         return podcastFragmentBinding?.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        podcastFragmentBinding?.run {
-            (activity as AppCompatActivity?)?.setSupportActionBar(programToolbar)
-
-        }
+    override fun onStart() {
+        super.onStart()
         observeViewModel()
         programViewModel.getChannelData(args.podcastId)
     }
@@ -78,6 +78,14 @@ class PodcastFragment : Fragment() {
     private fun setupPodcast(podcast: Podcast) {
         program = podcast
         podcastFragmentBinding?.run {
+            loading.popOut()
+            (activity as AppCompatActivity?)?.run {
+                setSupportActionBar(programToolbar)
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                programToolbar.setNavigationOnClickListener {
+                    findNavController().popBackStack()
+                }
+            }
             programName.text = podcast.name
             if (podcast.highLightColor.isNotEmpty()) {
                 programIcon.borderColor = Color.parseColor(podcast.highLightColor)
@@ -89,36 +97,83 @@ class PodcastFragment : Fragment() {
                 false
             }
             channelVideos.adapter = channelSectionsAdapter
+            val hostHeaders = ArrayList<HostGroup>()
+            if (podcast.hosts.isNotEmpty()) {
+                hostHeaders.add(HostGroup("Hosts", podcast.hosts))
+            }
+            if (podcast.weeklyGuests.isNotEmpty()) {
+                hostHeaders.add(
+                    HostGroup(
+                        "Próximos convidados",
+                        podcast.weeklyGuests,
+                        GroupType.GUESTS
+                    )
+                )
+            }
             hostsRecyclerView.adapter = HostGroupAdapter(
-                listOf(
-                    HostGroup("Hosts", podcast.hosts),
-                    HostGroup("Próximos convidados", podcast.weeklyGuests, GroupType.GUESTS)
-                ), false, { host, groupType ->
+                hostHeaders, false, { host, groupType ->
+
+                    when (groupType) {
+                        GroupType.HOSTS -> {
+                            if (host.socialUrl.isNotEmpty()) {
+                                WebUtils(requireContext()).openInstagram(host.socialUrl)
+                            }
+                        }
+                        GroupType.GUESTS -> {
+                            if (host.socialUrl.isNotEmpty()) {
+                                val liveHeader = LiveHeader(podcast, host.name, host.socialUrl)
+                                val bundle = bundleOf("live_object" to liveHeader)
+                                findNavController().navigate(
+                                    R.id.action_podcastFragment_to_liveFragment,
+                                    bundle
+                                )
+                            }
+                        }
+                    }
+
 
                 }, podcast.highLightColor
             )
-            loading.fadeOut()
-            delayedFunction {
-                appBar.fadeIn()
-                channelVideos.slideInRight()
-            }
-            animateSubscriberCount(podcast.subscribe)
-        }
 
+            appBar.slideInBottom()
+            channelVideos.slideInRight()
+            animateSubscriberCount(podcast.subscribe)
+            if (podcast.weeklyGuests.isNotEmpty()) {
+                programViewModel.checkSchedule(podcast)
+            }
+        }
+    }
+
+    private fun navigateToLive(podcast: Podcast, host: Host) {
+        val liveHeader = LiveHeader(podcast, host.name, host.socialUrl)
+        val bundle = bundleOf("live_object" to liveHeader)
+        findNavController().navigate(R.id.action_podcastFragment_to_liveFragment, bundle)
     }
 
     private fun observeViewModel() {
         programViewModel.channelState.observe(viewLifecycleOwner) {
             when (it) {
-                is PodcastViewModel.ChannelState.ChannelDataRetrieved -> {
+                is PodcastViewModel.PodcastState.PodcastDataRetrieved -> {
                     setupPodcast(it.podcast)
                     channelSectionsAdapter.addSections(it.headers)
                 }
-                PodcastViewModel.ChannelState.ChannelFailedState -> {
+                PodcastViewModel.PodcastState.PodcastFailedState -> {
                     view?.showSnackBar("Ocorreu um erro ao obter os vídeos")
                     podcastFragmentBinding?.loading?.fadeOut()
                 }
-                is PodcastViewModel.ChannelState.ChannelHostRetrieved -> {
+            }
+        }
+        programViewModel.scheduleState.observe(viewLifecycleOwner) {
+            when (it) {
+                is PodcastViewModel.ScheduleState.TodayGuestState -> {
+                        PodcastScheduleDialog(
+                            requireContext(),
+                            it.position,
+                            it.guests,
+                            it.podcast.highLightColor
+                        ) { host ->
+                            navigateToLive(it.podcast, host)
+                        }.buildDialog()
                 }
             }
         }

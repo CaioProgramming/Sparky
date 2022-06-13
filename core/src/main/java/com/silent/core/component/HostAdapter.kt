@@ -20,9 +20,7 @@ import com.silent.core.databinding.NewHostLayoutBinding
 import com.silent.core.podcast.Host
 import com.silent.core.podcast.NEW_HOST
 import com.silent.core.utils.ImageUtils
-import com.silent.ilustriscore.core.utilities.formatDate
-import com.silent.ilustriscore.core.utilities.gone
-import com.silent.ilustriscore.core.utilities.visible
+import com.silent.ilustriscore.core.utilities.*
 
 
 class HostAdapter(
@@ -74,12 +72,11 @@ class HostAdapter(
                 itemView.setOnClickListener {
                     hostSelected(host)
                 }
-                Glide.with(itemView.context).load(host.profilePic).error(R.drawable.ic_iconmonstr_headphones_8).into(hostPhoto)
+                Glide.with(itemView.context).load(host.profilePic).error(R.drawable.ic_iconmonstr_connection_1).into(hostPhoto)
                 hostName.text = host.name
                 hostDescription.text = host.description
                 host.comingDate?.let {
-                    if (groupType == GroupType.GUESTS) eventDate.text =
-                        it.formatDate("dd.MM - HH") + "H"
+                    if (groupType == GroupType.GUESTS) eventDate.text = it.formatDate("dd.MM - HH") + "H"
                 }
                 if (!highLightColor.isNullOrEmpty()) {
                     hostNameCard.strokeColor = Color.parseColor(highLightColor)
@@ -101,11 +98,10 @@ class HostAdapter(
                 }
                 Glide.with(context)
                     .load(host.profilePic)
-                    .error(R.drawable.ic_iconmonstr_headphones_8)
+                    .error(R.drawable.ic_iconmonstr_connection_1)
                     .into(hostPhoto)
                 host.comingDate?.let {
-                    if (groupType == GroupType.GUESTS) eventDate.text =
-                        it.formatDate("dd.MM - HH") + "H"
+                    if (groupType == GroupType.GUESTS) eventDate.text = it.formatDate("dd.MM - HH") + "H"
                 }
                 hostName.text = host.name
                 hostDescription.text = host.description

@@ -16,6 +16,8 @@ import com.silent.ilustriscore.core.model.BaseViewModel
 import com.silent.sparky.data.PodcastHeader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class PodcastViewModel(application: Application) : BaseViewModel<Podcast>(application) {
@@ -27,19 +29,30 @@ class PodcastViewModel(application: Application) : BaseViewModel<Podcast>(applic
     private val videoMapper = VideoMapper()
 
 
-    sealed class ChannelState {
-        object ChannelFailedState : ChannelState()
-        data class ChannelHostRetrieved(
+    sealed class PodcastState {
+        object PodcastFailedState : PodcastState()
+        data class PodcastHostRetrieved(
             val host: Host
-        ) : ChannelState()
+        ) : PodcastState()
 
-        data class ChannelDataRetrieved(
+        data class PodcastDataRetrieved(
             val podcast: Podcast,
             val headers: ArrayList<PodcastHeader>
-        ) : ChannelState()
+        ) : PodcastState()
+
+
     }
 
-    val channelState = MutableLiveData<ChannelState>()
+    sealed class ScheduleState {
+        data class TodayGuestState(
+            val guests: List<Host>,
+            val position: Int,
+            val podcast: Podcast
+        ) : ScheduleState()
+    }
+
+    val channelState = MutableLiveData<PodcastState>()
+    val scheduleState = MutableLiveData<ScheduleState>()
 
     private fun getHeader(
         title: String,
@@ -55,62 +68,71 @@ class PodcastViewModel(application: Application) : BaseViewModel<Podcast>(applic
         highLightColor = highlightColor
     )
 
-    fun getHostsData(hosts: List<Host>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                hosts.forEach {
-                    //val instaUser = instagramService.getUserInfo(it.user)
-                    /*it.apply {
-                        profilePic = instaUser.graphql.user.profile_pic_url
-                        name = instaUser.graphql.user.full_name
-                        user = instaUser.graphql.user.username
-                    }*/
-                    channelState.postValue(ChannelState.ChannelHostRetrieved(it))
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
-    }
-
     fun getChannelData(podcastID: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                val headers = ArrayList<PodcastHeader>()
                 val podcast = service.getSingleData(podcastID).success.data as Podcast
-                val uploads = videoService.query(
-                    podcast.youtubeID,
-                    "podcastId"
-                ).success.data as ArrayList<Video>
-                //val cuts = youtubeService.getPlaylistVideos(podcast.cuts)
-                val uploadHeader = getHeader(
-                    "Últimos episódios",
-                    podcast.uploads,
-                    uploads.sortedByDescending { it.publishedAt },
-                    RecyclerView.HORIZONTAL,
-                    podcast.highLightColor
-                )
+                val uploads = youtubeService.getPlaylistVideos(podcast.uploads)
+                val cuts = youtubeService.getPlaylistVideos(podcast.cuts)
                 val mappedCuts = ArrayList<Video>()
-                /* cuts.items.forEach {
+                cuts.items.forEach {
                      mappedCuts.add(videoMapper.mapVideoSnippet(it.snippet, podcastID))
-                 }*/
-                val cutsHeader = getHeader(
-                    "Úlitmos cortes",
-                    podcast.cuts,
-                    mappedCuts,
-                    RecyclerView.VERTICAL,
-                    podcast.highLightColor
-                )
+                 }
+                val mappedUploads = ArrayList<Video>()
+                uploads.items.forEach {
+                    mappedUploads.add(videoMapper.mapVideoSnippet(it.snippet, podcastID))
+                }
+                if (mappedUploads.isNotEmpty()) {
+                    headers.add(
+                        getHeader(
+                            "Últimos episódios",
+                            podcast.uploads,
+                            mappedUploads.sortedByDescending { it.publishedAt },
+                            if (mappedCuts.isEmpty()) RecyclerView.VERTICAL else RecyclerView.HORIZONTAL,
+                            podcast.highLightColor
+                        )
+                    )
+                }
+                if (mappedCuts.isNotEmpty()) {
+                    headers.add(
+                        getHeader(
+                            "Cortes do ${podcast.name}",
+                            podcast.cuts,
+                            mappedCuts.sortedByDescending { it.publishedAt },
+                            RecyclerView.VERTICAL,
+                            podcast.highLightColor
+                        )
+                    )
+                }
+                val sortedGuests = podcast.weeklyGuests.sortedBy { it.comingDate }
+                podcast.weeklyGuests = ArrayList(sortedGuests)
                 channelState.postValue(
-                    ChannelState.ChannelDataRetrieved(
+                    PodcastState.PodcastDataRetrieved(
                         podcast,
-                        arrayListOf(uploadHeader, cutsHeader)
+                        headers
                     )
                 )
-                //getHostsData(podcast.hosts)
             } catch (e: Exception) {
                 e.printStackTrace()
-                channelState.postValue(ChannelState.ChannelFailedState)
+                channelState.postValue(PodcastState.PodcastFailedState)
+            }
+        }
+    }
+
+    fun checkSchedule(podcast: Podcast) {
+        val calendar = Calendar.getInstance()
+        podcast.weeklyGuests.forEachIndexed { index, host ->
+            val hostCalendar = Calendar.getInstance()
+            hostCalendar.time = host.comingDate
+            if (hostCalendar[Calendar.DAY_OF_MONTH] == calendar[Calendar.DAY_OF_MONTH]) {
+                scheduleState.postValue(
+                    ScheduleState.TodayGuestState(
+                        podcast.weeklyGuests,
+                        index,
+                        podcast
+                    )
+                )
             }
         }
     }
