@@ -11,6 +11,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.ilustris.animations.fadeIn
+import com.ilustris.animations.fadeOut
 import com.silent.core.component.GroupType
 import com.silent.core.component.HostGroup
 import com.silent.core.component.HostGroupAdapter
@@ -54,8 +56,14 @@ class PodcastFragment : Fragment() {
             updatePodcast.setOnClickListener {
                 podcast.name = podcastEditText.text.toString()
                 podcast.hosts = ArrayList(podcast.hosts.filter { it.name != NEW_HOST })
-                podcastViewModel.editData(podcast)
-                podcastViewModel.updatePodcastData(podcast)
+                MaterialAlertDialogBuilder(requireContext())
+                    .setMessage("Gostaria de atualizar também os episódios e cortes?")
+                    .setNegativeButton("Não") { dialog, which ->
+                        podcastViewModel.updatePodcastData(podcast)
+                    }
+                    .setPositiveButton("Sim") { dialog, which ->
+                        podcastViewModel.updatePodcastData(podcast, true)
+                    }.show()
             }
             removePodcast.setOnClickListener {
                 MaterialAlertDialogBuilder(requireContext())
@@ -87,6 +95,7 @@ class PodcastFragment : Fragment() {
                     findNavController().popBackStack()
                 }
                 is ViewModelBaseState.DataUpdateState -> {
+                    podcastFragmentBinding?.loading?.fadeOut()
                     val snackColor = Color.parseColor(podcast.highLightColor)
                     view?.showSnackBar(
                         "Podcast Atualizado com sucesso!",
@@ -101,22 +110,29 @@ class PodcastFragment : Fragment() {
                 }
             }
         }
+        podcastViewModel.podcastManagerState.observe(viewLifecycleOwner) {
+            when(it) {
+                is PodcastViewModel.PodcastManagerState.CutsUpdated -> {
+                    requireView().showSnackBar("${it.count} cortes atualizados")
+                }
+                is PodcastViewModel.PodcastManagerState.EpisodesUpdated -> {
+                    requireView().showSnackBar("${it.count} episódios atualizados")
+
+                }
+                PodcastViewModel.PodcastManagerState.PodcastUpdateRequest -> {
+                    podcastFragmentBinding?.loading?.fadeIn()
+                }
+            }
+        }
     }
 
     private fun setupPodcast(argPodcast: Podcast) {
         podcast = argPodcast
-        podcastFragmentBinding?.podcastEditText?.setText(podcast.name)
-        podcastFragmentBinding?.podcastCover?.let {
-            Glide.with(requireContext()).load(podcast.cover)
-                .error(R.drawable.ic_iconmonstr_connection_1).into(it)
-        }
-        podcastFragmentBinding?.programIcon?.let {
-            Glide.with(requireContext()).load(podcast.iconURL).into(it)
-            if (podcast.highLightColor.isNotEmpty()) {
-                it.borderColor = Color.parseColor(podcast.highLightColor)
-                podcastFragmentBinding?.highlightColor?.backgroundTintList =
-                    ColorStateList.valueOf(Color.parseColor(podcast.highLightColor))
-            }
+        podcastFragmentBinding?.run {
+            podcastEditText.setText(podcast.name)
+            Glide.with(requireContext()).load(podcast.cover).error(R.drawable.ic_iconmonstr_connection_1).into(podcastCover)
+            Glide.with(requireContext()).load(podcast.iconURL).error(R.drawable.ic_iconmonstr_connection_1).into(programIcon)
+            loading.indeterminateTintList = ColorStateList.valueOf(Color.parseColor(podcast.highLightColor))
         }
         updateHosts()
     }

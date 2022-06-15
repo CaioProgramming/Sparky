@@ -11,7 +11,7 @@
     android:stateListAnimator="@animator/scale_down_animator"
     app:cardBackgroundColor="?android:colorBackground"
     app:cardCornerRadius="0dp"
-    app:strokeColor="@color/material_grey900"
+    app:strokeColor="@color/md_white"
     app:strokeWidth="2dp">
 
 
@@ -24,7 +24,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="180dp"
         android:background="@drawable/faded_gradient" />
 
     <LinearLayout

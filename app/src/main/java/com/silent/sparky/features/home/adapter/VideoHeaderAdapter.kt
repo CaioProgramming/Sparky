@@ -51,7 +51,7 @@ class VideoHeaderAdapter(
                         headerSelected(section)
                     }
                 }
-                videosRecycler.adapter = VideosAdapter(section.videos, section.highLightColor)
+
                 Glide.with(itemView.context)
                     .load(section.icon)
                     .listener(object : RequestListener<Drawable> {
@@ -84,10 +84,10 @@ class VideoHeaderAdapter(
                 } ?: run {
                     programIcon.gone()
                 }
-                videosRecycler.layoutManager =
-                    LinearLayoutManager(itemView.context, section.orientation, false)
+                videosRecycler.adapter = VideosAdapter(section.videos, section.highLightColor)
+                videosRecycler.layoutManager = LinearLayoutManager(itemView.context, section.orientation, false)
                 if (section.scrollAnimation) {
-                    videosRecycler.smoothScrollBy(100, 100, Interpolator {
+                    videosRecycler.smoothScrollBy(100, 100, {
                         50f
                     }, 1000)
                 }

@@ -5,15 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.codeboy.pager2_transformers.Pager2_PopTransformer
-import com.ilustris.animations.fadeOut
 import com.ilustris.animations.popOut
-import com.silent.core.youtube.PlaylistResource
-import com.silent.ilustriscore.core.utilities.gone
+import com.silent.core.videos.Video
 import com.silent.ilustriscore.core.utilities.showSnackBar
-import com.silent.ilustriscore.core.utilities.visible
 import com.silent.sparky.R
 import com.silent.sparky.databinding.FragmentCutsBinding
 import com.silent.sparky.features.cuts.viewmodel.CutsState
@@ -43,7 +39,7 @@ class CutsFragment : Fragment() {
         cutsViewModel.fetchCuts()
     }
 
-    private fun updateCuts(videos: ArrayList<PlaylistResource>) {
+    private fun updateCuts(videos: ArrayList<Video>) {
         cutsAdapter.updateCuts(videos)
         cutsBinding.cutsAnimation.popOut()
     }

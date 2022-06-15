@@ -11,14 +11,15 @@ import com.ilustris.animations.slideInBottom
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
+import com.silent.core.videos.Video
 import com.silent.core.youtube.PlaylistResource
 import com.silent.sparky.R
 import com.silent.sparky.databinding.CutPlayerLayoutBinding
 
-class CutsAdapter(val cuts: ArrayList<PlaylistResource>) :
+class CutsAdapter(val cuts: ArrayList<Video>) :
     RecyclerView.Adapter<CutsAdapter.CutViewHolder>() {
 
-    fun updateCuts(newCuts: ArrayList<PlaylistResource>) {
+    fun updateCuts(newCuts: ArrayList<Video>) {
         cuts.addAll(newCuts)
         notifyDataSetChanged()
     }
@@ -28,7 +29,7 @@ class CutsAdapter(val cuts: ArrayList<PlaylistResource>) :
         fun bind() {
             CutPlayerLayoutBinding.bind(itemView).run {
                 val cut = cuts[bindingAdapterPosition]
-                videoTitle.text = cut.snippet.title
+                videoTitle.text = cut.title
                 cutPlayer.apply {
                     initialize(object : YouTubePlayerListener {
                         override fun onApiChange(youTubePlayer: YouTubePlayer) {
@@ -57,7 +58,7 @@ class CutsAdapter(val cuts: ArrayList<PlaylistResource>) :
                         }
 
                         override fun onReady(youTubePlayer: YouTubePlayer) {
-                            youTubePlayer.cueVideo(cut.snippet.resourceId.videoId, 0f)
+                            youTubePlayer.cueVideo(cut.youtubeID, 0f)
                             cutPlayer.setOnClickListener {
                                 youTubePlayer.play()
                             }

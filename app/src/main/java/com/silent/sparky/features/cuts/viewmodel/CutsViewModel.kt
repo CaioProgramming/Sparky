@@ -8,15 +8,20 @@ import com.silent.core.podcast.PodcastService
 import com.silent.core.podcast.podcasts
 import com.silent.core.preferences.PreferencesService
 import com.silent.core.utils.PODCASTS_PREFERENCES
+import com.silent.core.videos.CutService
+import com.silent.core.videos.Video
+import com.silent.core.videos.VideoService
 import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
+import com.silent.ilustriscore.core.model.ServiceResult
+import com.silent.ilustriscore.core.model.ViewModelBaseState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class CutsViewModel(application: Application) : BaseViewModel<Podcast>(application) {
     override val service = PodcastService()
-    private val youtubeService = YoutubeService()
+    private val cutService = CutService()
     private val preferencesService = PreferencesService(application)
     val cutsState = MutableLiveData<CutsState>()
 
@@ -31,21 +36,21 @@ class CutsViewModel(application: Application) : BaseViewModel<Podcast>(applicati
                     val filteredPodcasts = podcasts.filter { podcastFilter.contains(it.id) }
                     val sortedPodcasts = filteredPodcasts.sortedByDescending { it.subscribe }
                     sortedPodcasts.forEachIndexed { index, podcast ->
-                        val channelUploads = youtubeService.getPlaylistVideos(podcast.cuts)
+                        val channelUploads = cutService.query(podcast.id, "podcastId").success.data as ArrayList<Video>
                         cutsState.postValue(
                             CutsState.CutsRetrieved(
                                 podcast.cuts,
-                                ArrayList(channelUploads.items)
+                                ArrayList(channelUploads)
                             )
                         )
                     }
                 } else {
                     podcasts.forEachIndexed { index, podcast ->
-                        val channelUploads = youtubeService.getPlaylistVideos(podcast.cuts)
+                        val channelUploads = cutService.query(podcast.id, "podcastId").success.data as ArrayList<Video>
                         cutsState.postValue(
                             CutsState.CutsRetrieved(
                                 podcast.cuts,
-                                ArrayList(channelUploads.items)
+                                ArrayList(channelUploads)
                             )
                         )
                     }

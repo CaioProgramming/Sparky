@@ -10,11 +10,12 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ilustris.animations.slideInBottom
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.podcasts
 import com.silent.core.utils.WebUtils
-import com.silent.core.videos.Video
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.ilustriscore.core.utilities.RC_SIGN_IN
 import com.silent.ilustriscore.core.utilities.showSnackBar
@@ -23,7 +24,7 @@ import com.silent.navigation.NavigationUtils
 import com.silent.sparky.R
 import com.silent.sparky.data.PodcastHeader
 import com.silent.sparky.databinding.HomeFragmentBinding
-import com.silent.sparky.features.home.adapter.ProgramsAdapter
+import com.silent.sparky.features.home.adapter.PodcastsAdapter
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
 import com.silent.sparky.features.home.data.LiveHeader
 import com.silent.sparky.features.home.viewmodel.HomeState
@@ -32,7 +33,7 @@ import com.silent.sparky.features.profile.dialog.PreferencesDialogFragment
 
 class HomeFragment : Fragment() {
 
-    var homeFragmentBinding: HomeFragmentBinding? = null
+    lateinit var homeFragmentBinding: HomeFragmentBinding
     private val homeViewModel by lazy { HomeViewModel(requireActivity().application) }
     private var videoHeaderAdapter: VideoHeaderAdapter? = VideoHeaderAdapter(
         ArrayList(),
@@ -46,13 +47,15 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         setHasOptionsMenu(true)
         setMenuVisibility(false)
-        if (homeFragmentBinding == null) {
+        if (this::homeFragmentBinding.isInitialized) {
+            homeFragmentBinding.root
+        } else {
             homeFragmentBinding = HomeFragmentBinding.inflate(inflater)
         }
-        return homeFragmentBinding?.root
+        return homeFragmentBinding.root
     }
 
     private fun openPodcast(id: String) {
@@ -75,24 +78,13 @@ class HomeFragment : Fragment() {
         videoHeaderAdapter?.clearAdapter()
     }
 
-    override fun onDetach() {
-        clearFragment()
-        super.onDetach()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        videoHeaderAdapter?.clearAdapter()
-        homeFragmentBinding = null
-    }
-
     override fun onStop() {
         super.onStop()
         videoHeaderAdapter?.clearAdapter()
     }
 
     private fun setupView() {
-        homeFragmentBinding?.run {
+        homeFragmentBinding.run {
             videoHeaderAdapter?.clearAdapter()
             podcastsResumeRecycler.adapter = videoHeaderAdapter
             (requireActivity() as AppCompatActivity?)?.run {
@@ -131,8 +123,8 @@ class HomeFragment : Fragment() {
     private fun observeViewModel() {
         homeViewModel.homeState.observe(viewLifecycleOwner) {
             when (it) {
-                is HomeState.HomeChannelRetrieved -> {
-                    setupHome(it.podcastHeader)
+                is HomeState.HomeChannelsRetrieved -> {
+                    setupHome(it.podcastHeaders)
                 }
                 HomeState.HomeError -> {
                     homeViewModel.getAllData()
@@ -140,14 +132,13 @@ class HomeFragment : Fragment() {
 
                 is HomeState.HomeLivesRetrieved -> {
                     setupLive(it.podcasts)
-                    //view?.showSnackBar("${it.podcasts.size} lives no momento")
                 }
                 HomeState.InvalidManager -> {
                     setMenuVisibility(false)
                 }
                 HomeState.ValidManager -> {
                     setMenuVisibility(true)
-                    homeFragmentBinding?.homeAnimation?.setOnClickListener {
+                    homeFragmentBinding.homeAnimation.setOnClickListener {
                         goToManager()
                     }
                 }
@@ -164,9 +155,9 @@ class HomeFragment : Fragment() {
 
                 }
                 is ViewModelBaseState.DataListRetrievedState -> {
-                    homeFragmentBinding?.podcastsResumeRecycler?.run {
+                    homeFragmentBinding.podcastsResumeRecycler.run {
                         adapter =
-                            ProgramsAdapter((it.dataList as podcasts).sortedByDescending { p -> p.subscribe }) { podcast, index ->
+                            PodcastsAdapter((it.dataList as podcasts).sortedByDescending { p -> p.subscribe }) { podcast, index ->
                                 WebUtils(requireContext()).openYoutubeChannel(podcast.youtubeID)
                             }
                         layoutManager =
@@ -180,22 +171,24 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setupHome(podcastHeader: PodcastHeader) {
-        videoHeaderAdapter?.updateSection(podcastHeader)
+    private fun setupHome(podcastHeader: ArrayList<PodcastHeader>) {
+        videoHeaderAdapter?.addSections(podcastHeader)
     }
 
-    private fun setupLive(lives: ArrayList<Video>) {
-        if (lives.isNotEmpty()) {
-            videoHeaderAdapter?.updateSection(
-                PodcastHeader(
-                    "Ao vivo agora",
-                    orientation = RecyclerView.HORIZONTAL,
-                    seeMore = false,
-                    playlistId = "",
-                    videos = lives,
-                    scrollAnimation = true
-                )
-            )
+    private fun setupLive(livePodcasts: ArrayList<Podcast>) {
+        homeFragmentBinding.livesRecyclerView.run {
+            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+            adapter = PodcastsAdapter(livePodcasts, true) { podcast, i ->
+                podcast.liveVideo?.let { live ->
+                    val liveHeader = LiveHeader(podcast, live.title, live.youtubeID)
+                    val bundle = bundleOf("live_object" to liveHeader)
+                    findNavController().navigate(
+                        R.id.action_navigation_home_to_liveFragment,
+                        bundle
+                    )
+                }
+            }
+            slideInBottom()
         }
     }
 
