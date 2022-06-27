@@ -7,17 +7,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ilustris.animations.slideInBottom
+import com.ilustris.ui.extensions.gone
+import com.ilustris.ui.extensions.visible
 import com.silent.core.podcast.Podcast
-import com.silent.ilustriscore.core.utilities.gone
-import com.silent.ilustriscore.core.utilities.visible
 import com.silent.sparky.R
 import com.silent.sparky.databinding.ProgramIconLayoutBinding
 
-class ProgramsAdapter(
+class PodcastsAdapter(
     val podcasts: List<Podcast>,
     val isLive: Boolean = false,
     private val onSelectProgram: (Podcast, Int) -> Unit
-) : RecyclerView.Adapter<ProgramsAdapter.ProgramViewHolder>() {
+) : RecyclerView.Adapter<PodcastsAdapter.ProgramViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProgramViewHolder {
         val itemView =
@@ -45,7 +45,7 @@ class ProgramsAdapter(
                 }
                 if (isLive) {
                     liveStatus.visible()
-                    liveStatus.progress = 100
+                    liveStatus.indeterminate = true
                     if (podcast.highLightColor.isNotEmpty()) {
                         liveStatus.rimColor = Color.parseColor(podcast.highLightColor)
                     }

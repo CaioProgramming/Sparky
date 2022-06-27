@@ -8,6 +8,7 @@ import com.silent.core.instagram.InstagramService
 import com.silent.core.podcast.Host
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastService
+import com.silent.core.videos.CutService
 import com.silent.core.videos.Video
 import com.silent.core.videos.VideoMapper
 import com.silent.core.videos.VideoService
@@ -22,10 +23,10 @@ import kotlin.collections.ArrayList
 
 class PodcastViewModel(application: Application) : BaseViewModel<Podcast>(application) {
 
-    private val youtubeService = YoutubeService()
     private val instagramService = InstagramService()
     override val service = PodcastService()
     private val videoService = VideoService()
+    private val cutService = CutService()
     private val videoMapper = VideoMapper()
 
 
@@ -73,33 +74,28 @@ class PodcastViewModel(application: Application) : BaseViewModel<Podcast>(applic
             try {
                 val headers = ArrayList<PodcastHeader>()
                 val podcast = service.getSingleData(podcastID).success.data as Podcast
-                val uploads = youtubeService.getPlaylistVideos(podcast.uploads)
-                val cuts = youtubeService.getPlaylistVideos(podcast.cuts)
-                val mappedCuts = ArrayList<Video>()
-                cuts.items.forEach {
-                     mappedCuts.add(videoMapper.mapVideoSnippet(it.snippet, podcastID))
-                 }
-                val mappedUploads = ArrayList<Video>()
-                uploads.items.forEach {
-                    mappedUploads.add(videoMapper.mapVideoSnippet(it.snippet, podcastID))
-                }
-                if (mappedUploads.isNotEmpty()) {
+                val uploads = videoService.getPodcastVideos(podcastID).success.data as ArrayList<Video>
+                val cuts = cutService.getPodcastCuts(podcastID).success.data as ArrayList<Video>
+
+                if (uploads.isNotEmpty()) {
+                    uploads.map { it.podcast = podcast }
                     headers.add(
                         getHeader(
                             "Últimos episódios",
                             podcast.uploads,
-                            mappedUploads.sortedByDescending { it.publishedAt },
-                            if (mappedCuts.isEmpty()) RecyclerView.VERTICAL else RecyclerView.HORIZONTAL,
+                            uploads.sortedByDescending { it.publishedAt },
+                            if (cuts.isEmpty()) RecyclerView.VERTICAL else RecyclerView.HORIZONTAL,
                             podcast.highLightColor
                         )
                     )
                 }
-                if (mappedCuts.isNotEmpty()) {
+                if (cuts.isNotEmpty()) {
+                    cuts.map { it.podcast = podcast }
                     headers.add(
                         getHeader(
                             "Cortes do ${podcast.name}",
                             podcast.cuts,
-                            mappedCuts.sortedByDescending { it.publishedAt },
+                            cuts.sortedByDescending { it.publishedAt },
                             RecyclerView.VERTICAL,
                             podcast.highLightColor
                         )

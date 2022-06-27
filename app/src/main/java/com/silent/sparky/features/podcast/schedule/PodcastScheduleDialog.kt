@@ -7,12 +7,9 @@ import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import com.codeboy.pager2_transformers.*
 import com.ilustris.animations.fadeOut
-import com.ilustris.animations.repeatBounce
-import com.ilustris.animations.slideDown
 import com.ilustris.animations.slideInBottom
+import com.ilustris.ui.alert.BaseAlert
 import com.silent.core.podcast.Host
-import com.silent.ilustriscore.core.utilities.DialogStyles
-import com.silent.ilustriscore.core.view.BaseAlert
 import com.silent.sparky.R
 import com.silent.sparky.databinding.FragmentTodayGuestBinding
 

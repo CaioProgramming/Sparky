@@ -40,10 +40,11 @@ class YoutubeService {
     }
 
     suspend fun getPlaylistVideos(
-        playlistId: String
+        playlistId: String,
+        limit: Int = 50
     ): PlaylistItemResponse {
         val youtubeApi = retroFitService.create(YoutubeApi::class.java)
-        return youtubeApi.getChannelUploads(playlistId = playlistId)
+        return youtubeApi.getPlaylistVideos(playlistId = playlistId, maxResults =  limit)
     }
 
     suspend fun getChannelLiveStatus(channelID: String): SearchResponse {

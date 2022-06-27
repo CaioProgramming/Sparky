@@ -2,26 +2,20 @@ package com.silent.sparky.features.podcast.adapter
 
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.ilustris.animations.fadeIn
+import com.ilustris.ui.extensions.gone
+import com.ilustris.ui.extensions.visible
 import com.silent.core.utils.WebUtils
 import com.silent.core.videos.Video
-import com.silent.ilustriscore.core.utilities.gone
-import com.silent.ilustriscore.core.utilities.visible
+import com.silent.ilustriscore.core.utilities.DateFormats
+import com.silent.ilustriscore.core.utilities.format
 import com.silent.sparky.R
 import com.silent.sparky.databinding.VideoPreviewBinding
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class VideosAdapter(
     val playlistVideos: List<Video>,
@@ -39,27 +33,26 @@ class VideosAdapter(
                 videoCard.setOnClickListener {
                     WebUtils(itemView.context).openYoutubeVideo(video.youtubeID)
                 }
-                Glide.with(itemView.context).load(video.thumbnailUrl).error(R.drawable.ic_iconmonstr_connection_1).into(videoThumb)
+                Glide.with(itemView.context).load(video.thumbnailUrl)
+                    .error(video.podcast?.iconURL).into(videoThumb)
                 title.text = video.title
                 try {
-                    val date =
-                        LocalDate.parse(video.publishedAt, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-                            .format(DateTimeFormatter.ofPattern("YYYY-MM-DDThh:mm:ss.sZ"))
-                    publishDate.text = date
+                    /*val date = LocalDate.parse(video.publishedAt, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                            .format(DateTimeFormatter.ofPattern("YYYY-MM-DDThh:mm:ss.sZ"))*/
+                    publishDate.text = video.publishedAt.format(DateFormats.DD_OF_MM_FROM_YYYY)
+                    publishDate.visible()
                 } catch (e: Exception) {
                     publishDate.gone()
                 }
-                if (!root.isVisible) {
-                    //root.fadeIn()
-                }
+                root.fadeIn()
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoViewHolder {
-        val bind =
+        val view =
             LayoutInflater.from(parent.context).inflate(R.layout.video_preview, parent, false)
-        return VideoViewHolder(bind)
+        return VideoViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: VideoViewHolder, position: Int) {

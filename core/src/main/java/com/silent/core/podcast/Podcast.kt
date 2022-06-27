@@ -1,13 +1,17 @@
 package com.silent.core.podcast
 
 import android.os.Parcelable
+import com.google.firebase.firestore.Exclude
+import com.google.firebase.firestore.IgnoreExtraProperties
 import com.google.gson.annotations.SerializedName
+import com.silent.core.videos.Video
 import com.silent.ilustriscore.core.bean.BaseBean
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
 typealias podcasts = ArrayList<Podcast>
 
+@IgnoreExtraProperties
 data class Podcast(
     override var id: String = "",
     var name: String = "",
@@ -21,7 +25,9 @@ data class Podcast(
     var cuts: String = "",
     var uploads: String = "",
     var highLightColor: String = "#000",
-    var cover: String = ""
+    var cover: String = "",
+    @Exclude var liveVideo: Video? = null,
+    @Exclude var updating: Boolean = false
 ) : BaseBean(id) {
     companion object {
         val newPodcast = Podcast(id = NEW_PODCAST, name = "Adicionar podcast")

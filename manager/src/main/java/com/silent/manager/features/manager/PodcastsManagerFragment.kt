@@ -8,17 +8,20 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.firebase.ui.auth.AuthUI
+import com.ilustris.ui.extensions.showSnackBar
 import com.silent.core.podcast.podcasts
 import com.silent.ilustriscore.core.model.ViewModelBaseState
-import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.manager.R
 import com.silent.manager.databinding.FragmentManagerBinding
 import com.silent.manager.features.manager.adapter.PodcastManagerAdapter
+import com.silent.manager.features.manager.update.PodcastUpdateDialog
 import com.silent.manager.features.newpodcast.NewPodcastActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PodcastsManagerFragment : Fragment() {
-    private val viewModel by lazy { ManagerViewModel(requireActivity().application) }
+    private val viewModel by viewModel<ManagerViewModel>()
     private var fragmentManagerBinding: FragmentManagerBinding? = null
+    private var updateDialog: PodcastUpdateDialog? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,6 +40,9 @@ class PodcastsManagerFragment : Fragment() {
         newPodcastButton.setOnClickListener {
             NewPodcastActivity.launchIntent(requireContext())
         }
+        updateEpisodes.setOnClickListener {
+            viewModel.updatePodcastsEpisodesAndCuts()
+        }
         observeViewModel()
         viewModel.getAllData()
     }
@@ -54,10 +60,6 @@ class PodcastsManagerFragment : Fragment() {
         viewModel.viewModelState.observe(viewLifecycleOwner) {
             when (it) {
                 ViewModelBaseState.RequireAuth -> {
-                    val providers = listOf(
-                        AuthUI.IdpConfig.GoogleBuilder().build(),
-                        AuthUI.IdpConfig.EmailBuilder().build()
-                    )
                     activity?.finish()
                 }
                 ViewModelBaseState.DataDeletedState -> {
@@ -87,6 +89,26 @@ class PodcastsManagerFragment : Fragment() {
                 }
                 else -> {
                     //DO NOTHING
+                }
+            }
+        }
+        viewModel.managerState.observe(viewLifecycleOwner) {
+            when(it) {
+                is ManagerViewModel.ManagerState.PodcastUpdated -> {
+                    updateDialog?.updatePodcastStatus(it.index)
+                }
+                ManagerViewModel.ManagerState.UpdateComplete -> {
+                    updateDialog?.dialog?.dismiss()
+                }
+                is ManagerViewModel.ManagerState.UpdateError -> {
+                    updateDialog?.dialog?.dismiss()
+                    showSnackBar("Ocorreu um erro ao atualizar os podcasts")
+                }
+                is ManagerViewModel.ManagerState.UpdatingPodcasts -> {
+                    if (updateDialog == null) {
+                        updateDialog = PodcastUpdateDialog(requireContext(), it.podcasts)
+                    }
+                    updateDialog?.buildDialog()
                 }
             }
         }

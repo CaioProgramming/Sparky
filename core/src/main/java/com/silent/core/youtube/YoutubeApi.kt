@@ -10,7 +10,7 @@ private const val DATA_BRANDING_QUERY = "brandingSettings"
 private const val DATA_STATISTICS_QUERY = "statistics"
 private const val DATA_VIDEO_TYPE_QUERY = "video"
 private const val DATA_EVENT_TYPE_LIVE_QUERY = "live"
-private const val MAX_UPLOADS_REQUIRED = 20
+private const val MAX_UPLOADS_REQUIRED = 50
 
 interface YoutubeApi {
 
@@ -45,7 +45,7 @@ interface YoutubeApi {
     ): ChannelDetailsResponse
 
     @GET("playlistItems")
-    suspend fun getChannelUploads(
+    suspend fun getPlaylistVideos(
         @Query("part") snippet: String? = DATA_SNIPPET_QUERY,
         @Query("playlistId") playlistId: String,
         @Query("maxResults") maxResults: Int = MAX_UPLOADS_REQUIRED,

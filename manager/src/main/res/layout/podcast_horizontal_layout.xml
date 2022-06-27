@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/bottom_line"
+    android:backgroundTint="?android:textColorHint"
+    android:orientation="horizontal">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/program_icon"
+        style="@style/Theme.Sparky.ProgramIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:padding="@dimen/padding_small_8dp"
+        android:src="@drawable/ic_round_podcasts_24"
+        app:civ_border_color="?android:textColorPrimary"
+        app:civ_border_width="0dp"
+        app:civ_circle_background_color="@color/md_black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.hmomeni.progresscircula.ProgressCircula
+        android:id="@+id/update_progress"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/program_icon"
+        app:layout_constraintEnd_toEndOf="@id/program_icon"
+        app:layout_constraintStart_toStartOf="@id/program_icon"
+        app:layout_constraintTop_toTopOf="@id/program_icon"
+        app:pgc_rimColor="@color/material_red500"
+        app:pgc_indeterminate="true"
+        app:pgc_rimWidth="2dp"
+        app:pgc_progress="100"
+        app:pgc_showProgress="false"
+        app:pgc_speed="1"
+        tools:visibility="visible" />
+
+
+    <TextView
+        android:id="@+id/podcast_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/margin_default_10dp"
+        android:text="Flow podcast"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+        app:layout_constraintBottom_toBottomOf="@id/program_icon"
+        app:layout_constraintEnd_toStartOf="@+id/update_check"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/program_icon"
+        app:layout_constraintTop_toTopOf="@id/program_icon"
+         />
+
+    <ImageView
+        android:id="@+id/update_check"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        android:scaleType="fitCenter"
+        android:layout_marginHorizontal="@dimen/margin_default_10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/podcast_title"
+        app:layout_constraintBottom_toBottomOf="@id/podcast_title"
+        android:src="@drawable/ic_round_check_24"
+        android:layout_width="24dp"
+        android:layout_height="0dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

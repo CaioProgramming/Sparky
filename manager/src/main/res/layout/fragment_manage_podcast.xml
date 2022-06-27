@@ -7,7 +7,6 @@
     android:orientation="vertical"
     tools:context=".features.podcast.PodcastFragment">
 
-
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -29,6 +28,7 @@
                 tools:src="@mipmap/ic_launcher" />
 
             <View
+                tools:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/faded_gradient" />
@@ -67,19 +67,11 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:layout_width="match_parent"
+                app:layout_collapseMode="pin"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="bottom"
-                android:elevation="3dp"
-                android:layout_marginTop="@dimen/margin_big_16dp" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginTop="@dimen/margin_big_16dp"
-                android:background="@drawable/bottom_line"
-                android:backgroundTint="@color/material_grey900"
-                android:padding="@dimen/padding_small_8dp">
+                android:elevation="0dp"
+                android:layout_marginTop="@dimen/margin_big_16dp" >
 
                 <EditText
                     android:id="@+id/podcast_edit_text"
@@ -95,8 +87,19 @@
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                     app:layout_collapseMode="pin" />
 
-            </RelativeLayout>
+            </com.google.android.material.appbar.MaterialToolbar>
 
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/loading"
+                app:trackCornerRadius="@dimen/radius_small_5dp"
+                android:padding="0dp"
+                tools:progress="50"
+                tools:indeterminate="false"
+                app:trackColor="@color/transparent"
+                android:indeterminate="true"
+                android:layout_gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

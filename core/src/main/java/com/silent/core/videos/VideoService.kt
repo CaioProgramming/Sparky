@@ -11,7 +11,7 @@ import com.silent.ilustriscore.core.utilities.SEARCH_SUFFIX
 import kotlinx.coroutines.tasks.await
 
 class VideoService : BaseService() {
-    override val dataPath = "video"
+    override val dataPath = "Video"
 
     override fun deserializeDataSnapshot(dataSnapshot: DocumentSnapshot): BaseBean? {
         return dataSnapshot.toObject(Video::class.java)?.apply {
@@ -24,6 +24,8 @@ class VideoService : BaseService() {
             id = dataSnapshot.id
         }
     }
+
+    suspend fun getPodcastVideos(podcastId: String) = query(podcastId, "podcastId")
 
     suspend fun getHomeVideos(podcastId: String): ServiceResult<DataException, ArrayList<Video>> {
         Log.i(

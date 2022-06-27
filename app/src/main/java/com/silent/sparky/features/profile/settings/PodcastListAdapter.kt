@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.silent.core.podcast.NEW_PODCAST
 import com.silent.core.podcast.Podcast
-import com.silent.ilustriscore.core.utilities.gone
-import com.silent.ilustriscore.core.utilities.visible
 import com.silent.sparky.R
+import com.ilustris.ui.extensions.gone
+import com.ilustris.ui.extensions.visible
 import com.silent.sparky.databinding.PodcastListLayoutBinding
 
 class PodcastListAdapter(
