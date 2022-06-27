@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/video_card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="200dp"
     android:layout_weight=".20"
     android:animateLayoutChanges="true"
     android:layout_margin="@dimen/padding_small_8dp"
@@ -20,11 +20,12 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:background="@color/md_black"
+        android:src="@drawable/ic_iconmonstr_connection_1"
         android:scaleType="centerCrop" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="match_parent"
         android:background="@drawable/faded_gradient" />
 
     <LinearLayout
@@ -39,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="2"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             android:textColor="@color/md_white"
             android:textStyle="bold"
             tools:text="Flows podcre #1" />
@@ -49,7 +50,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-            android:textColor="@color/md_white"
             tools:text="12 de Outubro de 2021" />
 
 

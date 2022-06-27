@@ -1,42 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/margin_small_4dp"
     android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/video_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:colorBackground"
-        android:gravity="center"
-        android:padding="@dimen/padding_default_16dp"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-        android:textStyle="bold"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="Monark enlouqueceu"
-        tools:visibility="visible" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/video_card"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/video_bottom"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:stateListAnimator="@animator/scale_down_animator"
-        app:cardBackgroundColor="@color/material_grey900"
-        app:cardCornerRadius="@dimen/radius_small_5dp"
+        app:cardCornerRadius="0dp"
         app:cardElevation="0dp"
-        app:strokeColor="@color/material_grey900"
-        app:strokeWidth="2dp">
+        app:strokeColor="@color/md_white"
+        app:strokeWidth="0dp">
 
         <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
             android:id="@+id/cut_player"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:stateListAnimator="@animator/scale_down_animator"
@@ -47,20 +31,68 @@
             app:showVideoDuration="false"
             app:useWebUi="false" />
 
+        <ImageView
+            android:id="@+id/video_thumb"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_iconmonstr_connection_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <LinearLayout
+        android:id="@+id/video_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/video_progress"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:trackColor="@color/transparent"
+            android:layout_gravity="bottom"
             android:progressTint="?attr/colorAccent"
             app:trackCornerRadius="@dimen/radius_small_5dp"
-            app:trackThickness="5dp"
+            app:trackThickness="1dp"
             tools:progress="50" />
 
-    </com.google.android.material.card.MaterialCardView>
+        <LinearLayout
+            android:layout_margin="@dimen/margin_default_10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/podcast_icon"
+                android:layout_gravity="center"
+                style="@style/Theme.Sparky.ProgramIcon"/>
+
+            <TextView
+                android:id="@+id/cut_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                tools:text="Igor deu a maior baforada do mundo já vista"
+                android:textStyle="bold"
+                android:layout_marginHorizontal="@dimen/margin_default_10dp"
+                android:maxLines="2"
+                android:textColor="@color/md_white"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                tools:visibility="visible" />
+
+        </LinearLayout>
 
 
-</LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

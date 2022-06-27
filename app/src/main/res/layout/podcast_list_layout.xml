@@ -6,7 +6,7 @@
     android:layout_centerInParent="true"
     android:layout_toStartOf="@id/see_more_button"
     android:background="@drawable/bottom_line"
-    android:backgroundTint="@color/material_grey700"
+    android:backgroundTint="@color/material_grey900"
     android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal"
@@ -15,8 +15,8 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/program_icon"
         style="@style/Theme.Sparky.ProgramIcon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:visibility="gone"
         tools:src="@drawable/ic_round_podcasts_24"
         tools:visibility="visible" />

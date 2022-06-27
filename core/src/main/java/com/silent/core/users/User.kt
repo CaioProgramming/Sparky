@@ -8,5 +8,6 @@ data class User(
     var flowUserName: String = "",
     var email: String = "",
     var name: String = "",
-    var profilePic: String = ""
+    var profilePic: String = "",
+    var admin: Boolean = false
 ) : BaseBean(id)

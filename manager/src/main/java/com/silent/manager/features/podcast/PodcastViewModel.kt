@@ -13,7 +13,14 @@ import com.silent.ilustriscore.core.model.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PodcastViewModel(application: Application) : BaseViewModel<Podcast>(application) {
+class PodcastViewModel(
+    application: Application,
+    override val service: PodcastService,
+    private val videoService: VideoService,
+    private val cutService: CutService,
+    private val youtubeService: YoutubeService,
+    private val videoMapper: VideoMapper
+) : BaseViewModel<Podcast>(application) {
 
     sealed class PodcastManagerState() {
         object PodcastUpdateRequest : PodcastManagerState()
@@ -21,14 +28,9 @@ class PodcastViewModel(application: Application) : BaseViewModel<Podcast>(applic
         data class CutsUpdated(var count: Int) : PodcastManagerState()
     }
 
-    override val service = PodcastService()
-    private val videoService = VideoService()
-    private val cutService = CutService()
-    private val videoMapper = VideoMapper()
-    private val youtubeService = YoutubeService()
     val podcastManagerState = MutableLiveData<PodcastManagerState>()
-    fun updatePodcastData(podcast: Podcast, updateClips: Boolean = false) {
 
+    fun updatePodcastData(podcast: Podcast, updateClips: Boolean = false) {
         viewModelScope.launch(Dispatchers.IO) {
             podcastManagerState.postValue(PodcastManagerState.PodcastUpdateRequest)
             val channel = youtubeService.getChannelDetails(podcast.youtubeID).items.first()
@@ -42,26 +44,30 @@ class PodcastViewModel(application: Application) : BaseViewModel<Podcast>(applic
             if (!updateClips) {
                 editData(podcast)
             } else {
-                val uploads = youtubeService.getPlaylistVideos(podcast.uploads)
-                val cuts = youtubeService.getPlaylistVideos(podcast.cuts)
-                uploads.items.forEachIndexed { index, playlistResource ->
-                    val video = videoMapper.mapVideoSnippet(playlistResource.snippet, podcast.id)
-                    videoService.addData(video)
-                    if (index == uploads.items.lastIndex) {
-                        podcastManagerState.postValue(PodcastManagerState.EpisodesUpdated(uploads.items.size))
-                    }
-                }
-                cuts.items.forEachIndexed { index, playlistResource ->
-                    val video = videoMapper.mapVideoSnippet(playlistResource.snippet, podcast.id)
-                    cutService.editData(video)
-                    if (index == uploads.items.lastIndex) {
-                        podcastManagerState.postValue(PodcastManagerState.CutsUpdated(uploads.items.size))
-                    }
-                }
+                updateEpisodesAndCuts(podcast)
                 editData(podcast)
             }
         }
     }
 
+    private suspend fun updateEpisodesAndCuts(podcast: Podcast) {
+        val uploads = youtubeService.getPlaylistVideos(podcast.uploads, 100)
+        val cuts = youtubeService.getPlaylistVideos(podcast.cuts, 100)
+        uploads.items.forEachIndexed { index, playlistResource ->
+            val video = videoMapper.mapVideoSnippet(playlistResource.snippet, podcast.id)
+            videoService.editData(video)
 
+            if (index == uploads.items.lastIndex) {
+                podcastManagerState.postValue(PodcastManagerState.EpisodesUpdated(uploads.items.size))
+            }
+        }
+        cuts.items.forEachIndexed { index, playlistResource ->
+            val video = videoMapper.mapVideoSnippet(playlistResource.snippet, podcast.id)
+            cutService.editData(video)
+            if (index == uploads.items.lastIndex) {
+                podcastManagerState.postValue(PodcastManagerState.CutsUpdated(uploads.items.size))
+            }
+        }
+
+    }
 }

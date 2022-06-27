@@ -6,16 +6,15 @@ import androidx.lifecycle.viewModelScope
 import com.silent.core.flow.FlowService
 import com.silent.core.users.User
 import com.silent.core.users.UsersService
-import com.silent.ilustriscore.core.model.BaseViewModel
-import com.silent.ilustriscore.core.model.DataException
-import com.silent.ilustriscore.core.model.ErrorType
-import com.silent.ilustriscore.core.model.ViewModelBaseState
+import com.silent.ilustriscore.core.model.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ProfileViewModel(application: Application) : BaseViewModel<User>(application) {
-    private val flowService = FlowService()
-    override val service = UsersService()
+class ProfileViewModel(
+    application: Application,
+    override val service: UsersService,
+    private val flowService: FlowService
+) : BaseViewModel<User>(application) {
     val profileState = MutableLiveData<ProfileState>()
 
 
@@ -24,7 +23,7 @@ class ProfileViewModel(application: Application) : BaseViewModel<User>(applicati
             query(getUser()!!.uid, "id")
         } catch (e: Exception) {
             e.printStackTrace()
-            viewModelState.postValue(ViewModelBaseState.RequireAuth)
+            sendErrorState(DataException.AUTH)
         }
     }
 
@@ -36,6 +35,8 @@ class ProfileViewModel(application: Application) : BaseViewModel<User>(applicati
             } catch (e: Exception) {
                 e.printStackTrace()
                 profileState.postValue(ProfileState.FlowUserError)
+            } finally {
+                updateViewState(ViewModelBaseState.LoadCompleteState)
             }
         }
 
@@ -44,11 +45,12 @@ class ProfileViewModel(application: Application) : BaseViewModel<User>(applicati
     fun saveFirebaseUser() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                val authUser = getUser()!!
                 val user = User().apply {
-                    name = getUser()!!.displayName.toString()
-                    profilePic = getUser()!!.photoUrl.toString()
-                    id = getUser()!!.uid
-                    uid = getUser()!!.uid
+                    name = authUser.displayName.toString()
+                    profilePic = authUser.photoUrl.toString()
+                    id = authUser.uid
+                    uid = authUser.uid
                 }
                 editData(user)
             } catch (e: Exception) {

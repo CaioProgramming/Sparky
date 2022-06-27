@@ -67,6 +67,7 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:layout_width="match_parent"
+                app:layout_collapseMode="pin"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="bottom"
                 android:elevation="0dp"
@@ -90,11 +91,11 @@
 
             <com.google.android.material.progressindicator.LinearProgressIndicator
                 android:id="@+id/loading"
-                android:visibility="gone"
-                tools:visibility="visible"
-                app:trackColor="@color/transparent"
                 app:trackCornerRadius="@dimen/radius_small_5dp"
                 android:padding="0dp"
+                tools:progress="50"
+                tools:indeterminate="false"
+                app:trackColor="@color/transparent"
                 android:indeterminate="true"
                 android:layout_gravity="bottom"
                 android:layout_width="match_parent"

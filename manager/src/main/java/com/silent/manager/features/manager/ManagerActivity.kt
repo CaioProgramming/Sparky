@@ -7,10 +7,16 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.silent.manager.R
 import com.silent.manager.databinding.ActivityManagerBinding
+import com.silent.manager.features.manager.di.managerModule
+import com.silent.manager.features.podcast.di.podcastManagerModule
+import org.koin.core.context.loadKoinModules
+import org.koin.core.context.unloadKoinModules
 
 class ManagerActivity : AppCompatActivity() {
+    private val managerModules = listOf(managerModule, podcastManagerModule)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        loadKoinModules(managerModules)
         val binding = ActivityManagerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.run {
@@ -30,6 +36,11 @@ class ManagerActivity : AppCompatActivity() {
             managerToolbar.setupWithNavController(navController, appBarConfiguration)
         }
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unloadKoinModules(managerModules)
     }
 
 

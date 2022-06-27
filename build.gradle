@@ -2,7 +2,8 @@
 buildscript {
     ext {
         kotlin_version = '1.6.10'
-        ilustris_version = '2.3.4'
+        ilustris_version = '2.4.2'
+        ext.koin_version= "3.1.5"
     }
     repositories {
         google()

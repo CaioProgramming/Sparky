@@ -1,24 +1,29 @@
 package com.silent.sparky.features.home
 
 import android.app.Activity
-import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.firebase.ui.auth.AuthUI
+import com.ilustris.animations.fadeIn
+import com.ilustris.animations.fadeOut
 import com.ilustris.animations.slideInBottom
+import com.ilustris.ui.auth.LoginHelper
+import com.ilustris.ui.extensions.ERROR_COLOR
+import com.ilustris.ui.extensions.gone
+import com.ilustris.ui.extensions.showSnackBar
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.podcasts
 import com.silent.core.utils.WebUtils
+import com.silent.ilustriscore.core.model.ErrorType
 import com.silent.ilustriscore.core.model.ViewModelBaseState
-import com.silent.ilustriscore.core.utilities.RC_SIGN_IN
-import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.navigation.ModuleNavigator
 import com.silent.navigation.NavigationUtils
 import com.silent.sparky.R
@@ -29,12 +34,16 @@ import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
 import com.silent.sparky.features.home.data.LiveHeader
 import com.silent.sparky.features.home.viewmodel.HomeState
 import com.silent.sparky.features.home.viewmodel.HomeViewModel
+import com.silent.sparky.features.home.viewmodel.MainActViewModel
 import com.silent.sparky.features.profile.dialog.PreferencesDialogFragment
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
 
     lateinit var homeFragmentBinding: HomeFragmentBinding
-    private val homeViewModel by lazy { HomeViewModel(requireActivity().application) }
+    private val homeViewModel: HomeViewModel by viewModel()
+    private val mainActViewModel by sharedViewModel<MainActViewModel>()
     private var videoHeaderAdapter: VideoHeaderAdapter? = VideoHeaderAdapter(
         ArrayList(),
         {
@@ -50,12 +59,14 @@ class HomeFragment : Fragment() {
     ): View {
         setHasOptionsMenu(true)
         setMenuVisibility(false)
-        if (this::homeFragmentBinding.isInitialized) {
-            homeFragmentBinding.root
-        } else {
-            homeFragmentBinding = HomeFragmentBinding.inflate(inflater)
-        }
+        observeViewModel()
+        homeFragmentBinding = HomeFragmentBinding.inflate(inflater)
         return homeFragmentBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupView()
     }
 
     private fun openPodcast(id: String) {
@@ -69,17 +80,12 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        observeViewModel()
-        setupView()
+        homeViewModel.getHome()
     }
 
     private fun clearFragment() {
+        homeViewModel.viewModelState.removeObservers(this)
         homeViewModel.homeState.removeObservers(this)
-        videoHeaderAdapter?.clearAdapter()
-    }
-
-    override fun onStop() {
-        super.onStop()
         videoHeaderAdapter?.clearAdapter()
     }
 
@@ -91,7 +97,6 @@ class HomeFragment : Fragment() {
                 setSupportActionBar(homeToolbar)
                 supportActionBar?.title = ""
             }
-            homeViewModel.getHome()
         }
     }
 
@@ -111,13 +116,6 @@ class HomeFragment : Fragment() {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_SIGN_IN && resultCode == Activity.RESULT_OK) {
-            homeViewModel.getHome()
-        }
     }
 
     private fun observeViewModel() {
@@ -151,8 +149,19 @@ class HomeFragment : Fragment() {
         }
         homeViewModel.viewModelState.observe(viewLifecycleOwner) {
             when (it) {
-                ViewModelBaseState.RequireAuth -> {
+                ViewModelBaseState.LoadingState -> {
+                    homeFragmentBinding.homeAnimation.fadeIn()
+                    homeFragmentBinding.livesRecyclerView.gone()
+                }
 
+                ViewModelBaseState.LoadCompleteState -> {
+                    homeFragmentBinding.loadingAnimation.fadeOut()
+                    homeFragmentBinding.appBarLayout.fadeIn()
+                    homeFragmentBinding.podcastsResumeRecycler.fadeIn()
+                }
+
+                ViewModelBaseState.RequireAuth -> {
+                    login()
                 }
                 is ViewModelBaseState.DataListRetrievedState -> {
                     homeFragmentBinding.podcastsResumeRecycler.run {
@@ -165,9 +174,31 @@ class HomeFragment : Fragment() {
                     }
                 }
                 is ViewModelBaseState.ErrorState -> {
-                    view?.showSnackBar("Ocorreu um erro inesperado", backColor = Color.RED)
+                    view?.showSnackBar("Ocorreu um erro inesperado(${it.dataException.code.message}", backColor = ContextCompat.getColor(requireContext(), ERROR_COLOR))
+                    if (it.dataException.code == ErrorType.AUTH) {
+                        mainActViewModel.updateState(MainActViewModel.MainActState.RequireLoginState)
+                    }
                 }
             }
+        }
+    }
+
+    private fun login() {
+        LoginHelper.signIn(
+            requireActivity() as AppCompatActivity,
+            arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build()),
+            R.style.Theme_Sparky,
+            R.mipmap.ic_launcher
+        ) { resultCode ->
+            handleResultCode(resultCode)
+        }
+    }
+
+    private fun handleResultCode(resultCode : Int) {
+        if (resultCode != Activity.RESULT_OK) {
+            login()
+        } else {
+            onStart()
         }
     }
 
@@ -191,13 +222,4 @@ class HomeFragment : Fragment() {
             slideInBottom()
         }
     }
-
-    private fun extractPodcasts(liveHeader: ArrayList<LiveHeader>): ArrayList<Podcast> {
-        val podcasts = ArrayList<Podcast>()
-        liveHeader.forEach {
-            podcasts.add(it.podcast)
-        }
-        return podcasts
-    }
-
 }

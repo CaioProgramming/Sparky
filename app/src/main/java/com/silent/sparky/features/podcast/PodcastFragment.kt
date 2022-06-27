@@ -1,6 +1,5 @@
 package com.silent.sparky.features.podcast
 
-import android.animation.Animator
 import android.animation.ValueAnimator
 import android.graphics.Color
 import android.os.Bundle
@@ -14,13 +13,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.ilustris.animations.*
+import com.ilustris.ui.extensions.showSnackBar
 import com.silent.core.component.GroupType
 import com.silent.core.component.HostGroup
 import com.silent.core.component.HostGroupAdapter
 import com.silent.core.podcast.Host
 import com.silent.core.podcast.Podcast
 import com.silent.core.utils.WebUtils
-import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.sparky.R
 import com.silent.sparky.data.PodcastHeader
 import com.silent.sparky.databinding.FragmentPodcastBinding
@@ -158,7 +157,7 @@ class PodcastFragment : Fragment() {
                     channelSectionsAdapter.addSections(it.headers)
                 }
                 PodcastViewModel.PodcastState.PodcastFailedState -> {
-                    view?.showSnackBar("Ocorreu um erro ao obter os vídeos")
+                    requireView().showSnackBar("Ocorreu um erro ao obter os vídeos")
                     podcastFragmentBinding?.loading?.fadeOut()
                 }
             }

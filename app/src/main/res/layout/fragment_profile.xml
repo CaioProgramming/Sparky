@@ -80,6 +80,7 @@
 
                         <com.google.android.material.card.MaterialCardView
                             android:id="@+id/username_card"
+                            android:visibility="gone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/margin_default_10dp"
@@ -104,6 +105,7 @@
                         </com.google.android.material.card.MaterialCardView>
 
                         <TextView
+                            android:visibility="gone"
                             android:id="@+id/realName"
                             android:layout_width="150dp"
                             android:layout_height="wrap_content"
@@ -112,7 +114,6 @@
                             android:background="@drawable/stroked_retangle_primary"
                             android:gravity="center"
                             android:lines="2"
-                            android:text="@string/app_name"
                             android:textAlignment="center"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                             android:textColor="@color/md_black"
@@ -142,26 +143,35 @@
                     android:drawableTint="?attr/colorPrimaryDark"
                     android:text="Vincular conta flow" />
 
+                <LinearLayout
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:layout_gravity="center"
+                    android:id="@+id/badges_layout"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/badges_count"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        tools:text="0"
+                        android:textAlignment="center"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                        android:textColor="@color/md_white"
+                        android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/badges_count"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    tools:text="0"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-                    android:textColor="@color/md_white"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="emblemas"
+                        android:textAlignment="center"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                        android:textColor="@color/md_white" />
+                </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="emblemas"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                    android:textColor="@color/md_white" />
 
             </LinearLayout>
 
@@ -216,11 +226,10 @@
         android:id="@+id/user_badges"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         app:spanCount="3"
         tools:listitem="@layout/badge_layout"
-        tools:visibility="visible" />
+          />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

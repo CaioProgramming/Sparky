@@ -1,6 +1,7 @@
 package com.silent.sparky.features.cuts.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.silent.core.podcast.Podcast
@@ -36,13 +37,23 @@ class CutsViewModel(application: Application) : BaseViewModel<Podcast>(applicati
                     val filteredPodcasts = podcasts.filter { podcastFilter.contains(it.id) }
                     val sortedPodcasts = filteredPodcasts.sortedByDescending { it.subscribe }
                     sortedPodcasts.forEachIndexed { index, podcast ->
-                        val channelUploads = cutService.query(podcast.id, "podcastId").success.data as ArrayList<Video>
-                        cutsState.postValue(
-                            CutsState.CutsRetrieved(
-                                podcast.cuts,
-                                ArrayList(channelUploads)
-                            )
-                        )
+                        when(val cutsRequest = cutService.query(podcast.id, "podcastId")) {
+                            is ServiceResult.Error -> {
+                                Log.e(javaClass.simpleName, "fetchCuts: error /n $cutsRequest \n ", )
+                                sendErrorState(cutsRequest.errorException)
+                            }
+                            is ServiceResult.Success -> {
+                                val channelUploads = cutsRequest.data as ArrayList<Video>
+                                channelUploads.map { it.podcast = podcast }
+                                cutsState.postValue(
+                                    CutsState.CutsRetrieved(
+                                        podcast.cuts,
+                                        ArrayList(channelUploads.sortedByDescending { it.publishedAt })
+                                    )
+                                )
+                            }
+                        }
+
                     }
                 } else {
                     podcasts.forEachIndexed { index, podcast ->

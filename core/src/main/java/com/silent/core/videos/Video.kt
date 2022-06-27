@@ -2,6 +2,7 @@ package com.silent.core.videos
 
 import com.google.gson.annotations.SerializedName
 import com.google.type.DateTime
+import com.silent.core.podcast.Podcast
 import com.silent.ilustriscore.core.bean.BaseBean
 import java.util.*
 
@@ -14,6 +15,7 @@ data class Video(
     var thumbnailUrl: String = "",
     @SerializedName("ytId")
     var youtubeID: String = "",
-    var title: String = ""
+    var title: String = "",
+    var podcast: Podcast? = null
 
 ) : BaseBean(id)

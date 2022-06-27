@@ -40,10 +40,16 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     api "com.github.CaioProgramming.Ilustris:core:$ilustris_version"
+    api "com.github.CaioProgramming.Ilustris:ui:$ilustris_version"
     api "com.github.CaioProgramming.Ilustris:animations:$ilustris_version"
     api 'androidx.navigation:navigation-fragment-ktx:2.5.0-rc01'
     api 'androidx.navigation:navigation-ui-ktx:2.5.0-rc01'
     api 'com.android.support:multidex:1.0.3'
+
+    api "io.insert-koin:koin-core:$koin_version"
+    api "io.insert-koin:koin-android:$koin_version"
+    api "io.insert-koin:koin-androidx-workmanager:$koin_version"
+    api "io.insert-koin:koin-androidx-navigation:$koin_version"
 
     api 'de.hdodenhof:circleimageview:3.1.0'
     api 'com.github.mmin18:realtimeblurview:1.1.2'
@@ -70,6 +76,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'org.jsoup:jsoup:1.13.1'
+    api 'com.hmomeni.progresscircula:progresscircula:0.2.1'
+
 
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     testImplementation 'junit:junit:4.13.2'

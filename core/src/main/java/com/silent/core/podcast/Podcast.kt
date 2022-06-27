@@ -26,7 +26,8 @@ data class Podcast(
     var uploads: String = "",
     var highLightColor: String = "#000",
     var cover: String = "",
-    @Exclude var liveVideo: Video? = null
+    @Exclude var liveVideo: Video? = null,
+    @Exclude var updating: Boolean = false
 ) : BaseBean(id) {
     companion object {
         val newPodcast = Podcast(id = NEW_PODCAST, name = "Adicionar podcast")

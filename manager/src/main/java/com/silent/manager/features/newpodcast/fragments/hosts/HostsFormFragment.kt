@@ -5,15 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.ilustris.ui.extensions.ERROR_COLOR
+import com.ilustris.ui.extensions.showSnackBar
 import com.silent.core.component.GroupType
 import com.silent.core.component.HostAdapter
 import com.silent.core.instagram.InstagramUserResponse
 import com.silent.core.podcast.Host
 import com.silent.core.podcast.NEW_HOST
-import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.manager.R
 import com.silent.manager.databinding.FragmentHostsDataBinding
 import com.silent.manager.features.newpodcast.NewPodcastViewModel
@@ -80,7 +82,7 @@ class HostsFormFragment : Fragment() {
                 HostState.ErrorFetchInstagram -> {
                     view?.showSnackBar(
                         "Ocorreu um erro ao recuperar dados do Instagram",
-                        backColor = Color.RED
+                        backColor = ContextCompat.getColor(requireContext(), ERROR_COLOR)
                     )
                 }
                 is HostState.HostDeleted -> {

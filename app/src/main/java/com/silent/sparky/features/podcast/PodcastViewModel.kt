@@ -78,22 +78,24 @@ class PodcastViewModel(application: Application) : BaseViewModel<Podcast>(applic
                 val cuts = cutService.getPodcastCuts(podcastID).success.data as ArrayList<Video>
 
                 if (uploads.isNotEmpty()) {
+                    uploads.map { it.podcast = podcast }
                     headers.add(
                         getHeader(
                             "Últimos episódios",
                             podcast.uploads,
-                            uploads.reversed(),
+                            uploads.sortedByDescending { it.publishedAt },
                             if (cuts.isEmpty()) RecyclerView.VERTICAL else RecyclerView.HORIZONTAL,
                             podcast.highLightColor
                         )
                     )
                 }
                 if (cuts.isNotEmpty()) {
+                    cuts.map { it.podcast = podcast }
                     headers.add(
                         getHeader(
                             "Cortes do ${podcast.name}",
                             podcast.cuts,
-                            cuts.reversed(),
+                            cuts.sortedByDescending { it.publishedAt },
                             RecyclerView.VERTICAL,
                             podcast.highLightColor
                         )

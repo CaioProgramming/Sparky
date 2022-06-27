@@ -8,8 +8,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.ilustris.ui.extensions.ERROR_COLOR
+import com.ilustris.ui.extensions.showSnackBar
 import com.silent.core.podcast.Podcast
-import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.manager.R
 import com.silent.manager.databinding.FragmentPodcastYoutubedataBinding
 import com.silent.manager.features.newpodcast.NewPodcastViewModel
@@ -60,7 +61,7 @@ class YoutubeFormFragment : Fragment() {
                         "Esse podcast já foi cadastrado, selecione outro.",
                         backColor = ContextCompat.getColor(
                             requireContext(),
-                            R.color.material_red500
+                           ERROR_COLOR
                         )
                     )
                 }

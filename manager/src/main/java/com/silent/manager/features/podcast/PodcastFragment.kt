@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
+import com.ilustris.ui.extensions.showSnackBar
 import com.silent.core.component.GroupType
 import com.silent.core.component.HostGroup
 import com.silent.core.component.HostGroupAdapter
@@ -21,7 +22,6 @@ import com.silent.core.podcast.Host
 import com.silent.core.podcast.NEW_HOST
 import com.silent.core.podcast.Podcast
 import com.silent.ilustriscore.core.model.ViewModelBaseState
-import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.manager.R
 import com.silent.manager.databinding.FragmentManagePodcastBinding
 import com.silent.manager.features.manager.PodcastsManagerFragmentArgs
@@ -29,17 +29,17 @@ import com.silent.manager.features.newpodcast.fragments.highlight.HIGHLIGHT_TAG
 import com.silent.manager.features.newpodcast.fragments.highlight.HighlightColorFragment
 import com.silent.manager.features.newpodcast.fragments.hosts.HostDialog
 import com.silent.manager.features.newpodcast.fragments.hosts.HostInstagramDialog
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PodcastFragment : Fragment() {
 
     private val args by navArgs<PodcastsManagerFragmentArgs>()
-    private val podcastViewModel by lazy { PodcastViewModel(requireActivity().application) }
+    private val podcastViewModel by viewModel<PodcastViewModel>()
     private var podcastFragmentBinding: FragmentManagePodcastBinding? = null
 
     lateinit var podcast: Podcast
 
 
-    private fun getArgPodcast() = args.podcast
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -97,13 +97,16 @@ class PodcastFragment : Fragment() {
                 is ViewModelBaseState.DataUpdateState -> {
                     podcastFragmentBinding?.loading?.fadeOut()
                     val snackColor = Color.parseColor(podcast.highLightColor)
-                    view?.showSnackBar(
-                        "Podcast Atualizado com sucesso!",
-                        snackColor,
-                        actionText = "Ok",
-                        action = {
-                            findNavController().popBackStack()
-                        })
+                    podcastFragmentBinding?.programIcon?.let { imageView ->
+                        requireView().showSnackBar(
+                            "Podcast Atualizado com sucesso!",
+                            snackColor,
+                            actionText = "Ok",
+                            action = {
+                                findNavController().popBackStack()
+                            })
+                    }
+
                 }
                 else -> {
 
@@ -132,7 +135,8 @@ class PodcastFragment : Fragment() {
             podcastEditText.setText(podcast.name)
             Glide.with(requireContext()).load(podcast.cover).error(R.drawable.ic_iconmonstr_connection_1).into(podcastCover)
             Glide.with(requireContext()).load(podcast.iconURL).error(R.drawable.ic_iconmonstr_connection_1).into(programIcon)
-            loading.indeterminateTintList = ColorStateList.valueOf(Color.parseColor(podcast.highLightColor))
+            loading.setIndicatorColor(Color.parseColor(podcast.highLightColor))
+            highlightColor.backgroundTintList = ColorStateList.valueOf(Color.parseColor(podcast.highLightColor))
         }
         updateHosts()
     }
@@ -154,14 +158,19 @@ class PodcastFragment : Fragment() {
 
 
     private fun updateHosts() {
-        podcastFragmentBinding?.hostsRecyclerview?.adapter = HostGroupAdapter(
-            listOf(
-                HostGroup("Hosts", podcast.hosts),
-                HostGroup("Convidados da semana", podcast.weeklyGuests, GroupType.GUESTS)
-            ),
-            true, ::selectHost,
-            podcast.highLightColor
-        )
+
+        podcastFragmentBinding?.run {
+            programIcon.invalidate()
+            podcastFragmentBinding?.hostsRecyclerview?.adapter = HostGroupAdapter(
+                listOf(
+                    HostGroup("Hosts", podcast.hosts),
+                    HostGroup("Convidados da semana", podcast.weeklyGuests, GroupType.GUESTS)
+                ),
+                true, ::selectHost,
+                podcast.highLightColor
+            )
+        }
+
     }
 
     private fun confirmUser(instagramUser: InstagramUserResponse, type: GroupType) {

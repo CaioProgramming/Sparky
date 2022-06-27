@@ -10,11 +10,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.ilustris.ui.extensions.showSnackBar
 import com.silent.core.podcast.NEW_PODCAST
 import com.silent.core.podcast.Podcast
 import com.silent.core.users.User
 import com.silent.ilustriscore.core.model.ViewModelBaseState
-import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.sparky.R
 import com.silent.sparky.databinding.FragmentSettingsBinding
 import com.silent.sparky.features.profile.dialog.PreferencesDialogFragment

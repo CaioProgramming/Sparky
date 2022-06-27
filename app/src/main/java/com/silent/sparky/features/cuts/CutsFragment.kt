@@ -5,11 +5,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.codeboy.pager2_transformers.Pager2_CubeInDepthTransformer
+import com.codeboy.pager2_transformers.Pager2_ParallaxTransformer
 import com.codeboy.pager2_transformers.Pager2_PopTransformer
 import com.ilustris.animations.popOut
+import com.ilustris.ui.extensions.ERROR_COLOR
+import com.ilustris.ui.extensions.gone
+import com.ilustris.ui.extensions.showSnackBar
 import com.silent.core.videos.Video
-import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.sparky.R
 import com.silent.sparky.databinding.FragmentCutsBinding
 import com.silent.sparky.features.cuts.viewmodel.CutsState
@@ -31,9 +38,11 @@ class CutsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         cutsBinding.cutsPager.run {
-            cutsAdapter = CutsAdapter(ArrayList())
+            cutsAdapter = CutsAdapter(ArrayList()) {
+                val bundle = bundleOf("podcast_id" to it.id)
+                findNavController().navigate(R.id.action_navigation_cuts_to_podcastFragment, bundle)
+            }
             adapter = cutsAdapter
-            setPageTransformer(Pager2_PopTransformer())
         }
         observeViewModel()
         cutsViewModel.fetchCuts()
@@ -41,7 +50,7 @@ class CutsFragment : Fragment() {
 
     private fun updateCuts(videos: ArrayList<Video>) {
         cutsAdapter.updateCuts(videos)
-        cutsBinding.cutsAnimation.popOut()
+        cutsBinding.cutsAnimation.gone()
     }
 
     private fun observeViewModel() {
@@ -49,7 +58,7 @@ class CutsFragment : Fragment() {
             when (it) {
                 CutsState.CutsError -> view?.showSnackBar(
                     "Ocorre um erro inesperado ao obter os cortes",
-                    backColor = Color.RED
+                    backColor = ContextCompat.getColor(requireContext(), ERROR_COLOR)
                 )
                 is CutsState.CutsRetrieved -> {
                     updateCuts(it.videos)

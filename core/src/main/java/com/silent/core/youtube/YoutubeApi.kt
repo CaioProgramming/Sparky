@@ -45,7 +45,7 @@ interface YoutubeApi {
     ): ChannelDetailsResponse
 
     @GET("playlistItems")
-    suspend fun getChannelUploads(
+    suspend fun getPlaylistVideos(
         @Query("part") snippet: String? = DATA_SNIPPET_QUERY,
         @Query("playlistId") playlistId: String,
         @Query("maxResults") maxResults: Int = MAX_UPLOADS_REQUIRED,

@@ -16,21 +16,20 @@ import com.silent.core.flow.data.FlowProfile
 import com.silent.core.users.User
 import com.silent.core.utils.ImageUtils
 import com.silent.ilustriscore.core.model.ViewModelBaseState
-import com.silent.ilustriscore.core.utilities.gone
 import com.silent.sparky.R
+import com.ilustris.ui.extensions.gone
+import com.ilustris.ui.extensions.visible
 import com.silent.sparky.databinding.FlowLinkAlertBinding
 import com.silent.sparky.features.profile.viewmodel.ProfileState
 import com.silent.sparky.features.profile.viewmodel.ProfileViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class FlowLinkDialog(val user: User) : DialogFragment() {
+class FlowLinkDialog(private val user: User) : DialogFragment() {
 
     private var flowLinkAlertBinding: FlowLinkAlertBinding? = null
 
-    private val profileViewModel: ProfileViewModel by lazy {
-        ViewModelProvider(this)[ProfileViewModel::class.java]
-    }
-
+    private val profileViewModel: ProfileViewModel by sharedViewModel()
     private fun View.configure() {
         flowLinkAlertBinding = FlowLinkAlertBinding.bind(this).apply {
             flowAccountName.editText?.addTextChangedListener {
