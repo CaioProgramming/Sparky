@@ -34,7 +34,7 @@
 
     <fragment
         android:id="@+id/navigation_cuts"
-        android:name="com.silent.sparky.features.cuts.CutsFragment"
+        android:name="com.silent.sparky.features.cuts.ui.CutsFragment"
         android:label="@string/title_cuts"
         tools:layout="@layout/fragment_cuts" >
         <action

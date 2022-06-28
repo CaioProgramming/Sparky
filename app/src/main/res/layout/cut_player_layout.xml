@@ -6,46 +6,32 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/video_card"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/video_bottom"
+    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+        android:id="@+id/cut_player"
+        android:visibility="invisible"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:stateListAnimator="@animator/scale_down_animator"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="0dp"
-        app:strokeColor="@color/md_white"
-        app:strokeWidth="0dp">
+        app:enableAutomaticInitialization="false"
+        app:showFullScreenButton="false"
+        app:showSeekBar="false"
+        app:showVideoCurrentTime="false"
+        app:showVideoDuration="false"
+        />
 
-        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-            android:id="@+id/cut_player"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:stateListAnimator="@animator/scale_down_animator"
-            app:enableAutomaticInitialization="false"
-            app:showFullScreenButton="false"
-            app:showSeekBar="false"
-            app:showVideoCurrentTime="false"
-            app:showVideoDuration="false"
-            app:useWebUi="false" />
-
-        <ImageView
-            android:id="@+id/video_thumb"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_iconmonstr_connection_1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-    </com.google.android.material.card.MaterialCardView>
+    <ImageView
+        android:id="@+id/cut_thumbnail"
+        tools:src="@mipmap/ic_launcher"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <LinearLayout
+        android:background="@drawable/double_faded_gradient"
         android:id="@+id/video_bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:orientation="vertical"
+        android:gravity="bottom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/video_progress"
@@ -54,35 +40,24 @@
             app:trackColor="@color/transparent"
             android:layout_gravity="bottom"
             android:progressTint="?attr/colorAccent"
-            app:trackCornerRadius="@dimen/radius_small_5dp"
-            app:trackThickness="1dp"
+            android:layout_margin="@dimen/margin_default_10dp"
+            app:trackCornerRadius="@dimen/radius_default_10dp"
             tools:progress="50" />
 
-        <LinearLayout
-            android:layout_margin="@dimen/margin_default_10dp"
-            android:orientation="horizontal"
+
+        <TextView
+            android:id="@+id/cut_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            tools:text="Igor deu a maior baforada do mundo já vista"
+            android:textStyle="bold"
+            android:padding="@dimen/padding_default_16dp"
+            android:maxLines="2"
+            android:textColor="@color/md_white"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            tools:visibility="visible" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/podcast_icon"
-                android:layout_gravity="center"
-                style="@style/Theme.Sparky.ProgramIcon"/>
-
-            <TextView
-                android:id="@+id/cut_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                tools:text="Igor deu a maior baforada do mundo já vista"
-                android:textStyle="bold"
-                android:layout_marginHorizontal="@dimen/margin_default_10dp"
-                android:maxLines="2"
-                android:textColor="@color/md_white"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                tools:visibility="visible" />
-
-        </LinearLayout>
 
 
 

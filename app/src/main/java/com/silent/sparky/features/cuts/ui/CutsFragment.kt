@@ -1,6 +1,5 @@
-package com.silent.sparky.features.cuts
+package com.silent.sparky.features.cuts.ui
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,24 +8,29 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.codeboy.pager2_transformers.Pager2_CubeInDepthTransformer
-import com.codeboy.pager2_transformers.Pager2_ParallaxTransformer
-import com.codeboy.pager2_transformers.Pager2_PopTransformer
-import com.ilustris.animations.popOut
+import com.codeboy.pager2_transformers.Pager2_TabletTransformer
+import com.codeboy.pager2_transformers.Pager2_VerticalFlipTransformer
+import com.codeboy.pager2_transformers.Pager2_ZoomOutTransformer
+import com.ilustris.animations.slideInBottom
 import com.ilustris.ui.extensions.ERROR_COLOR
 import com.ilustris.ui.extensions.gone
 import com.ilustris.ui.extensions.showSnackBar
+import com.silent.core.podcast.Podcast
 import com.silent.core.videos.Video
 import com.silent.sparky.R
 import com.silent.sparky.databinding.FragmentCutsBinding
+import com.silent.sparky.features.cuts.data.PodcastCutHeader
+import com.silent.sparky.features.cuts.ui.adapter.CutsAdapter
+import com.silent.sparky.features.cuts.ui.adapter.PodcastCutPageAdapter
 import com.silent.sparky.features.cuts.viewmodel.CutsState
 import com.silent.sparky.features.cuts.viewmodel.CutsViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CutsFragment : Fragment() {
 
     private val cutsBinding : FragmentCutsBinding by lazy { FragmentCutsBinding.bind(requireView()) }
-    private val cutsViewModel by lazy { CutsViewModel(requireActivity().application) }
-    lateinit var cutsAdapter : CutsAdapter
+    private val cutsViewModel by viewModel<CutsViewModel>()
+    lateinit var cutsAdapter : PodcastCutPageAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,22 +39,30 @@ class CutsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_cuts, container, false)
     }
 
+    private fun navigateToPodcast(podcast: Podcast) {
+        val bundle = bundleOf("podcast_id" to podcast.id)
+        findNavController().navigate(R.id.action_navigation_cuts_to_podcastFragment, bundle)
+    }
+
     override fun onStart() {
         super.onStart()
-        cutsBinding.cutsPager.run {
-            cutsAdapter = CutsAdapter(ArrayList()) {
-                val bundle = bundleOf("podcast_id" to it.id)
-                findNavController().navigate(R.id.action_navigation_cuts_to_podcastFragment, bundle)
-            }
-            adapter = cutsAdapter
-        }
         observeViewModel()
         cutsViewModel.fetchCuts()
     }
 
-    private fun updateCuts(videos: ArrayList<Video>) {
-        cutsAdapter.updateCuts(videos)
+    private fun FragmentCutsBinding.setupCuts(headers: ArrayList<PodcastCutHeader>) {
+        cutsAdapter  = PodcastCutPageAdapter(headers, ::navigateToPodcast, {
+            val currentItem = cutsPager.currentItem
+            if (currentItem == headers.lastIndex) return@PodcastCutPageAdapter
+            cutsPager.setCurrentItem(currentItem + 1, true)
+        }, {
+            val currentItem = cutsPager.currentItem
+            if (currentItem == 0) return@PodcastCutPageAdapter
+            cutsPager.setCurrentItem(currentItem - 1, true)
+        })
+        cutsPager.adapter = cutsAdapter
         cutsBinding.cutsAnimation.gone()
+        cutsPager.setPageTransformer(Pager2_ZoomOutTransformer())
     }
 
     private fun observeViewModel() {
@@ -61,7 +73,7 @@ class CutsFragment : Fragment() {
                     backColor = ContextCompat.getColor(requireContext(), ERROR_COLOR)
                 )
                 is CutsState.CutsRetrieved -> {
-                    updateCuts(it.videos)
+                    cutsBinding.setupCuts(it.cutHeader)
                 }
             }
         }

@@ -26,11 +26,12 @@ import com.silent.sparky.databinding.FragmentPodcastBinding
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
 import com.silent.sparky.features.home.data.LiveHeader
 import com.silent.sparky.features.podcast.schedule.PodcastScheduleDialog
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.NumberFormat
 
 class PodcastFragment : Fragment() {
     private var podcastFragmentBinding: FragmentPodcastBinding? = null
-    private val programViewModel by lazy { PodcastViewModel(requireActivity().application) }
+    private val programViewModel by viewModel<PodcastViewModel>()
     private val args by navArgs<PodcastFragmentArgs>()
     private val channelSectionsAdapter = VideoHeaderAdapter(ArrayList(), ::onSelectHeader)
     private var program: Podcast? = null

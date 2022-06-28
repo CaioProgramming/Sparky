@@ -21,26 +21,19 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class PodcastViewModel(application: Application) : BaseViewModel<Podcast>(application) {
-
-    private val instagramService = InstagramService()
-    override val service = PodcastService()
-    private val videoService = VideoService()
-    private val cutService = CutService()
-    private val videoMapper = VideoMapper()
+class PodcastViewModel(application: Application,
+                       override val service: PodcastService,
+                       private val videoService: VideoService,
+                       private val cutService: CutService
+) : BaseViewModel<Podcast>(application) {
 
 
     sealed class PodcastState {
         object PodcastFailedState : PodcastState()
-        data class PodcastHostRetrieved(
-            val host: Host
-        ) : PodcastState()
-
         data class PodcastDataRetrieved(
             val podcast: Podcast,
             val headers: ArrayList<PodcastHeader>
         ) : PodcastState()
-
 
     }
 
