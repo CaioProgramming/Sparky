@@ -97,7 +97,6 @@ class PreferencesDialogFragment : BottomSheetDialogFragment() {
                     dismiss()
                 }
                 is PreferencesViewModel.PreferencesViewState.PodcastPreferencesRetrieved -> {
-                    selectedPodcasts.addAll(it.favorites)
                     it.favorites.forEach { id ->
                         podcastAdapter.selectPodcast(id)
                     }
