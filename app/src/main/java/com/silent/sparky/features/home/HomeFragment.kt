@@ -159,7 +159,11 @@ class HomeFragment : Fragment() {
                         loadingAnimation.fadeOut()
                         appBarLayout.fadeIn()
                         podcastsResumeRecycler.fadeIn()
-                        if (podcastsResumeRecycler.childCount == 0) homeViewModel.getHome()
+                        if (podcastsResumeRecycler.childCount == 0) {
+                            podcastsResumeRecycler.removeAllViews()
+                            videoHeaderAdapter?.clearAdapter()
+                            homeViewModel.getHome()
+                        }
                     }
 
 
