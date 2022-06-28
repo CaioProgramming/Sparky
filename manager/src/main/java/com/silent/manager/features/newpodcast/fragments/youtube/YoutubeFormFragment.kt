@@ -15,14 +15,13 @@ import com.silent.manager.R
 import com.silent.manager.databinding.FragmentPodcastYoutubedataBinding
 import com.silent.manager.features.newpodcast.NewPodcastViewModel
 import com.silent.manager.states.NewPodcastState
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class YoutubeFormFragment : Fragment() {
 
     private val relatedChannelsAdapter =
         PodcastHeaderAdapter(ArrayList(), onSelectPodcast = ::selectPodcast)
-    private val newPodcastViewModel: NewPodcastViewModel by lazy {
-        ViewModelProvider(requireActivity())[NewPodcastViewModel::class.java]
-    }
+    private val newPodcastViewModel: NewPodcastViewModel by sharedViewModel()
 
     private fun selectPodcast(podcast: Podcast) {
         newPodcastViewModel.checkPodcast(podcast)

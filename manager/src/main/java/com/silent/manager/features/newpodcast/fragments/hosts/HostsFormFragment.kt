@@ -22,12 +22,12 @@ import com.silent.manager.features.newpodcast.NewPodcastViewModel
 import com.silent.manager.features.newpodcast.fragments.highlight.HIGHLIGHT_TAG
 import com.silent.manager.features.newpodcast.fragments.highlight.HighlightColorFragment
 import com.silent.manager.states.HostState
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class HostsFormFragment : Fragment() {
 
-    private val newPodcastViewModel: NewPodcastViewModel by lazy {
-        ViewModelProvider(requireActivity())[NewPodcastViewModel::class.java]
-    }
+    private val newPodcastViewModel: NewPodcastViewModel by sharedViewModel()
+
 
     private val hostAdapter = HostAdapter(arrayListOf(Host(NEW_HOST, "", "")), true, ::selectHost)
 

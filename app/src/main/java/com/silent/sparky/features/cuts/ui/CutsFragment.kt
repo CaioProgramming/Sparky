@@ -8,9 +8,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.codeboy.pager2_transformers.Pager2_TabletTransformer
 import com.codeboy.pager2_transformers.Pager2_VerticalFlipTransformer
 import com.codeboy.pager2_transformers.Pager2_ZoomOutTransformer
+import com.ilustris.animations.fadeOut
 import com.ilustris.animations.slideInBottom
 import com.ilustris.ui.extensions.ERROR_COLOR
 import com.ilustris.ui.extensions.gone
@@ -51,18 +53,17 @@ class CutsFragment : Fragment() {
     }
 
     private fun FragmentCutsBinding.setupCuts(headers: ArrayList<PodcastCutHeader>) {
-        cutsAdapter  = PodcastCutPageAdapter(headers, ::navigateToPodcast, {
-            val currentItem = cutsPager.currentItem
-            if (currentItem == headers.lastIndex) return@PodcastCutPageAdapter
-            cutsPager.setCurrentItem(currentItem + 1, true)
-        }, {
-            val currentItem = cutsPager.currentItem
-            if (currentItem == 0) return@PodcastCutPageAdapter
-            cutsPager.setCurrentItem(currentItem - 1, true)
-        })
+        cutsAdapter  = PodcastCutPageAdapter(headers, ::navigateToPodcast)
         cutsPager.adapter = cutsAdapter
-        cutsBinding.cutsAnimation.gone()
         cutsPager.setPageTransformer(Pager2_ZoomOutTransformer())
+        cutsPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                cutsAdapter.enabledPlayer = position
+            }
+        })
+        cutsBinding.cutsAnimation.fadeOut()
+
     }
 
     private fun observeViewModel() {

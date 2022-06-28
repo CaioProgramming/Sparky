@@ -27,11 +27,11 @@ import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.navigation.ModuleNavigator
 import com.silent.navigation.NavigationUtils
 import com.silent.sparky.R
-import com.silent.sparky.data.PodcastHeader
 import com.silent.sparky.databinding.HomeFragmentBinding
 import com.silent.sparky.features.home.adapter.PodcastsAdapter
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
 import com.silent.sparky.features.home.data.LiveHeader
+import com.silent.sparky.features.home.data.PodcastHeader
 import com.silent.sparky.features.home.viewmodel.HomeState
 import com.silent.sparky.features.home.viewmodel.HomeViewModel
 import com.silent.sparky.features.home.viewmodel.MainActViewModel

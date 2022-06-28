@@ -14,7 +14,7 @@ import com.silent.core.videos.VideoMapper
 import com.silent.core.videos.VideoService
 import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
-import com.silent.sparky.data.PodcastHeader
+import com.silent.sparky.features.home.data.PodcastHeader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*

@@ -22,13 +22,15 @@ import kotlinx.coroutines.launch
 private const val VENUS_CHANNEL_ID = "UCTBhsXf_XRxk8w4rMj6WBOA"
 private const val FLOW_STUDIOS_ID = "UCmw6h7iv_A_nHA1nlnhkAAA"
 
-class NewPodcastViewModel(application: Application) : BaseViewModel<Podcast>(application) {
+class NewPodcastViewModel(
+    application: Application,
+    override val service: PodcastService,
+    private val youtubeService: YoutubeService,
+    private val podcastMapper: PodcastMapper
+) : BaseViewModel<Podcast>(application) {
 
-    override val service = PodcastService()
-    private val youtubeService = YoutubeService()
     val newPodcastState = MutableLiveData<NewPodcastState>()
     val hostState = MutableLiveData<HostState>()
-    val podcastMapper = PodcastMapper()
 
     var podcast = Podcast()
 

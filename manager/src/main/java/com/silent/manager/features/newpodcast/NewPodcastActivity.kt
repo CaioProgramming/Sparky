@@ -10,10 +10,11 @@ import androidx.navigation.ui.setupWithNavController
 import com.silent.manager.R
 import com.silent.manager.databinding.ActivityNewPodcastBinding
 import com.silent.manager.states.NewPodcastState
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class NewPodcastActivity : AppCompatActivity() {
 
-    private val newPodcastViewModel: NewPodcastViewModel by lazy { NewPodcastViewModel(application) }
+    private val newPodcastViewModel: NewPodcastViewModel by viewModel()
     private var newPodcastBinding: ActivityNewPodcastBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

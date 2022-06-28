@@ -13,12 +13,11 @@ import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.silent.manager.R
 import com.silent.manager.databinding.FragmentCreateCompleteBinding
 import com.silent.manager.features.newpodcast.NewPodcastViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class CompleteFragment : Fragment() {
 
-    private val newPodcastViewModel: NewPodcastViewModel by lazy {
-        ViewModelProvider(requireActivity())[NewPodcastViewModel::class.java]
-    }
+    private val newPodcastViewModel: NewPodcastViewModel by sharedViewModel()
 
     private val completeFragmentBinding by lazy {
         view?.let { FragmentCreateCompleteBinding.bind(it) }
