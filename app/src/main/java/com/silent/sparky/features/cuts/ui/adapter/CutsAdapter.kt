@@ -20,7 +20,7 @@ import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.silent.sparky.R
 import com.silent.sparky.databinding.CutPlayerLayoutBinding
 
-class CutsAdapter(val cuts: ArrayList<Video>) :
+class CutsAdapter(val cuts: ArrayList<Video>,private val moveToNext: () -> Unit) :
     RecyclerView.Adapter<CutsAdapter.CutViewHolder>() {
 
     fun initializeCut(position: Int) {
@@ -53,6 +53,8 @@ class CutsAdapter(val cuts: ArrayList<Video>) :
                             if (state == PlayerConstants.PlayerState.PLAYING && cutThumbnail.isVisible) {
                                 cutThumbnail.fadeOut()
                                 cutPlayer.fadeIn()
+                            } else if (state == PlayerConstants.PlayerState.ENDED) {
+                                moveToNext()
                             }
                         }
                         cutPlayer.initialize(youTubePlayerListener!!)
@@ -60,7 +62,7 @@ class CutsAdapter(val cuts: ArrayList<Video>) :
                         cutPlayer.removeYouTubePlayerListener(youTubePlayerListener!!)
                         youTubePlayerListener = null
                     }
-                    Glide.with(itemView).load(cut.thumbnailUrl).error(cut.podcast?.iconURL).into(cutThumbnail)
+                    Glide.with(itemView).load(cut.thumbnailUrl).placeholder(R.drawable.ic_iconmonstr_connection_1).error(cut.podcast?.iconURL).into(cutThumbnail)
                     cutTitle.fadeIn()
                 } catch (e: Exception) {
                     Log.e(javaClass.simpleName, "\n \nError loading video ${e.message}")

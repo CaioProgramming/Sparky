@@ -155,9 +155,14 @@ class HomeFragment : Fragment() {
                 }
 
                 ViewModelBaseState.LoadCompleteState -> {
-                    homeFragmentBinding.loadingAnimation.fadeOut()
-                    homeFragmentBinding.appBarLayout.fadeIn()
-                    homeFragmentBinding.podcastsResumeRecycler.fadeIn()
+                    homeFragmentBinding.run {
+                        loadingAnimation.fadeOut()
+                        appBarLayout.fadeIn()
+                        podcastsResumeRecycler.fadeIn()
+                        if (podcastsResumeRecycler.childCount == 0) homeViewModel.getHome()
+                    }
+
+
                 }
 
                 ViewModelBaseState.RequireAuth -> {
