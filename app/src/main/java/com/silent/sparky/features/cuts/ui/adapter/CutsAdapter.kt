@@ -6,35 +6,40 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
 import com.ilustris.ui.extensions.setAlpha
-import com.ilustris.ui.extensions.visible
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
 import com.silent.core.videos.Video
+import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.silent.sparky.R
 import com.silent.sparky.databinding.CutPlayerLayoutBinding
 
-class CutsAdapter(val cuts: ArrayList<Video>) :
+class CutsAdapter(val cuts: ArrayList<Video>,private val moveToNext: () -> Unit) :
     RecyclerView.Adapter<CutsAdapter.CutViewHolder>() {
 
     fun initializeCut(position: Int) {
         Log.i(javaClass.simpleName, "initializeCut: updating playing  to $position")
         initializedCut = position
+        delayedFunction(2000) {
+            notifyItemChanged(position)
+        }
     }
 
     var initializedCut: Int? = null
-    private var playerInitialized: Boolean = false
+    var enabled: Boolean = true
 
     inner class CutViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
+        private var youTubePlayerListener: YouTubePlayerListener? = null
         fun bind() {
             CutPlayerLayoutBinding.bind(itemView).run {
                 try {
+                    val playingVideo = bindingAdapterPosition == initializedCut && enabled
                     val cut = cuts[bindingAdapterPosition]
                     cutTitle.text = cut.title
                     cut.podcast?.let {
@@ -43,27 +48,22 @@ class CutsAdapter(val cuts: ArrayList<Video>) :
                         videoProgress.trackColor = highlightColor.setAlpha(0.4f)
                     }
                     cutPlayer.enableBackgroundPlayback(false)
-                    if (!playerInitialized) {
-                        cutPlayer.initialize(
-                            cutPlayerListener(
-                                cut.youtubeID,
-                                videoProgress
-                            ) { state, player ->
-                                if (state == PlayerConstants.PlayerState.VIDEO_CUED) {
-                                    playerInitialized = true
-                                    initializedCut?.let {
-                                        if (bindingAdapterPosition == initializedCut) {
-                                            player.play()
-                                            cutThumbnail.fadeOut()
-                                            cutPlayer.fadeIn()
-                                        }
-                                    }
-                                }
-                            })
+                    if (youTubePlayerListener == null && playingVideo) {
+                        youTubePlayerListener = cutPlayerListener(cut.youtubeID, videoProgress) { state, player ->
+                            if (state == PlayerConstants.PlayerState.PLAYING && cutThumbnail.isVisible) {
+                                cutThumbnail.fadeOut()
+                                cutPlayer.fadeIn()
+                            } else if (state == PlayerConstants.PlayerState.ENDED) {
+                                moveToNext()
+                            }
+                        }
+                        cutPlayer.initialize(youTubePlayerListener!!)
+                    } else {
+                        cutPlayer.removeYouTubePlayerListener(youTubePlayerListener!!)
+                        youTubePlayerListener = null
                     }
-                    Glide.with(itemView).load(cut.thumbnailUrl).error(cut.podcast?.iconURL)
-                        .into(cutThumbnail)
-
+                    Glide.with(itemView).load(cut.thumbnailUrl).placeholder(R.drawable.ic_iconmonstr_connection_1).error(cut.podcast?.iconURL).into(cutThumbnail)
+                    cutTitle.fadeIn()
                 } catch (e: Exception) {
                     Log.e(javaClass.simpleName, "\n \nError loading video ${e.message}")
                     e.printStackTrace()
@@ -107,7 +107,7 @@ class CutsAdapter(val cuts: ArrayList<Video>) :
                 }
 
                 override fun onReady(youTubePlayer: YouTubePlayer) {
-                    youTubePlayer.cueVideo(youtubeId, 0f)
+                    youTubePlayer.loadVideo(youtubeId, 0f)
                 }
 
                 override fun onStateChange(
@@ -123,6 +123,7 @@ class CutsAdapter(val cuts: ArrayList<Video>) :
                 ) {
                     progressBar.isIndeterminate = false
                     progressBar.max = duration.toInt()
+                    progressBar.fadeIn()
                 }
 
                 override fun onVideoId(youTubePlayer: YouTubePlayer, videoId: String) {

@@ -16,11 +16,10 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.ilustris.animations.fadeIn
 import com.ilustris.ui.extensions.gone
-import com.ilustris.ui.extensions.visible
 import com.silent.sparky.R
-import com.silent.sparky.data.PodcastHeader
-import com.silent.sparky.data.programSections
 import com.silent.sparky.databinding.VideoGroupLayoutBinding
+import com.silent.sparky.features.home.data.PodcastHeader
+import com.silent.sparky.features.home.data.programSections
 import com.silent.sparky.features.podcast.adapter.VideosAdapter
 
 class VideoHeaderAdapter(

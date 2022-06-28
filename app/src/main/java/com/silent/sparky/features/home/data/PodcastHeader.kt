@@ -1,4 +1,4 @@
-package com.silent.sparky.data
+package com.silent.sparky.features.home.data
 
 import androidx.recyclerview.widget.RecyclerView
 import com.silent.core.videos.Video

@@ -1,9 +1,10 @@
 package com.silent.sparky.features.cuts.ui.adapter
 
-import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -15,11 +16,15 @@ import com.silent.sparky.databinding.CutPageLayoutBinding
 import com.silent.sparky.features.cuts.data.PodcastCutHeader
 
 class PodcastCutPageAdapter(
-    val cutHeaders: ArrayList<PodcastCutHeader>, private val onSelectPodcast: (Podcast) -> Unit,
-    private val callNextPodcast: () -> Unit,
-    private val callPreviousPodcast: () -> Unit
+    val cutHeaders: ArrayList<PodcastCutHeader>, private val onSelectPodcast: (Podcast) -> Unit
 ) : RecyclerView.Adapter<PodcastCutPageAdapter.CutHeaderHolder>() {
 
+    var enabledPlayer = 0
+
+    fun updateEnabledPlayer(position: Int) {
+        enabledPlayer = position
+        notifyItemChanged(position)
+    }
 
     inner class CutHeaderHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -27,8 +32,6 @@ class PodcastCutPageAdapter(
             val cutHeader = cutHeaders[bindingAdapterPosition]
             CutPageLayoutBinding.bind(itemView).run {
                 val highlightColor = Color.parseColor(cutHeader.podcast.highLightColor)
-                val gestureDetector =
-                    pageGestureDetector(itemView.context, podcastCuts, cutHeader.videos.lastIndex)
                 podcastName.text = cutHeader.podcast.name
                 Glide.with(itemView).load(cutHeader.podcast.iconURL)
                     .error(R.drawable.ic_iconmonstr_connection_1).into(podcastIcon)
@@ -37,17 +40,22 @@ class PodcastCutPageAdapter(
                 podcastIcon.setOnClickListener {
                     onSelectPodcast(cutHeader.podcast)
                 }
-                val cutsAdapter = CutsAdapter(cutHeader.videos)
+                val cutsAdapter = CutsAdapter(cutHeader.videos) {
+                    val currentItem = podcastCuts.currentItem
+                    if (currentItem < cutHeader.videos.lastIndex) {
+                        podcastCuts.setCurrentItem(currentItem + 1, true)
+                    }
+                }
                 podcastCuts.adapter = cutsAdapter
                 cutsProgress.max = cutHeader.videos.lastIndex
                 cutsProgress.setIndicatorColor(highlightColor)
                 cutsProgress.trackColor = highlightColor.setAlpha(0.5f)
                 podcastCuts.registerOnPageChangeCallback(object :
                     ViewPager2.OnPageChangeCallback() {
-
                     override fun onPageSelected(position: Int) {
                         super.onPageSelected(position)
                         cutsProgress.setProgress(position, true)
+                        cutsAdapter.enabled = enabledPlayer == bindingAdapterPosition
                         cutsAdapter.initializeCut(position)
                     }
                 })
@@ -57,29 +65,6 @@ class PodcastCutPageAdapter(
 
         }
 
-        fun pageGestureDetector(context: Context, pager: ViewPager2, count: Int): GestureDetector {
-            return GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-                override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
-                    val width = pager.width
-                    val x = e?.x
-                    val currentPage = pager.currentItem
-                    x?.let {
-                        if (x < (width * 0.5)) {
-                            if (currentPage > 0) {
-                                pager.setCurrentItem(currentPage - 1)
-                            } else {
-                                callPreviousPodcast()
-                            }
-                        } else {
-                            if (currentPage < count) {
-                                pager.setCurrentItem(currentPage + 1, true)
-                            }
-                        }
-                    }
-                    return true
-                }
-            })
-        }
 
     }
 

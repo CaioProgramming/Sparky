@@ -37,6 +37,7 @@
             android:id="@+id/video_progress"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             app:trackColor="@color/transparent"
             android:layout_gravity="bottom"
             android:progressTint="?attr/colorAccent"
@@ -47,6 +48,7 @@
 
         <TextView
             android:id="@+id/cut_title"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

@@ -21,10 +21,10 @@ import com.silent.core.podcast.Host
 import com.silent.core.podcast.Podcast
 import com.silent.core.utils.WebUtils
 import com.silent.sparky.R
-import com.silent.sparky.data.PodcastHeader
 import com.silent.sparky.databinding.FragmentPodcastBinding
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
 import com.silent.sparky.features.home.data.LiveHeader
+import com.silent.sparky.features.home.data.PodcastHeader
 import com.silent.sparky.features.podcast.schedule.PodcastScheduleDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.NumberFormat

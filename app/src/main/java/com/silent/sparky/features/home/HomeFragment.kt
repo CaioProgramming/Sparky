@@ -27,11 +27,11 @@ import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.navigation.ModuleNavigator
 import com.silent.navigation.NavigationUtils
 import com.silent.sparky.R
-import com.silent.sparky.data.PodcastHeader
 import com.silent.sparky.databinding.HomeFragmentBinding
 import com.silent.sparky.features.home.adapter.PodcastsAdapter
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
 import com.silent.sparky.features.home.data.LiveHeader
+import com.silent.sparky.features.home.data.PodcastHeader
 import com.silent.sparky.features.home.viewmodel.HomeState
 import com.silent.sparky.features.home.viewmodel.HomeViewModel
 import com.silent.sparky.features.home.viewmodel.MainActViewModel
@@ -155,9 +155,18 @@ class HomeFragment : Fragment() {
                 }
 
                 ViewModelBaseState.LoadCompleteState -> {
-                    homeFragmentBinding.loadingAnimation.fadeOut()
-                    homeFragmentBinding.appBarLayout.fadeIn()
-                    homeFragmentBinding.podcastsResumeRecycler.fadeIn()
+                    homeFragmentBinding.run {
+                        loadingAnimation.fadeOut()
+                        appBarLayout.fadeIn()
+                        podcastsResumeRecycler.fadeIn()
+                        if (podcastsResumeRecycler.childCount == 0) {
+                            podcastsResumeRecycler.removeAllViews()
+                            videoHeaderAdapter?.clearAdapter()
+                            homeViewModel.getHome()
+                        }
+                    }
+
+
                 }
 
                 ViewModelBaseState.RequireAuth -> {
