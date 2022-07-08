@@ -25,8 +25,6 @@ class PodcastViewModel(
     private val cutService: CutService
 ) : BaseViewModel<Podcast>(application) {
 
-
-
     sealed class PodcastState {
         object PodcastFailedState : PodcastState()
         data class PodcastDataRetrieved(
@@ -54,13 +52,15 @@ class PodcastViewModel(
         playlistId: String,
         videos: List<Video>,
         orientation: Int,
-        highlightColor: String
+        highlightColor: String,
+        subtitle: String
     ) = PodcastHeader(
         title = title,
         playlistId = playlistId,
         videos = ArrayList(videos),
         orientation = orientation,
-        highLightColor = highlightColor
+        highLightColor = highlightColor,
+        subTitle = subtitle
     )
 
     fun getChannelData(podcastID: String) {
@@ -79,7 +79,8 @@ class PodcastViewModel(
                             podcast.uploads,
                             uploads.sortedByDescending { it.publishedAt },
                             if (cuts.isEmpty()) RecyclerView.VERTICAL else RecyclerView.HORIZONTAL,
-                            podcast.highLightColor
+                            podcast.highLightColor,
+                            podcast.name
                         )
                     )
                 }
@@ -91,7 +92,8 @@ class PodcastViewModel(
                             podcast.cuts,
                             cuts.sortedByDescending { it.publishedAt },
                             RecyclerView.VERTICAL,
-                            podcast.highLightColor
+                            podcast.highLightColor,
+                            podcast.name
                         )
                     )
                 }

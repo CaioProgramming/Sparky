@@ -40,7 +40,7 @@ class ManagerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        unloadKoinModules(managerModules)
+        //unloadKoinModules(managerModules)
     }
 
 

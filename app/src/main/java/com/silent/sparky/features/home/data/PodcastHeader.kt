@@ -2,6 +2,7 @@ package com.silent.sparky.features.home.data
 
 import androidx.recyclerview.widget.RecyclerView
 import com.silent.core.videos.Video
+import java.io.Serializable
 
 typealias programSections = ArrayList<PodcastHeader>
 
@@ -15,5 +16,6 @@ data class PodcastHeader(
     val orientation: Int = RecyclerView.VERTICAL,
     val seeMore: Boolean = false,
     val scrollAnimation: Boolean = false,
-    var referenceIndex: Int? = null
-)
+    var referenceIndex: Int? = null,
+    var subTitle: String? = null
+): Serializable

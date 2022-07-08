@@ -32,7 +32,7 @@ class HomeActivity : AuthActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        loadKoinModules(listOf(appModule, homeModule, profileModule, podcastModule, cutsModule))
+        loadKoinModules(listOf(homeModule, profileModule, podcastModule, cutsModule))
         val homeBinding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(homeBinding.root)
         val navView: BottomNavigationView = homeBinding.navView
@@ -50,7 +50,7 @@ class HomeActivity : AuthActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        unloadKoinModules(listOf(appModule, homeModule, profileModule, podcastModule, cutsModule))
+       // unloadKoinModules(listOf(appModule, homeModule, profileModule, podcastModule, cutsModule))
     }
 
     private fun observeViewModel() {

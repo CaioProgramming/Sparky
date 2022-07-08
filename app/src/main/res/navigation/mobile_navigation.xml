@@ -64,6 +64,9 @@
         <action
             android:id="@+id/action_podcastFragment_to_liveFragment"
             app:destination="@id/liveFragment" />
+        <action
+            android:id="@+id/action_podcastFragment_to_playlistFragment"
+            app:destination="@id/playlistFragment" />
     </fragment>
     <fragment
         android:id="@+id/liveFragment"
@@ -135,6 +138,15 @@
         <argument android:name="highlightColor" app:argType="string"/>
         <argument android:name="guestList" app:argType="com.silent.core.podcast.Host[]"/>
         <argument android:name="position" app:argType="integer"/>
+    </fragment>
+    <fragment
+        android:id="@+id/playlistFragment"
+        tools:layout="@layout/fragment_playlist"
+        android:name="com.silent.sparky.features.podcast.playlist.PlaylistFragment"
+        android:label="PlaylistFragment">
+
+        <argument android:name="header" app:argType="com.silent.sparky.features.home.data.PodcastHeader"/>
+
     </fragment>
 
 </navigation>

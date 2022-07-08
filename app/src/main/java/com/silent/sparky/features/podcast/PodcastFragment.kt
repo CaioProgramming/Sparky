@@ -44,8 +44,7 @@ class PodcastFragment : Fragment() {
     }
 
     private fun onSelectHeader(podcastHeader: PodcastHeader) {
-
-        WebUtils(requireContext()).openYoutubePlaylist(podcastHeader.playlistId)
+        findNavController().navigate(R.id.action_podcastFragment_to_playlistFragment, bundleOf("header" to podcastHeader))
     }
 
     override fun onCreateView(

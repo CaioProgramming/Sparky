@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cut_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".features.cuts.ui.CutsFragment">
+
+    <LinearLayout
+        android:id="@+id/title_view"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/kaushan_script"
+            android:gravity="center"
+            android:text="@string/title_cuts"
+            android:id="@+id/title"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/subtitle"
+            tools:text="Flow Podcast"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:alpha="0.5"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/loading"
+            android:layout_margin="@dimen/padding_small_8dp"
+            app:trackThickness="2dp"
+            app:trackCornerRadius="@dimen/radius_small_5dp"
+            app:trackColor="@color/md_grey900"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/videos_recycler"
+        android:visibility="gone"
+        tools:listitem="@layout/video_preview"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/title_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"  />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

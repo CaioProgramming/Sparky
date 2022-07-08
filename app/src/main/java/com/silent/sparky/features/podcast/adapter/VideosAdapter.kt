@@ -62,7 +62,7 @@ class VideosAdapter(
         holder.bind()
     }
 
-    override fun getItemCount(): Int = if (playlistVideos.count() < 20) playlistVideos.count() else 20
+    override fun getItemCount(): Int = playlistVideos.count()
 
 
 }
