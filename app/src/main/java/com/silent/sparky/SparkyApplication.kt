@@ -23,13 +23,14 @@ class SparkyApplication : Application() {
         startKoin {
             androidLogger(Level.ERROR)
             androidContext(applicationContext)
-            modules(appModule, homeModule, profileModule, podcastModule, cutsModule)
+            modules(appModule)
         }
         CaocConfig.Builder.create()
             .backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT)
             .trackActivities(true)
             .errorActivity(ErrorActivity::class.java).apply()
     }
+
 
 
     override fun attachBaseContext(base: Context?) {

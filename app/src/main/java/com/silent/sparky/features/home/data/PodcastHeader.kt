@@ -9,10 +9,11 @@ data class PodcastHeader(
     val title: String,
     val icon: String? = null,
     val highLightColor: String? = null,
-    val videos: List<Video>,
+    val videos: ArrayList<Video>,
     val playlistId: String,
     val channelURL: String? = null,
     val orientation: Int = RecyclerView.VERTICAL,
     val seeMore: Boolean = false,
-    val scrollAnimation: Boolean = false
+    val scrollAnimation: Boolean = false,
+    var referenceIndex: Int? = null
 )
