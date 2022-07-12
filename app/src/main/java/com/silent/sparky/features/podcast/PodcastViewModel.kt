@@ -1,32 +1,29 @@
 package com.silent.sparky.features.podcast
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
-import com.silent.core.instagram.InstagramService
 import com.silent.core.podcast.Host
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastService
 import com.silent.core.videos.CutService
 import com.silent.core.videos.Video
-import com.silent.core.videos.VideoMapper
 import com.silent.core.videos.VideoService
-import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
 import com.silent.sparky.features.home.data.PodcastHeader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
 
 
-class PodcastViewModel(application: Application,
-                       override val service: PodcastService,
-                       private val videoService: VideoService,
-                       private val cutService: CutService
+class PodcastViewModel(
+    application: Application,
+    override val service: PodcastService,
+    private val videoService: VideoService,
+    private val cutService: CutService
 ) : BaseViewModel<Podcast>(application) {
-
 
     sealed class PodcastState {
         object PodcastFailedState : PodcastState()
@@ -35,6 +32,8 @@ class PodcastViewModel(application: Application,
             val headers: ArrayList<PodcastHeader>
         ) : PodcastState()
 
+        data class UpdateHeader(val position: Int, val videos: List<Video>, val lastIndex: Int) :
+            PodcastState()
     }
 
     sealed class ScheduleState {
@@ -53,13 +52,15 @@ class PodcastViewModel(application: Application,
         playlistId: String,
         videos: List<Video>,
         orientation: Int,
-        highlightColor: String
+        highlightColor: String,
+        subtitle: String
     ) = PodcastHeader(
         title = title,
         playlistId = playlistId,
-        videos = videos,
+        videos = ArrayList(videos),
         orientation = orientation,
-        highLightColor = highlightColor
+        highLightColor = highlightColor,
+        subTitle = subtitle
     )
 
     fun getChannelData(podcastID: String) {
@@ -74,11 +75,12 @@ class PodcastViewModel(application: Application,
                     uploads.map { it.podcast = podcast }
                     headers.add(
                         getHeader(
-                            "Últimos episódios",
+                            "Episódios",
                             podcast.uploads,
                             uploads.sortedByDescending { it.publishedAt },
                             if (cuts.isEmpty()) RecyclerView.VERTICAL else RecyclerView.HORIZONTAL,
-                            podcast.highLightColor
+                            podcast.highLightColor,
+                            podcast.name
                         )
                     )
                 }
@@ -90,7 +92,8 @@ class PodcastViewModel(application: Application,
                             podcast.cuts,
                             cuts.sortedByDescending { it.publishedAt },
                             RecyclerView.VERTICAL,
-                            podcast.highLightColor
+                            podcast.highLightColor,
+                            podcast.name
                         )
                     )
                 }

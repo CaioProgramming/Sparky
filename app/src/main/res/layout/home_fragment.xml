@@ -50,6 +50,7 @@
                 app:layout_collapseMode="pin">
 
                 <com.airbnb.lottie.LottieAnimationView
+                    android:layout_marginHorizontal="@dimen/padding_default_16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -59,7 +60,6 @@
                     android:layout_gravity="start"
                     app:lottie_autoPlay="true"
                     app:lottie_colorFilter="?attr/colorPrimaryDark"
-                    app:lottie_loop="true"
                     app:lottie_rawRes="@raw/lightning" />
 
                 <TextView

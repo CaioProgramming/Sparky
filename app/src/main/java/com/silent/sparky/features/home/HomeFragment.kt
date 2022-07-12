@@ -59,7 +59,6 @@ class HomeFragment : Fragment() {
     ): View {
         setHasOptionsMenu(true)
         setMenuVisibility(false)
-        observeViewModel()
         homeFragmentBinding = HomeFragmentBinding.inflate(inflater)
         return homeFragmentBinding.root
     }
@@ -70,6 +69,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun openPodcast(id: String) {
+        clearFragment()
         val bundle = bundleOf("podcast_id" to id)
         findNavController().navigate(R.id.action_navigation_home_to_podcastFragment, bundle)
     }
@@ -80,6 +80,12 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        observeViewModel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupView()
         homeViewModel.getHome()
     }
 

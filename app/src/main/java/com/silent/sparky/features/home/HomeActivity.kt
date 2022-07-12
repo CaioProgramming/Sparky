@@ -16,15 +16,23 @@ import com.ilustris.ui.extensions.getView
 import com.ilustris.ui.extensions.showSnackBar
 import com.silent.sparky.R
 import com.silent.sparky.databinding.ActivityHomeBinding
+import com.silent.sparky.di.appModule
+import com.silent.sparky.features.cuts.di.cutsModule
+import com.silent.sparky.features.home.di.homeModule
 import com.silent.sparky.features.home.viewmodel.MainActViewModel
+import com.silent.sparky.features.podcast.di.podcastModule
+import com.silent.sparky.features.profile.di.profileModule
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.context.loadKoinModules
+import org.koin.core.context.unloadKoinModules
 
 class HomeActivity : AuthActivity() {
 
-    private val mainActViewModel :MainActViewModel by viewModel()
+    private val mainActViewModel : MainActViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        loadKoinModules(listOf(homeModule, profileModule, podcastModule, cutsModule))
         val homeBinding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(homeBinding.root)
         val navView: BottomNavigationView = homeBinding.navView
@@ -38,6 +46,11 @@ class HomeActivity : AuthActivity() {
         )*/
         observeViewModel()
         navView.setupWithNavController(navController)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+       // unloadKoinModules(listOf(appModule, homeModule, profileModule, podcastModule, cutsModule))
     }
 
     private fun observeViewModel() {

@@ -12,6 +12,7 @@ import com.silent.sparky.features.podcast.di.podcastModule
 import com.silent.sparky.features.profile.di.profileModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 
@@ -23,13 +24,15 @@ class SparkyApplication : Application() {
         startKoin {
             androidLogger(Level.ERROR)
             androidContext(applicationContext)
-            modules(appModule, homeModule, profileModule, podcastModule, cutsModule)
+            modules(appModule)
+
         }
         CaocConfig.Builder.create()
             .backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT)
             .trackActivities(true)
             .errorActivity(ErrorActivity::class.java).apply()
     }
+
 
 
     override fun attachBaseContext(base: Context?) {

@@ -20,6 +20,7 @@ import com.silent.core.component.HostGroupAdapter
 import com.silent.core.podcast.Host
 import com.silent.core.podcast.Podcast
 import com.silent.core.utils.WebUtils
+import com.silent.core.videos.Video
 import com.silent.sparky.R
 import com.silent.sparky.databinding.FragmentPodcastBinding
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
@@ -36,13 +37,14 @@ class PodcastFragment : Fragment() {
     private val channelSectionsAdapter = VideoHeaderAdapter(ArrayList(), ::onSelectHeader)
     private var program: Podcast? = null
 
+
     override fun onDestroy() {
         super.onDestroy()
         podcastFragmentBinding = null
     }
 
     private fun onSelectHeader(podcastHeader: PodcastHeader) {
-        WebUtils(requireContext()).openYoutubePlaylist(podcastHeader.playlistId)
+        findNavController().navigate(R.id.action_podcastFragment_to_playlistFragment, bundleOf("header" to podcastHeader))
     }
 
     override fun onCreateView(
@@ -160,6 +162,9 @@ class PodcastFragment : Fragment() {
                 PodcastViewModel.PodcastState.PodcastFailedState -> {
                     requireView().showSnackBar("Ocorreu um erro ao obter os vídeos")
                     podcastFragmentBinding?.loading?.fadeOut()
+                }
+                is PodcastViewModel.PodcastState.UpdateHeader -> {
+                    channelSectionsAdapter.updateSection(it.position, ArrayList (it.videos), it.lastIndex)
                 }
             }
         }
