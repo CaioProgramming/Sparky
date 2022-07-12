@@ -35,8 +35,8 @@ class PlaylistFragment: Fragment() {
     }
 
     private fun FragmentPlaylistBinding.setupHeader(header: PodcastHeader) {
-        title.text = header.title
-        subtitle.text = header.subTitle
+        title.text = header.subTitle
+        subtitle.text =  "${header.title} - ${header.videos.size} resultados"
         loading.setIndicatorColor(Color.parseColor(header.highLightColor))
         videosRecycler.adapter = VideosAdapter(header.videos, header.highLightColor)
         loading.setProgress(100, true)

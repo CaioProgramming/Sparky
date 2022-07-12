@@ -39,11 +39,6 @@ class VideoHeaderAdapter(
                 val maxLimit = if (section.videos.size > 20) 20 else section.videos.size
                 videosRecycler.adapter = VideosAdapter(section.videos.subList(0, maxLimit), section.highLightColor)
                 videosRecycler.layoutManager = layoutManager
-                if (section.scrollAnimation) {
-                    videosRecycler.smoothScrollBy(100, 100, {
-                        50f
-                    }, 1000)
-                }
                 section.referenceIndex?.let {
                     videosRecycler.scrollToPosition(it)
                     section.referenceIndex = null

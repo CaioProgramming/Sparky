@@ -15,7 +15,6 @@ data class PodcastHeader(
     val channelURL: String? = null,
     val orientation: Int = RecyclerView.VERTICAL,
     val seeMore: Boolean = false,
-    val scrollAnimation: Boolean = false,
     var referenceIndex: Int? = null,
     var subTitle: String? = null
 ): Serializable

@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/kaushan_script"
             android:gravity="center"
-            android:text="@string/title_cuts"
+            android:text="@string/app_name"
             android:id="@+id/title"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
@@ -29,9 +29,10 @@
 
         <TextView
             android:id="@+id/subtitle"
-            tools:text="Flow Podcast"
+            tools:text="150 resultados"
             android:textAlignment="center"
             android:gravity="center"
+            android:paddingVertical="@dimen/padding_small_8dp"
             android:alpha="0.5"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
             android:layout_width="match_parent"
@@ -39,7 +40,7 @@
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/loading"
-            android:layout_margin="@dimen/padding_small_8dp"
+            android:layout_marginHorizontal="@dimen/padding_small_8dp"
             app:trackThickness="2dp"
             app:trackCornerRadius="@dimen/radius_small_5dp"
             app:trackColor="@color/md_grey900"

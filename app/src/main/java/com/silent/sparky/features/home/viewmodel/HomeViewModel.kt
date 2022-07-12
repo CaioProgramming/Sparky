@@ -160,7 +160,7 @@ class HomeViewModel(
             channelURL = podcast.youtubeID,
             videos = ArrayList(uploads),
             playlistId = playlistID,
-            orientation = RecyclerView.HORIZONTAL
+            orientation = RecyclerView.HORIZONTAL,
         )
 
     }
