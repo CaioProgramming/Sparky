@@ -101,7 +101,7 @@ class PodcastsManagerFragment : Fragment() {
                     updateDialog?.dialog?.dismiss()
                 }
                 is ManagerViewModel.ManagerState.UpdateError -> {
-                    updateDialog?.dialog?.dismiss()
+                    //updateDialog?.dialog?.dismiss()
                     showSnackBar("Ocorreu um erro ao atualizar os podcasts")
                 }
                 is ManagerViewModel.ManagerState.UpdatingPodcasts -> {
