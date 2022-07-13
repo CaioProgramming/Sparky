@@ -94,7 +94,6 @@
                 android:layout_gravity="top"
                 android:background="?android:colorBackground"
                 app:layout_collapseMode="pin"
-                app:menu="@menu/program_menu"
                 app:title=" " />
 
             <TextView
@@ -107,6 +106,16 @@
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                 app:layout_collapseMode="pin" />
+
+            <CheckBox
+                app:layout_collapseMode="pin"
+                android:id="@+id/favorite_podcast"
+                android:layout_margin="@dimen/margin_default_10dp"
+                android:button="@color/transparent"
+                android:layout_gravity="end"
+                android:background="@drawable/favoritecheck"
+                android:layout_width="24dp"
+                android:layout_height="24dp"/>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

@@ -30,10 +30,11 @@ class HomeViewModel(
     private val videoService: VideoService,
     private val youtubeService: YoutubeService,
     private val usersService: UsersService,
-    private val videoMapper: VideoMapper
+    private val videoMapper: VideoMapper,
+    private val preferencesService: PreferencesService
 ) : BaseViewModel<Podcast>(application) {
 
-    private val preferencesService = PreferencesService(application)
+
     val homeState = MutableLiveData<HomeState>()
 
 

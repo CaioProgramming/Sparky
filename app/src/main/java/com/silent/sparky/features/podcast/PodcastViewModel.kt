@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.silent.core.podcast.Host
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastService
+import com.silent.core.preferences.PreferencesService
+import com.silent.core.utils.PODCASTS_PREFERENCES
 import com.silent.core.videos.CutService
 import com.silent.core.videos.Video
 import com.silent.core.videos.VideoService
@@ -17,25 +19,26 @@ import com.silent.sparky.features.home.data.PodcastHeader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class PodcastViewModel(
     application: Application,
     override val service: PodcastService,
     private val videoService: VideoService,
-    private val cutService: CutService
+    private val cutService: CutService,
+    private val preferencesService: PreferencesService
 ) : BaseViewModel<Podcast>(application) {
 
     sealed class PodcastState {
         object PodcastFailedState : PodcastState()
         data class PodcastDataRetrieved(
             val podcast: Podcast,
-            val headers: ArrayList<PodcastHeader>
+            val headers: ArrayList<PodcastHeader>,
+            val isFavorite: Boolean
         ) : PodcastState()
-
-        data class UpdateHeader(val position: Int, val videos: List<Video>, val lastIndex: Int) :
-            PodcastState()
-
+        data class UpdateHeader(val position: Int, val videos: List<Video>, val lastIndex: Int) : PodcastState()
+        data class UpdateFavorite(val isFavorite: Boolean) : PodcastState()
     }
 
     sealed class ScheduleState {
@@ -64,6 +67,25 @@ class PodcastViewModel(
         highLightColor = highlightColor,
         subTitle = subtitle
     )
+
+    fun favoritePodcast(podcastID: String, isFavorite: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val userPodcasts = ArrayList<String>()
+            val preferedPodcasts = preferencesService.getStringSetValue(PODCASTS_PREFERENCES)
+            preferedPodcasts?.forEach {
+                userPodcasts.add(it)
+            }
+
+            if (isFavorite) {
+                userPodcasts.remove(podcastID)
+            } else {
+                userPodcasts.add(podcastID)
+            }
+
+            preferencesService.editPreference(PODCASTS_PREFERENCES, userPodcasts.toSet())
+            channelState.postValue(PodcastState.UpdateFavorite(isFavorite))
+        }
+    }
 
     fun getChannelData(podcastID: String) {
         clearState()
@@ -102,10 +124,13 @@ class PodcastViewModel(
                 }
                 val sortedGuests = podcast.weeklyGuests.sortedBy { it.comingDate }
                 podcast.weeklyGuests = ArrayList(sortedGuests)
+                val preferencesPodcasts = preferencesService.getStringSetValue(PODCASTS_PREFERENCES)
+
                 channelState.postValue(
                     PodcastState.PodcastDataRetrieved(
                         podcast,
-                        headers
+                        headers,
+                        preferencesPodcasts?.contains(podcastID) == true
                     )
                 )
             } catch (e: Exception) {
