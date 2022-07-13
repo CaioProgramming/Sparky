@@ -41,7 +41,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
 
-    lateinit var homeFragmentBinding: HomeFragmentBinding
+   var homeFragmentBinding: HomeFragmentBinding? = null
     private val homeViewModel: HomeViewModel by viewModel()
     private val mainActViewModel by sharedViewModel<MainActViewModel>()
     private var videoHeaderAdapter: VideoHeaderAdapter? = VideoHeaderAdapter(
@@ -56,20 +56,20 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         setHasOptionsMenu(true)
         setMenuVisibility(false)
         homeFragmentBinding = HomeFragmentBinding.inflate(inflater)
-        return homeFragmentBinding.root
+        return homeFragmentBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupView()
+        observeViewModel()
     }
 
     private fun openPodcast(id: String) {
-        clearFragment()
         val bundle = bundleOf("podcast_id" to id)
         findNavController().navigate(R.id.action_navigation_home_to_podcastFragment, bundle)
     }
@@ -80,23 +80,39 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        observeViewModel()
+        homeViewModel.getHome()
     }
 
     override fun onResume() {
         super.onResume()
         setupView()
-        homeViewModel.getHome()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        clearFragment()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        clearFragment()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        clearFragment()
+    }
+
 
     private fun clearFragment() {
         homeViewModel.viewModelState.removeObservers(this)
         homeViewModel.homeState.removeObservers(this)
         videoHeaderAdapter?.clearAdapter()
+        homeFragmentBinding = null
     }
 
     private fun setupView() {
-        homeFragmentBinding.run {
+        homeFragmentBinding?.run {
             videoHeaderAdapter?.clearAdapter()
             podcastsResumeRecycler.adapter = videoHeaderAdapter
             (requireActivity() as AppCompatActivity?)?.run {
@@ -142,7 +158,7 @@ class HomeFragment : Fragment() {
                 }
                 HomeState.ValidManager -> {
                     setMenuVisibility(true)
-                    homeFragmentBinding.homeAnimation.setOnClickListener {
+                    homeFragmentBinding?.homeAnimation?.setOnClickListener {
                         goToManager()
                     }
                 }
@@ -156,12 +172,12 @@ class HomeFragment : Fragment() {
         homeViewModel.viewModelState.observe(viewLifecycleOwner) {
             when (it) {
                 ViewModelBaseState.LoadingState -> {
-                    homeFragmentBinding.homeAnimation.fadeIn()
-                    homeFragmentBinding.livesRecyclerView.gone()
+                    homeFragmentBinding?.homeAnimation?.fadeIn()
+                    homeFragmentBinding?.livesRecyclerView?.gone()
                 }
 
                 ViewModelBaseState.LoadCompleteState -> {
-                    homeFragmentBinding.run {
+                    homeFragmentBinding?.run {
                         loadingAnimation.fadeOut()
                         appBarLayout.fadeIn()
                         podcastsResumeRecycler.fadeIn()
@@ -179,7 +195,7 @@ class HomeFragment : Fragment() {
                     login()
                 }
                 is ViewModelBaseState.DataListRetrievedState -> {
-                    homeFragmentBinding.podcastsResumeRecycler.run {
+                    homeFragmentBinding?.podcastsResumeRecycler?.run {
                         adapter =
                             PodcastsAdapter((it.dataList as podcasts).sortedByDescending { p -> p.subscribe }) { podcast, index ->
                                 WebUtils(requireContext()).openYoutubeChannel(podcast.youtubeID)
@@ -222,7 +238,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupLive(livePodcasts: ArrayList<Podcast>) {
-        homeFragmentBinding.livesRecyclerView.run {
+        homeFragmentBinding?.livesRecyclerView?.run {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
             adapter = PodcastsAdapter(livePodcasts, true) { podcast, i ->
                 podcast.liveVideo?.let { live ->

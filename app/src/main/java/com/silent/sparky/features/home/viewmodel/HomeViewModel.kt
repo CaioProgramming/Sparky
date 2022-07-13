@@ -38,10 +38,6 @@ class HomeViewModel(
 
 
     fun getHome() {
-        if (homeState.value == HomeState.HomeFetched) {
-            Log.i(javaClass.simpleName, "getHome: data already fetched")
-            //return
-        }
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val podcastFilter = ArrayList<String>()
@@ -100,7 +96,6 @@ class HomeViewModel(
             }
         }
     }
-
 
     private fun checkLives(podcasts: List<Podcast>) {
         try {
