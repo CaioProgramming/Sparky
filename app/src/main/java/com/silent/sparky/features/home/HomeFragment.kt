@@ -41,7 +41,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
 
-   var homeFragmentBinding: HomeFragmentBinding? = null
+    var homeFragmentBinding: HomeFragmentBinding? = null
     private val homeViewModel: HomeViewModel by viewModel()
     private val mainActViewModel by sharedViewModel<MainActViewModel>()
     private var videoHeaderAdapter: VideoHeaderAdapter? = VideoHeaderAdapter(
@@ -113,7 +113,6 @@ class HomeFragment : Fragment() {
 
     private fun setupView() {
         homeFragmentBinding?.run {
-            videoHeaderAdapter?.clearAdapter()
             podcastsResumeRecycler.adapter = videoHeaderAdapter
             (requireActivity() as AppCompatActivity?)?.run {
                 setSupportActionBar(homeToolbar)
@@ -205,7 +204,10 @@ class HomeFragment : Fragment() {
                     }
                 }
                 is ViewModelBaseState.ErrorState -> {
-                    view?.showSnackBar("Ocorreu um erro inesperado(${it.dataException.code.message}", backColor = ContextCompat.getColor(requireContext(), ERROR_COLOR))
+                    view?.showSnackBar(
+                        "Ocorreu um erro inesperado(${it.dataException.code.message}",
+                        backColor = ContextCompat.getColor(requireContext(), ERROR_COLOR)
+                    )
                     if (it.dataException.code == ErrorType.AUTH) {
                         mainActViewModel.updateState(MainActViewModel.MainActState.RequireLoginState)
                     }
@@ -225,7 +227,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun handleResultCode(resultCode : Int) {
+    private fun handleResultCode(resultCode: Int) {
         if (resultCode != Activity.RESULT_OK) {
             login()
         } else {
@@ -233,8 +235,8 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setupHome(podcastHeader: ArrayList<PodcastHeader>) {
-        videoHeaderAdapter?.addSections(podcastHeader)
+    private fun setupHome(headers: ArrayList<PodcastHeader>) {
+        homeFragmentBinding?.podcastsResumeRecycler?.adapter = VideoHeaderAdapter(headers, { openPodcast(it.playlistId) }, ::openChannel)
     }
 
     private fun setupLive(livePodcasts: ArrayList<Podcast>) {
