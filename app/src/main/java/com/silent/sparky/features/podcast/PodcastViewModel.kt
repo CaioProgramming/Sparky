@@ -12,6 +12,7 @@ import com.silent.core.videos.CutService
 import com.silent.core.videos.Video
 import com.silent.core.videos.VideoService
 import com.silent.ilustriscore.core.model.BaseViewModel
+import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.sparky.features.home.data.PodcastHeader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,6 +35,7 @@ class PodcastViewModel(
 
         data class UpdateHeader(val position: Int, val videos: List<Video>, val lastIndex: Int) :
             PodcastState()
+
     }
 
     sealed class ScheduleState {
@@ -64,6 +66,7 @@ class PodcastViewModel(
     )
 
     fun getChannelData(podcastID: String) {
+        clearState()
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val headers = ArrayList<PodcastHeader>()
@@ -127,6 +130,12 @@ class PodcastViewModel(
                 )
             }
         }
+    }
+
+    fun clearState() {
+        channelState.value = null
+        viewModelState.value = null
+        scheduleState.value = null
     }
 
 }

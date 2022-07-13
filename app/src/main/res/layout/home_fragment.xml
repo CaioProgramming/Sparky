@@ -59,6 +59,8 @@
                     android:layout_height="?attr/actionBarSize"
                     android:layout_gravity="start"
                     app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_repeatMode="restart"
                     app:lottie_colorFilter="?attr/colorPrimaryDark"
                     app:lottie_rawRes="@raw/lightning" />
 
