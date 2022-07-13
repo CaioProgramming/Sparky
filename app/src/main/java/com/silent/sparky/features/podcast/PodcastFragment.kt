@@ -1,6 +1,7 @@
 package com.silent.sparky.features.podcast
 
 import android.animation.ValueAnimator
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -98,7 +99,7 @@ class PodcastFragment : Fragment() {
 
     }
 
-    private fun setupPodcast(podcast: Podcast, headers: ArrayList<PodcastHeader>) {
+    private fun setupPodcast(podcast: Podcast, headers: ArrayList<PodcastHeader>, isFavorite: Boolean) {
         program = podcast
         podcastFragmentBinding?.run {
             loading.popOut()
@@ -161,6 +162,11 @@ class PodcastFragment : Fragment() {
                 programViewModel.checkSchedule(podcast)
             }
             channelVideos.adapter = VideoHeaderAdapter(headers, ::onSelectHeader)
+            favoritePodcast.backgroundTintList = ColorStateList.valueOf(Color.parseColor(podcast.highLightColor))
+            favoritePodcast.isChecked = isFavorite
+            favoritePodcast.setOnCheckedChangeListener { buttonView, isChecked ->
+                programViewModel.favoritePodcast(podcast.id, isChecked)
+            }
         }
     }
 
@@ -180,7 +186,7 @@ class PodcastFragment : Fragment() {
         programViewModel.channelState.observe(viewLifecycleOwner) {
             when (it) {
                 is PodcastViewModel.PodcastState.PodcastDataRetrieved -> {
-                    setupPodcast(it.podcast, it.headers)
+                    setupPodcast(it.podcast, it.headers, it.isFavorite)
                 }
                 PodcastViewModel.PodcastState.PodcastFailedState -> {
                     requireView().showSnackBar("Ocorreu um erro ao obter os vídeos")
