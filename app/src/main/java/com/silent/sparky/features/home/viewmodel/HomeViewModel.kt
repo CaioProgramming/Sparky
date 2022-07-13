@@ -20,6 +20,7 @@ import com.silent.ilustriscore.core.model.BaseViewModel
 import com.silent.ilustriscore.core.model.DataException
 import com.silent.ilustriscore.core.model.ServiceResult
 import com.silent.ilustriscore.core.model.ViewModelBaseState
+import com.silent.sparky.features.home.data.HeaderType
 import com.silent.sparky.features.home.data.PodcastHeader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,11 +54,7 @@ class HomeViewModel(
                 val sortedPodcasts = filteredPodcasts.sortedByDescending { it.subscribe }
                 val homeHeaders = ArrayList<PodcastHeader>()
                 sortedPodcasts.forEachIndexed { index, podcast ->
-                    val uploadsData = videoService.query(
-                        podcast.id,
-                        "podcastId"
-                    )
-
+                    val uploadsData = videoService.query(podcast.id, "podcastId")
                     when (uploadsData) {
                         is ServiceResult.Error -> {
                             Log.e(
@@ -77,8 +74,9 @@ class HomeViewModel(
                             )
                         }
                     }
-
                     if (index == filteredPodcasts.lastIndex) {
+                        val remainingPodcasts = podcasts.filter { !podcastFilter.contains(it.id) }
+                        homeHeaders.add(PodcastHeader("Veja mais podcasts", type = HeaderType.PODCASTS, podcasts = remainingPodcasts, orientation = RecyclerView.HORIZONTAL))
                         homeState.postValue(HomeState.HomeChannelsRetrieved(homeHeaders))
                     }
                 }
@@ -90,7 +88,6 @@ class HomeViewModel(
                         checkManager(it.uid)
                     }
                 }
-                updateViewState(ViewModelBaseState.LoadCompleteState)
             } catch (e: Exception) {
                 e.printStackTrace()
                 //homeState.postValue(HomeState.HomeError)
@@ -157,6 +154,7 @@ class HomeViewModel(
             videos = ArrayList(uploads),
             playlistId = playlistID,
             orientation = RecyclerView.HORIZONTAL,
+            seeMore = true
         )
 
     }

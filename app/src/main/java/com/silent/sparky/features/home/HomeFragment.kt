@@ -44,13 +44,6 @@ class HomeFragment : Fragment() {
     var homeFragmentBinding: HomeFragmentBinding? = null
     private val homeViewModel: HomeViewModel by viewModel()
     private val mainActViewModel by sharedViewModel<MainActViewModel>()
-    private var videoHeaderAdapter: VideoHeaderAdapter? = VideoHeaderAdapter(
-        ArrayList(),
-        {
-            openPodcast(it.playlistId)
-        },
-        ::openChannel
-    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -107,13 +100,11 @@ class HomeFragment : Fragment() {
     private fun clearFragment() {
         homeViewModel.viewModelState.removeObservers(this)
         homeViewModel.homeState.removeObservers(this)
-        videoHeaderAdapter?.clearAdapter()
         homeFragmentBinding = null
     }
 
     private fun setupView() {
         homeFragmentBinding?.run {
-            podcastsResumeRecycler.adapter = videoHeaderAdapter
             (requireActivity() as AppCompatActivity?)?.run {
                 setSupportActionBar(homeToolbar)
                 supportActionBar?.title = ""
@@ -182,7 +173,6 @@ class HomeFragment : Fragment() {
                         podcastsResumeRecycler.fadeIn()
                         if (podcastsResumeRecycler.childCount == 0) {
                             podcastsResumeRecycler.removeAllViews()
-                            videoHeaderAdapter?.clearAdapter()
                             homeViewModel.getHome()
                         }
                     }
@@ -236,7 +226,20 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupHome(headers: ArrayList<PodcastHeader>) {
-        homeFragmentBinding?.podcastsResumeRecycler?.adapter = VideoHeaderAdapter(headers, { openPodcast(it.playlistId) }, ::openChannel)
+        homeFragmentBinding?.run {
+            loadingAnimation.fadeOut()
+            appBarLayout.fadeIn()
+            podcastsResumeRecycler.fadeIn()
+            if (podcastsResumeRecycler.childCount == 0) {
+                podcastsResumeRecycler.removeAllViews()
+                homeViewModel.getHome()
+            }
+            podcastsResumeRecycler?.adapter = VideoHeaderAdapter(headers, headerSelected =  { header ->
+                header.playlistId?.let { id -> openPodcast(id) }
+            }, ::openChannel, selectPodcast = {
+                openPodcast(it.id)
+            })
+        }
     }
 
     private fun setupLive(livePodcasts: ArrayList<Podcast>) {
