@@ -13,6 +13,7 @@ import com.silent.core.preferences.PreferencesService
 import com.silent.core.users.User
 import com.silent.core.users.UsersService
 import com.silent.core.utils.PODCASTS_PREFERENCES
+import com.silent.core.utils.TOKEN_PREFERENCES
 import com.silent.core.videos.Video
 import com.silent.core.videos.VideoMapper
 import com.silent.core.videos.VideoService
@@ -96,6 +97,7 @@ class HomeViewModel(
                     service.currentUser()?.let {
                         checkManager(it.uid)
                     }
+                    checkToken()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -148,6 +150,15 @@ class HomeViewModel(
         } catch (e: Exception) {
             e.printStackTrace()
             homeState.postValue(HomeState.InvalidManager)
+        }
+    }
+
+    private fun checkToken() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val tokenPref = preferencesService.getStringValue(TOKEN_PREFERENCES)
+            if (tokenPref == null) {
+                homeState.postValue(HomeState.NoTokenFound)
+            }
         }
     }
 
