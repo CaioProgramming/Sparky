@@ -65,7 +65,8 @@ class PodcastViewModel(
         videos = ArrayList(videos),
         orientation = orientation,
         highLightColor = highlightColor,
-        subTitle = subtitle
+        subTitle = subtitle,
+        seeMore = true
     )
 
     fun favoritePodcast(podcastID: String, isFavorite: Boolean) {
@@ -118,7 +119,7 @@ class PodcastViewModel(
                             cuts.sortedByDescending { it.publishedAt },
                             RecyclerView.VERTICAL,
                             podcast.highLightColor,
-                            podcast.name
+                            podcast.name,
                         )
                     )
                 }

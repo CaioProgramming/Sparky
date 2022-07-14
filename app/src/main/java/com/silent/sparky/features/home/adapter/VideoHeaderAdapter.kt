@@ -16,9 +16,12 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.ilustris.animations.fadeIn
 import com.ilustris.ui.extensions.gone
-import com.silent.core.videos.Video
+import com.ilustris.ui.extensions.visible
+import com.silent.core.component.PodcastAdapter
+import com.silent.core.podcast.Podcast
 import com.silent.sparky.R
 import com.silent.sparky.databinding.VideoGroupLayoutBinding
+import com.silent.sparky.features.home.data.HeaderType
 import com.silent.sparky.features.home.data.PodcastHeader
 import com.silent.sparky.features.home.data.programSections
 import com.silent.sparky.features.podcast.adapter.VideosAdapter
@@ -26,7 +29,8 @@ import com.silent.sparky.features.podcast.adapter.VideosAdapter
 class VideoHeaderAdapter(
     val programSections: programSections,
     val headerSelected: (PodcastHeader) -> Unit,
-    val iconClick: ((String) -> Unit)? = null
+    val iconClick: ((String) -> Unit)? = null,
+    val selectPodcast: ((Podcast) -> Unit)? = null
 ) : RecyclerView.Adapter<VideoHeaderAdapter.HeaderViewHolder>() {
 
     inner class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -35,13 +39,21 @@ class VideoHeaderAdapter(
             VideoGroupLayoutBinding.bind(itemView).run {
                 val section = programSections[bindingAdapterPosition]
                 setupHeader(section)
-                val layoutManager = LinearLayoutManager(itemView.context, section.orientation, false)
-                val maxLimit = if (section.videos.size > 20) 20 else section.videos.size
-                videosRecycler.adapter = VideosAdapter(section.videos.subList(0, maxLimit), section.highLightColor)
-                videosRecycler.layoutManager = layoutManager
-                section.referenceIndex?.let {
-                    videosRecycler.scrollToPosition(it)
-                    section.referenceIndex = null
+                if (section.type == HeaderType.VIDEOS) {
+                    val layoutManager =
+                        LinearLayoutManager(itemView.context, section.orientation, false)
+                    val maxLimit = if (section.videos!!.size > 20) 20 else section.videos.size
+                    videosRecycler.adapter = VideosAdapter(section.videos.subList(0, maxLimit), section.highLightColor)
+                    videosRecycler.layoutManager = layoutManager
+                    section.referenceIndex?.let {
+                        videosRecycler.scrollToPosition(it)
+                        section.referenceIndex = null
+                    }
+                } else {
+                    videosRecycler.layoutManager = LinearLayoutManager(itemView.context, section.orientation, false)
+                    videosRecycler.adapter =  PodcastAdapter(ArrayList(section.podcasts!!)) {
+                        selectPodcast?.invoke(it)
+                    }
                 }
             }
         }
@@ -64,6 +76,14 @@ class VideoHeaderAdapter(
                     headerSelected(section)
                 }
             }
+            section.icon?.let {
+                if (!programIcon.isVisible) {
+                    programIcon.fadeIn()
+                }
+            } ?: run {
+                programIcon.gone()
+            }
+            if (section.seeMore) seeMoreButton.visible() else seeMoreButton.gone()
             Glide.with(itemView.context)
                 .load(section.icon)
                 .listener(object : RequestListener<Drawable> {
@@ -89,13 +109,6 @@ class VideoHeaderAdapter(
                     }
                 })
                 .into(programIcon)
-            section.icon?.let {
-                if (!programIcon.isVisible) {
-                    programIcon.fadeIn()
-                }
-            } ?: run {
-                programIcon.gone()
-            }
         }
 
     }
@@ -111,18 +124,6 @@ class VideoHeaderAdapter(
     }
 
     override fun getItemCount() = programSections.size
-
-    fun updateSection(position: Int, videos: ArrayList<Video>, index: Int) {
-        val header = programSections[position]
-        header.videos.addAll(videos)
-        header.referenceIndex = index
-        notifyItemChanged(position, header)
-    }
-
-    fun addSections(headers: ArrayList<PodcastHeader>) {
-        programSections.addAll(headers)
-        notifyItemRangeChanged(0, programSections.size)
-    }
 
     fun clearAdapter() {
         programSections.clear()

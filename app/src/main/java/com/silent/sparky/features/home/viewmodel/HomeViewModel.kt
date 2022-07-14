@@ -2,6 +2,7 @@ package com.silent.sparky.features.home.viewmodel
 
 import android.app.Application
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
@@ -19,20 +20,21 @@ import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
 import com.silent.ilustriscore.core.model.DataException
 import com.silent.ilustriscore.core.model.ServiceResult
-import com.silent.ilustriscore.core.model.ViewModelBaseState
+import com.silent.sparky.R
+import com.silent.sparky.features.home.data.HeaderType
 import com.silent.sparky.features.home.data.PodcastHeader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    application: Application,
+    private val myApplication: Application,
     override val service: PodcastService,
     private val videoService: VideoService,
     private val youtubeService: YoutubeService,
     private val usersService: UsersService,
     private val videoMapper: VideoMapper,
     private val preferencesService: PreferencesService
-) : BaseViewModel<Podcast>(application) {
+) : BaseViewModel<Podcast>(myApplication) {
 
 
     val homeState = MutableLiveData<HomeState>()
@@ -53,11 +55,7 @@ class HomeViewModel(
                 val sortedPodcasts = filteredPodcasts.sortedByDescending { it.subscribe }
                 val homeHeaders = ArrayList<PodcastHeader>()
                 sortedPodcasts.forEachIndexed { index, podcast ->
-                    val uploadsData = videoService.query(
-                        podcast.id,
-                        "podcastId"
-                    )
-
+                    val uploadsData = videoService.query(podcast.id, "podcastId")
                     when (uploadsData) {
                         is ServiceResult.Error -> {
                             Log.e(
@@ -66,7 +64,8 @@ class HomeViewModel(
                             )
                         }
                         is ServiceResult.Success -> {
-                            val sortedVideos = (uploadsData.data as ArrayList<Video>).sortedByDescending { it.publishedAt }
+                            val sortedVideos =
+                                (uploadsData.data as ArrayList<Video>).sortedByDescending { it.publishedAt }
                             sortedVideos.map { it.podcast = podcast }
                             homeHeaders.add(
                                 createHeader(
@@ -77,8 +76,16 @@ class HomeViewModel(
                             )
                         }
                     }
-
                     if (index == filteredPodcasts.lastIndex) {
+                        val remainingPodcasts = podcasts.filter { !podcastFilter.contains(it.id) }
+                        homeHeaders.add(
+                            PodcastHeader(
+                                "Veja mais podcasts",
+                                type = HeaderType.PODCASTS,
+                                podcasts = remainingPodcasts,
+                                orientation = RecyclerView.HORIZONTAL
+                            )
+                        )
                         homeState.postValue(HomeState.HomeChannelsRetrieved(homeHeaders))
                     }
                 }
@@ -90,7 +97,6 @@ class HomeViewModel(
                         checkManager(it.uid)
                     }
                 }
-                updateViewState(ViewModelBaseState.LoadCompleteState)
             } catch (e: Exception) {
                 e.printStackTrace()
                 //homeState.postValue(HomeState.HomeError)
@@ -130,7 +136,7 @@ class HomeViewModel(
 
     suspend fun checkManager(uid: String) {
         try {
-            when(val userRequest = usersService.getSingleData(uid)) {
+            when (val userRequest = usersService.getSingleData(uid)) {
                 is ServiceResult.Error -> homeState.postValue(HomeState.InvalidManager)
                 is ServiceResult.Success -> {
                     val user = userRequest.data as User
@@ -157,6 +163,7 @@ class HomeViewModel(
             videos = ArrayList(uploads),
             playlistId = playlistID,
             orientation = RecyclerView.HORIZONTAL,
+            seeMore = true
         )
 
     }

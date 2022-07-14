@@ -1,4 +1,4 @@
-package com.silent.manager.features.newpodcast.fragments.youtube
+package com.silent.core.component
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ilustris.animations.slideInBottom
+import com.silent.core.R
+import com.silent.core.databinding.PodcastIconLayoutBinding
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.podcasts
-import com.silent.manager.R
-import com.silent.manager.databinding.PodcastIconLayoutBinding
 
 class PodcastAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcast) -> Unit) :
     RecyclerView.Adapter<PodcastAdapter.PodcastViewHolder>() {
@@ -22,16 +22,6 @@ class PodcastAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcast) -> U
 
     override fun onBindViewHolder(holder: PodcastViewHolder, position: Int) {
         holder.bind()
-    }
-
-    fun updateAdapter(podcast: Podcast) {
-        podcasts.add(podcast)
-        notifyItemInserted(podcasts.lastIndex)
-    }
-
-    fun clearAdapter() {
-        podcasts.clear()
-        notifyDataSetChanged()
     }
 
     override fun getItemCount() = podcasts.size
@@ -49,9 +39,6 @@ class PodcastAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcast) -> U
                     onSelectPodcast(podcast)
                 }
                 programIcon.slideInBottom()
-
-            }
-            podcasts[adapterPosition].run {
 
             }
         }

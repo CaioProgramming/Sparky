@@ -11,17 +11,17 @@ import com.ilustris.ui.extensions.gone
 import com.ilustris.ui.extensions.visible
 import com.silent.core.podcast.Podcast
 import com.silent.sparky.R
-import com.silent.sparky.databinding.ProgramIconLayoutBinding
+import com.silent.sparky.databinding.PodcastLiveLayoutBinding
 
-class PodcastsAdapter(
+class PodcastsLiveAdapter(
     val podcasts: List<Podcast>,
     val isLive: Boolean = false,
     private val onSelectProgram: (Podcast, Int) -> Unit
-) : RecyclerView.Adapter<PodcastsAdapter.ProgramViewHolder>() {
+) : RecyclerView.Adapter<PodcastsLiveAdapter.ProgramViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProgramViewHolder {
         val itemView =
-            LayoutInflater.from(parent.context).inflate(R.layout.program_icon_layout, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.podcast_live_layout, parent, false)
         return ProgramViewHolder(itemView)
     }
 
@@ -36,8 +36,8 @@ class PodcastsAdapter(
 
         fun bind() {
             val context = itemView.context
-            val podcast = podcasts[adapterPosition]
-            ProgramIconLayoutBinding.bind(itemView).run {
+            val podcast = podcasts[bindingAdapterPosition]
+            PodcastLiveLayoutBinding.bind(itemView).run {
                 Glide.with(context).load(podcast.iconURL).into(programIcon)
                 //itemView.program_name.text = name
                 programIcon.setOnClickListener {

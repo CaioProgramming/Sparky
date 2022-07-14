@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.silent.core.component.PodcastAdapter
 import com.silent.core.podcast.Podcast
 import com.silent.manager.R
 import com.silent.manager.databinding.PodcastsHeaderBinding

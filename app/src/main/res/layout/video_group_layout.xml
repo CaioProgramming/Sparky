@@ -47,7 +47,7 @@
             android:background="@color/transparent"
             android:src="@drawable/ic_round_chevron_right_24"
             android:stateListAnimator="@animator/text_animator"
-             />
+            app:tint="@color/material_white" />
     </RelativeLayout>
 
 

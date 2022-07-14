@@ -28,7 +28,7 @@ import com.silent.navigation.ModuleNavigator
 import com.silent.navigation.NavigationUtils
 import com.silent.sparky.R
 import com.silent.sparky.databinding.HomeFragmentBinding
-import com.silent.sparky.features.home.adapter.PodcastsAdapter
+import com.silent.sparky.features.home.adapter.PodcastsLiveAdapter
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
 import com.silent.sparky.features.home.data.LiveHeader
 import com.silent.sparky.features.home.data.PodcastHeader
@@ -44,13 +44,6 @@ class HomeFragment : Fragment() {
     var homeFragmentBinding: HomeFragmentBinding? = null
     private val homeViewModel: HomeViewModel by viewModel()
     private val mainActViewModel by sharedViewModel<MainActViewModel>()
-    private var videoHeaderAdapter: VideoHeaderAdapter? = VideoHeaderAdapter(
-        ArrayList(),
-        {
-            openPodcast(it.playlistId)
-        },
-        ::openChannel
-    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -107,13 +100,11 @@ class HomeFragment : Fragment() {
     private fun clearFragment() {
         homeViewModel.viewModelState.removeObservers(this)
         homeViewModel.homeState.removeObservers(this)
-        videoHeaderAdapter?.clearAdapter()
         homeFragmentBinding = null
     }
 
     private fun setupView() {
         homeFragmentBinding?.run {
-            podcastsResumeRecycler.adapter = videoHeaderAdapter
             (requireActivity() as AppCompatActivity?)?.run {
                 setSupportActionBar(homeToolbar)
                 supportActionBar?.title = ""
@@ -182,7 +173,6 @@ class HomeFragment : Fragment() {
                         podcastsResumeRecycler.fadeIn()
                         if (podcastsResumeRecycler.childCount == 0) {
                             podcastsResumeRecycler.removeAllViews()
-                            videoHeaderAdapter?.clearAdapter()
                             homeViewModel.getHome()
                         }
                     }
@@ -196,7 +186,7 @@ class HomeFragment : Fragment() {
                 is ViewModelBaseState.DataListRetrievedState -> {
                     homeFragmentBinding?.podcastsResumeRecycler?.run {
                         adapter =
-                            PodcastsAdapter((it.dataList as podcasts).sortedByDescending { p -> p.subscribe }) { podcast, index ->
+                            PodcastsLiveAdapter((it.dataList as podcasts).sortedByDescending { p -> p.subscribe }) { podcast, index ->
                                 WebUtils(requireContext()).openYoutubeChannel(podcast.youtubeID)
                             }
                         layoutManager =
@@ -236,13 +226,26 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupHome(headers: ArrayList<PodcastHeader>) {
-        homeFragmentBinding?.podcastsResumeRecycler?.adapter = VideoHeaderAdapter(headers, { openPodcast(it.playlistId) }, ::openChannel)
+        homeFragmentBinding?.run {
+            loadingAnimation.fadeOut()
+            appBarLayout.fadeIn()
+            podcastsResumeRecycler.fadeIn()
+            if (podcastsResumeRecycler.childCount == 0) {
+                podcastsResumeRecycler.removeAllViews()
+                homeViewModel.getHome()
+            }
+            podcastsResumeRecycler?.adapter = VideoHeaderAdapter(headers, headerSelected =  { header ->
+                header.playlistId?.let { id -> openPodcast(id) }
+            }, ::openChannel, selectPodcast = {
+                openPodcast(it.id)
+            })
+        }
     }
 
     private fun setupLive(livePodcasts: ArrayList<Podcast>) {
         homeFragmentBinding?.livesRecyclerView?.run {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-            adapter = PodcastsAdapter(livePodcasts, true) { podcast, i ->
+            adapter = PodcastsLiveAdapter(livePodcasts, true) { podcast, i ->
                 podcast.liveVideo?.let { live ->
                     val liveHeader = LiveHeader(podcast, live.title, live.youtubeID)
                     val bundle = bundleOf("live_object" to liveHeader)
