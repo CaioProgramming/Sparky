@@ -41,20 +41,19 @@ class CompleteFragment : Fragment() {
         sucessMessage.fadeIn()
         animation.playAnimation()
         animation.addAnimatorListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(animation: Animator?) {
-            }
+            override fun onAnimationStart(p0: Animator) {}
 
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(p0: Animator) {
                 sucessMessage.text = "Programa salvo com sucesso!"
                 delayedFunction(2000) {
                     requireActivity().finish()
                 }
             }
 
-            override fun onAnimationCancel(animation: Animator?) {
+            override fun onAnimationCancel(p0: Animator) {
             }
 
-            override fun onAnimationRepeat(animation: Animator?) {
+            override fun onAnimationRepeat(p0: Animator) {
             }
 
         })
@@ -66,7 +65,7 @@ class CompleteFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        newPodcastViewModel.viewModelState.observe(this, {
+        newPodcastViewModel.viewModelState.observe(viewLifecycleOwner) {
             when (it) {
                 is ViewModelBaseState.DataSavedState -> {
                     completeFragmentBinding?.showSaveSuccess()
@@ -78,6 +77,6 @@ class CompleteFragment : Fragment() {
                     //DO NOTHING}
                 }
             }
-        })
+        }
     }
 }

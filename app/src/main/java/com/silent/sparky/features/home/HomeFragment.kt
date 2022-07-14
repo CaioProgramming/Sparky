@@ -157,6 +157,9 @@ class HomeFragment : Fragment() {
                         homeViewModel.getHome()
                     }
                 }
+                HomeState.NoTokenFound -> {
+                    mainActViewModel.checkToken()
+                }
             }
         }
         homeViewModel.viewModelState.observe(viewLifecycleOwner) {
