@@ -17,6 +17,7 @@ import com.bumptech.glide.request.target.Target
 import com.ilustris.animations.fadeIn
 import com.ilustris.ui.extensions.gone
 import com.ilustris.ui.extensions.visible
+import com.silent.core.component.PodcastAdapter
 import com.silent.core.podcast.Podcast
 import com.silent.sparky.R
 import com.silent.sparky.databinding.VideoGroupLayoutBinding
@@ -42,20 +43,16 @@ class VideoHeaderAdapter(
                     val layoutManager =
                         LinearLayoutManager(itemView.context, section.orientation, false)
                     val maxLimit = if (section.videos!!.size > 20) 20 else section.videos.size
-                    videosRecycler.adapter =
-                        VideosAdapter(section.videos.subList(0, maxLimit), section.highLightColor)
+                    videosRecycler.adapter = VideosAdapter(section.videos.subList(0, maxLimit), section.highLightColor)
                     videosRecycler.layoutManager = layoutManager
                     section.referenceIndex?.let {
                         videosRecycler.scrollToPosition(it)
                         section.referenceIndex = null
                     }
                 } else {
-                    videosRecycler.layoutManager =
-                        LinearLayoutManager(itemView.context, section.orientation, false)
-                    videosRecycler.adapter = PodcastsAdapter(
-                        section.podcasts!!, false
-                    ) { podcast, _ ->
-                        selectPodcast?.invoke(podcast)
+                    videosRecycler.layoutManager = LinearLayoutManager(itemView.context, section.orientation, false)
+                    videosRecycler.adapter =  PodcastAdapter(ArrayList(section.podcasts!!)) {
+                        selectPodcast?.invoke(it)
                     }
                 }
             }
