@@ -14,6 +14,7 @@ import org.koin.dsl.module
 val podcastManagerModule = module {
 
 
+    factory { PodcastService() }
     factory { YoutubeService() }
     factory { VideoMapper() }
 

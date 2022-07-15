@@ -10,7 +10,6 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val homeModule = module {
-    factory { PreferencesService(androidApplication()) }
     factory { PodcastService() }
     factory { VideoService() }
     factory { UsersService() }

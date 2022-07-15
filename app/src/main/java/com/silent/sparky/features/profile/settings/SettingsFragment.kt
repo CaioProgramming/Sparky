@@ -18,12 +18,13 @@ import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.sparky.R
 import com.silent.sparky.databinding.FragmentSettingsBinding
 import com.silent.sparky.features.profile.dialog.PreferencesDialogFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment : Fragment() {
 
     private val args by navArgs<SettingsFragmentArgs>()
     var settingsBinding: FragmentSettingsBinding? = null
-    private val settingsViewModel by lazy { SettingsViewModel(requireActivity().application) }
+    private val settingsViewModel by viewModel<SettingsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

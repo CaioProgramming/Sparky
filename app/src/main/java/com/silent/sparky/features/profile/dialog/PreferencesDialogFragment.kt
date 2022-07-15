@@ -15,12 +15,13 @@ import com.silent.sparky.R
 import com.silent.sparky.databinding.FragmentPreferencesBinding
 import com.silent.sparky.features.profile.adapter.PodcastAdapter
 import com.silent.sparky.features.profile.viewmodel.PreferencesViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val TAG = "PREFERENCES_DIALOG"
 
 class PreferencesDialogFragment : BottomSheetDialogFragment() {
 
-    private val preferencesViewModel by lazy { PreferencesViewModel(requireActivity().application) }
+    private val preferencesViewModel by viewModel<PreferencesViewModel>()
     private var fragmentPreferencesBinding: FragmentPreferencesBinding? = null
     private var podcastAdapter = PodcastAdapter(ArrayList(), ::selectPodcast)
     private val selectedPodcasts = ArrayList<String>()

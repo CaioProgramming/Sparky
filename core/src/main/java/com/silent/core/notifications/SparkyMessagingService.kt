@@ -20,21 +20,23 @@ import kotlinx.coroutines.withContext
 class SparkyMessagingService: FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
-        super.onMessageReceived(message)
-        message.notification?.body?.let { handleNotification(it) }
+        message.notification?.let {
+            handleNotification(it)
+        }
     }
 
-    private fun handleNotification(messageBody: String) {
+    private fun handleNotification(message: RemoteMessage.Notification) {
         val homeIntent = Intent(this, Class.forName(HOME_ACT)).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            putExtra("podcastId", message.clickAction)
         }
         val pendingIntent = PendingIntent.getActivity(this, 0 , homeIntent, PendingIntent.FLAG_ONE_SHOT)
         val channelId = getString(R.string.channel_id)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_sparky_notify)
-            .setContentTitle(getString(R.string.app_name))
-            .setContentText(messageBody)
+            .setContentTitle(message.title)
+            .setContentText(message.body)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)

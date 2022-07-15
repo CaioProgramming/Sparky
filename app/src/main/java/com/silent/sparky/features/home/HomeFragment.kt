@@ -207,6 +207,12 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+        mainActViewModel.actState.observe(viewLifecycleOwner) {
+            if (it is MainActViewModel.MainActState.NavigateToPodcast) {
+                openPodcast(it.podcastId)
+                mainActViewModel.notificationOpen()
+            }
+        }
     }
 
     private fun login() {
