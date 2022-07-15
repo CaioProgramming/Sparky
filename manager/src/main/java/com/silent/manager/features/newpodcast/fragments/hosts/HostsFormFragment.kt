@@ -5,30 +5,35 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.ilustris.ui.extensions.ERROR_COLOR
+import com.ilustris.ui.extensions.showSnackBar
+import com.silent.core.component.GroupType
 import com.silent.core.component.HostAdapter
 import com.silent.core.instagram.InstagramUserResponse
 import com.silent.core.podcast.Host
 import com.silent.core.podcast.NEW_HOST
-import com.silent.ilustriscore.core.utilities.showSnackBar
 import com.silent.manager.R
+import com.silent.manager.databinding.FragmentHostsDataBinding
 import com.silent.manager.features.newpodcast.NewPodcastViewModel
+import com.silent.manager.features.newpodcast.fragments.highlight.HIGHLIGHT_TAG
+import com.silent.manager.features.newpodcast.fragments.highlight.HighlightColorFragment
 import com.silent.manager.states.HostState
-import kotlinx.android.synthetic.main.fragment_hosts_data.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class HostsFormFragment : Fragment() {
 
-    private val newPodcastViewModel: NewPodcastViewModel by lazy {
-        ViewModelProvider(requireActivity())[NewPodcastViewModel::class.java]
-    }
+    private val newPodcastViewModel: NewPodcastViewModel by sharedViewModel()
 
-    private val hostAdapter = HostAdapter(arrayListOf(Host(NEW_HOST, "", "")), ::selectHost)
+
+    private val hostAdapter = HostAdapter(ArrayList(), true, ::selectHost)
 
     private fun selectHost(host: Host) {
         if (host.name == NEW_HOST) {
-            HostInstagramDialog.getInstance(this::confirmUser)
+            HostInstagramDialog.getInstance(GroupType.HOSTS, this::confirmUser)
                 .show(childFragmentManager, "INSTAGRAMDIALOG")
         } else {
             newPodcastViewModel.deleteHost(host)
@@ -39,9 +44,9 @@ class HostsFormFragment : Fragment() {
         val host = Host(
             instagramUser.full_name,
             instagramUser.profile_pic_url,
-            instagramUser.username
+            instagramUser.biography
         )
-        HostDialog.getInstance(host) {
+        HostDialog.getInstance(GroupType.HOSTS, host) {
             newPodcastViewModel.updateHosts(host)
         }.show(childFragmentManager, "CONFIRMHOST")
     }
@@ -57,14 +62,20 @@ class HostsFormFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
-        instagram_hosts_recyclerview.adapter = hostAdapter
-        host_next_button.setOnClickListener {
-            findNavController().navigate(R.id.action_podcastGetHostsFragment_to_completeFragment)
+        FragmentHostsDataBinding.bind(view).run {
+            instagramHostsRecyclerview.adapter = hostAdapter
+            hostNextButton.setOnClickListener {
+                HighlightColorFragment.getInstance {
+                    newPodcastViewModel.podcast.highLightColor = it
+                    findNavController().navigate(R.id.action_podcastGetHostsFragment_to_completeFragment)
+                }.show(childFragmentManager, HIGHLIGHT_TAG)
+            }
         }
+
     }
 
     private fun observeViewModel() {
-        newPodcastViewModel.hostState.observe(this, {
+        newPodcastViewModel.hostState.observe(viewLifecycleOwner) {
             when (it) {
                 is HostState.HostUpdated -> {
                     hostAdapter.updateHost(it.host)
@@ -72,7 +83,7 @@ class HostsFormFragment : Fragment() {
                 HostState.ErrorFetchInstagram -> {
                     view?.showSnackBar(
                         "Ocorreu um erro ao recuperar dados do Instagram",
-                        backColor = Color.RED
+                        backColor = ContextCompat.getColor(requireContext(), ERROR_COLOR)
                     )
                 }
                 is HostState.HostDeleted -> {
@@ -83,7 +94,7 @@ class HostsFormFragment : Fragment() {
 
                 }
             }
-        })
+        }
     }
 
 }

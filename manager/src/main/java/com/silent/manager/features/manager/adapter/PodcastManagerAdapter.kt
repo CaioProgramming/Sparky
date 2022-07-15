@@ -1,14 +1,15 @@
 package com.silent.manager.features.manager.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.silent.core.databinding.PodcastsCardBinding
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.podcasts
 import com.silent.manager.R
-import kotlinx.android.synthetic.main.podcasts_card.view.*
 
 class PodcastManagerAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcast) -> Unit) :
     RecyclerView.Adapter<PodcastManagerAdapter.PodcastViewHolder>() {
@@ -16,12 +17,17 @@ class PodcastManagerAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcas
     inner class PodcastViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind() {
-            podcasts[bindingAdapterPosition].run {
-                itemView.podcast_name.text = name
-                Glide.with(itemView.context).load(iconURL).into(itemView.podcast_icon)
-                itemView.podcast_card.setOnClickListener {
-                    onSelectPodcast(this)
+            PodcastsCardBinding.bind(itemView).run {
+                val podcast = podcasts[bindingAdapterPosition]
+                podcastName.text = podcast.name
+                Glide.with(itemView.context).load(podcast.iconURL).into(podcastIcon)
+                podcastCard.setOnClickListener {
+                    onSelectPodcast(podcast)
                 }
+                if (podcast.highLightColor.isNotEmpty()) {
+                    podcastIcon.borderColor = Color.parseColor(podcast.highLightColor)
+                }
+
             }
         }
 

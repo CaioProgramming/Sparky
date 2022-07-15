@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -23,7 +21,7 @@
         android:clipToPadding="true"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="3"
-        tools:listitem="@layout/program_icon_layout" />
+        app:spanCount="1"
+        tools:listitem="@layout/podcasts_header" />
 
 </LinearLayout>

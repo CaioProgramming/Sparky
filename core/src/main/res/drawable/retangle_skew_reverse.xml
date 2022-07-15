@@ -1,0 +1,20 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:bottom="-25dp"
+        android:left="-5dp"
+        android:right="25dp"
+        android:top="-50dp">
+        <rotate android:fromDegrees="20">
+            <shape android:shape="rectangle">
+                <padding
+                    android:left="@dimen/padding_default_16dp"
+                    android:right="@dimen/padding_default_16dp" />
+                <solid android:color="#13a8de" />
+            </shape>
+
+        </rotate>
+    </item>
+
+</layer-list>

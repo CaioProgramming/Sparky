@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/padding_default_16dp"
     tools:context="com.silent.manager.features.newpodcast.NewPodcastActivity">
 
 
@@ -29,7 +27,7 @@
         android:progress="1" />
 
     <fragment
-        android:id="@+id/new_podcast_fragment"
+        android:id="@+id/newpodcast_navhost"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

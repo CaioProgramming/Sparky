@@ -1,5 +1,6 @@
 package com.silent.manager.features.newpodcast.fragments.youtube
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,14 +9,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.silent.core.podcast.Podcast
 import com.silent.manager.R
+import com.silent.manager.databinding.CutsDialogBinding
 import com.silent.manager.features.newpodcast.NewPodcastViewModel
 import com.silent.manager.states.NewPodcastState
-import kotlinx.android.synthetic.main.cuts_dialog.*
 
 class CutsDialog : BottomSheetDialogFragment() {
 
-    private val podcastAdapter = PodcastAdapter(arrayListOf()) {
-        onSelectCut.invoke(it)
+    private val podcastAdapter = PodcastHeaderAdapter(arrayListOf(), Color.BLACK) {
+        onSelectCut(it)
         dialog?.dismiss()
     }
     private val newPodcastViewModel: NewPodcastViewModel by lazy {
@@ -34,16 +35,16 @@ class CutsDialog : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
-        flow_cuts_channels.adapter = podcastAdapter
+        CutsDialogBinding.bind(view).flowCutsChannels.adapter = podcastAdapter
         newPodcastViewModel.getRelatedCuts()
     }
 
     private fun observeViewModel() {
-        newPodcastViewModel.newPodcastState.observe(this, {
-            if (it is NewPodcastState.RelatedCutsRetrieved) {
-                podcastAdapter.updateAdapter(it.podcast)
+        newPodcastViewModel.newPodcastState.observe(viewLifecycleOwner) {
+            if (it is NewPodcastState.RelatedPodcastsRetrieved) {
+                podcastAdapter.updateHeaders(ArrayList(it.podcastsHeader))
             }
-        })
+        }
     }
 
     companion object {

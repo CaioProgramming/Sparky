@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+        android:id="@+id/live_player"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:enableAutomaticInitialization="false"
+        app:showFullScreenButton="false"
+        app:useWebUi="false" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/double_faded_gradient" />
+
+    <RelativeLayout
+        android:id="@+id/live_top"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:padding="@dimen/padding_default_16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/collapseButton"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@color/transparent"
+            android:src="@drawable/quantum_ic_keyboard_arrow_down_white_36" />
+
+        <TextView
+            android:id="@+id/channel_name"
+            android:fontFamily="@font/kaushan_script"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_toEndOf="@id/collapseButton"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            tools:text="Flow podcast" />
+
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/live_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="?attr/actionBarSize"
+        android:padding="@dimen/padding_default_16dp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Flow especial" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

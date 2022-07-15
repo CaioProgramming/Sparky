@@ -40,8 +40,8 @@
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/message"
-        app:spanCount="3"
-        tools:listitem="@layout/program_icon_layout" />
+        app:spanCount="1"
+        tools:listitem="@layout/podcasts_header" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

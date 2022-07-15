@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/video_card"
+    tools:visibility="visible"
+    android:visibility="visible"
     android:layout_width="match_parent"
-    android:layout_height="180dp"
-    android:layout_marginVertical="@dimen/margin_default_10dp"
-    android:layout_marginStart="@dimen/margin_small_4dp"
-    android:layout_marginEnd="@dimen/margin_big_16dp"
+    android:layout_height="200dp"
+    android:layout_weight=".20"
+    android:animateLayoutChanges="true"
+    android:layout_margin="@dimen/padding_small_8dp"
     android:stateListAnimator="@animator/scale_down_animator"
-    app:cardBackgroundColor="@color/md_black"
-    app:cardCornerRadius="@dimen/radius_small_5dp"
-    app:strokeColor="@color/material_grey900"
-    app:strokeWidth="1dp">
+    app:cardBackgroundColor="?android:colorBackground"
+    app:cardCornerRadius="0dp"
+    app:strokeColor="@color/md_white"
+    app:strokeWidth="2dp">
+
 
     <ImageView
         android:id="@+id/video_thumb"
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_width="match_parent"
         android:background="@color/md_black"
-        android:scaleType="centerCrop"
-        tools:src="@drawable/ic_baseline_wechat_24" />
+        android:src="@drawable/ic_iconmonstr_connection_1"
+        android:scaleType="centerCrop" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="match_parent"
         android:background="@drawable/faded_gradient" />
 
     <LinearLayout
@@ -39,8 +41,8 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:maxLines="2"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             android:textColor="@color/md_white"
             android:textStyle="bold"
             tools:text="Flows podcre #1" />
@@ -50,7 +52,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-            android:textColor="@color/md_white"
             tools:text="12 de Outubro de 2021" />
 
 

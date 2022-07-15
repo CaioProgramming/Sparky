@@ -1,23 +1,26 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
-    compileSdk 31
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.silent.sparky"
         minSdk 26
-        targetSdk 31
+        targetSdk 33
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 
     buildTypes {
@@ -44,8 +47,8 @@ dependencies {
 
     implementation project(':core')
     implementation project(':navigation')
-    implementation 'com.airbnb.android:lottie:3.6.0'
     implementation 'com.github.PierfrancescoSoffritti:AndroidYouTubePlayer:10.0.5'
+    implementation 'com.github.CodeBoy722:ViewPager2_Transformers:1.0.0'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

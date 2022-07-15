@@ -1,6 +1,5 @@
 package com.silent.core.youtube
 
-import com.silent.core.twitch.ChannelDetailsResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -41,10 +40,11 @@ class YoutubeService {
     }
 
     suspend fun getPlaylistVideos(
-        playlistId: String
+        playlistId: String,
+        limit: Int = 50
     ): PlaylistItemResponse {
         val youtubeApi = retroFitService.create(YoutubeApi::class.java)
-        return youtubeApi.getChannelUploads(playlistId = playlistId)
+        return youtubeApi.getPlaylistVideos(playlistId = playlistId, maxResults =  limit)
     }
 
     suspend fun getChannelLiveStatus(channelID: String): SearchResponse {
