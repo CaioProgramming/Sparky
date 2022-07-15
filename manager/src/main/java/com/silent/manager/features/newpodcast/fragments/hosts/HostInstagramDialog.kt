@@ -48,7 +48,7 @@ class HostInstagramDialog : BottomSheetDialogFragment() {
                 instagramHostViewModel.getInstagramData(usernameEditText.text.toString())
             }
             continueAnywayInstaButton.setOnClickListener {
-                onInstagramRetrieve(InstagramUserResponse(usernameEditText.text.toString(), "", ""))
+                onInstagramRetrieve(InstagramUserResponse(usernameEditText.text.toString(), "", "", ""))
             }
         }
 

@@ -6,6 +6,7 @@ import com.silent.ilustriscore.core.model.DataException
 import com.silent.ilustriscore.core.model.ServiceResult
 import kotlinx.coroutines.tasks.await
 
+private const val ALL_USERS_TOPIC = "SparkyUsers"
 class FirebaseService {
 
     suspend fun generateFirebaseToken(): ServiceResult<DataException, String> {
@@ -18,7 +19,7 @@ class FirebaseService {
         }
     }
 
-    suspend fun subscribeToTopic(topicName: String, serviceResult: (ServiceResult<DataException, String>) -> Unit) {
+    suspend fun subscribeToTopic(topicName: String = ALL_USERS_TOPIC, serviceResult: (ServiceResult<DataException, String>) -> Unit) {
         FirebaseMessaging.getInstance().subscribeToTopic(topicName).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 serviceResult(ServiceResult.Success("Subscribed to topic($topicName) successfull!"))

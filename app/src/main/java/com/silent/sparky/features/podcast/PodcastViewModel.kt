@@ -82,7 +82,7 @@ class PodcastViewModel(
                 userPodcasts.add(it)
             }
 
-            if (!isFavorite) {
+            if (isFavorite) {
                 userPodcasts.add(podcastID)
                 firebaseService.subscribeToTopic(podcastID, ::handleServiceResult)
             } else {

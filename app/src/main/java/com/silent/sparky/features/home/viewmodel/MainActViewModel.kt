@@ -17,15 +17,17 @@ import kotlinx.coroutines.launch
 
 class MainActViewModel(
     application: Application,
-    val firebaseService: FirebaseService,
-    val preferencesService: PreferencesService
+    private val firebaseService: FirebaseService,
+    private val preferencesService: PreferencesService
 ) : AndroidViewModel(application) {
 
     sealed class MainActState {
         data class RetrieveToken(val token: String) : MainActState()
+        data class NavigateToPodcast(val podcastId: String) : MainActState()
         object RequireLoginState : MainActState()
         object LoginSuccessState : MainActState()
         object LoginErrorState : MainActState()
+
     }
 
     sealed class NotificationState {
@@ -45,6 +47,11 @@ class MainActViewModel(
     fun updateNotificationPermission(permissionStatus: Boolean = false) {
         if (permissionStatus) {
             notificationState.value = NotificationState.NotificationGranted
+            viewModelScope.launch {
+                firebaseService.subscribeToTopic {
+                    Log.i(javaClass.simpleName, "All users topic result -> $it")
+                }
+            }
         } else {
             notificationState.value = NotificationState.NotificationRevoked
         }
@@ -64,15 +71,28 @@ class MainActViewModel(
 
     fun checkToken() {
         viewModelScope.launch(Dispatchers.IO) {
-            when(val token = firebaseService.generateFirebaseToken()) {
+            when (val token = firebaseService.generateFirebaseToken()) {
                 is ServiceResult.Error -> {
-                    Log.e(this@MainActViewModel.javaClass.simpleName, "checkToken: Error getting token \n ${token.errorException} ")
+                    Log.e(
+                        this@MainActViewModel.javaClass.simpleName,
+                        "checkToken: Error getting token \n ${token.errorException} "
+                    )
                 }
                 is ServiceResult.Success -> {
                     preferencesService.editPreference(TOKEN_PREFERENCES, token.data)
                 }
             }
         }
+    }
+
+    fun validatePush(podcastExtra: String?) {
+        podcastExtra?.let {
+            actState.value = MainActState.NavigateToPodcast(it)
+        }
+    }
+
+    fun notificationOpen() {
+        actState.value = MainActState.LoginSuccessState
     }
 
 }

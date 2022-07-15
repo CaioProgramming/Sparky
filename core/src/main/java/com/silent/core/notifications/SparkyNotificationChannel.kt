@@ -11,7 +11,7 @@ object SparkyNotificationChannel {
         val channelId = context.getString(R.string.channel_id)
        val name = context.getString(R.string.channel_name)
        val description = context.getString(R.string.channel_description)
-       val importance = NotificationManager.IMPORTANCE_DEFAULT
+       val importance = NotificationManager.IMPORTANCE_HIGH
        val channel = NotificationChannel(channelId, name, importance)
        channel.description = description
        return channel

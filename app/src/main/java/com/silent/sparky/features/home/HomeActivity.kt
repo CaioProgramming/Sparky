@@ -34,6 +34,7 @@ class HomeActivity : AuthActivity() {
 
     private val mainActViewModel : MainActViewModel by viewModel()
     private lateinit var notificationPermissionRequest: ActivityResultLauncher<String>
+    val podcastExtra: String? by lazy { intent.extras?.getString("podcastId") }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +49,7 @@ class HomeActivity : AuthActivity() {
         observeViewModel()
         navView.setupWithNavController(navController)
         mainActViewModel.checkNotifications()
+        mainActViewModel.validatePush(podcastExtra)
     }
 
 

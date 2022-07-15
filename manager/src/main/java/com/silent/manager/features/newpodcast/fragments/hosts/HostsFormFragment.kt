@@ -29,7 +29,7 @@ class HostsFormFragment : Fragment() {
     private val newPodcastViewModel: NewPodcastViewModel by sharedViewModel()
 
 
-    private val hostAdapter = HostAdapter(arrayListOf(Host(NEW_HOST, "", "")), true, ::selectHost)
+    private val hostAdapter = HostAdapter(ArrayList(), true, ::selectHost)
 
     private fun selectHost(host: Host) {
         if (host.name == NEW_HOST) {
@@ -43,7 +43,8 @@ class HostsFormFragment : Fragment() {
     private fun confirmUser(instagramUser: InstagramUserResponse) {
         val host = Host(
             instagramUser.full_name,
-            instagramUser.profile_pic_url
+            instagramUser.profile_pic_url,
+            instagramUser.biography
         )
         HostDialog.getInstance(GroupType.HOSTS, host) {
             newPodcastViewModel.updateHosts(host)
