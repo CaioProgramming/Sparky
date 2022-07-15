@@ -10,8 +10,9 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
+
     single { PreferencesService(androidApplication()) }
-    factory { FirebaseService() }
+    single { FirebaseService() }
     single { YoutubeService() }
     single { VideoMapper() }
     viewModel { MainActViewModel(androidApplication(), get(), get()) }

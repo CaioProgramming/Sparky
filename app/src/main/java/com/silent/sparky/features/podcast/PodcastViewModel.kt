@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
+import com.silent.core.firebase.FirebaseService
 import com.silent.core.podcast.Host
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastService
@@ -14,12 +15,12 @@ import com.silent.core.videos.CutService
 import com.silent.core.videos.Video
 import com.silent.core.videos.VideoService
 import com.silent.ilustriscore.core.model.BaseViewModel
-import com.silent.ilustriscore.core.model.ViewModelBaseState
+import com.silent.ilustriscore.core.model.DataException
+import com.silent.ilustriscore.core.model.ServiceResult
 import com.silent.sparky.features.home.data.PodcastHeader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class PodcastViewModel(
@@ -27,7 +28,8 @@ class PodcastViewModel(
     override val service: PodcastService,
     private val videoService: VideoService,
     private val cutService: CutService,
-    private val preferencesService: PreferencesService
+    private val preferencesService: PreferencesService,
+    private val firebaseService: FirebaseService
 ) : BaseViewModel<Podcast>(application) {
 
     sealed class PodcastState {
@@ -37,7 +39,10 @@ class PodcastViewModel(
             val headers: ArrayList<PodcastHeader>,
             val isFavorite: Boolean
         ) : PodcastState()
-        data class UpdateHeader(val position: Int, val videos: List<Video>, val lastIndex: Int) : PodcastState()
+
+        data class UpdateHeader(val position: Int, val videos: List<Video>, val lastIndex: Int) :
+            PodcastState()
+
         data class UpdateFavorite(val isFavorite: Boolean) : PodcastState()
     }
 
@@ -77,14 +82,27 @@ class PodcastViewModel(
                 userPodcasts.add(it)
             }
 
-            if (isFavorite) {
-                userPodcasts.remove(podcastID)
-            } else {
+            if (!isFavorite) {
                 userPodcasts.add(podcastID)
+                firebaseService.subscribeToTopic(podcastID, ::handleServiceResult)
+            } else {
+                userPodcasts.remove(podcastID)
+                firebaseService.unsubscribeTopic(podcastID, ::handleServiceResult)
             }
 
             preferencesService.editPreference(PODCASTS_PREFERENCES, userPodcasts.toSet())
             channelState.postValue(PodcastState.UpdateFavorite(isFavorite))
+        }
+    }
+
+    private fun handleServiceResult(serviceResult: ServiceResult<DataException, String>) {
+        when(serviceResult) {
+            is ServiceResult.Error -> {
+                Log.e(javaClass.simpleName, "handleServiceResult: Error -> ${serviceResult.errorException}", )
+            }
+            is ServiceResult.Success -> {
+                Log.i(javaClass.simpleName, "handleServiceResult: Success -> ${serviceResult.data}")
+            }
         }
     }
 
@@ -94,7 +112,8 @@ class PodcastViewModel(
             try {
                 val headers = ArrayList<PodcastHeader>()
                 val podcast = service.getSingleData(podcastID).success.data as Podcast
-                val uploads = videoService.getPodcastVideos(podcastID).success.data as ArrayList<Video>
+                val uploads =
+                    videoService.getPodcastVideos(podcastID).success.data as ArrayList<Video>
                 val cuts = cutService.getPodcastCuts(podcastID).success.data as ArrayList<Video>
 
                 if (uploads.isNotEmpty()) {

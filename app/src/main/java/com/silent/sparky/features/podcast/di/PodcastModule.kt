@@ -10,9 +10,8 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val podcastModule = module {
-    factory { PreferencesService(androidApplication()) }
     factory { PodcastService() }
     factory { VideoService() }
     factory { CutService()  }
-    viewModel { PodcastViewModel(androidApplication(), get(), get(), get(), get()) }
+    viewModel { PodcastViewModel(androidApplication(), get(), get(), get(), get(), get()) }
 }
