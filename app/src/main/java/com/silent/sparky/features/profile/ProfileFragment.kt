@@ -14,10 +14,12 @@ import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
+import com.ilustris.animations.popIn
 import com.ilustris.animations.slideInBottom
 import com.ilustris.ui.extensions.ERROR_COLOR
 import com.ilustris.ui.extensions.showSnackBar
 import com.silent.core.flow.data.FlowProfile
+import com.silent.core.stickers.response.Badge
 import com.silent.core.users.User
 import com.silent.core.utils.ImageUtils
 import com.silent.ilustriscore.core.model.ErrorType
@@ -29,6 +31,7 @@ import com.silent.sparky.features.profile.adapter.BadgeAdapter
 import com.silent.sparky.features.profile.dialog.FlowLinkDialog
 import com.silent.sparky.features.profile.viewmodel.ProfileState
 import com.silent.sparky.features.profile.viewmodel.ProfileViewModel
+import com.silent.sparky.features.profile.viewmodel.StickersState
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.NumberFormat
@@ -120,6 +123,22 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
+        viewModel.stickersState.observe(viewLifecycleOwner) {
+            when(it) {
+                StickersState.ErrorFetchingStickers -> {
+                    requireView().showSnackBar(
+                        "Ocorreu um erro ao obter os stickers",
+                        backColor = ContextCompat.getColor(requireContext(), ERROR_COLOR)
+                    )
+                }
+                StickersState.FetchingStickers -> {
+                    profileBinding?.loadingBadges?.popIn()
+                }
+                is StickersState.StickersRetrieved -> {
+                    profileBinding?.setupStickers(it.badges)
+                }
+            }
+        }
         mainActViewModel.actState.observe(viewLifecycleOwner) {
             when (it) {
                 MainActViewModel.MainActState.LoginErrorState -> {
@@ -135,6 +154,11 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun FragmentProfileBinding.setupStickers(badges: List<Badge>) {
+        userBadges.adapter = BadgeAdapter(badges)
+        loadingBadges.fadeOut()
     }
 
     private fun setupUser(user: User) {
@@ -165,10 +189,7 @@ class ProfileFragment : Fragment() {
                 )
             }
             loading.fadeOut()
-
         }
-
-
     }
 
     private fun FragmentProfileBinding.loadComplete() {
@@ -183,12 +204,11 @@ class ProfileFragment : Fragment() {
             realName.text = user.name
             userBio.text = flowProfile.bio
             linkFlow.text = "Alterar conta flow"
-            userBadges.adapter = BadgeAdapter(flowProfile.selected_badges)
             badgesLayout.slideInBottom()
             usernameCard.fadeIn()
         }
-
-        animateBadgeCount(flowProfile.selected_badges.size)
+        animateBadgeCount(flowProfile.total_badges)
+        viewModel.getBadges(flowProfile.username)
     }
 
     private fun animateBadgeCount(count: Int) {
