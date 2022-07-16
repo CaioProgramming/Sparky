@@ -5,12 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.silent.core.flow.data.FlowBadge
+import com.silent.core.stickers.response.Badge
 import com.silent.core.utils.ImageUtils
 import com.silent.sparky.R
 import com.silent.sparky.databinding.BadgeLayoutBinding
 
-class BadgeAdapter(val selectedBadges: List<FlowBadge>) :
+class BadgeAdapter(val selectedBadges: List<Badge>) :
     RecyclerView.Adapter<BadgeAdapter.BadgeViewHolder>() {
 
     inner class BadgeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
