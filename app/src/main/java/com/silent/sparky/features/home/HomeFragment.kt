@@ -80,31 +80,7 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
     override fun onResume() {
         super.onResume()
         setupView()
-        if (mainActViewModel.actState.value is MainActViewModel.MainActState.NotificationOpenedState) {
-           homeViewModel.getHome()
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        clearFragment()
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        clearFragment()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        clearFragment()
-    }
-
-
-    private fun clearFragment() {
-        homeViewModel.viewModelState.removeObservers(this)
-        homeViewModel.homeState.removeObservers(this)
-        homeFragmentBinding = null
+        homeViewModel.getHome()
     }
 
     private fun setupView() {
@@ -243,7 +219,6 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
             }
         }
     }
-
 
 
     private fun login() {
