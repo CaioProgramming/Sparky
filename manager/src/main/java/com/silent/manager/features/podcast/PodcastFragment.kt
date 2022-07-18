@@ -62,7 +62,15 @@ class PodcastFragment : Fragment() {
                         podcastViewModel.updatePodcastData(podcast)
                     }
                     .setPositiveButton("Sim") { dialog, which ->
-                        podcastViewModel.updatePodcastData(podcast, true)
+
+                        MaterialAlertDialogBuilder(requireContext()).setMessage("Deseja os vídeos recentes (Últimos 100 vídeos) ou vídeos mais antigos?")
+                            .setNegativeButton("Vídeos recentes"){ dialog, which ->
+                                podcastViewModel.updatePodcastData(podcast, true)
+                            }
+                            .setPositiveButton("Vídeos mais antigos") {dialog, which ->
+                                podcastViewModel.updatePodcastData(podcast, updateClips = true, requireOldVideos =  true)
+                            }.show()
+
                     }.show()
             }
             removePodcast.setOnClickListener {
