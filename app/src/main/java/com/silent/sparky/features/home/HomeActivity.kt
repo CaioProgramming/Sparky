@@ -34,7 +34,7 @@ class HomeActivity : AuthActivity() {
 
     private val mainActViewModel : MainActViewModel by viewModel()
     private lateinit var notificationPermissionRequest: ActivityResultLauncher<String>
-    val podcastExtra: String? by lazy { intent.extras?.getString("podcastId") }
+    private val podcastExtra: String? by lazy { intent.extras?.getString("podcastId") }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

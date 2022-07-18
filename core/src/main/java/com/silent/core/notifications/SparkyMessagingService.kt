@@ -22,35 +22,38 @@ import kotlinx.coroutines.withContext
 class SparkyMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
-        message.notification?.let {
-            handleNotification(it)
-        }
+        handleNotification(message)
+
     }
 
-    private fun handleNotification(message: RemoteMessage.Notification) {
-        val icon = ImageUtils.getNotificationIcon(message.icon)
-        var defaultColor = baseContext.getColor(R.color.material_yellow700)
-        message.color?.let {
-            defaultColor = Color.parseColor(it)
+    private fun handleNotification(message: RemoteMessage) {
+        message.notification?.let { notification ->
+            val icon = ImageUtils.getNotificationIcon(notification.icon)
+            var defaultColor = baseContext.getColor(R.color.material_yellow700)
+            notification.color?.let {
+                defaultColor = Color.parseColor(it)
+            }
+            val homeIntent = Intent(this, Class.forName(HOME_ACT)).apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                putExtra("podcastId", message.data["podcastId"])
+            }
+            val pendingIntent = PendingIntent.getActivity(this, 0, homeIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+            val channelId = getString(R.string.channel_id)
+            val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+            val notificationBuilder = NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(icon.drawable)
+                .setContentTitle(notification.title)
+                .setContentText(notification.body)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setColor(defaultColor)
+                .setColorized(true)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent)
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.notify(1, notificationBuilder.build())
         }
-        val homeIntent = Intent(this, Class.forName(HOME_ACT)).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            putExtra("podcastId", message.clickAction)
-        }
-        val pendingIntent = PendingIntent.getActivity(this, 0, homeIntent, PendingIntent.FLAG_CANCEL_CURRENT)
-        val channelId = getString(R.string.channel_id)
-        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(icon.drawable)
-            .setContentTitle(message.title)
-            .setContentText(message.body)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setColor(defaultColor)
-            .setColorized(true)
-            .setSound(defaultSoundUri)
-            .setContentIntent(pendingIntent)
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(1, notificationBuilder.build())
+
     }
 
     override fun onNewToken(token: String) {

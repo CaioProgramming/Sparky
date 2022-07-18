@@ -39,8 +39,9 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="home" />
+                <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="com.silent.sparky.features.home.HomeActivity" />
             </intent-filter>
         </activity>
 
