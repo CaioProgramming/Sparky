@@ -9,3 +9,4 @@ apikey.properties
 .externalNativeBuild
 .cxx
 local.properties
+/.idea/
