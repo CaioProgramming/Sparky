@@ -35,19 +35,25 @@ class HomeActivity : AuthActivity() {
     private val mainActViewModel : MainActViewModel by viewModel()
     private lateinit var notificationPermissionRequest: ActivityResultLauncher<String>
     private val podcastExtra: String? by lazy { intent.extras?.getString("podcastId") }
-
+    var homeBinding: ActivityHomeBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         notificationPermissionRequest = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             mainActViewModel.updateNotificationPermission(it)
         }
         loadKoinModules(listOf(homeModule, profileModule, podcastModule, cutsModule))
-        val homeBinding = ActivityHomeBinding.inflate(layoutInflater)
-        setContentView(homeBinding.root)
-        val navView: BottomNavigationView = homeBinding.navView
-        val navController = findNavController(R.id.nav_host_fragment_activity_home)
+        homeBinding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(homeBinding?.root)
+        homeBinding?.run {
+            val navView: BottomNavigationView = navView
+            val navController = findNavController(R.id.nav_host_fragment_activity_home)
+            navView.setupWithNavController(navController)
+            if (mainActViewModel.actState.value is MainActViewModel.MainActState.NotificationOpenedState) {
+                navController.navigate(R.id.navigation_home)
+            }
+        }
+
         observeViewModel()
-        navView.setupWithNavController(navController)
         mainActViewModel.checkNotifications()
         mainActViewModel.validatePush(podcastExtra)
     }
@@ -62,6 +68,11 @@ class HomeActivity : AuthActivity() {
                         getView().showSnackBar("FCM Token retrieved ${it.token}", backColor = ContextCompat.getColor(this, WARNING_COLOR))
                     }
                 }
+
+                MainActViewModel.MainActState.NotificationOpenedState -> {
+
+                }
+
                 else -> {
 
                 }
@@ -73,6 +84,7 @@ class HomeActivity : AuthActivity() {
                 MainActViewModel.NotificationState.RequestNotification -> {
                     notificationPermissionRequest.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }
+
                 else -> {}
             }
         }

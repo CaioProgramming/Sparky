@@ -80,6 +80,9 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
     override fun onResume() {
         super.onResume()
         setupView()
+        if (mainActViewModel.actState.value is MainActViewModel.MainActState.NotificationOpenedState) {
+           homeViewModel.getHome()
+        }
     }
 
     override fun onDestroy() {
@@ -240,6 +243,8 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
             }
         }
     }
+
+
 
     private fun login() {
         LoginHelper.signIn(
