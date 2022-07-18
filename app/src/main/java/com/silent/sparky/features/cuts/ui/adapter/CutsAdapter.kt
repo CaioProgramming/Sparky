@@ -15,6 +15,7 @@ import com.ilustris.ui.extensions.setAlpha
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
+import com.silent.core.utils.ImageUtils
 import com.silent.core.videos.Video
 import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.silent.sparky.R
@@ -62,7 +63,7 @@ class CutsAdapter(val cuts: ArrayList<Video>,private val moveToNext: () -> Unit)
                         cutPlayer.removeYouTubePlayerListener(youTubePlayerListener!!)
                         youTubePlayerListener = null
                     }
-                    Glide.with(itemView).load(cut.thumbnailUrl).placeholder(R.drawable.ic_iconmonstr_connection_1).error(cut.podcast?.iconURL).into(cutThumbnail)
+                    Glide.with(itemView).load(ImageUtils.getYoutubeThumb(cut.youtubeID)).placeholder(R.drawable.ic_iconmonstr_connection_1).error(cut.podcast?.iconURL).into(cutThumbnail)
                     cutTitle.fadeIn()
                 } catch (e: Exception) {
                     Log.e(javaClass.simpleName, "\n \nError loading video ${e.message}")

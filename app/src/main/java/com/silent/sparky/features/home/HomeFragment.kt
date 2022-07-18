@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -39,7 +40,7 @@ import com.silent.sparky.features.profile.dialog.PreferencesDialogFragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HomeFragment : Fragment() {
+class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
 
     var homeFragmentBinding: HomeFragmentBinding? = null
     private val homeViewModel: HomeViewModel by viewModel()
@@ -109,6 +110,19 @@ class HomeFragment : Fragment() {
                 setSupportActionBar(homeToolbar)
                 supportActionBar?.title = ""
             }
+            homeSearch.setOnQueryTextListener(this@HomeFragment)
+            homeSearch.setOnCloseListener {
+                homeViewModel.getHome()
+                return@setOnCloseListener false
+            }
+            homeSearch.setOnSearchClickListener {
+                homeViewModel.searchPodcastAndEpisodes(homeSearch.query.toString())
+            }
+            val closeButton: View? = homeSearch.findViewById(androidx.appcompat.R.id.search_close_btn)
+            closeButton?.setOnClickListener {
+                homeSearch.setQuery("", false)
+                homeViewModel.getHome()
+            }
         }
     }
 
@@ -160,6 +174,13 @@ class HomeFragment : Fragment() {
                 HomeState.NoTokenFound -> {
                     mainActViewModel.checkToken()
                 }
+                HomeState.LoadingSearch -> {
+                    homeFragmentBinding?.run {
+                        loadingAnimation.fadeIn()
+                        podcastsResumeRecycler.gone()
+                    }
+                }
+                is HomeState.HomeSearchRetrieved -> setupHome(it.podcastHeader)
             }
         }
         homeViewModel.viewModelState.observe(viewLifecycleOwner) {
@@ -266,5 +287,16 @@ class HomeFragment : Fragment() {
             }
             slideInBottom()
         }
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        query?.let {
+            homeViewModel.searchPodcastAndEpisodes(it)
+        }
+        return false
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+       return false
     }
 }

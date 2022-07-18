@@ -123,17 +123,46 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/channel_videos"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+    <androidx.constraintlayout.widget.ConstraintLayout
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        app:spanCount="1"
-        tools:listitem="@layout/video_preview"
-        tools:visibility="visible" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/podcast_search"
+            app:queryBackground="@color/transparent"
+            android:layout_margin="@dimen/padding_default_16dp"
+            app:iconifiedByDefault="false"
+            app:queryHint="Busque episódios e cortes"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/input_round_retangle"
+            android:backgroundTint="@color/material_grey900"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/channel_videos"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/podcast_search"
+            tools:visibility="visible"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="vertical"
+            android:paddingVertical="@dimen/padding_small_8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            tools:itemCount="4"
+            tools:listitem="@layout/video_group_layout" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/loading"

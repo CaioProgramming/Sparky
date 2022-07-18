@@ -1,5 +1,6 @@
 package com.silent.core.videos
 
+import com.silent.core.utils.ImageUtils
 import com.silent.core.youtube.VideoSnippet
 
 class VideoMapper {
@@ -8,7 +9,7 @@ class VideoMapper {
         id = videoItem.resourceId.videoId,
         description = videoItem.description,
         publishedAt = videoItem.publishedAt,
-        thumbnailUrl = videoItem.thumbnails?.standard?.url ?: "",
+        thumbnailUrl = ImageUtils.getYoutubeThumb(videoItem.resourceId.videoId),
         youtubeID = videoItem.resourceId.videoId,
         title = videoItem.title,
         podcastId = podcastId
@@ -17,7 +18,7 @@ class VideoMapper {
         id = videoId,
         description = videoItem.description,
         publishedAt = videoItem.publishedAt,
-        thumbnailUrl = videoItem.thumbnails?.standard?.url ?: "",
+        thumbnailUrl = ImageUtils.getYoutubeThumb(videoId),
         youtubeID = videoId,
         title = videoItem.title,
         podcastId = podcastId

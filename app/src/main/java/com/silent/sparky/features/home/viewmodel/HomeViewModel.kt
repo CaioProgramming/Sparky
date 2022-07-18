@@ -2,7 +2,6 @@ package com.silent.sparky.features.home.viewmodel
 
 import android.app.Application
 import android.util.Log
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
@@ -21,7 +20,6 @@ import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
 import com.silent.ilustriscore.core.model.DataException
 import com.silent.ilustriscore.core.model.ServiceResult
-import com.silent.sparky.R
 import com.silent.sparky.features.home.data.HeaderType
 import com.silent.sparky.features.home.data.PodcastHeader
 import kotlinx.coroutines.Dispatchers
@@ -39,7 +37,6 @@ class HomeViewModel(
 
 
     val homeState = MutableLiveData<HomeState>()
-
 
     fun getHome() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -104,6 +101,59 @@ class HomeViewModel(
                 //homeState.postValue(HomeState.HomeError)
             }
         }
+    }
+
+
+    fun searchPodcastAndEpisodes(query: String) {
+        if (query.isBlank()) {
+            getHome()
+            return
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            homeState.postValue(HomeState.LoadingSearch)
+            val headers = ArrayList<PodcastHeader>()
+            val podcasts = service.getAllData().success.data as ArrayList<Podcast>
+            val queryPodcasts = podcasts.filter { podcast ->
+                podcast.name.contains(query, true) || podcast.hosts.any { host ->
+                    host.name.contains(query, true)
+                } || podcast.weeklyGuests.any { guest -> guest.name.contains(query, true) }
+            }
+            if (queryPodcasts.isNotEmpty()) {
+                headers.add(
+                    PodcastHeader(
+                        "Podcasts encontrados",
+                        orientation = RecyclerView.HORIZONTAL,
+                        seeMore = false,
+                        type = HeaderType.PODCASTS,
+                        podcasts = queryPodcasts)
+                )
+            }
+
+            podcasts.forEachIndexed { index, podcast ->
+                when(val videoRequest = videoService.getPodcastVideos(podcast.id)) {
+                    is ServiceResult.Success -> {
+                        val videos = videoRequest.success.data as ArrayList<Video>
+                        val queryVideos = ArrayList(videos.filter {
+                            it.title.contains(
+                                query,
+                                true
+                            ) || it.description.contains(query, true)
+                        })
+                        val header = createHeader(podcast, queryVideos, podcast.uploads)
+                        headers.add(header)
+                    }
+                }
+
+                if (index == podcasts.lastIndex) {
+                    val queryHeaders = headers.filter { header ->
+                        header.title.contains(query, true) || header.videos?.isNotEmpty() == true || header.podcasts?.isNotEmpty() == true
+                    }
+                    homeState.postValue(HomeState.HomeSearchRetrieved(ArrayList(queryHeaders)))
+                }
+            }
+        }
+
+
     }
 
     private fun checkLives(podcasts: List<Podcast>) {
@@ -174,7 +224,7 @@ class HomeViewModel(
             videos = ArrayList(uploads),
             playlistId = playlistID,
             orientation = RecyclerView.HORIZONTAL,
-            seeMore = true
+            seeMore = true,
         )
 
     }
