@@ -29,20 +29,4 @@ class VideoService : BaseService() {
 
     suspend fun getPodcastVideos(podcastId: String) = query(podcastId, "podcastId")
 
-    suspend fun getHomeVideos(podcastId: String): ServiceResult<DataException, ArrayList<Video>> {
-        Log.i(
-            javaClass.simpleName,
-            "query: Buscando por $podcastId em podcastID na collection $dataPath"
-        )
-        if (requireAuth && currentUser() == null) return ServiceResult.Error(DataException.AUTH)
-        val query = reference.orderBy("podcastId")
-            .startAt(podcastId)
-            .endAt(podcastId + SEARCH_SUFFIX).get().await().documents
-        return if (query.isNotEmpty()) {
-            ServiceResult.Success(getDataList(query) as ArrayList<Video>)
-        } else {
-            ServiceResult.Error(DataException.NOTFOUND)
-        }
-    }
-
 }

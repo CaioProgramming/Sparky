@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_container"
-    android:animateLayoutChanges="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
+        tools:visibility="visible"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -83,18 +83,43 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/podcasts_resume_recycler"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:foreground="?attr/selectableItemBackground"
-        android:orientation="vertical"
-        android:paddingVertical="@dimen/padding_small_8dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_content"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        tools:itemCount="4"
-        tools:listitem="@layout/video_group_layout" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/home_search"
+            app:queryBackground="@color/transparent"
+            android:layout_margin="@dimen/padding_default_16dp"
+            app:iconifiedByDefault="false"
+            app:queryHint="Busque podcasts e episódios"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/input_round_retangle"
+            android:backgroundTint="@color/material_grey900"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/podcasts_resume_recycler"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/home_search"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="vertical"
+            android:paddingVertical="@dimen/padding_small_8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            tools:itemCount="4"
+            tools:listitem="@layout/video_group_layout" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/loading_animation"

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -16,6 +17,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.ilustris.animations.*
 import com.ilustris.ui.extensions.ERROR_COLOR
+import com.ilustris.ui.extensions.gone
 import com.ilustris.ui.extensions.showSnackBar
 import com.silent.core.component.GroupType
 import com.silent.core.component.HostGroup
@@ -35,7 +37,7 @@ import java.text.NumberFormat
 
 class PodcastFragment : Fragment() {
     private var podcastFragmentBinding: FragmentPodcastBinding? = null
-    private val programViewModel by viewModel<PodcastViewModel>()
+    private val podcastViewModel by viewModel<PodcastViewModel>()
     private val args by navArgs<PodcastFragmentArgs>()
     private var program: Podcast? = null
 
@@ -51,10 +53,10 @@ class PodcastFragment : Fragment() {
     }
 
     private fun clearFragment() {
-        programViewModel.viewModelState.removeObservers(this)
-        programViewModel.channelState.removeObservers(this)
-        programViewModel.scheduleState.removeObservers(this)
-        programViewModel.clearState()
+        podcastViewModel.viewModelState.removeObservers(this)
+        podcastViewModel.podcastState.removeObservers(this)
+        podcastViewModel.scheduleState.removeObservers(this)
+        podcastViewModel.clearState()
         podcastFragmentBinding = null
     }
 
@@ -82,7 +84,7 @@ class PodcastFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        programViewModel.getChannelData(args.podcastId)
+        podcastViewModel.getPodcastData(args.podcastId)
     }
 
     private fun animateSubscriberCount(count: Int) {
@@ -155,18 +157,38 @@ class PodcastFragment : Fragment() {
 
 
                 }, podcast.highLightColor)
-            appBar.slideInBottom()
-            channelVideos.slideInRight()
+
             animateSubscriberCount(podcast.subscribe)
+            setupHeaders(headers)
             if (podcast.weeklyGuests.isNotEmpty()) {
-                programViewModel.checkSchedule(podcast)
+                podcastViewModel.checkSchedule(podcast)
             }
-            channelVideos.adapter = VideoHeaderAdapter(headers, ::onSelectHeader)
             favoritePodcast.backgroundTintList = ColorStateList.valueOf(Color.parseColor(podcast.highLightColor))
             favoritePodcast.isChecked = isFavorite
             favoritePodcast.setOnCheckedChangeListener { buttonView, isChecked ->
-                programViewModel.favoritePodcast(podcast.id, isChecked)
+                podcastViewModel.favoritePodcast(podcast.id, isChecked)
             }
+            podcastSearch.setOnSearchClickListener {
+                podcastViewModel.searchEpisodesAndCuts(podcast, podcastSearch.query.toString())
+            }
+            podcastSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    query?.let { podcastViewModel.searchEpisodesAndCuts(podcast, it) } ?: podcastViewModel.getPodcastData(args.podcastId)
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                   return false
+                }
+
+            })
+            val closeButton: View? = podcastSearch.findViewById(androidx.appcompat.R.id.search_close_btn)
+            closeButton?.setOnClickListener {
+                podcastSearch.setQuery("", false)
+                podcastViewModel.getPodcastData(args.podcastId)
+            }
+            appBar.slideInBottom()
+            mainContent.slideInBottom()
         }
     }
 
@@ -179,11 +201,11 @@ class PodcastFragment : Fragment() {
     private fun FragmentPodcastBinding.showLoading() {
         loading.fadeIn()
         appBar.fadeOut()
-        channelVideos.fadeOut()
+        mainContent.gone()
     }
 
     private fun observeViewModel() {
-        programViewModel.channelState.observe(viewLifecycleOwner) {
+        podcastViewModel.podcastState.observe(viewLifecycleOwner) {
             when (it) {
                 is PodcastViewModel.PodcastState.PodcastDataRetrieved -> {
                     setupPodcast(it.podcast, it.headers, it.isFavorite)
@@ -192,12 +214,12 @@ class PodcastFragment : Fragment() {
                     requireView().showSnackBar("Ocorreu um erro ao obter os vídeos")
                     podcastFragmentBinding?.loading?.fadeOut()
                 }
-                is PodcastViewModel.PodcastState.UpdateHeader -> {
-
+                is PodcastViewModel.PodcastState.RetrieveSearch -> {
+                    setupHeaders(it.headers)
                 }
             }
         }
-        programViewModel.scheduleState.observe(viewLifecycleOwner) {
+        podcastViewModel.scheduleState.observe(viewLifecycleOwner) {
             when (it) {
                 is PodcastViewModel.ScheduleState.TodayGuestState -> {
                     PodcastScheduleDialog(
@@ -211,7 +233,7 @@ class PodcastFragment : Fragment() {
                 }
             }
         }
-        programViewModel.viewModelState.observe(viewLifecycleOwner) {
+        podcastViewModel.viewModelState.observe(viewLifecycleOwner) {
             when (it) {
                 ViewModelBaseState.LoadingState -> {
                     podcastFragmentBinding?.showLoading()
@@ -225,4 +247,10 @@ class PodcastFragment : Fragment() {
             }
         }
     }
+
+    private fun setupHeaders(headers: ArrayList<PodcastHeader>) {
+       podcastFragmentBinding?.channelVideos?.adapter = VideoHeaderAdapter(headers, ::onSelectHeader)
+    }
+
+
 }

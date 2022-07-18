@@ -21,6 +21,7 @@ import com.silent.sparky.features.home.data.PodcastHeader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class PodcastViewModel(
@@ -34,6 +35,7 @@ class PodcastViewModel(
 
     sealed class PodcastState {
         object PodcastFailedState : PodcastState()
+        data class RetrieveSearch(val headers: ArrayList<PodcastHeader>) : PodcastState()
         data class PodcastDataRetrieved(
             val podcast: Podcast,
             val headers: ArrayList<PodcastHeader>,
@@ -54,7 +56,7 @@ class PodcastViewModel(
         ) : ScheduleState()
     }
 
-    val channelState = MutableLiveData<PodcastState>()
+    val podcastState = MutableLiveData<PodcastState>()
     val scheduleState = MutableLiveData<ScheduleState>()
 
     private fun getHeader(
@@ -91,7 +93,7 @@ class PodcastViewModel(
             }
 
             preferencesService.editPreference(PODCASTS_PREFERENCES, userPodcasts.toSet())
-            channelState.postValue(PodcastState.UpdateFavorite(isFavorite))
+            podcastState.postValue(PodcastState.UpdateFavorite(isFavorite))
         }
     }
 
@@ -106,7 +108,7 @@ class PodcastViewModel(
         }
     }
 
-    fun getChannelData(podcastID: String) {
+    fun getPodcastData(podcastID: String) {
         clearState()
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -146,7 +148,7 @@ class PodcastViewModel(
                 podcast.weeklyGuests = ArrayList(sortedGuests)
                 val preferencesPodcasts = preferencesService.getStringSetValue(PODCASTS_PREFERENCES)
 
-                channelState.postValue(
+                podcastState.postValue(
                     PodcastState.PodcastDataRetrieved(
                         podcast,
                         headers,
@@ -155,7 +157,7 @@ class PodcastViewModel(
                 )
             } catch (e: Exception) {
                 e.printStackTrace()
-                channelState.postValue(PodcastState.PodcastFailedState)
+                podcastState.postValue(PodcastState.PodcastFailedState)
             }
         }
     }
@@ -178,9 +180,35 @@ class PodcastViewModel(
     }
 
     fun clearState() {
-        channelState.value = null
+        podcastState.value = null
         viewModelState.value = null
         scheduleState.value = null
+    }
+
+    fun searchEpisodesAndCuts(podcast: Podcast, query: String) {
+        if (query.isEmpty()) {
+            getPodcastData(podcast.id)
+        }
+        viewModelScope.launch {
+            val headers = ArrayList<PodcastHeader>()
+            val videoRequest = videoService.getPodcastVideos(podcast.id)
+            if (videoRequest is ServiceResult.Success) {
+                val videos = videoRequest.data as ArrayList<Video>
+                val queryVideos =  videos.filter { it.title.contains(query, true) || it.description.contains(query, true) }
+                if (queryVideos.isNotEmpty()) {
+                    headers.add(0, getHeader("Episódios encontrados", podcast.uploads, queryVideos, RecyclerView.VERTICAL, podcast.highLightColor, "${queryVideos.size} resultados."))
+                }
+            }
+            val cutRequest = cutService.getPodcastCuts(podcast.id)
+            if (cutRequest is ServiceResult.Success) {
+                val cuts = cutRequest.data as ArrayList<Video>
+                val queryCuts =  cuts.filter { it.title.contains(query, true) || it.description.contains(query, true) }
+                if (queryCuts.isNotEmpty()) {
+                    headers.add( getHeader("Cortes encontrados", podcast.cuts, queryCuts, RecyclerView.VERTICAL, podcast.highLightColor, "${queryCuts.size} resultados."))
+                }
+            }
+            podcastState.postValue(PodcastState.RetrieveSearch(headers))
+        }
     }
 
 }

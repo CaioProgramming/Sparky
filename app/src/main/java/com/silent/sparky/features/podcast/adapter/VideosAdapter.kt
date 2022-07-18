@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.ilustris.animations.fadeIn
 import com.ilustris.ui.extensions.gone
 import com.ilustris.ui.extensions.visible
+import com.silent.core.utils.ImageUtils
 import com.silent.core.utils.WebUtils
 import com.silent.core.videos.Video
 import com.silent.ilustriscore.core.utilities.DateFormats
@@ -34,7 +35,7 @@ class VideosAdapter(
                 videoCard.setOnClickListener {
                     WebUtils(itemView.context).openYoutubeVideo(video.youtubeID)
                 }
-                Glide.with(itemView.context).load(video.thumbnailUrl)
+                Glide.with(itemView.context).load(ImageUtils.getYoutubeThumb(video.youtubeID))
                     .error(video.podcast?.iconURL).into(videoThumb)
                 title.text = video.title
                 try {
