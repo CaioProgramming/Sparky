@@ -17,6 +17,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.ilustris.animations.*
 import com.ilustris.ui.extensions.ERROR_COLOR
+import com.ilustris.ui.extensions.gone
 import com.ilustris.ui.extensions.showSnackBar
 import com.silent.core.component.GroupType
 import com.silent.core.component.HostGroup
@@ -156,8 +157,7 @@ class PodcastFragment : Fragment() {
 
 
                 }, podcast.highLightColor)
-            appBar.slideInBottom()
-            channelVideos.slideInRight()
+
             animateSubscriberCount(podcast.subscribe)
             setupHeaders(headers)
             if (podcast.weeklyGuests.isNotEmpty()) {
@@ -187,6 +187,8 @@ class PodcastFragment : Fragment() {
                 podcastSearch.setQuery("", false)
                 podcastViewModel.getPodcastData(args.podcastId)
             }
+            appBar.slideInBottom()
+            mainContent.slideInBottom()
         }
     }
 
@@ -199,7 +201,7 @@ class PodcastFragment : Fragment() {
     private fun FragmentPodcastBinding.showLoading() {
         loading.fadeIn()
         appBar.fadeOut()
-        channelVideos.fadeOut()
+        mainContent.gone()
     }
 
     private fun observeViewModel() {

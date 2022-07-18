@@ -110,6 +110,7 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                 setSupportActionBar(homeToolbar)
                 supportActionBar?.title = ""
             }
+            homeSearch.setQuery("", false)
             homeSearch.setOnQueryTextListener(this@HomeFragment)
             homeSearch.setOnCloseListener {
                 homeViewModel.getHome()
@@ -118,7 +119,8 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
             homeSearch.setOnSearchClickListener {
                 homeViewModel.searchPodcastAndEpisodes(homeSearch.query.toString())
             }
-            val closeButton: View? = homeSearch.findViewById(androidx.appcompat.R.id.search_close_btn)
+            val closeButton: View? =
+                homeSearch.findViewById(androidx.appcompat.R.id.search_close_btn)
             closeButton?.setOnClickListener {
                 homeSearch.setQuery("", false)
                 homeViewModel.getHome()
@@ -177,7 +179,7 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                 HomeState.LoadingSearch -> {
                     homeFragmentBinding?.run {
                         loadingAnimation.fadeIn()
-                        podcastsResumeRecycler.gone()
+                        mainContent.gone()
                     }
                 }
                 is HomeState.HomeSearchRetrieved -> setupHome(it.podcastHeader)
@@ -188,13 +190,14 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                 ViewModelBaseState.LoadingState -> {
                     homeFragmentBinding?.homeAnimation?.fadeIn()
                     homeFragmentBinding?.livesRecyclerView?.gone()
+                    homeFragmentBinding?.mainContent?.gone()
                 }
 
                 ViewModelBaseState.LoadCompleteState -> {
                     homeFragmentBinding?.run {
                         loadingAnimation.fadeOut()
                         appBarLayout.fadeIn()
-                        podcastsResumeRecycler.fadeIn()
+                        mainContent.fadeIn()
                         if (podcastsResumeRecycler.childCount == 0) {
                             podcastsResumeRecycler.removeAllViews()
                             homeViewModel.getHome()
@@ -264,11 +267,12 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                 podcastsResumeRecycler.removeAllViews()
                 homeViewModel.getHome()
             }
-            podcastsResumeRecycler?.adapter = VideoHeaderAdapter(headers, headerSelected =  { header ->
-                header.playlistId?.let { id -> openPodcast(id) }
-            }, ::openChannel, selectPodcast = {
-                openPodcast(it.id)
-            })
+            podcastsResumeRecycler?.adapter =
+                VideoHeaderAdapter(headers, headerSelected = { header ->
+                    header.playlistId?.let { id -> openPodcast(id) }
+                }, ::openChannel, selectPodcast = {
+                    openPodcast(it.id)
+                })
         }
     }
 
@@ -297,6 +301,6 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-       return false
+        return false
     }
 }
