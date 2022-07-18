@@ -21,7 +21,8 @@ interface YoutubeApi {
         @Query("type") searchType: String? = DATA_VIDEO_TYPE_QUERY,
         @Query("eventType") eventType: String? = DATA_EVENT_TYPE_LIVE_QUERY,
         @Query("maxResults") maxResults: Int = 1,
-        @Query("key") apiKey: String? = BuildConfig.YOUTUBE_KEY
+        @Query("key") apiKey: String? = BuildConfig.YOUTUBE_KEY,
+
 
     ): SearchResponse
 
@@ -49,8 +50,11 @@ interface YoutubeApi {
         @Query("part") snippet: String? = DATA_SNIPPET_QUERY,
         @Query("playlistId") playlistId: String,
         @Query("maxResults") maxResults: Int = MAX_UPLOADS_REQUIRED,
+        @Query("publishedAfter") beforeDate: String? = null,
         @Query("key") apiKey: String? = BuildConfig.YOUTUBE_KEY
     ): PlaylistItemResponse
+
+
 
     @GET("channelSections")
     suspend fun getChannelSections(
