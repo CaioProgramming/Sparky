@@ -142,6 +142,7 @@ class HomeViewModel(
                         val header = createHeader(podcast, queryVideos, podcast.uploads)
                         headers.add(header)
                     }
+                    else -> {}
                 }
 
                 if (index == podcasts.lastIndex) {

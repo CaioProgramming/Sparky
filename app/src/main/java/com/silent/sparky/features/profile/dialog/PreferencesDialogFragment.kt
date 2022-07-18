@@ -76,6 +76,7 @@ class PreferencesDialogFragment : BottomSheetDialogFragment() {
                     it.dataException.code.message,
                     backColor = Color.RED
                 )
+                else -> {}
             }
         }
         preferencesViewModel.preferencesViewState.observe(viewLifecycleOwner) {

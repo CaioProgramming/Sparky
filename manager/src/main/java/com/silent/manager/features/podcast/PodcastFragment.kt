@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -21,12 +22,15 @@ import com.silent.core.instagram.InstagramUserResponse
 import com.silent.core.podcast.Host
 import com.silent.core.podcast.NEW_HOST
 import com.silent.core.podcast.Podcast
+import com.silent.core.utils.ImageUtils
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.manager.R
 import com.silent.manager.databinding.FragmentManagePodcastBinding
 import com.silent.manager.features.manager.PodcastsManagerFragmentArgs
 import com.silent.manager.features.newpodcast.fragments.highlight.HIGHLIGHT_TAG
 import com.silent.manager.features.newpodcast.fragments.highlight.HighlightColorFragment
+import com.silent.manager.features.newpodcast.fragments.highlight.NOTIFICATION_ICON_TAG
+import com.silent.manager.features.newpodcast.fragments.highlight.NotificationIconFragment
 import com.silent.manager.features.newpodcast.fragments.hosts.HostDialog
 import com.silent.manager.features.newpodcast.fragments.hosts.HostInstagramDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -38,8 +42,6 @@ class PodcastFragment : Fragment() {
     private var podcastFragmentBinding: FragmentManagePodcastBinding? = null
 
     lateinit var podcast: Podcast
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,6 +56,7 @@ class PodcastFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         podcastFragmentBinding?.run {
             updatePodcast.setOnClickListener {
+                podcast.slogan = podcastSlogan.text.toString()
                 podcast.name = podcastEditText.text.toString()
                 podcast.hosts = ArrayList(podcast.hosts.filter { it.name != NEW_HOST })
                 MaterialAlertDialogBuilder(requireContext())
@@ -91,9 +94,17 @@ class PodcastFragment : Fragment() {
                     setupPodcast(podcast)
                 }.show(parentFragmentManager, HIGHLIGHT_TAG)
             }
+            podcastNotificationIcon.setOnClickListener {
+               NotificationIconFragment.getInstance(Color.parseColor(podcast.highLightColor)) {
+                    podcast.notificationIcon = it
+                    setupPodcast(podcast)
+                }.show(parentFragmentManager, NOTIFICATION_ICON_TAG)
+            }
+
         }
         setupPodcast(args.podcast)
         observeViewModel()
+        (requireActivity() as AppCompatActivity).supportActionBar?.hide()
     }
 
     private fun observeViewModel() {
@@ -145,6 +156,9 @@ class PodcastFragment : Fragment() {
             Glide.with(requireContext()).load(podcast.iconURL).error(R.drawable.ic_iconmonstr_connection_1).into(programIcon)
             loading.setIndicatorColor(Color.parseColor(podcast.highLightColor))
             highlightColor.backgroundTintList = ColorStateList.valueOf(Color.parseColor(podcast.highLightColor))
+            podcastNotificationIcon.setImageDrawable(requireContext().getDrawable(ImageUtils.getNotificationIcon(podcast.notificationIcon).drawable))
+            podcastNotificationIcon.circleBackgroundColor = Color.parseColor(podcast.highLightColor)
+            podcastSlogan.setText(podcast.slogan)
         }
         updateHosts()
     }

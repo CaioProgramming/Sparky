@@ -3,15 +3,16 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 
 android {
-    compileSdkVersion 33
+    compileSdk 32
     def apikeyPropertiesFile = rootProject.file("apikey.properties")
     def apikeyProperties = new Properties()
     apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
     defaultConfig {
-        minSdkVersion 26
-        targetSdkVersion 33
-        buildConfigField("String", "YOUTUBE_KEY", apikeyProperties['YOUTUBE_KEY'])
+        minSdk rootProject.ext.minSdk
+        targetSdk rootProject.ext.targetSdk
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "YOUTUBE_KEY", apikeyProperties['YOUTUBE_KEY'])
     }
     buildFeatures {
         viewBinding true
@@ -23,18 +24,16 @@ android {
         }
 
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
+
 }
 
 dependencies {
@@ -55,8 +54,8 @@ dependencies {
     api 'cat.ereza:customactivityoncrash:2.3.0'
     api 'com.airbnb.android:lottie:3.6.0'
 
-    api platform('com.google.firebase:firebase-bom:25.12.0')
-    api 'com.google.firebase:firebase-core:21.0.0'
+    api platform('com.google.firebase:firebase-bom:30.2.0')
+    api 'com.google.firebase:firebase-core:21.1.0'
     api 'com.google.firebase:firebase-firestore-ktx'
     api 'com.google.firebase:firebase-auth:21.0.6'
     api 'com.firebaseui:firebase-ui-auth:8.0.1'
@@ -68,15 +67,16 @@ dependencies {
     api 'com.google.firebase:firebase-messaging:23.0.6'
     api 'com.google.firebase:firebase-crashlytics-ktx'
     api 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-inappmessaging-display-ktx'
     api 'com.airbnb.android:lottie:3.6.0'
     api 'com.github.bumptech.glide:glide:4.12.0'
-    api "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    api "org.jetbrains.kotlin:kotlin-stdlib:$rootProject.ext.kotlin_version"
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'org.jsoup:jsoup:1.13.1'
     api 'com.hmomeni.progresscircula:progresscircula:0.2.1'
-
+    implementation 'com.pavelsikun:materialdesignicons:1.0'
 
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     testImplementation 'junit:junit:4.13.2'

@@ -80,6 +80,9 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
     override fun onResume() {
         super.onResume()
         setupView()
+        if (mainActViewModel.actState.value is MainActViewModel.MainActState.NotificationOpenedState) {
+           homeViewModel.getHome()
+        }
     }
 
     override fun onDestroy() {
@@ -183,6 +186,7 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                     }
                 }
                 is HomeState.HomeSearchRetrieved -> setupHome(it.podcastHeader)
+                else -> {}
             }
         }
         homeViewModel.viewModelState.observe(viewLifecycleOwner) {
@@ -229,6 +233,7 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                         mainActViewModel.updateState(MainActViewModel.MainActState.RequireLoginState)
                     }
                 }
+                else -> {}
             }
         }
         mainActViewModel.actState.observe(viewLifecycleOwner) {
@@ -238,6 +243,8 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
             }
         }
     }
+
+
 
     private fun login() {
         LoginHelper.signIn(

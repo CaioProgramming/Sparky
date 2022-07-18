@@ -1,12 +1,14 @@
 package com.silent.core.utils
 
-import android.widget.ImageView
+import android.R.drawable
+import android.content.Context
 import com.silent.core.R
+
 
 object ImageUtils {
 
     fun getRandomIcon(): Int {
-        val pics = listOf(R.drawable.eye, R.drawable.cat)
+        val pics = listOf(com.silent.core.R.drawable.eye, com.silent.core.R.drawable.cat)
         return pics.random()
     }
 
@@ -19,4 +21,24 @@ object ImageUtils {
         return "https://img.youtube.com/vi/$videoId/hqdefault.jpg"
     }
 
+    fun getNotificationIcon(iconName: String?): IconData {
+        return getIcons().find { it.name == iconName } ?: IconData("Sparky", R.drawable.ic_sparky_notify)
+    }
+
+    fun getIcons() : List<IconData>{
+        val icons = ArrayList<IconData>()
+        val fields = (com.pavelsikun.materialdesignicons.R.drawable::class.java.declaredFields).filter { it.name.startsWith("zzz_") }
+        fields.forEach { icon ->
+            val drawableRes = drawable()
+            icons.add(IconData(icon.name, icon.getInt(drawableRes)))
+        }
+        return icons
+    }
+
+
+
 }
+
+
+
+data class IconData(val name:String, val drawable: Int)

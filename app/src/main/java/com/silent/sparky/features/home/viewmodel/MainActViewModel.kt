@@ -27,6 +27,7 @@ class MainActViewModel(
         object RequireLoginState : MainActState()
         object LoginSuccessState : MainActState()
         object LoginErrorState : MainActState()
+        object NotificationOpenedState: MainActState()
 
     }
 

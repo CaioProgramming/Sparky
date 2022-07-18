@@ -109,6 +109,7 @@ class ProfileFragment : Fragment() {
                 }
 
                 ViewModelBaseState.LoadCompleteState -> profileBinding?.loadComplete()
+                else -> {}
             }
         }
         viewModel.profileState.observe(viewLifecycleOwner) {
@@ -152,6 +153,7 @@ class ProfileFragment : Fragment() {
                 MainActViewModel.MainActState.LoginSuccessState -> {
                     viewModel.findUser()
                 }
+                else -> {}
             }
         }
     }
