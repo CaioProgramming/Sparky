@@ -17,6 +17,7 @@ import com.silent.core.users.User
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.sparky.R
 import com.silent.sparky.databinding.FragmentSettingsBinding
+import com.silent.sparky.features.profile.dialog.FlowLinkDialog
 import com.silent.sparky.features.profile.dialog.PreferencesDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -51,6 +52,9 @@ class SettingsFragment : Fragment() {
         settingsViewModel.settingsState.observe(viewLifecycleOwner) {
             when (it) {
                 is SettingsViewModel.SettingsState.PodcastsPreferencesRetrieve -> setupPodcasts(it.podcasts)
+                SettingsViewModel.SettingsState.UserSignedOut -> {
+                    requireActivity().finishAffinity()
+                }
             }
         }
         settingsViewModel.viewModelState.observe(viewLifecycleOwner) {
@@ -59,6 +63,7 @@ class SettingsFragment : Fragment() {
                     it.dataException.code.message,
                     backColor = Color.RED
                 )
+                else -> {}
             }
         }
     }
@@ -73,8 +78,8 @@ class SettingsFragment : Fragment() {
                 }
             } else {
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Tem certeza")
-                    .setMessage("Essa ação irá remover o podcast ${podcast.name} de seus favoritos")
+                    .setTitle("Tem certeza?")
+                    .setMessage("Quer mesmo remover ${podcast.name} de seus favoritos?")
                     .setNegativeButton("Remover") { dialog, which ->
                         settingsViewModel.removeFavorite(podcast.id)
                     }
@@ -93,7 +98,10 @@ class SettingsFragment : Fragment() {
             Glide.with(requireContext()).load(user.profilePic)
                 .placeholder(R.drawable.ic_iconmonstr_flower).into(userPhoto)
             flowAccountButton.setOnClickListener {
-                findNavController().navigate(R.id.action_settingsFragment_to_flowLinkDialog)
+                FlowLinkDialog(user).show(requireActivity().supportFragmentManager, "FLOWLINKDIALOG")
+            }
+            signOutButton.setOnClickListener {
+                settingsViewModel.logout()
             }
             settingsViewModel.loadSettings()
         }

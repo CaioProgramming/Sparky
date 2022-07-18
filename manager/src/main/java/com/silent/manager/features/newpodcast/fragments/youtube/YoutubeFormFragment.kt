@@ -72,6 +72,10 @@ class YoutubeFormFragment : Fragment() {
                 is NewPodcastState.PodcastUpdated -> {
                     findNavController().navigate(R.id.action_podcastGetYoutubeFormFragment_to_GetHostsFragment)
                 }
+
+                else -> {
+
+                }
             }
         }
     }

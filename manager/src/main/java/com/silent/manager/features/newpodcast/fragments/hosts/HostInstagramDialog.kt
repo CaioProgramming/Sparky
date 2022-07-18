@@ -64,6 +64,10 @@ class HostInstagramDialog : BottomSheetDialogFragment() {
                 HostState.ErrorFetchInstagram -> {
                     hostInstaDialogBinding?.showError()
                 }
+
+                else -> {
+
+                }
             }
         }
     }

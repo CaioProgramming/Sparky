@@ -23,7 +23,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="?attr/actionBarSize"
+                android:layout_marginVertical="?attr/actionBarSize"
                 android:orientation="vertical"
                 app:layout_collapseMode="parallax">
 
@@ -77,6 +77,8 @@
 
             <TextView
                 style="@style/Ilustris.Title"
+                android:textAlignment="center"
+                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/kaushan_script"
@@ -118,14 +120,14 @@
                 tools:itemCount="2"
                 tools:listitem="@layout/podcast_list_layout" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/sign_out_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/padding_default_16dp"
                 android:background="@drawable/card_shape"
+                app:backgroundTint="@color/material_grey900"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/padding_default_16dp"
                 android:text="Desconectar"
                 android:textAlignment="center"
                 android:textColor="@color/material_red500" />

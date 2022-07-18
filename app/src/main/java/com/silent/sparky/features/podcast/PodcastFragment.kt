@@ -217,6 +217,7 @@ class PodcastFragment : Fragment() {
                 is PodcastViewModel.PodcastState.RetrieveSearch -> {
                     setupHeaders(it.headers)
                 }
+                else -> {}
             }
         }
         podcastViewModel.scheduleState.observe(viewLifecycleOwner) {
@@ -244,6 +245,7 @@ class PodcastFragment : Fragment() {
                         backColor = ContextCompat.getColor(requireContext(), ERROR_COLOR)
                     )
                 }
+                else -> {}
             }
         }
     }

@@ -120,6 +120,7 @@ class FlowLinkDialog(private val user: User) : DialogFragment() {
                 is ViewModelBaseState.DataUpdateState -> {
                     dismiss()
                 }
+                else -> {}
             }
         }
     }

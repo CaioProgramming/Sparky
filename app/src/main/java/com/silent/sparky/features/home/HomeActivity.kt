@@ -62,6 +62,9 @@ class HomeActivity : AuthActivity() {
                         getView().showSnackBar("FCM Token retrieved ${it.token}", backColor = ContextCompat.getColor(this, WARNING_COLOR))
                     }
                 }
+                else -> {
+
+                }
             }
         }
 
@@ -70,6 +73,7 @@ class HomeActivity : AuthActivity() {
                 MainActViewModel.NotificationState.RequestNotification -> {
                     notificationPermissionRequest.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }
+                else -> {}
             }
         }
     }

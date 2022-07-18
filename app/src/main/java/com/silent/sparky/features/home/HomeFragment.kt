@@ -183,6 +183,7 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                     }
                 }
                 is HomeState.HomeSearchRetrieved -> setupHome(it.podcastHeader)
+                else -> {}
             }
         }
         homeViewModel.viewModelState.observe(viewLifecycleOwner) {
@@ -229,6 +230,7 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                         mainActViewModel.updateState(MainActViewModel.MainActState.RequireLoginState)
                     }
                 }
+                else -> {}
             }
         }
         mainActViewModel.actState.observe(viewLifecycleOwner) {

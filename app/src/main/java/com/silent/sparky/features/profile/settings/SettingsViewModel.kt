@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.silent.core.firebase.FirebaseService
 import com.silent.core.podcast.PodcastService
 import com.silent.core.podcast.podcasts
@@ -27,6 +28,7 @@ class SettingsViewModel(
 
     sealed class SettingsState {
         data class PodcastsPreferencesRetrieve(val podcasts: podcasts) : SettingsState()
+        object UserSignedOut: SettingsState()
     }
 
     private val podcastsService = PodcastService()
@@ -79,6 +81,13 @@ class SettingsViewModel(
             is ServiceResult.Success -> {
                 Log.i(javaClass.simpleName, "handleServiceResult: Success -> ${serviceResult.data}")
             }
+        }
+    }
+
+    fun logout() {
+        FirebaseAuth.getInstance().signOut()
+        if (getUser() == null) {
+            settingsState.postValue(SettingsState.UserSignedOut)
         }
     }
 
