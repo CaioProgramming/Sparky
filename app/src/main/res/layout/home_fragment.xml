@@ -11,18 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:colorBackground"
-        app:elevation="4dp">
+        app:elevation="0dp">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:colorBackground"
             app:contentScrim="?android:colorBackground"
             app:scrimAnimationDuration="100"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/lives_recycler_view"
-                android:background="@drawable/bottom_line"
                 android:backgroundTint="@color/material_grey900"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

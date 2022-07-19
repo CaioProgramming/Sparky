@@ -21,6 +21,7 @@ import com.silent.manager.databinding.FragmentHostsDataBinding
 import com.silent.manager.features.newpodcast.NewPodcastViewModel
 import com.silent.manager.features.newpodcast.fragments.highlight.HIGHLIGHT_TAG
 import com.silent.manager.features.newpodcast.fragments.highlight.HighlightColorFragment
+import com.silent.manager.features.newpodcast.fragments.highlight.NOTIFICATION_ICON_TAG
 import com.silent.manager.features.newpodcast.fragments.highlight.NotificationIconFragment
 import com.silent.manager.states.HostState
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -71,7 +72,7 @@ class HostsFormFragment : Fragment() {
                     NotificationIconFragment.getInstance(Color.parseColor(color)) { icon ->
                         newPodcastViewModel.podcast.notificationIcon = icon
                         findNavController().navigate(R.id.action_podcastGetHostsFragment_to_completeFragment)
-                    }
+                    }.show(childFragmentManager, NOTIFICATION_ICON_TAG)
                 }.show(childFragmentManager, HIGHLIGHT_TAG)
             }
         }
