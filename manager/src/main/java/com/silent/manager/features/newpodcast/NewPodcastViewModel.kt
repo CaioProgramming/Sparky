@@ -3,10 +3,7 @@ package com.silent.manager.features.newpodcast
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.silent.core.podcast.Host
-import com.silent.core.podcast.Podcast
-import com.silent.core.podcast.PodcastMapper
-import com.silent.core.podcast.PodcastService
+import com.silent.core.podcast.*
 import com.silent.core.youtube.SectionItem
 import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
@@ -33,6 +30,13 @@ class NewPodcastViewModel(
     val hostState = MutableLiveData<HostState>()
 
     var podcast = Podcast()
+
+    override fun saveData(data: Podcast) {
+        data.apply {
+            hosts = ArrayList(this.hosts.filter { it.name != NEW_HOST })
+        }
+        super.saveData(data)
+    }
 
     fun updatePodcast(newPodcast: Podcast) {
         this.podcast = newPodcast
@@ -97,6 +101,7 @@ class NewPodcastViewModel(
         sectionItem: List<SectionItem>,
         filter: String? = null
     ) {
+        val podcastsList = service.getAllData().success.data as podcasts
         val podcastHeaders = ArrayList<PodcastsHeader>()
         val multipleChannelsList = if (filter != null) {
             sectionItem.filter { it.snippet.type == "multiplechannels" && it.snippet.title == filter }
@@ -109,7 +114,7 @@ class NewPodcastViewModel(
             channels.forEach { podcastID ->
                 val channel = youtubeService.getChannelDetails(podcastID).items.first()
                 val podcast = podcastMapper.mapChannelResponse(channel)
-                relatedPodcasts.add(podcast)
+                if (!podcastsList.any { it.youtubeID == podcast.youtubeID }) relatedPodcasts.add(podcast)
             }
             podcastHeaders.add(PodcastsHeader(sectionItem.snippet.title, relatedPodcasts))
             if (index == multipleChannelsList.lastIndex) {

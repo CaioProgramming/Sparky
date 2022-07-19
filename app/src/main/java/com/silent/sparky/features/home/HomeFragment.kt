@@ -121,7 +121,6 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                 HomeState.HomeError -> {
                     homeFragmentBinding?.showError("Ocorreu um erro inesperado ao carregar.") {
                         homeViewModel.getAllData()
-
                     }
                 }
 

@@ -1,16 +1,13 @@
 package com.silent.manager.features.newpodcast.fragments.highlight
 
-import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.silent.core.utils.ColorUtils
+import com.ilustris.animations.slideInBottom
 import com.silent.core.utils.ImageUtils
 import com.silent.manager.R
-import com.silent.manager.databinding.ColorCardBinding
 import com.silent.manager.databinding.IconCardBinding
 
 class NotificationIconAdapter(val highlightColor: Int, private val onIconPick: (String) -> Unit) :
@@ -26,10 +23,10 @@ class NotificationIconAdapter(val highlightColor: Int, private val onIconPick: (
                 val icon = icons[bindingAdapterPosition]
                 iconCard.setImageDrawable(context.getDrawable(icon.drawable))
                 iconCard.imageTintList = ColorStateList.valueOf(highlightColor)
-                //root.setCardBackgroundColor(highlightColor)
-               root.setOnClickListener {
+                root.setOnClickListener {
                     onIconPick(icon.name)
                 }
+                root.slideInBottom()
             }
         }
     }

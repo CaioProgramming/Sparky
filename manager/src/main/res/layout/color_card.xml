@@ -2,14 +2,15 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/colorcard"
-    android:layout_width="40dp"
-    android:layout_height="40dp"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
     android:layout_margin="@dimen/margin_small_4dp"
     android:stateListAnimator="@animator/scale_down_animator"
     app:cardBackgroundColor="@color/material_grey900"
     app:cardCornerRadius="@dimen/radius_default_10dp"
+    app:strokeColor="@color/md_white"
     app:cardElevation="0dp"
-    app:strokeWidth="0dp">
+    app:strokeWidth="1dp">
 
 
 </com.google.android.material.card.MaterialCardView>

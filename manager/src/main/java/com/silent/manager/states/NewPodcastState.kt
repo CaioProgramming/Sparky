@@ -7,9 +7,7 @@ import com.silent.manager.features.newpodcast.fragments.youtube.PodcastsHeader
 
 sealed class NewPodcastState {
     data class RelatedCutsRetrieved(val podcastsHeader: List<PodcastsHeader>) : NewPodcastState()
-    data class RelatedPodcastsRetrieved(val podcastsHeader: List<PodcastsHeader>) :
-        NewPodcastState()
-
+    data class RelatedPodcastsRetrieved(val podcastsHeader: List<PodcastsHeader>) : NewPodcastState()
     data class ValidPodcast(val podcast: Podcast) : NewPodcastState()
     object PodcastUpdated : NewPodcastState()
     object InvalidPodcast : NewPodcastState()
