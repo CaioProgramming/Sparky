@@ -2,7 +2,6 @@ package com.silent.sparky.features.home
 
 import android.Manifest
 import android.app.Activity
-import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -68,11 +67,6 @@ class HomeActivity : AuthActivity() {
                         getView().showSnackBar("FCM Token retrieved ${it.token}", backColor = ContextCompat.getColor(this, WARNING_COLOR))
                     }
                 }
-
-                MainActViewModel.MainActState.NotificationOpenedState -> {
-
-                }
-
                 else -> {
 
                 }

@@ -12,14 +12,13 @@ import com.silent.core.preferences.PreferencesService
 import com.silent.core.users.User
 import com.silent.core.users.UsersService
 import com.silent.core.utils.PODCASTS_PREFERENCES
-import com.silent.core.utils.TOKEN_PREFERENCES
 import com.silent.core.videos.Video
 import com.silent.core.videos.VideoMapper
 import com.silent.core.videos.VideoService
 import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
-import com.silent.ilustriscore.core.model.DataException
 import com.silent.ilustriscore.core.model.ServiceResult
+import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.sparky.features.home.data.HeaderType
 import com.silent.sparky.features.home.data.PodcastHeader
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +38,10 @@ class HomeViewModel(
     val homeState = MutableLiveData<HomeState>()
 
     fun getHome() {
+        if (getUser() == null) {
+            viewModelState.postValue(ViewModelBaseState.RequireAuth)
+            return
+        }
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val podcastFilter = ArrayList<String>()
@@ -53,7 +56,7 @@ class HomeViewModel(
                 val sortedPodcasts = filteredPodcasts.sortedByDescending { it.subscribe }
                 val homeHeaders = ArrayList<PodcastHeader>()
                 sortedPodcasts.forEachIndexed { index, podcast ->
-                    val uploadsData = videoService.query(podcast.id, "podcastId")
+                    val uploadsData = videoService.query(podcast.id, "podcastId", limit = 20)
                     when (uploadsData) {
                         is ServiceResult.Error -> {
                             Log.e(
@@ -88,17 +91,12 @@ class HomeViewModel(
                     }
                 }
                 checkLives(sortedPodcasts)
-                if (service.currentUser() == null) {
-                    sendErrorState(DataException.AUTH)
-                } else {
-                    service.currentUser()?.let {
-                        checkManager(it.uid)
-                    }
-                    checkToken()
+                service.currentUser()?.let {
+                    checkManager(it.uid)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                //homeState.postValue(HomeState.HomeError)
+                homeState.postValue(HomeState.HomeError)
             }
         }
     }
@@ -180,8 +178,6 @@ class HomeViewModel(
                 }
                 homeState.postValue(HomeState.HomeFetched)
             }
-
-
         } catch (e: Exception) {
             homeState.postValue(HomeState.HomeLiveError)
         }
@@ -204,14 +200,7 @@ class HomeViewModel(
         }
     }
 
-    private fun checkToken() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val tokenPref = preferencesService.getStringValue(TOKEN_PREFERENCES)
-            if (tokenPref == null) {
-                homeState.postValue(HomeState.NoTokenFound)
-            }
-        }
-    }
+
 
     private fun createHeader(
         podcast: Podcast,

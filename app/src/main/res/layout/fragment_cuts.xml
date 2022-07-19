@@ -45,5 +45,9 @@
         app:lottie_rawRes="@raw/cut"
         app:lottie_repeatMode="reverse" />
 
-
+    <include
+        android:id="@+id/error_view"
+        layout="@layout/error_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

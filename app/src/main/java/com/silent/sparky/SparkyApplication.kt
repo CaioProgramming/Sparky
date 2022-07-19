@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Build
 import androidx.multidex.MultiDex
 import cat.ereza.customactivityoncrash.config.CaocConfig
+import com.google.firebase.firestore.ktx.firestoreSettings
 import com.silent.core.notifications.SparkyNotificationChannel
 import com.silent.sparky.di.appModule
 import com.silent.sparky.features.ErrorActivity
@@ -34,11 +35,11 @@ class SparkyApplication : Application() {
             .backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT)
             .trackActivities(true)
             .errorActivity(ErrorActivity::class.java).apply()
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(SparkyNotificationChannel.createChannel(applicationContext))
         }
+
     }
 
 

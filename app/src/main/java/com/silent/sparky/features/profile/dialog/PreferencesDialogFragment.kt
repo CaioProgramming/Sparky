@@ -1,5 +1,6 @@
 package com.silent.sparky.features.profile.dialog
 
+import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,7 +20,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val TAG = "PREFERENCES_DIALOG"
 
-class PreferencesDialogFragment : BottomSheetDialogFragment() {
+class PreferencesDialogFragment : DialogInterface.OnDismissListener, BottomSheetDialogFragment() {
 
     private val preferencesViewModel by viewModel<PreferencesViewModel>()
     private var fragmentPreferencesBinding: FragmentPreferencesBinding? = null
@@ -123,6 +124,10 @@ class PreferencesDialogFragment : BottomSheetDialogFragment() {
             podcastAdapter = PodcastAdapter(podcasts, ::selectPodcast)
             podcastsRecycler.adapter = podcastAdapter
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        onDismiss()
     }
 
 

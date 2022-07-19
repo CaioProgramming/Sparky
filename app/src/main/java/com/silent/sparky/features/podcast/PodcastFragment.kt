@@ -22,6 +22,7 @@ import com.ilustris.ui.extensions.showSnackBar
 import com.silent.core.component.GroupType
 import com.silent.core.component.HostGroup
 import com.silent.core.component.HostGroupAdapter
+import com.silent.core.component.showError
 import com.silent.core.podcast.Host
 import com.silent.core.podcast.Podcast
 import com.silent.core.utils.WebUtils
@@ -40,25 +41,6 @@ class PodcastFragment : Fragment() {
     private val podcastViewModel by viewModel<PodcastViewModel>()
     private val args by navArgs<PodcastFragmentArgs>()
     private var program: Podcast? = null
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        clearFragment()
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        clearFragment()
-    }
-
-    private fun clearFragment() {
-        podcastViewModel.viewModelState.removeObservers(this)
-        podcastViewModel.podcastState.removeObservers(this)
-        podcastViewModel.scheduleState.removeObservers(this)
-        podcastViewModel.clearState()
-        podcastFragmentBinding = null
-    }
 
     private fun onSelectHeader(podcastHeader: PodcastHeader) {
         findNavController().navigate(
@@ -80,11 +62,12 @@ class PodcastFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
-    }
-
-    override fun onStart() {
-        super.onStart()
         podcastViewModel.getPodcastData(args.podcastId)
+        podcastFragmentBinding?.run {
+            errorView.run {
+                errorAnimation.setAnimationFromUrl("https://assets3.lottiefiles.com/packages/lf20_txli4cbw.json")
+            }
+        }
     }
 
     private fun animateSubscriberCount(count: Int) {
@@ -204,6 +187,8 @@ class PodcastFragment : Fragment() {
         mainContent.gone()
     }
 
+
+
     private fun observeViewModel() {
         podcastViewModel.podcastState.observe(viewLifecycleOwner) {
             when (it) {
@@ -211,8 +196,9 @@ class PodcastFragment : Fragment() {
                     setupPodcast(it.podcast, it.headers, it.isFavorite)
                 }
                 PodcastViewModel.PodcastState.PodcastFailedState -> {
-                    requireView().showSnackBar("Ocorreu um erro ao obter os vídeos")
-                    podcastFragmentBinding?.loading?.fadeOut()
+                    podcastFragmentBinding?.errorView?.showError("Ocorreu um erro ao obter os dados desse podcast") {
+                        findNavController().popBackStack()
+                    }
                 }
                 is PodcastViewModel.PodcastState.RetrieveSearch -> {
                     setupHeaders(it.headers)
@@ -240,10 +226,9 @@ class PodcastFragment : Fragment() {
                     podcastFragmentBinding?.showLoading()
                 }
                 is ViewModelBaseState.ErrorState -> {
-                    requireView().showSnackBar(
-                        "Ocorreu ao obter dados do podcast",
-                        backColor = ContextCompat.getColor(requireContext(), ERROR_COLOR)
-                    )
+                    podcastFragmentBinding?.errorView?.showError(it.dataException.code.message) {
+                        findNavController().popBackStack()
+                    }
                 }
                 else -> {}
             }
