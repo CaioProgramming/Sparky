@@ -244,7 +244,7 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
         homeFragmentBinding?.run {
             loadingAnimation.fadeOut()
             appBarLayout.fadeIn()
-            podcastsResumeRecycler.fadeIn()
+            mainContent.fadeIn()
             if (podcastsResumeRecycler.childCount == 0) {
                 podcastsResumeRecycler.removeAllViews()
                 homeViewModel.getHome()
