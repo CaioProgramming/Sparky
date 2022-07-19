@@ -222,8 +222,6 @@
         app:lottie_repeatMode="reverse"
         app:lottie_speed="0.5" />
 
-
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/user_badges"
         android:layout_width="match_parent"
@@ -233,7 +231,6 @@
         app:spanCount="3"
         tools:listitem="@layout/badge_layout"
           />
-
 
     <com.airbnb.lottie.LottieAnimationView
 
@@ -248,5 +245,11 @@
         app:lottie_rawRes="@raw/cards"
         app:lottie_repeatMode="reverse"
          />
+
+    <include
+        android:id="@+id/error_view"
+        layout="@layout/error_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

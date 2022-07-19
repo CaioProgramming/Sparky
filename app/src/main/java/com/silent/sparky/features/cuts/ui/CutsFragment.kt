@@ -17,6 +17,7 @@ import com.ilustris.animations.slideInBottom
 import com.ilustris.ui.extensions.ERROR_COLOR
 import com.ilustris.ui.extensions.gone
 import com.ilustris.ui.extensions.showSnackBar
+import com.silent.core.component.showError
 import com.silent.core.podcast.Podcast
 import com.silent.core.videos.Video
 import com.silent.sparky.R
@@ -48,6 +49,7 @@ class CutsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        cutsBinding.errorView.errorAnimation.setAnimationFromUrl("https://assets5.lottiefiles.com/packages/lf20_753sjt3m.json")
         observeViewModel()
         cutsViewModel.fetchCuts()
     }
@@ -69,10 +71,11 @@ class CutsFragment : Fragment() {
     private fun observeViewModel() {
         cutsViewModel.cutsState.observe(viewLifecycleOwner) {
             when (it) {
-                CutsState.CutsError -> view?.showSnackBar(
-                    "Ocorre um erro inesperado ao obter os cortes",
-                    backColor = ContextCompat.getColor(requireContext(), ERROR_COLOR)
-                )
+                CutsState.CutsError -> {
+                    cutsBinding.errorView.showError("Ocorre um erro inesperado ao obter os cortes") {
+                        cutsViewModel.fetchCuts()
+                    }
+                }
                 is CutsState.CutsRetrieved -> {
                     cutsBinding.setupCuts(it.cutHeader)
                 }

@@ -14,6 +14,5 @@ sealed class HomeState {
     object InvalidManager : HomeState()
     object HomeError : HomeState()
     object HomeLiveError : HomeState()
-    object NoTokenFound: HomeState()
     object LoadingSearch: HomeState()
 }

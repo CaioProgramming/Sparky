@@ -18,6 +18,7 @@ import com.ilustris.animations.popIn
 import com.ilustris.animations.slideInBottom
 import com.ilustris.ui.extensions.ERROR_COLOR
 import com.ilustris.ui.extensions.showSnackBar
+import com.silent.core.component.showError
 import com.silent.core.flow.data.FlowProfile
 import com.silent.core.stickers.response.Badge
 import com.silent.core.users.User
@@ -57,6 +58,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
+        profileBinding?.errorView?.errorAnimation?.setAnimationFromUrl("https://assets10.lottiefiles.com/packages/lf20_rjobbdq9.json")
         viewModel.findUser()
     }
 
@@ -92,13 +94,14 @@ class ProfileFragment : Fragment() {
                             viewModel.saveFirebaseUser()
                         }
                         ErrorType.AUTH -> {
-                            login()
+                            profileBinding?.errorView?.showError("Ocorreu um erro inesperado(${it.dataException.code.message}") {
+                                login()
+                            }
                         }
                         else -> {
-                            view?.showSnackBar(
-                                "Ocorreu um erro inesperado(${it.dataException.code.message}",
-                                backColor = Color.RED
-                            )
+                            profileBinding?.errorView?.showError("Ocorreu um erro inesperado(${it.dataException.code.message}") {
+                                viewModel.findUser()
+                            }
                         }
                     }
                 }
@@ -131,7 +134,7 @@ class ProfileFragment : Fragment() {
             when(it) {
                 StickersState.ErrorFetchingStickers -> {
                     requireView().showSnackBar(
-                        "Ocorreu um erro ao obter os stickers",
+                        "Ocorreu um erro ao obter os emblemas",
                         backColor = ContextCompat.getColor(requireContext(), ERROR_COLOR)
                     )
                 }
@@ -146,12 +149,9 @@ class ProfileFragment : Fragment() {
         mainActViewModel.actState.observe(viewLifecycleOwner) {
             when (it) {
                 MainActViewModel.MainActState.LoginErrorState -> {
-                    requireView().showSnackBar(
-                        "Ocorreu um erro ao realizar o login, tente novamente.",
-                        ContextCompat.getColor(requireContext(), ERROR_COLOR),
-                        action = {
-                            login()
-                        })
+                    profileBinding?.errorView?.showError("Ocorreu um erro ao realizar o login, tente novamente") {
+                        login()
+                    }
                 }
                 MainActViewModel.MainActState.LoginSuccessState -> {
                     viewModel.findUser()

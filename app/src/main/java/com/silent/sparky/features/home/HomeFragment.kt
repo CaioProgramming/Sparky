@@ -119,7 +119,10 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                     setupHome(it.podcastHeaders)
                 }
                 HomeState.HomeError -> {
-                    homeViewModel.getAllData()
+                    homeFragmentBinding?.showError("Ocorreu um erro inesperado ao carregar.") {
+                        homeViewModel.getAllData()
+
+                    }
                 }
 
                 is HomeState.HomeLivesRetrieved -> {
@@ -138,9 +141,6 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                     PreferencesDialogFragment.buildDialog(childFragmentManager) {
                         homeViewModel.getHome()
                     }
-                }
-                HomeState.NoTokenFound -> {
-                    mainActViewModel.checkToken()
                 }
                 HomeState.LoadingSearch -> {
                     homeFragmentBinding?.run {
