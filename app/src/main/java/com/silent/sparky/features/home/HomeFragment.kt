@@ -1,25 +1,22 @@
 package com.silent.sparky.features.home
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.firebase.ui.auth.AuthUI
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
+import com.ilustris.animations.popOut
 import com.ilustris.animations.slideInBottom
-import com.ilustris.ui.auth.LoginHelper
-import com.ilustris.ui.extensions.ERROR_COLOR
 import com.ilustris.ui.extensions.gone
-import com.ilustris.ui.extensions.showSnackBar
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.podcasts
 import com.silent.core.utils.WebUtils
@@ -61,6 +58,8 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupView()
         observeViewModel()
+        homeViewModel.getHome()
+        homeFragmentBinding?.showLoading()
     }
 
     private fun openPodcast(id: String) {
@@ -70,17 +69,6 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
 
     private fun openChannel(url: String) {
         WebUtils(requireContext()).openYoutubeChannel(url)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        homeViewModel.getHome()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setupView()
-        homeViewModel.getHome()
     }
 
     private fun setupView() {
@@ -98,8 +86,7 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
             homeSearch.setOnSearchClickListener {
                 homeViewModel.searchPodcastAndEpisodes(homeSearch.query.toString())
             }
-            val closeButton: View? =
-                homeSearch.findViewById(androidx.appcompat.R.id.search_close_btn)
+            val closeButton: View? = homeSearch.findViewById(androidx.appcompat.R.id.search_close_btn)
             closeButton?.setOnClickListener {
                 homeSearch.setQuery("", false)
                 homeViewModel.getHome()
@@ -157,38 +144,36 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                 }
                 HomeState.LoadingSearch -> {
                     homeFragmentBinding?.run {
-                        loadingAnimation.fadeIn()
-                        mainContent.gone()
+                        showLoading()
                     }
                 }
-                is HomeState.HomeSearchRetrieved -> setupHome(it.podcastHeader)
+                is HomeState.HomeSearchRetrieved -> {
+                    if (it.podcastHeader.isNotEmpty()) {
+                        setupHome(it.podcastHeader)
+                    } else {
+                        homeFragmentBinding?.showError("Nenhum resultado encontrado para sua busca.") {
+                            homeFragmentBinding?.homeSearch?.setQuery("",false)
+                            homeViewModel.getHome()
+                        }
+                    }
+                }
                 else -> {}
             }
         }
         homeViewModel.viewModelState.observe(viewLifecycleOwner) {
             when (it) {
                 ViewModelBaseState.LoadingState -> {
-                    homeFragmentBinding?.homeAnimation?.fadeIn()
-                    homeFragmentBinding?.livesRecyclerView?.gone()
-                    homeFragmentBinding?.mainContent?.gone()
+                    homeFragmentBinding?.showLoading()
                 }
 
                 ViewModelBaseState.LoadCompleteState -> {
-                    homeFragmentBinding?.run {
-                        loadingAnimation.fadeOut()
-                        appBarLayout.fadeIn()
-                        mainContent.fadeIn()
-                        if (podcastsResumeRecycler.childCount == 0) {
-                            podcastsResumeRecycler.removeAllViews()
-                            homeViewModel.getHome()
-                        }
-                    }
-
-
+                    homeFragmentBinding?.stopLoading()
                 }
 
                 ViewModelBaseState.RequireAuth -> {
-                    login()
+                    homeFragmentBinding?.showError("Você precisa estar logado para utilizar o app.") {
+                        mainActViewModel.updateState(MainActViewModel.MainActState.RequireLoginState)
+                    }
                 }
                 is ViewModelBaseState.DataListRetrievedState -> {
                     homeFragmentBinding?.podcastsResumeRecycler?.run {
@@ -201,12 +186,14 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                     }
                 }
                 is ViewModelBaseState.ErrorState -> {
-                    view?.showSnackBar(
-                        "Ocorreu um erro inesperado(${it.dataException.code.message}",
-                        backColor = ContextCompat.getColor(requireContext(), ERROR_COLOR)
-                    )
                     if (it.dataException.code == ErrorType.AUTH) {
-                        mainActViewModel.updateState(MainActViewModel.MainActState.RequireLoginState)
+                        homeFragmentBinding?.showError("Você precisa estar logado para utilizar o app.") {
+                            mainActViewModel.updateState(MainActViewModel.MainActState.RequireLoginState)
+                        }
+                    } else {
+                        homeFragmentBinding?.showError("Ocorreu um erro inesperado(${it.dataException.code.message}") {
+                            homeViewModel.getHome()
+                        }
                     }
                 }
                 else -> {}
@@ -220,41 +207,42 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
         }
     }
 
-
-    private fun login() {
-        LoginHelper.signIn(
-            requireActivity() as AppCompatActivity,
-            arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build()),
-            R.style.Theme_Sparky,
-            R.mipmap.ic_launcher
-        ) { resultCode ->
-            handleResultCode(resultCode)
-        }
+    private fun HomeFragmentBinding.showLoading() {
+        homeAnimation.updateLayoutParams<ConstraintLayout.LayoutParams> { horizontalBias = 0.5f }
+        homeTitle.fadeOut()
+        homeToolbar.fadeOut()
+        mainContent.fadeOut()
     }
 
-    private fun handleResultCode(resultCode: Int) {
-        if (resultCode != Activity.RESULT_OK) {
-            login()
-        } else {
-            onStart()
+    private fun HomeFragmentBinding.stopLoading() {
+        homeAnimation.updateLayoutParams<ConstraintLayout.LayoutParams> { horizontalBias = 0.0f }
+        homeTitle.fadeIn()
+        homeToolbar.fadeIn()
+        mainContent.slideInBottom()
+    }
+
+    private fun HomeFragmentBinding.showError(message: String, tryAgainClick: () -> Unit) {
+
+        errorView.run {
+            errorAnimation.playAnimation()
+             errorMessage.text = message
+             errorButton.setOnClickListener {
+                tryAgainClick.invoke()
+                 root.fadeOut()
+            }
+            root.fadeIn()
         }
+
     }
 
     private fun setupHome(headers: ArrayList<PodcastHeader>) {
         homeFragmentBinding?.run {
-            loadingAnimation.fadeOut()
-            appBarLayout.fadeIn()
-            mainContent.fadeIn()
-            if (podcastsResumeRecycler.childCount == 0) {
-                podcastsResumeRecycler.removeAllViews()
-                homeViewModel.getHome()
-            }
-            podcastsResumeRecycler?.adapter =
-                VideoHeaderAdapter(headers, headerSelected = { header ->
+            podcastsResumeRecycler.adapter = VideoHeaderAdapter(headers, headerSelected = { header ->
                     header.playlistId?.let { id -> openPodcast(id) }
                 }, ::openChannel, selectPodcast = {
                     openPodcast(it.id)
                 })
+            stopLoading()
         }
     }
 

@@ -20,6 +20,7 @@ import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
 import com.silent.ilustriscore.core.model.DataException
 import com.silent.ilustriscore.core.model.ServiceResult
+import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.sparky.features.home.data.HeaderType
 import com.silent.sparky.features.home.data.PodcastHeader
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +40,10 @@ class HomeViewModel(
     val homeState = MutableLiveData<HomeState>()
 
     fun getHome() {
+        if (getUser() == null) {
+            viewModelState.postValue(ViewModelBaseState.RequireAuth)
+            return
+        }
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val podcastFilter = ArrayList<String>()
@@ -180,8 +185,6 @@ class HomeViewModel(
                 }
                 homeState.postValue(HomeState.HomeFetched)
             }
-
-
         } catch (e: Exception) {
             homeState.postValue(HomeState.HomeLiveError)
         }
