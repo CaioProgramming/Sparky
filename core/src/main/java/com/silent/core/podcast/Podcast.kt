@@ -25,7 +25,7 @@ data class Podcast(
     var cuts: String = "",
     var uploads: String = "",
     var highLightColor: String = "#000",
-    var cover: String = "",
+    var cover: String? = "",
     var notificationIcon: String = "",
     var slogan: String = "",
     @Exclude var liveVideo: Video? = null,

@@ -35,10 +35,10 @@ import com.silent.manager.features.newpodcast.fragments.hosts.HostDialog
 import com.silent.manager.features.newpodcast.fragments.hosts.HostInstagramDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PodcastFragment : Fragment() {
+class PodcastManageFragment : Fragment() {
 
     private val args by navArgs<PodcastsManagerFragmentArgs>()
-    private val podcastViewModel by viewModel<PodcastViewModel>()
+    private val podcastViewModel by viewModel<PodcastManagerViewModel>()
     private var podcastFragmentBinding: FragmentManagePodcastBinding? = null
 
     lateinit var podcast: Podcast
@@ -134,14 +134,14 @@ class PodcastFragment : Fragment() {
         }
         podcastViewModel.podcastManagerState.observe(viewLifecycleOwner) {
             when(it) {
-                is PodcastViewModel.PodcastManagerState.CutsUpdated -> {
+                is PodcastManagerViewModel.PodcastManagerState.CutsUpdated -> {
                     requireView().showSnackBar("${it.count} cortes atualizados")
                 }
-                is PodcastViewModel.PodcastManagerState.EpisodesUpdated -> {
+                is PodcastManagerViewModel.PodcastManagerState.EpisodesUpdated -> {
                     requireView().showSnackBar("${it.count} episódios atualizados")
 
                 }
-                PodcastViewModel.PodcastManagerState.PodcastUpdateRequest -> {
+                PodcastManagerViewModel.PodcastManagerState.PodcastUpdateRequest -> {
                     podcastFragmentBinding?.loading?.fadeIn()
                 }
             }

@@ -10,7 +10,7 @@ class PodcastMapper {
         iconURL = channel.snippet.thumbnails.high.url,
         subscribe = channel.statistics.subscriberCount,
         views = channel.statistics.viewCount,
-        uploads = channel.contentDetails.relatedPlaylists.uploads
+        uploads = channel.contentDetails.relatedPlaylists.uploads,
     )
 
 }

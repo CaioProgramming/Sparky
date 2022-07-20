@@ -16,7 +16,7 @@ import com.silent.ilustriscore.core.utilities.formatDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PodcastViewModel(
+class PodcastManagerViewModel(
     application: Application,
     override val service: PodcastService,
     private val videoService: VideoService,

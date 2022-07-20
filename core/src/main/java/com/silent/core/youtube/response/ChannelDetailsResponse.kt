@@ -12,7 +12,8 @@ data class ChannelResource(
     val snippet: ChannelDetails,
     val contentDetails: ChannelContent,
     val brandingSettings: BrandingSettings,
-    val statistics: ChannelStatistics
+    val statistics: ChannelStatistics,
+    val image: BrandingImage? = null
 )
 
 data class ChannelContent(val relatedPlaylists: ChannelPlaylists)
@@ -23,7 +24,7 @@ data class BrandingSettings(val image: BrandingImage)
 
 data class ChannelStatistics(val subscriberCount: Int, val viewCount: Int)
 
-data class BrandingImage(val bannerExternalUrl: String)
+data class BrandingImage(val bannerExternalUrl: String? = null)
 
 data class ChannelDetails(
     val type: String,

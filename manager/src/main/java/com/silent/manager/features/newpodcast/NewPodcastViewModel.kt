@@ -5,15 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.silent.core.podcast.*
 import com.silent.core.videos.CutService
-import com.silent.core.videos.Video
 import com.silent.core.videos.VideoMapper
 import com.silent.core.videos.VideoService
 import com.silent.core.youtube.SectionItem
 import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.*
-import com.silent.ilustriscore.core.utilities.formatDate
 import com.silent.manager.features.newpodcast.fragments.youtube.PodcastsHeader
-import com.silent.manager.features.podcast.PodcastViewModel
 import com.silent.manager.states.HostState
 import com.silent.manager.states.NewPodcastState
 import kotlinx.coroutines.Dispatchers
