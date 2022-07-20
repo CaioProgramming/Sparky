@@ -5,9 +5,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
-import com.silent.core.podcast.Podcast
-import com.silent.core.podcast.PodcastService
-import com.silent.core.podcast.podcasts
+import com.silent.core.podcast.*
 import com.silent.core.preferences.PreferencesService
 import com.silent.core.users.User
 import com.silent.core.users.UsersService
@@ -19,8 +17,6 @@ import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
 import com.silent.ilustriscore.core.model.ServiceResult
 import com.silent.ilustriscore.core.model.ViewModelBaseState
-import com.silent.core.podcast.HeaderType
-import com.silent.core.podcast.PodcastHeader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -126,12 +122,13 @@ class HomeViewModel(
                         orientation = RecyclerView.HORIZONTAL,
                         seeMore = false,
                         type = HeaderType.PODCASTS,
-                        podcasts = queryPodcasts)
+                        podcasts = queryPodcasts
+                    )
                 )
             }
 
             podcasts.forEachIndexed { index, podcast ->
-                when(val videoRequest = videoService.getPodcastVideos(podcast.id)) {
+                when (val videoRequest = videoService.getPodcastVideos(podcast.id)) {
                     is ServiceResult.Success -> {
                         val videos = videoRequest.success.data as ArrayList<Video>
                         val queryVideos = ArrayList(videos.filter {
@@ -148,7 +145,10 @@ class HomeViewModel(
 
                 if (index == podcasts.lastIndex) {
                     val queryHeaders = headers.filter { header ->
-                        header.title.contains(query, true) || header.videos?.isNotEmpty() == true || header.podcasts?.isNotEmpty() == true
+                        header.title.contains(
+                            query,
+                            true
+                        ) || header.videos?.isNotEmpty() == true || header.podcasts?.isNotEmpty() == true
                     }
                     homeState.postValue(HomeState.HomeSearchRetrieved(ArrayList(queryHeaders)))
                 }
@@ -204,7 +204,6 @@ class HomeViewModel(
     }
 
 
-
     private fun createHeader(
         podcast: Podcast,
         uploads: List<Video>,
@@ -212,12 +211,13 @@ class HomeViewModel(
     ): PodcastHeader {
         return PodcastHeader(
             title = podcast.name,
+            subTitle = "Últimos episódios do ${podcast.name}",
             icon = podcast.iconURL,
             channelURL = podcast.youtubeID,
             videos = ArrayList(uploads),
             playlistId = playlistID,
             orientation = RecyclerView.HORIZONTAL,
-            seeMore = true,
+            seeMore = true
         )
 
     }

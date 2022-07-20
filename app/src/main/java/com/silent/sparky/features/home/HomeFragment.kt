@@ -209,7 +209,6 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
 
     private fun HomeFragmentBinding.showLoading() {
         homeAnimation.updateLayoutParams<ConstraintLayout.LayoutParams> { horizontalBias = 0.5f }
-        homeTitle.fadeOut()
         homeToolbar.fadeOut()
         mainContent.fadeOut()
     }
