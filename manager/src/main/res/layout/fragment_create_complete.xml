@@ -7,12 +7,11 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animation"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/podcast_slogan"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:lottie_rawRes="@raw/jellyfish"
         app:lottie_speed="0.8" />
 
@@ -20,14 +19,35 @@
         android:id="@+id/sucess_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         android:visibility="gone"
         tools:visibility="visible"
+        android:textColor="@color/material_blue500"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/animation"
+        app:layout_constraintTop_toBottomOf="@id/save_slogan"
         tools:text="Podcast salvo com sucesso!" />
+
+    <EditText
+        android:id="@+id/podcast_slogan"
+        android:hint="Bordão do podcast"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textAlignment="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/transparent"
+        android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/save_slogan"
+        app:layout_constraintTop_toBottomOf="@id/podcast_slogan"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:text="Salvar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -88,7 +88,7 @@ class YoutubeFormFragment : Fragment() {
 
     private fun selectCutChannel(savedPodcast: Podcast) {
         CutsDialog.getInstance { cutPodcast ->
-            savedPodcast.cuts = cutPodcast.cuts
+            savedPodcast.cuts = cutPodcast.uploads
             newPodcastViewModel.updatePodcast(savedPodcast)
         }.show(childFragmentManager, "SELECT_CUT")
     }

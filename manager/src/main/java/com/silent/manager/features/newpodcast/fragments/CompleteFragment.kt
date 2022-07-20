@@ -34,7 +34,12 @@ class CompleteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
-        newPodcastViewModel.saveData(newPodcastViewModel.podcast)
+        completeFragmentBinding?.run {
+            saveSlogan.setOnClickListener {
+                newPodcastViewModel.podcast.slogan = podcastSlogan.text.toString()
+                newPodcastViewModel.saveData(newPodcastViewModel.podcast)
+            }
+        }
     }
 
     private fun FragmentCreateCompleteBinding.showSaveSuccess() {

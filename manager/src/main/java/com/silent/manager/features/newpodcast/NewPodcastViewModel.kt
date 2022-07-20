@@ -3,16 +3,13 @@ package com.silent.manager.features.newpodcast
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.silent.core.podcast.Host
-import com.silent.core.podcast.Podcast
-import com.silent.core.podcast.PodcastMapper
-import com.silent.core.podcast.PodcastService
+import com.silent.core.podcast.*
+import com.silent.core.videos.CutService
+import com.silent.core.videos.VideoMapper
+import com.silent.core.videos.VideoService
 import com.silent.core.youtube.SectionItem
 import com.silent.core.youtube.YoutubeService
-import com.silent.ilustriscore.core.model.BaseViewModel
-import com.silent.ilustriscore.core.model.DataException
-import com.silent.ilustriscore.core.model.ErrorType
-import com.silent.ilustriscore.core.model.ViewModelBaseState
+import com.silent.ilustriscore.core.model.*
 import com.silent.manager.features.newpodcast.fragments.youtube.PodcastsHeader
 import com.silent.manager.states.HostState
 import com.silent.manager.states.NewPodcastState
@@ -20,19 +17,33 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 private const val VENUS_CHANNEL_ID = "UCTBhsXf_XRxk8w4rMj6WBOA"
-private const val FLOW_STUDIOS_ID = "UCmw6h7iv_A_nHA1nlnhkAAA"
+private const val FLOW_SPORT_CLUB_ID = "UC5-aueB1RqpUc-EeAjtx9Lw"
 
 class NewPodcastViewModel(
     application: Application,
     override val service: PodcastService,
     private val youtubeService: YoutubeService,
-    private val podcastMapper: PodcastMapper
+    private val podcastMapper: PodcastMapper,
+    private val videoMapper: VideoMapper,
+    private val videoService: VideoService,
+    private val cutService: CutService
 ) : BaseViewModel<Podcast>(application) {
 
     val newPodcastState = MutableLiveData<NewPodcastState>()
     val hostState = MutableLiveData<HostState>()
 
     var podcast = Podcast()
+
+    override fun saveData(data: Podcast) {
+        viewModelScope.launch(Dispatchers.IO) {
+            data.apply {
+                hosts = ArrayList(this.hosts.filter { it.name != NEW_HOST })
+            }
+            updateEpisodesAndCuts(data)
+            super.saveData(data)
+        }
+
+    }
 
     fun updatePodcast(newPodcast: Podcast) {
         this.podcast = newPodcast
@@ -71,7 +82,7 @@ class NewPodcastViewModel(
     fun getRelatedChannels(filter: String? = null) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val channelSections = youtubeService.getChannelSections(VENUS_CHANNEL_ID)
+                val channelSections = youtubeService.getChannelSections(FLOW_SPORT_CLUB_ID)
                 filterRelatedChannels(channelSections.items, filter)
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -97,6 +108,7 @@ class NewPodcastViewModel(
         sectionItem: List<SectionItem>,
         filter: String? = null
     ) {
+        val podcastsList = service.getAllData().success.data as podcasts
         val podcastHeaders = ArrayList<PodcastsHeader>()
         val multipleChannelsList = if (filter != null) {
             sectionItem.filter { it.snippet.type == "multiplechannels" && it.snippet.title == filter }
@@ -109,7 +121,7 @@ class NewPodcastViewModel(
             channels.forEach { podcastID ->
                 val channel = youtubeService.getChannelDetails(podcastID).items.first()
                 val podcast = podcastMapper.mapChannelResponse(channel)
-                relatedPodcasts.add(podcast)
+                if (!podcastsList.any { it.youtubeID == podcast.youtubeID }) relatedPodcasts.add(podcast)
             }
             podcastHeaders.add(PodcastsHeader(sectionItem.snippet.title, relatedPodcasts))
             if (index == multipleChannelsList.lastIndex) {
@@ -124,6 +136,19 @@ class NewPodcastViewModel(
                 }
             }
         }
+    }
+
+    private suspend fun updateEpisodesAndCuts(podcast: Podcast) {
+            val uploads = youtubeService.getPlaylistVideos(podcast.uploads, 100)
+            val cuts = youtubeService.getPlaylistVideos(podcast.cuts, 100)
+            uploads.items.forEachIndexed { index, playlistResource ->
+                val video = videoMapper.mapVideoSnippet(playlistResource.snippet, podcast.id)
+                videoService.editData(video)
+            }
+            cuts.items.forEachIndexed { index, playlistResource ->
+                val video = videoMapper.mapVideoSnippet(playlistResource.snippet, podcast.id)
+                cutService.editData(video)
+            }
     }
 
 }

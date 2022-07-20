@@ -33,12 +33,13 @@ import com.silent.manager.features.newpodcast.fragments.highlight.NOTIFICATION_I
 import com.silent.manager.features.newpodcast.fragments.highlight.NotificationIconFragment
 import com.silent.manager.features.newpodcast.fragments.hosts.HostDialog
 import com.silent.manager.features.newpodcast.fragments.hosts.HostInstagramDialog
+import com.silent.manager.features.podcast.adapter.VideoHeaderAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PodcastFragment : Fragment() {
+class PodcastManageFragment : Fragment() {
 
     private val args by navArgs<PodcastsManagerFragmentArgs>()
-    private val podcastViewModel by viewModel<PodcastViewModel>()
+    private val podcastViewModel by viewModel<PodcastManagerViewModel>()
     private var podcastFragmentBinding: FragmentManagePodcastBinding? = null
 
     lateinit var podcast: Podcast
@@ -134,15 +135,18 @@ class PodcastFragment : Fragment() {
         }
         podcastViewModel.podcastManagerState.observe(viewLifecycleOwner) {
             when(it) {
-                is PodcastViewModel.PodcastManagerState.CutsUpdated -> {
+                is PodcastManagerViewModel.PodcastManagerState.CutsUpdated -> {
                     requireView().showSnackBar("${it.count} cortes atualizados")
                 }
-                is PodcastViewModel.PodcastManagerState.EpisodesUpdated -> {
+                is PodcastManagerViewModel.PodcastManagerState.EpisodesUpdated -> {
                     requireView().showSnackBar("${it.count} episódios atualizados")
 
                 }
-                PodcastViewModel.PodcastManagerState.PodcastUpdateRequest -> {
+                PodcastManagerViewModel.PodcastManagerState.PodcastUpdateRequest -> {
                     podcastFragmentBinding?.loading?.fadeIn()
+                }
+                is PodcastManagerViewModel.PodcastManagerState.CutsAndUploadsRetrieved -> {
+                    podcastFragmentBinding?.videosRecyclerview?.adapter = VideoHeaderAdapter(it.sections, {})
                 }
             }
         }
@@ -161,6 +165,7 @@ class PodcastFragment : Fragment() {
             podcastSlogan.setText(podcast.slogan)
         }
         updateHosts()
+        podcastViewModel.getVideosAndCuts(argPodcast.id)
     }
 
     private fun selectHost(host: Host, type: GroupType) {

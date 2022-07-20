@@ -32,7 +32,7 @@ object ImageUtils {
             val drawableRes = drawable()
             icons.add(IconData(icon.name, icon.getInt(drawableRes)))
         }
-        return icons
+        return ArrayList(icons.sortedBy { it.name })
     }
 
 

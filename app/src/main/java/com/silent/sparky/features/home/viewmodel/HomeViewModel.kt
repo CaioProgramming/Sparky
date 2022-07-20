@@ -19,9 +19,10 @@ import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
 import com.silent.ilustriscore.core.model.ServiceResult
 import com.silent.ilustriscore.core.model.ViewModelBaseState
-import com.silent.sparky.features.home.data.HeaderType
-import com.silent.sparky.features.home.data.PodcastHeader
+import com.silent.core.podcast.HeaderType
+import com.silent.core.podcast.PodcastHeader
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
@@ -44,6 +45,8 @@ class HomeViewModel(
         }
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                getAllData()
+                delay(3000)
                 val podcastFilter = ArrayList<String>()
                 val preferencesPodcasts = preferencesService.getStringSetValue(PODCASTS_PREFERENCES)
                 if (preferencesPodcasts.isNullOrEmpty()) {

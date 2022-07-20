@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.ilustris.animations.popIn
 import com.silent.core.utils.ColorUtils
 import com.silent.manager.R
 import com.silent.manager.databinding.ColorCardBinding
@@ -23,6 +24,7 @@ class ColorAdapter(context: Context, private val onColorPick: (String) -> Unit) 
                 colorcard.setOnClickListener {
                     onColorPick(colors[bindingAdapterPosition])
                 }
+                root.popIn()
             }
         }
     }

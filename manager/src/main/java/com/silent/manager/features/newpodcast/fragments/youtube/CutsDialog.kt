@@ -12,6 +12,8 @@ import com.silent.manager.R
 import com.silent.manager.databinding.CutsDialogBinding
 import com.silent.manager.features.newpodcast.NewPodcastViewModel
 import com.silent.manager.states.NewPodcastState
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CutsDialog : BottomSheetDialogFragment() {
 
@@ -19,9 +21,7 @@ class CutsDialog : BottomSheetDialogFragment() {
         onSelectCut(it)
         dialog?.dismiss()
     }
-    private val newPodcastViewModel: NewPodcastViewModel by lazy {
-        ViewModelProvider(requireActivity())[NewPodcastViewModel::class.java]
-    }
+    private val newPodcastViewModel: NewPodcastViewModel by sharedViewModel()
     lateinit var onSelectCut: (Podcast) -> Unit
 
     override fun onCreateView(

@@ -1,4 +1,4 @@
-package com.silent.sparky.features.home.adapter
+package com.silent.manager.features.podcast.adapter
 
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -20,11 +20,10 @@ import com.ilustris.ui.extensions.visible
 import com.silent.core.component.PodcastAdapter
 import com.silent.core.databinding.VideoGroupLayoutBinding
 import com.silent.core.podcast.Podcast
-import com.silent.sparky.R
 import com.silent.core.podcast.HeaderType
 import com.silent.core.podcast.PodcastHeader
 import com.silent.core.podcast.programSections
-import com.silent.sparky.features.podcast.adapter.VideosAdapter
+import com.silent.manager.R
 
 class VideoHeaderAdapter(
     val programSections: programSections,
@@ -40,7 +39,8 @@ class VideoHeaderAdapter(
                 val section = programSections[bindingAdapterPosition]
                 setupHeader(section)
                 if (section.type == HeaderType.VIDEOS) {
-                    val layoutManager = LinearLayoutManager(itemView.context, section.orientation, false)
+                    val layoutManager =
+                        LinearLayoutManager(itemView.context, section.orientation, false)
                     val maxLimit = if (section.videos!!.size > 20) 20 else section.videos!!.size
                     videosRecycler.adapter = VideosAdapter(section.videos!!.subList(0, maxLimit), section.highLightColor)
                     videosRecycler.layoutManager = layoutManager
@@ -63,8 +63,8 @@ class VideoHeaderAdapter(
                     ColorStateList.valueOf(Color.parseColor(it))
                 programIcon.borderColor = Color.parseColor(it)
             }
-            groupTitle.text = section.title
             groupSubtitle.text = section.subTitle
+            groupTitle.text = section.title
             groupTitle.setOnClickListener {
                 headerSelected(section)
             }

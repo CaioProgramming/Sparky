@@ -14,9 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
-import com.ilustris.animations.popOut
 import com.ilustris.animations.slideInBottom
-import com.ilustris.ui.extensions.gone
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.podcasts
 import com.silent.core.utils.WebUtils
@@ -29,7 +27,7 @@ import com.silent.sparky.databinding.HomeFragmentBinding
 import com.silent.sparky.features.home.adapter.PodcastsLiveAdapter
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
 import com.silent.sparky.features.home.data.LiveHeader
-import com.silent.sparky.features.home.data.PodcastHeader
+import com.silent.core.podcast.PodcastHeader
 import com.silent.sparky.features.home.viewmodel.HomeState
 import com.silent.sparky.features.home.viewmodel.HomeViewModel
 import com.silent.sparky.features.home.viewmodel.MainActViewModel
@@ -56,10 +54,14 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        homeFragmentBinding?.showLoading()
         setupView()
         observeViewModel()
+    }
+
+    override fun onStart() {
+        super.onStart()
         homeViewModel.getHome()
-        homeFragmentBinding?.showLoading()
     }
 
     private fun openPodcast(id: String) {
@@ -121,7 +123,6 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                 HomeState.HomeError -> {
                     homeFragmentBinding?.showError("Ocorreu um erro inesperado ao carregar.") {
                         homeViewModel.getAllData()
-
                     }
                 }
 
@@ -177,12 +178,11 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                 }
                 is ViewModelBaseState.DataListRetrievedState -> {
                     homeFragmentBinding?.podcastsResumeRecycler?.run {
-                        adapter =
-                            PodcastsLiveAdapter((it.dataList as podcasts).sortedByDescending { p -> p.subscribe }) { podcast, index ->
-                                WebUtils(requireContext()).openYoutubeChannel(podcast.youtubeID)
+                        adapter = PodcastsLiveAdapter((it.dataList as podcasts).sortedByDescending { p -> p.subscribe }) { podcast, index ->
+                             openPodcast(podcast.id)
                             }
-                        layoutManager =
-                            GridLayoutManager(requireContext(), 4, RecyclerView.VERTICAL, false)
+                        layoutManager = GridLayoutManager(requireContext(), 4, RecyclerView.VERTICAL, false)
+                        homeFragmentBinding?.stopLoading()
                     }
                 }
                 is ViewModelBaseState.ErrorState -> {
@@ -242,6 +242,7 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                 }, ::openChannel, selectPodcast = {
                     openPodcast(it.id)
                 })
+            podcastsResumeRecycler.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             stopLoading()
         }
     }

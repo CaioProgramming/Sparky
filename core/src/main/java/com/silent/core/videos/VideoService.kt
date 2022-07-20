@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.silent.core.utils.VIDEOS_PATH
+import com.silent.ilustriscore.BuildConfig
 import com.silent.ilustriscore.core.bean.BaseBean
 import com.silent.ilustriscore.core.model.BaseService
 import com.silent.ilustriscore.core.model.DataException
@@ -14,6 +15,7 @@ import kotlinx.coroutines.tasks.await
 class VideoService : BaseService() {
 
     override val dataPath = VIDEOS_PATH
+    override var isDebug = true
 
     override fun deserializeDataSnapshot(dataSnapshot: DocumentSnapshot): BaseBean? {
         return dataSnapshot.toObject(Video::class.java)?.apply {

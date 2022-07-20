@@ -27,13 +27,29 @@
                 style="@style/Theme.Sparky.ProgramIcon"
                 tools:src="@drawable/ic_round_podcasts_24" />
 
-            <TextView
-                android:id="@+id/group_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/padding_default_16dp"
-                android:textAppearance="@style/Ilustris.Title"
-                tools:text="Últimos episódios" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/group_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/padding_default_16dp"
+                    android:textAppearance="@style/Ilustris.Title"
+                    tools:text="Últimos episódios" />
+
+                <TextView
+                    android:paddingHorizontal="@dimen/padding_default_16dp"
+                    android:id="@+id/group_subtitle"
+                    tools:text="Só conversa fiada!"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+
 
         </LinearLayout>
 

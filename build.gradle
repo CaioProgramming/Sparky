@@ -6,7 +6,7 @@ buildscript {
         ext.compileSdk = 33
         ext.minSdk = 26
         ext.kotlin_version = '1.7.10'
-        ext.ilustris_version = '2.5.0'
+        ext.ilustris_version = '2.5.4'
         ext.koin_version = "3.1.5"
         ext.versionCode = 1
         ext.versionName = "1.0"

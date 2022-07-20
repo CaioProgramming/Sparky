@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".features.podcast.PodcastFragment">
+    tools:context=".features.podcast.PodcastManageFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -30,8 +30,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/double_faded_gradient"
-                  />
+                android:background="@drawable/double_faded_gradient" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -47,7 +46,6 @@
                     android:layout_marginBottom="?attr/actionBarSize"
                     android:src="@drawable/ic_round_podcasts_24"
                     app:layout_collapseMode="parallax"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -61,31 +59,49 @@
                     android:stateListAnimator="@animator/scale_down_animator"
                     app:layout_constraintBottom_toBottomOf="@id/program_icon"
                     app:layout_constraintEnd_toEndOf="@id/program_icon" />
+
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/podcast_notification_icon"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    app:civ_circle_background_color="?attr/colorPrimary"
-                    app:civ_border_width="2dp"
-                    app:civ_border_color="@color/md_white"
                     android:src="@drawable/ic_iconmonstr_connection_1"
-                    android:tint="@color/md_white"
                     android:stateListAnimator="@animator/scale_down_animator"
+                    android:tint="@color/md_white"
+                    app:civ_border_color="@color/md_white"
+                    app:civ_border_width="2dp"
+                    app:civ_circle_background_color="?attr/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/program_icon"
                     app:layout_constraintStart_toStartOf="@id/program_icon" />
 
-
-
-                <EditText
-                    android:id="@+id/podcast_slogan"
-                    android:padding="@dimen/padding_default_16dp"
-                    android:hint="Slogan do podcast"
-                    android:textAlignment="center"
-                    android:gravity="center"
-                    android:background="@color/transparent"
+                <LinearLayout
                     app:layout_constraintTop_toBottomOf="@id/highlight_color"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/podcast_slogan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:gravity="center"
+                        android:hint="Slogan do podcast"
+                        android:padding="@dimen/padding_default_16dp"
+                        android:textAlignment="center"
+                        app:layout_constraintTop_toBottomOf="@id/highlight_color" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/hosts_recyclerview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bottom_line"
+                        android:backgroundTint="@color/material_grey900"
+                        android:nestedScrollingEnabled="true"
+                        android:orientation="vertical"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                        app:spanCount="2"
+                        tools:itemCount="1"
+                        tools:listitem="@layout/host_group_card" />
+                </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -100,9 +116,9 @@
 
             <EditText
                 android:id="@+id/podcast_edit_text"
-                android:layout_gravity="top"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="top"
                 android:background="@color/transparent"
                 android:focusedByDefault="true"
                 android:fontFamily="@font/kaushan_script"
@@ -139,8 +155,8 @@
                 android:layout_gravity="bottom"
                 android:indeterminate="true"
                 android:padding="0dp"
-                app:trackColor="@color/transparent"
                 android:visibility="gone"
+                app:trackColor="@color/transparent"
                 app:trackCornerRadius="@dimen/radius_small_5dp"
                 tools:indeterminate="false"
                 tools:progress="50" />
@@ -150,26 +166,17 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <RelativeLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/videos_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/hosts_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bottom_line"
-            android:backgroundTint="@color/material_grey900"
-            android:nestedScrollingEnabled="true"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:spanCount="2"
-            tools:itemCount="2"
-            tools:listitem="@layout/host_group_card" />
-
-
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_line"
+        android:backgroundTint="@color/material_grey900"
+        android:nestedScrollingEnabled="true"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

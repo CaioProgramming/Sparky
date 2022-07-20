@@ -9,16 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.ilustris.animations.*
-import com.ilustris.ui.extensions.ERROR_COLOR
 import com.ilustris.ui.extensions.gone
-import com.ilustris.ui.extensions.showSnackBar
 import com.silent.core.component.GroupType
 import com.silent.core.component.HostGroup
 import com.silent.core.component.HostGroupAdapter
@@ -31,7 +28,7 @@ import com.silent.sparky.R
 import com.silent.sparky.databinding.FragmentPodcastBinding
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
 import com.silent.sparky.features.home.data.LiveHeader
-import com.silent.sparky.features.home.data.PodcastHeader
+import com.silent.core.podcast.PodcastHeader
 import com.silent.sparky.features.podcast.schedule.PodcastScheduleDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.NumberFormat
