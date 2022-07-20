@@ -38,6 +38,21 @@ class ManagerViewModel(
     }
 
     val managerState = MutableLiveData<ManagerState>()
+    var uploads: List<Video>? = null
+    var cuts: List<Video>? = null
+
+    override fun deleteData(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            uploads?.forEach {
+                videoService.deleteData(it.id)
+            }
+            cuts?.forEach {
+                cutService.deleteData(it.id)
+            }
+            super.deleteData(id)
+        }
+
+    }
 
     fun updatePodcastsEpisodesAndCuts() {
         viewModelScope.launch(Dispatchers.IO) {

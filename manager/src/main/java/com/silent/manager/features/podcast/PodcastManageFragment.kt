@@ -33,6 +33,7 @@ import com.silent.manager.features.newpodcast.fragments.highlight.NOTIFICATION_I
 import com.silent.manager.features.newpodcast.fragments.highlight.NotificationIconFragment
 import com.silent.manager.features.newpodcast.fragments.hosts.HostDialog
 import com.silent.manager.features.newpodcast.fragments.hosts.HostInstagramDialog
+import com.silent.manager.features.podcast.adapter.VideoHeaderAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PodcastManageFragment : Fragment() {
@@ -144,6 +145,9 @@ class PodcastManageFragment : Fragment() {
                 PodcastManagerViewModel.PodcastManagerState.PodcastUpdateRequest -> {
                     podcastFragmentBinding?.loading?.fadeIn()
                 }
+                is PodcastManagerViewModel.PodcastManagerState.CutsAndUploadsRetrieved -> {
+                    podcastFragmentBinding?.videosRecyclerview?.adapter = VideoHeaderAdapter(it.sections, {})
+                }
             }
         }
     }
@@ -161,6 +165,7 @@ class PodcastManageFragment : Fragment() {
             podcastSlogan.setText(podcast.slogan)
         }
         updateHosts()
+        podcastViewModel.getVideosAndCuts(argPodcast.id)
     }
 
     private fun selectHost(host: Host, type: GroupType) {

@@ -1,8 +1,7 @@
 package com.silent.sparky.features.home.viewmodel
 
 import com.silent.core.podcast.Podcast
-import com.silent.core.videos.Video
-import com.silent.sparky.features.home.data.PodcastHeader
+import com.silent.core.podcast.PodcastHeader
 
 sealed class HomeState {
     data class HomeSearchRetrieved(val podcastHeader: ArrayList<PodcastHeader>): HomeState()

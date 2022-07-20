@@ -1,7 +1,6 @@
-package com.silent.sparky.features.home.data
+package com.silent.core.podcast
 
 import androidx.recyclerview.widget.RecyclerView
-import com.silent.core.podcast.Podcast
 import com.silent.core.videos.Video
 import java.io.Serializable
 

@@ -3,12 +3,9 @@ package com.silent.manager.features.podcast
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.silent.core.podcast.Podcast
-import com.silent.core.podcast.PodcastService
-import com.silent.core.videos.CutService
-import com.silent.core.videos.Video
-import com.silent.core.videos.VideoMapper
-import com.silent.core.videos.VideoService
+import androidx.recyclerview.widget.RecyclerView
+import com.silent.core.podcast.*
+import com.silent.core.videos.*
 import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
 import com.silent.ilustriscore.core.model.ServiceResult
@@ -26,6 +23,7 @@ class PodcastManagerViewModel(
 ) : BaseViewModel<Podcast>(application) {
 
     sealed class PodcastManagerState() {
+        data class CutsAndUploadsRetrieved(val sections: programSections): PodcastManagerState()
         object PodcastUpdateRequest : PodcastManagerState()
         data class EpisodesUpdated(var count: Int) : PodcastManagerState()
         data class CutsUpdated(var count: Int) : PodcastManagerState()
@@ -121,6 +119,24 @@ class PodcastManagerViewModel(
                     podcastManagerState.postValue(PodcastManagerState.CutsUpdated(uploads.items.size))
                 }
             }
+        }
+    }
+
+    fun getVideosAndCuts(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val headers = ArrayList<PodcastHeader>()
+            val uploads = videoService.getPodcastVideos(id)
+            val cuts = cutService.getPodcastCuts(id)
+            if (uploads.isSuccess) {
+                val uploadList = uploads.success.data as ArrayList<Video>
+                headers.add(PodcastHeader("Episódios", subTitle = "${uploadList.size} episódios salvos.", type = HeaderType.VIDEOS, videos = uploadList, orientation = RecyclerView.HORIZONTAL))
+            }
+            if (uploads.isSuccess) {
+                val cutsList = cuts.success.data as ArrayList<Video>
+                headers.add(PodcastHeader("Cortes", subTitle = "${cutsList.size} cortes salvos." , type = HeaderType.VIDEOS, videos = cutsList, orientation = RecyclerView.HORIZONTAL))
+            }
+
+            podcastManagerState.postValue(PodcastManagerState.CutsAndUploadsRetrieved(headers))
         }
     }
 }

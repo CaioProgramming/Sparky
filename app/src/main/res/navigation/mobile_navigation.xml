@@ -145,7 +145,7 @@
         android:name="com.silent.sparky.features.podcast.playlist.PlaylistFragment"
         android:label="PlaylistFragment">
 
-        <argument android:name="header" app:argType="com.silent.sparky.features.home.data.PodcastHeader"/>
+        <argument android:name="header" app:argType="com.silent.core.podcast.PodcastHeader"/>
 
     </fragment>
 

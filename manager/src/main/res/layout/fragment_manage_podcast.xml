@@ -46,7 +46,6 @@
                     android:layout_marginBottom="?attr/actionBarSize"
                     android:src="@drawable/ic_round_podcasts_24"
                     app:layout_collapseMode="parallax"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -74,17 +73,35 @@
                     app:layout_constraintBottom_toBottomOf="@id/program_icon"
                     app:layout_constraintStart_toStartOf="@id/program_icon" />
 
-
-                <EditText
-                    android:id="@+id/podcast_slogan"
+                <LinearLayout
+                    app:layout_constraintTop_toBottomOf="@id/highlight_color"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/transparent"
-                    android:gravity="center"
-                    android:hint="Slogan do podcast"
-                    android:padding="@dimen/padding_default_16dp"
-                    android:textAlignment="center"
-                    app:layout_constraintTop_toBottomOf="@id/highlight_color" />
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/podcast_slogan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:gravity="center"
+                        android:hint="Slogan do podcast"
+                        android:padding="@dimen/padding_default_16dp"
+                        android:textAlignment="center"
+                        app:layout_constraintTop_toBottomOf="@id/highlight_color" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/hosts_recyclerview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bottom_line"
+                        android:backgroundTint="@color/material_grey900"
+                        android:nestedScrollingEnabled="true"
+                        android:orientation="vertical"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                        app:spanCount="2"
+                        tools:itemCount="1"
+                        tools:listitem="@layout/host_group_card" />
+                </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -150,7 +167,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/hosts_recyclerview"
+        android:id="@+id/videos_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_line"
@@ -159,9 +176,7 @@
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        app:spanCount="2"
-        tools:itemCount="2"
-        tools:listitem="@layout/host_group_card" />
+        />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

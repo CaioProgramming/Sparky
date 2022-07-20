@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.ilustris.animations.popIn
 import com.ilustris.animations.slideInBottom
 import com.ilustris.ui.extensions.gone
 import com.ilustris.ui.extensions.visible
@@ -43,19 +44,12 @@ class PodcastsLiveAdapter(
                 programIcon.setOnClickListener {
                     onSelectProgram(podcast, bindingAdapterPosition)
                 }
-                if (isLive) {
-                    liveStatus.visible()
-                    liveStatus.indeterminate = true
-                    if (podcast.highLightColor.isNotEmpty()) {
-                        liveStatus.rimColor = Color.parseColor(podcast.highLightColor)
-                    }
-                } else {
-                    if (podcast.highLightColor.isNotEmpty()) {
-                        programIcon.borderColor = Color.parseColor(podcast.highLightColor)
-                    }
-                    liveStatus.gone()
-                    itemView.slideInBottom()
-                }
+                liveStatus.visible()
+                liveStatus.rimColor = Color.parseColor(podcast.highLightColor)
+                liveStatus.indeterminate = isLive
+
+                liveStatus.progress = 100
+                itemView.popIn()
             }
 
         }
