@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_default_16dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/user_pic"
+        style="@style/Theme.Sparky.ProgramIcon"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:layout_marginVertical="@dimen/margin_default_10dp"
+        android:src="@drawable/ic_round_podcasts_24"
+        app:civ_border_color="?android:textColorPrimary"
+        app:civ_border_width="2dp"
+        app:civ_circle_background_color="@color/md_black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_default_10dp"
+        android:text="Flow podcast"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+        app:layout_constraintEnd_toEndOf="@id/program_icon"
+        app:layout_constraintStart_toStartOf="@id/program_icon"
+        app:layout_constraintTop_toBottomOf="@id/program_icon" />
+
+</LinearLayout>

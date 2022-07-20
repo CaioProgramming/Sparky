@@ -14,6 +14,7 @@ import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.manager.R
 import com.silent.manager.databinding.FragmentManagerBinding
 import com.silent.manager.features.manager.adapter.PodcastManagerAdapter
+import com.silent.manager.features.manager.adapter.UsersAdapter
 import com.silent.manager.features.manager.update.PodcastUpdateDialog
 import com.silent.manager.features.newpodcast.NewPodcastActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -45,6 +46,7 @@ class PodcastsManagerFragment : Fragment() {
         }
         observeViewModel()
         viewModel.getAllData()
+        viewModel.getAdmins()
     }
 
     override fun onResume() {
@@ -109,6 +111,11 @@ class PodcastsManagerFragment : Fragment() {
                         updateDialog = PodcastUpdateDialog(requireContext(), it.podcasts)
                     }
                     updateDialog?.buildDialog()
+                }
+                is ManagerViewModel.ManagerState.AdminsRetrieved -> {
+                    fragmentManagerBinding?.adminsRecycler?.adapter = UsersAdapter(it.users) { user ->
+
+                    }
                 }
             }
         }

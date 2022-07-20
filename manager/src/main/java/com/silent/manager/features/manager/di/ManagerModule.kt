@@ -1,6 +1,7 @@
 package com.silent.manager.features.manager.di
 
 import com.silent.core.podcast.PodcastService
+import com.silent.core.users.UsersService
 import com.silent.core.videos.CutService
 import com.silent.core.videos.VideoMapper
 import com.silent.core.videos.VideoService
@@ -16,5 +17,6 @@ val managerModule = module {
     factory { VideoService() }
     factory { YoutubeService() }
     factory { PodcastService() }
-    viewModel { ManagerViewModel(androidApplication(), get(), get(), get(), get(), get()) }
+    factory { UsersService() }
+    viewModel { ManagerViewModel(androidApplication(), get(), get(), get(), get(), get(),get()) }
 }
