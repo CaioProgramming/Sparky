@@ -128,12 +128,12 @@ class PodcastManagerViewModel(
             val uploads = videoService.getPodcastVideos(id)
             val cuts = cutService.getPodcastCuts(id)
             if (uploads.isSuccess) {
-                val uploadList = uploads.success.data as ArrayList<Video>
-                headers.add(PodcastHeader("Episódios", subTitle = "${uploadList.size} episódios salvos.", type = HeaderType.VIDEOS, videos = uploadList, orientation = RecyclerView.HORIZONTAL))
+                val uploadList = (uploads.success.data as ArrayList<Video>).sortedByDescending { it.publishedAt }
+                headers.add(PodcastHeader("Episódios", subTitle = "${uploadList.size} episódios salvos.", type = HeaderType.VIDEOS, videos = ArrayList(uploadList), orientation = RecyclerView.HORIZONTAL))
             }
             if (uploads.isSuccess) {
-                val cutsList = cuts.success.data as ArrayList<Video>
-                headers.add(PodcastHeader("Cortes", subTitle = "${cutsList.size} cortes salvos." , type = HeaderType.VIDEOS, videos = cutsList, orientation = RecyclerView.HORIZONTAL))
+                val cutsList = (cuts.success.data as ArrayList<Video>).sortedByDescending { it.publishedAt }
+                headers.add(PodcastHeader("Cortes", subTitle = "${cutsList.size} cortes salvos." , type = HeaderType.VIDEOS, videos =  ArrayList(cutsList), orientation = RecyclerView.HORIZONTAL))
             }
 
             podcastManagerState.postValue(PodcastManagerState.CutsAndUploadsRetrieved(headers))

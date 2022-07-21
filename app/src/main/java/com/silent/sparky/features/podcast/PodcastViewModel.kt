@@ -127,7 +127,7 @@ class PodcastViewModel(
                             uploads.sortedByDescending { it.publishedAt },
                             if (cuts.isEmpty()) RecyclerView.VERTICAL else RecyclerView.HORIZONTAL,
                             podcast.highLightColor,
-                            podcast.name
+                            "${uploads.size} episódios disponíveis."
                         )
                     )
                 }
@@ -140,7 +140,7 @@ class PodcastViewModel(
                             cuts.sortedByDescending { it.publishedAt },
                             RecyclerView.VERTICAL,
                             podcast.highLightColor,
-                            podcast.name,
+                            "${cuts.size} cortes disponíveis.",
                         )
                     )
                 }
