@@ -28,11 +28,23 @@ class SettingsViewModel(
 
     sealed class SettingsState {
         data class PodcastsPreferencesRetrieve(val podcasts: podcasts) : SettingsState()
-        object UserSignedOut: SettingsState()
+        object UserSignedOut : SettingsState()
     }
 
     private val podcastsService = PodcastService()
     val settingsState = MutableLiveData<SettingsState>()
+
+    override fun deleteData(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val subscribedPodcasts = preferencesService.getStringSetValue(PODCASTS_PREFERENCES)
+            subscribedPodcasts?.forEach {
+                firebaseService.unsubscribeTopic(it) {}
+            }
+            getUser()?.delete()
+            super.deleteData(id)
+        }
+
+    }
 
     fun loadSettings() {
         viewModelScope.launch(Dispatchers.IO) {

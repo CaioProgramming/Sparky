@@ -15,6 +15,7 @@ import com.silent.core.podcast.Podcast
 import com.silent.core.users.User
 import com.silent.core.utils.WebUtils
 import com.silent.ilustriscore.core.model.ViewModelBaseState
+import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.silent.sparky.R
 import com.silent.sparky.databinding.FragmentSettingsBinding
 import com.silent.sparky.features.profile.dialog.FlowLinkDialog
@@ -64,6 +65,12 @@ class SettingsFragment : Fragment() {
                     it.dataException.code.message,
                     backColor = Color.RED
                 )
+                is ViewModelBaseState.DataDeletedState -> {
+                    requireView().showSnackBar("Conta deletada.", backColor = Color.BLACK)
+                    delayedFunction(5000) {
+                        requireActivity().finishAffinity()
+                    }
+                }
                 else -> {}
             }
         }
@@ -107,6 +114,19 @@ class SettingsFragment : Fragment() {
             signOutButton.setOnClickListener {
                 settingsViewModel.logout()
             }
+
+            deleteAccountButton.setOnClickListener {
+                MaterialAlertDialogBuilder(requireContext()).setTitle("Tem certeza?")
+                    .setMessage("Essa ação irá excluir sua conta e não pode ser revertida.")
+                    .setPositiveButton("Confirmar") { dialog, _ ->
+                        settingsViewModel.deleteData(user.id)
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("Cancelar") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+            }
+
             nv99Button.setOnClickListener {
                 WebUtils(requireContext()).openNv99()
             }

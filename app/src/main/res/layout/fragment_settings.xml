@@ -120,18 +120,6 @@
                 tools:listitem="@layout/podcast_list_layout" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/sign_out_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/padding_default_16dp"
-                android:background="@drawable/card_shape"
-                app:backgroundTint="@color/material_grey900"
-                android:foreground="?attr/selectableItemBackground"
-                android:text="Desconectar"
-                android:textAlignment="center"
-                android:textColor="@color/material_red500" />
-
-            <com.google.android.material.button.MaterialButton
                 android:id="@+id/nv99_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -144,6 +132,31 @@
                 app:backgroundTint="@color/material_grey900"
                 app:icon="@drawable/ic_iconmonstr_connection_1"
                 app:iconTint="@color/material_yellow700" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/sign_out_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_default_16dp"
+                android:background="@drawable/card_shape"
+                app:backgroundTint="@color/material_grey900"
+                android:foreground="?attr/selectableItemBackground"
+                android:text="Desconectar"
+                android:textAlignment="center"
+                android:textColor="@color/material_red500" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/delete_account_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_default_16dp"
+                android:background="@drawable/card_shape"
+                android:text="Excluir conta"
+                android:foreground="?attr/selectableItemBackground"
+                android:textColor="@color/material_red500"
+                android:textAlignment="center"
+                app:backgroundTint="@color/material_grey900" />
+
 
             <TextView
                 android:id="@+id/app_info"
