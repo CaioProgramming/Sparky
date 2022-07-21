@@ -90,11 +90,9 @@ class SettingsFragment : Fragment() {
                     .setMessage("Quer mesmo remover ${podcast.name} de seus favoritos?")
                     .setNegativeButton("Remover") { dialog, which ->
                         settingsViewModel.removeFavorite(podcast.id)
-                    }
-                    .setPositiveButton("Cancelar") { dialog, which ->
+                    }.setPositiveButton("Cancelar") { dialog, which ->
                         dialog.dismiss()
-                    }
-                    .show()
+                    }.show()
             }
         }
     }
@@ -124,7 +122,7 @@ class SettingsFragment : Fragment() {
                     }
                     .setNegativeButton("Cancelar") { dialog, _ ->
                         dialog.dismiss()
-                    }
+                    }.show()
             }
 
             nv99Button.setOnClickListener {
