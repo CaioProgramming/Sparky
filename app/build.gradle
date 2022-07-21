@@ -8,12 +8,29 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 android {
     compileSdk rootProject.ext.compileSdk
 
+    def versionPropsFile = file('version.properties')
+    Properties versionProps = new Properties()
+
+    if (versionPropsFile.canRead()) {
+        versionProps.load(new FileInputStream(versionPropsFile))
+    }
+    else {
+        throw new GradleException("Could not read version.properties!")
+    }
+
+    def versionMajor = versionProps['VERSION_MAJOR'].toInteger()
+    def versionMinor = versionProps['VERSION_MINOR'].toInteger()
+    def versionPatch = versionProps['VERSION_PATCH'].toInteger()
+    def versionBuild = versionProps['VERSION_BUILD'].toInteger()
+    def versionNumber = versionProps['VERSION_NUMBER'].toInteger()
+    def vName = "${rootProject.ext.applicationName}.${versionMajor}.${versionMinor}.${versionPatch}.${versionBuild}"
+
     defaultConfig {
         applicationId rootProject.ext.applicationId
         minSdk rootProject.ext.minSdk
         targetSdk rootProject.ext.targetSdk
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionName
+        versionCode versionNumber
+        versionName vName
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -27,7 +44,14 @@ android {
         release {
             minifyEnabled true
             shrinkResources true
+            resValue("string","version_text",vName + "(release)")
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue("string","version_text",vName + "(debug)")
         }
     }
     compileOptions {

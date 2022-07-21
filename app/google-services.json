@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "146683019199-h26e0i5prp2cdkrkf7us4rj5r2749qj5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.silent.sparky",
+            "certificate_hash": "a02e42dd32efb6a13f075bc326bbbf539fb63d9e"
+          }
+        },
+        {
           "client_id": "146683019199-q4ib73hhm93tv1idacnbb8q0hqp08rle.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

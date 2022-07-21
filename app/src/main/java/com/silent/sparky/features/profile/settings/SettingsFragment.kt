@@ -112,7 +112,7 @@ class SettingsFragment : Fragment() {
             }
             val date = GregorianCalendar.getInstance()
             appInfo.text =
-                "Desenvolvido por silent systems\n2021 a ${date.get(GregorianCalendar.YEAR)}"
+                "Desenvolvido por Silent systems\n2021 a ${date.get(GregorianCalendar.YEAR)}"
             settingsViewModel.loadSettings()
         }
     }

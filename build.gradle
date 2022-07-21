@@ -11,6 +11,7 @@ buildscript {
         ext.versionCode = 1
         ext.versionName = "1.0"
         ext.applicationId = "com.silent.sparky"
+        ext.applicationName = "Sparky"
     }
 
     repositories {

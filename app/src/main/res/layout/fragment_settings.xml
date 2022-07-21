@@ -153,7 +153,16 @@
                 android:alpha="0.5"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                tools:text="Desenvolvido por silent systems 2022" />
+                tools:text="Desenvolvido por Silent systems 2022" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/margin_small_4dp"
+                android:alpha="0.5"
+                android:text="@string/version_text"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
 
 
         </LinearLayout>
