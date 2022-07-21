@@ -5,4 +5,6 @@
     <string name="title_cuts">Cortes</string>
     <string name="nav_cuts">Cortes</string>
     <string name="title_profile">Perfil</string>
+    <string name="auth_error_message">Você precisa estar logado para utilizar o app.</string>
+    <string name="sparky_warning_message">Sparky foi desenvolvido de forma independente por fãs, não é um app oficial dos Estúdios Flow.</string>
 </resources>

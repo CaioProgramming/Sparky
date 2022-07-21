@@ -1,7 +1,6 @@
 package com.silent.sparky.features.home.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +9,7 @@ import com.silent.core.preferences.PreferencesService
 import com.silent.core.users.User
 import com.silent.core.users.UsersService
 import com.silent.core.utils.PODCASTS_PREFERENCES
+import com.silent.core.utils.WARNING_PREFERENCE
 import com.silent.core.videos.Video
 import com.silent.core.videos.VideoMapper
 import com.silent.core.videos.VideoService
@@ -21,8 +21,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+private const val FETCH_DELAY_TIME = 500L
+private const val WARNING_HIDE_TIME = 5000L
+private const val SHOW_PODCAST_PREFERENCE_DELAY = 2000L
+
 class HomeViewModel(
-    private val myApplication: Application,
+    myApplication: Application,
     override val service: PodcastService,
     private val videoService: VideoService,
     private val youtubeService: YoutubeService,
@@ -33,6 +37,7 @@ class HomeViewModel(
 
 
     val homeState = MutableLiveData<HomeState>()
+    val preferencesState = MutableLiveData<PreferencesState>()
 
     fun getHome() {
         if (getUser() == null) {
@@ -41,12 +46,17 @@ class HomeViewModel(
         }
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                val warningShown = preferencesService.getBooleanValue(WARNING_PREFERENCE)
+                if (!warningShown) {
+                    preferencesState.postValue(PreferencesState.WarningNotShowed)
+                    return@launch
+                }
                 getAllData()
-                delay(1000)
+                delay(FETCH_DELAY_TIME)
                 val podcastFilter = ArrayList<String>()
                 val preferencesPodcasts = preferencesService.getStringSetValue(PODCASTS_PREFERENCES)
                 if (preferencesPodcasts.isNullOrEmpty()) {
-                    homeState.postValue(HomeState.PreferencesNotSet)
+                    preferencesState.postValue(PreferencesState.PreferencesNotSet)
                 } else {
                     podcastFilter.addAll(preferencesPodcasts)
                 }
@@ -57,12 +67,7 @@ class HomeViewModel(
                 sortedPodcasts.forEachIndexed { index, podcast ->
                     val uploadsData = videoService.query(podcast.id, "podcastId")
                     when (uploadsData) {
-                        is ServiceResult.Error -> {
-                            Log.e(
-                                javaClass.simpleName,
-                                "Video Query for ${podcast.name}(${podcast.youtubeID}) not found"
-                            )
-                        }
+                        is ServiceResult.Error -> {}
                         is ServiceResult.Success -> {
                             val sortedVideos =
                                 (uploadsData.data as ArrayList<Video>).sortedByDescending { it.publishedAt }
@@ -93,6 +98,7 @@ class HomeViewModel(
                 service.currentUser()?.let {
                     checkManager(it.uid)
                 }
+
             } catch (e: Exception) {
                 e.printStackTrace()
                 homeState.postValue(HomeState.HomeError)
@@ -220,5 +226,14 @@ class HomeViewModel(
             seeMore = true
         )
 
+    }
+
+    fun updateWarning() {
+        viewModelScope.launch(Dispatchers.IO) {
+            delay(WARNING_HIDE_TIME)
+            preferencesService.editPreference(WARNING_PREFERENCE, true)
+            preferencesState.postValue(PreferencesState.PreferencesDone)
+            getHome()
+        }
     }
 }

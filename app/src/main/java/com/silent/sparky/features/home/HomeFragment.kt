@@ -31,6 +31,7 @@ import com.silent.sparky.features.home.data.LiveHeader
 import com.silent.sparky.features.home.viewmodel.HomeState
 import com.silent.sparky.features.home.viewmodel.HomeViewModel
 import com.silent.sparky.features.home.viewmodel.MainActViewModel
+import com.silent.sparky.features.home.viewmodel.PreferencesState
 import com.silent.sparky.features.profile.dialog.PreferencesDialogFragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -117,6 +118,22 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
     }
 
     private fun observeViewModel() {
+        homeViewModel.preferencesState.observe(viewLifecycleOwner) {
+            when (it) {
+                PreferencesState.PreferencesNotSet -> {
+                    PreferencesDialogFragment.buildDialog(childFragmentManager) {
+                        homeViewModel.getHome()
+                    }
+                }
+                PreferencesState.WarningNotShowed -> {
+                    homeFragmentBinding?.warningView?.root?.fadeIn()
+                    homeViewModel.updateWarning()
+                }
+                PreferencesState.PreferencesDone -> {
+                    homeFragmentBinding?.warningView?.root?.fadeOut()
+                }
+            }
+        }
         homeViewModel.homeState.observe(viewLifecycleOwner) {
             when (it) {
                 is HomeState.HomeChannelsRetrieved -> {
@@ -140,11 +157,7 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                         goToManager()
                     }
                 }
-                HomeState.PreferencesNotSet -> {
-                    PreferencesDialogFragment.buildDialog(childFragmentManager) {
-                        homeViewModel.getHome()
-                    }
-                }
+
                 HomeState.LoadingSearch -> {
                     homeFragmentBinding?.run {
                         showLoading()
@@ -174,9 +187,12 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                 }
 
                 ViewModelBaseState.RequireAuth -> {
-                    homeFragmentBinding?.showError("Você precisa estar logado para utilizar o app.") {
-                        mainActViewModel.updateState(MainActViewModel.MainActState.RequireLoginState)
+                    if (mainActViewModel.actState.value != MainActViewModel.MainActState.RequireLoginState) {
+                        homeFragmentBinding?.showError(getString(R.string.auth_error_message)) {
+                            mainActViewModel.updateState(MainActViewModel.MainActState.RequireLoginState)
+                        }
                     }
+
                 }
                 is ViewModelBaseState.DataListRetrievedState -> {
                     homeFragmentBinding?.podcastsResumeRecycler?.run {
@@ -203,9 +219,15 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
             }
         }
         mainActViewModel.actState.observe(viewLifecycleOwner) {
-            if (it is MainActViewModel.MainActState.NavigateToPodcast) {
-                openPodcast(it.podcastId)
-                mainActViewModel.notificationOpen()
+            when (it) {
+                is MainActViewModel.MainActState.NavigateToPodcast -> {
+                    openPodcast(it.podcastId)
+                    mainActViewModel.notificationOpen()
+                }
+                is MainActViewModel.MainActState.LoginSuccessState -> {
+                    homeViewModel.getHome()
+                }
+                else -> {}
             }
         }
     }

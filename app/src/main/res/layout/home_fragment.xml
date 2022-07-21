@@ -122,4 +122,8 @@
         android:id="@+id/error_view"
         layout="@layout/error_view" />
 
+    <include
+        android:id="@+id/warning_view"
+        layout="@layout/warning_layout" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

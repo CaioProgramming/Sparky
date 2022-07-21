@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.silent.core.firebase.FirebaseService
 import com.silent.core.preferences.PreferencesService
 import com.silent.core.utils.TOKEN_PREFERENCES
@@ -42,7 +43,6 @@ class MainActViewModel(
 
     fun updateState(mainActState: MainActState) {
         actState.postValue(mainActState)
-
     }
 
     fun updateNotificationPermission(permissionStatus: Boolean = false) {
@@ -94,6 +94,14 @@ class MainActViewModel(
 
     fun notificationOpen() {
         actState.value = MainActState.LoginSuccessState
+    }
+
+    fun checkUser() {
+        if (FirebaseAuth.getInstance().currentUser == null) {
+            updateState(MainActState.RequireLoginState)
+        } else {
+            updateState(MainActState.LoginSuccessState)
+        }
     }
 
 }

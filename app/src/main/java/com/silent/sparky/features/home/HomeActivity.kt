@@ -20,7 +20,6 @@ import com.ilustris.ui.extensions.showSnackBar
 import com.silent.sparky.BuildConfig
 import com.silent.sparky.R
 import com.silent.sparky.databinding.ActivityHomeBinding
-import com.silent.sparky.di.appModule
 import com.silent.sparky.features.cuts.di.cutsModule
 import com.silent.sparky.features.home.di.homeModule
 import com.silent.sparky.features.home.viewmodel.MainActViewModel
@@ -51,10 +50,10 @@ class HomeActivity : AuthActivity() {
                 navController.navigate(R.id.navigation_home)
             }
         }
-
         observeViewModel()
         mainActViewModel.checkNotifications()
         mainActViewModel.validatePush(podcastExtra)
+        mainActViewModel.checkUser()
     }
 
 
@@ -64,12 +63,13 @@ class HomeActivity : AuthActivity() {
                 MainActViewModel.MainActState.RequireLoginState -> login()
                 is MainActViewModel.MainActState.RetrieveToken -> {
                     if (BuildConfig.DEBUG) {
-                        getView().showSnackBar("FCM Token retrieved ${it.token}", backColor = ContextCompat.getColor(this, WARNING_COLOR))
+                        getView().showSnackBar(
+                            "FCM Token retrieved ${it.token}",
+                            backColor = ContextCompat.getColor(this, WARNING_COLOR)
+                        )
                     }
                 }
-                else -> {
-
-                }
+                else -> {}
             }
         }
 
