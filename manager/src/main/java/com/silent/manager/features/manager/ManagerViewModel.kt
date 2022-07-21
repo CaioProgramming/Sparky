@@ -43,6 +43,7 @@ class ManagerViewModel(
         ) : ManagerState()
         data class UpdateError(val podcast: Podcast) : ManagerState()
         data class AdminsRetrieved(val users: ArrayList<User>): ManagerState()
+        data class UsersRetrieved(val users: ArrayList<User>) : ManagerState()
     }
 
     val managerState = MutableLiveData<ManagerState>()
@@ -54,9 +55,23 @@ class ManagerViewModel(
             val request = usersService.getAllData()
             if (request is ServiceResult.Success) {
                 val userList = (request.data as ArrayList<User>).filter { it.admin }
-                managerState.postValue(ManagerState.AdminsRetrieved(ArrayList(userList)))
+                val userArray = ArrayList(userList).apply {
+                    add(User.newUser())
+                }
+                managerState.postValue(ManagerState.AdminsRetrieved(userArray))
             }
         }
+    }
+
+    fun requestUsers() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val request = usersService.getAllData()
+            if (request is ServiceResult.Success) {
+                val userList = (request.data as ArrayList<User>).sortedBy { it.admin }
+                managerState.postValue(ManagerState.UsersRetrieved(ArrayList(userList)))
+            }
+        }
+
     }
 
     override fun deleteData(id: String) {
@@ -204,5 +219,17 @@ class ManagerViewModel(
         }
 
     }
+
+    fun updateUser(user: User) {
+        viewModelScope.launch(Dispatchers.IO) {
+            user.admin = !user.admin
+            val updateRequest = usersService.editData(user)
+            if (updateRequest is ServiceResult.Success) {
+                getAdmins()
+            }
+        }
+
+    }
+
 
 }

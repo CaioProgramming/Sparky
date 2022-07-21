@@ -27,10 +27,11 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:padding="@dimen/padding_default_16dp"
+
                     android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
                     android:text="Administradores"
                     android:textStyle="bold"
-                    android:padding="@dimen/padding_default_16dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
