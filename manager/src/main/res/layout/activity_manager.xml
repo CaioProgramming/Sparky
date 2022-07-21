@@ -4,13 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/manager_toolbar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/app_name" />
-
     <fragment
         android:id="@+id/manager_host"
         android:name="androidx.navigation.fragment.NavHostFragment"

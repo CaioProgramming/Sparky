@@ -4,13 +4,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
 import com.silent.manager.R
 import com.silent.manager.databinding.ActivityManagerBinding
 import com.silent.manager.features.manager.di.managerModule
 import com.silent.manager.features.podcast.di.podcastManagerModule
 import org.koin.core.context.loadKoinModules
-import org.koin.core.context.unloadKoinModules
 
 class ManagerActivity : AppCompatActivity() {
     private val managerModules = listOf(managerModule, podcastManagerModule)
@@ -33,7 +31,6 @@ class ManagerActivity : AppCompatActivity() {
                     R.id.podcastsManagerFragment, R.id.podcastFragment
                 )
             )
-            managerToolbar.setupWithNavController(navController, appBarConfiguration)
         }
 
     }

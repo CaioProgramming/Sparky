@@ -7,14 +7,18 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.firebase.ui.auth.AuthUI
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ilustris.ui.extensions.showSnackBar
 import com.silent.core.podcast.podcasts
+import com.silent.core.users.NEW_USER
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.manager.R
 import com.silent.manager.databinding.FragmentManagerBinding
 import com.silent.manager.features.manager.adapter.PodcastManagerAdapter
+import com.silent.manager.features.manager.adapter.UsersAdapter
 import com.silent.manager.features.manager.update.PodcastUpdateDialog
+import com.silent.manager.features.manager.users.USERS_TAG
+import com.silent.manager.features.manager.users.UserListDialog
 import com.silent.manager.features.newpodcast.NewPodcastActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -40,11 +44,9 @@ class PodcastsManagerFragment : Fragment() {
         newPodcastButton.setOnClickListener {
             NewPodcastActivity.launchIntent(requireContext())
         }
-        updateEpisodes.setOnClickListener {
-            viewModel.updatePodcastsEpisodesAndCuts()
-        }
         observeViewModel()
         viewModel.getAllData()
+        viewModel.getAdmins()
     }
 
     override fun onResume() {
@@ -77,6 +79,16 @@ class PodcastsManagerFragment : Fragment() {
                                 bundle
                             )
                         }
+                    fragmentManagerBinding?.updateEpisodes?.setOnClickListener {
+                        MaterialAlertDialogBuilder(requireContext()).setTitle("Atenção!")
+                            .setMessage("Você irá atualizar os dados e episódios de todos os ${podcasts.size} podcasts. Isso pode demorar um pouco, deseja continuar?")
+                            .setPositiveButton("Ok") { _, _ ->
+                                viewModel.updatePodcastsEpisodesAndCuts()
+                            }
+                            .setNegativeButton("Cancelar") {  dialog, _ ->
+                                dialog.dismiss()
+                            }.show()
+                    }
                 }
                 is ViewModelBaseState.DataSavedState -> {
                     showSnackBar("Podcast adicionado com sucesso")
@@ -93,7 +105,7 @@ class PodcastsManagerFragment : Fragment() {
             }
         }
         viewModel.managerState.observe(viewLifecycleOwner) {
-            when(it) {
+            when (it) {
                 is ManagerViewModel.ManagerState.PodcastUpdated -> {
                     updateDialog?.updatePodcastStatus(it.index)
                 }
@@ -109,6 +121,21 @@ class PodcastsManagerFragment : Fragment() {
                         updateDialog = PodcastUpdateDialog(requireContext(), it.podcasts)
                     }
                     updateDialog?.buildDialog()
+                }
+                is ManagerViewModel.ManagerState.AdminsRetrieved -> {
+                    fragmentManagerBinding?.adminsRecycler?.adapter =
+                        UsersAdapter(it.users) { user ->
+                            if (user.id == NEW_USER) {
+                                viewModel.requestUsers()
+                            } else {
+                                viewModel.updateUser(user)
+                            }
+                        }
+                }
+                is ManagerViewModel.ManagerState.UsersRetrieved -> {
+                    UserListDialog.getInstance(it.users) { user ->
+                        viewModel.updateUser(user)
+                    }.show(parentFragmentManager, USERS_TAG)
                 }
             }
         }

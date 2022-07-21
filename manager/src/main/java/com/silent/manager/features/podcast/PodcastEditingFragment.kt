@@ -36,7 +36,7 @@ import com.silent.manager.features.newpodcast.fragments.hosts.HostInstagramDialo
 import com.silent.manager.features.podcast.adapter.VideoHeaderAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PodcastManageFragment : Fragment() {
+class PodcastEditingFragment : Fragment() {
 
     private val args by navArgs<PodcastsManagerFragmentArgs>()
     private val podcastViewModel by viewModel<PodcastManagerViewModel>()
