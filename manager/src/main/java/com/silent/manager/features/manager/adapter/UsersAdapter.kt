@@ -1,8 +1,10 @@
 package com.silent.manager.features.manager.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ilustris.animations.slideInBottom
@@ -25,10 +27,14 @@ class UsersAdapter(val users: ArrayList<User>, val onClickUser: (User) -> Unit):
                 if (user.id != NEW_USER) {
                     Glide.with(root.context).load(user.profilePic).into(userPic)
                     userName.text = user.name
+                    val borderColor = if (user.admin) R.color.material_yellow700 else R.color.material_grey800
+                    userPic.borderColor = ContextCompat.getColor(itemView.context, borderColor)
 
                 } else {
                     userName.gone()
-                    Glide.with(itemView).load(R.drawable.ic_iconmonstr_plus).fitCenter().into(userPic)
+                    Glide.with(itemView).load(R.drawable.ic_iconmonstr_plus).centerInside().into(userPic)
+                    userPic.borderColor = Color.TRANSPARENT
+                    userPic.circleBackgroundColor = Color.TRANSPARENT
                 }
                 root.slideInBottom()
             }

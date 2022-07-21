@@ -67,7 +67,7 @@ class ManagerViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val request = usersService.getAllData()
             if (request is ServiceResult.Success) {
-                val userList = (request.data as ArrayList<User>).sortedBy { it.admin }
+                val userList = (request.data as ArrayList<User>).sortedByDescending { it.admin }
                 managerState.postValue(ManagerState.UsersRetrieved(ArrayList(userList)))
             }
         }
@@ -87,10 +87,20 @@ class ManagerViewModel(
 
     }
 
+    fun updateUser(user: User) {
+        viewModelScope.launch(Dispatchers.IO) {
+            user.admin = !user.admin
+            val updateRequest = usersService.editData(user)
+            if (updateRequest is ServiceResult.Success) {
+                getAdmins()
+            }
+        }
+
+    }
+
     fun updatePodcastsEpisodesAndCuts() {
         viewModelScope.launch(Dispatchers.IO) {
-            val podcasts =
-                (service.getAllData().success.data as ArrayList<Podcast>).sortedByDescending { it.subscribe }
+            val podcasts = (service.getAllData().success.data as ArrayList<Podcast>).sortedByDescending { it.subscribe }
             podcasts.forEach {
                 it.updating = true
             }
@@ -105,25 +115,14 @@ class ManagerViewModel(
                         views = channel.statistics.viewCount
                         uploads = channel.contentDetails.relatedPlaylists.uploads
                     }
-                    fetchEpisodesAndCuts(podcast.id, podcast.uploads, podcast.cuts) { epsAndCuts ->
-                        viewModelScope.launch(Dispatchers.IO) {
-                            epsAndCuts.first.forEach { video ->
-                                videoService.editData(video)
-                            }
-                            epsAndCuts.second.forEach { video ->
-                                cutService.editData(video)
-                            }
-                            managerState.postValue(
-                                ManagerState.PodcastUpdated(
-                                    podcast,
-                                    epsAndCuts.first.size,
-                                    epsAndCuts.second.size,
-                                    index
-                                )
-                            )
-                        }
-
+                    val epsAndCuts = fetchEpisodesAndCuts(podcast.id, podcast.uploads, podcast.cuts)
+                    epsAndCuts.first.forEach { video ->
+                        videoService.editData(video)
                     }
+                    epsAndCuts.second.forEach { video ->
+                        cutService.editData(video)
+                    }
+                    managerState.postValue(ManagerState.PodcastUpdated(podcast, epsAndCuts.first.size, epsAndCuts.second.size, index))
 
                     if (index == podcasts.lastIndex) {
                         managerState.postValue(ManagerState.UpdateComplete)
@@ -141,94 +140,25 @@ class ManagerViewModel(
 
     }
 
-    private suspend fun getDateToFetch(
-        isCuts: Boolean = false,
-        podcastId: String,
-        fetchDate: (String) -> Unit
-    ) {
-        if (!isCuts) {
-            val videoService = videoService.getPodcastVideos(podcastId)
-            if (videoService is ServiceResult.Success) {
-                val videos =
-                    (videoService.data as ArrayList<Video>).sortedByDescending { it.publishedAt }
-                val firstVideo = videos.first()
-                val todayDate = GregorianCalendar.getInstance()
-                val videoDate = GregorianCalendar.getInstance()
-                videoDate.time = firstVideo.publishedAt
-                when (todayDate.compareTo(videoDate)) {
-                    -1 -> {
-                        fetchDate(videoDate.time.formatDate("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
-
-                    }
-                    0 -> {
-                        fetchDate(videos.last().publishedAt.formatDate("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
-                    }
-
-                }
-            }
-        } else {
-            val cutServiceRequest = cutService.getPodcastCuts(podcastId)
-            if (cutServiceRequest is ServiceResult.Success) {
-                val videos =
-                    (cutServiceRequest.data as ArrayList<Video>).sortedByDescending { it.publishedAt }
-                val firstVideo = videos.first()
-                val todayDate = GregorianCalendar.getInstance()
-                val videoDate = GregorianCalendar.getInstance()
-                videoDate.time = firstVideo.publishedAt
-                when (todayDate.compareTo(videoDate)) {
-                    -1 -> {
-                        fetchDate(videoDate.time.formatDate("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
-                    }
-                    0 -> {
-                        fetchDate(videos.last().publishedAt.formatDate("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
-                    }
-
-                }
-            }
-        }
-    }
-
     private suspend fun fetchEpisodesAndCuts(
         podcastId: String,
         uploads: String,
-        cuts: String,
-        mappedVideosAndCutsListener: (Pair<ArrayList<Video>, ArrayList<Video>>) -> Unit
-    ) {
-        val mappedCuts = ArrayList<Video>()
+        cuts: String
+    ): Pair<ArrayList<Video>, ArrayList<Video>> {
+        val uploads = youtubeService.getPlaylistVideos(uploads)
+        val cuts = youtubeService.getPlaylistVideos(cuts)
         val mappedUploads = ArrayList<Video>()
+        val mappedCuts = ArrayList<Video>()
+        uploads.items.toString().length
 
-        getDateToFetch(false, podcastId) { date ->
-            viewModelScope.launch(Dispatchers.IO) {
-                val uploads = youtubeService.getPlaylistVideos(uploads, beforeDate = date)
-                uploads.items.toString().length
-                uploads.items.forEach {
-                    mappedUploads.add(videoMapper.mapVideoSnippet(it.snippet, podcastId))
-                }
-            }
+        uploads.items.forEach {
+            mappedUploads.add(videoMapper.mapVideoSnippet(it.snippet, podcastId))
+        }
+        cuts.items.forEach {
+            mappedCuts.add(videoMapper.mapVideoSnippet(it.snippet, podcastId))
         }
 
-        getDateToFetch(true, podcastId) { date ->
-            viewModelScope.launch(Dispatchers.IO) {
-                val cuts = youtubeService.getPlaylistVideos(cuts, beforeDate = date)
-                cuts.items.forEach {
-                    mappedCuts.add(videoMapper.mapVideoSnippet(it.snippet, podcastId))
-                }
-                mappedVideosAndCutsListener(Pair(mappedUploads, mappedCuts))
-            }
-
-        }
-
-    }
-
-    fun updateUser(user: User) {
-        viewModelScope.launch(Dispatchers.IO) {
-            user.admin = !user.admin
-            val updateRequest = usersService.editData(user)
-            if (updateRequest is ServiceResult.Success) {
-                getAdmins()
-            }
-        }
-
+        return Pair(mappedUploads, mappedCuts)
     }
 
 

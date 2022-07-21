@@ -23,13 +23,13 @@ class UserListAdapter(val users: List<User>, val selectUser: (User) -> Unit): Re
         fun bind() {
             val user = users[bindingAdapterPosition]
             PodcastHorizontalLayoutBinding.bind(itemView).run {
-                programIcon.setOnClickListener {
+                root.setOnClickListener {
                     selectUser(user)
                 }
                 programIcon.borderWidth = 0
                 if (user.id != NEW_USER) {
                     updateProgress.visible()
-                    if (user.admin) updateProgress.rimColor = ContextCompat.getColor(itemView.context, R.color.material_yellow700) else  ContextCompat.getColor(itemView.context, R.color.material_white)
+                    if (user.admin) updateProgress.rimColor = ContextCompat.getColor(itemView.context, R.color.material_yellow700)  else updateProgress.gone()
                     updateCheck.gone()
                     Glide.with(itemView).load(user.profilePic).into(programIcon)
                     podcastTitle.text = user.name

@@ -16,6 +16,7 @@ import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
 import com.ilustris.animations.slideInBottom
 import com.silent.core.podcast.Podcast
+import com.silent.core.podcast.PodcastHeader
 import com.silent.core.podcast.podcasts
 import com.silent.core.utils.WebUtils
 import com.silent.ilustriscore.core.model.ErrorType
@@ -27,7 +28,6 @@ import com.silent.sparky.databinding.HomeFragmentBinding
 import com.silent.sparky.features.home.adapter.PodcastsLiveAdapter
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
 import com.silent.sparky.features.home.data.LiveHeader
-import com.silent.core.podcast.PodcastHeader
 import com.silent.sparky.features.home.viewmodel.HomeState
 import com.silent.sparky.features.home.viewmodel.HomeViewModel
 import com.silent.sparky.features.home.viewmodel.MainActViewModel
@@ -61,6 +61,7 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
 
     override fun onStart() {
         super.onStart()
+        homeFragmentBinding?.showLoading()
         homeViewModel.getHome()
     }
 
@@ -88,7 +89,8 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
             homeSearch.setOnSearchClickListener {
                 homeViewModel.searchPodcastAndEpisodes(homeSearch.query.toString())
             }
-            val closeButton: View? = homeSearch.findViewById(androidx.appcompat.R.id.search_close_btn)
+            val closeButton: View? =
+                homeSearch.findViewById(androidx.appcompat.R.id.search_close_btn)
             closeButton?.setOnClickListener {
                 homeSearch.setQuery("", false)
                 homeViewModel.getHome()
@@ -153,7 +155,7 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                         setupHome(it.podcastHeader)
                     } else {
                         homeFragmentBinding?.showError("Nenhum resultado encontrado para sua busca.") {
-                            homeFragmentBinding?.homeSearch?.setQuery("",false)
+                            homeFragmentBinding?.homeSearch?.setQuery("", false)
                             homeViewModel.getHome()
                         }
                     }
@@ -178,11 +180,12 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                 }
                 is ViewModelBaseState.DataListRetrievedState -> {
                     homeFragmentBinding?.podcastsResumeRecycler?.run {
-                        adapter = PodcastsLiveAdapter((it.dataList as podcasts).sortedByDescending { p -> p.subscribe }) { podcast, index ->
-                             openPodcast(podcast.id)
+                        adapter =
+                            PodcastsLiveAdapter((it.dataList as podcasts).sortedByDescending { p -> p.subscribe }) { podcast, index ->
+                                openPodcast(podcast.id)
                             }
                         layoutManager = GridLayoutManager(requireContext(), 4, RecyclerView.VERTICAL, false)
-                        homeFragmentBinding?.stopLoading()
+                        homeFragmentBinding?.mainContent?.fadeIn()
                     }
                 }
                 is ViewModelBaseState.ErrorState -> {
@@ -224,10 +227,10 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
 
         errorView.run {
             errorAnimation.playAnimation()
-             errorMessage.text = message
-             errorButton.setOnClickListener {
+            errorMessage.text = message
+            errorButton.setOnClickListener {
                 tryAgainClick.invoke()
-                 root.fadeOut()
+                root.fadeOut()
             }
             root.fadeIn()
         }
@@ -236,12 +239,14 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
 
     private fun setupHome(headers: ArrayList<PodcastHeader>) {
         homeFragmentBinding?.run {
-            podcastsResumeRecycler.adapter = VideoHeaderAdapter(headers, headerSelected = { header ->
+            podcastsResumeRecycler.adapter =
+                VideoHeaderAdapter(headers, headerSelected = { header ->
                     header.playlistId?.let { id -> openPodcast(id) }
                 }, ::openChannel, selectPodcast = {
                     openPodcast(it.id)
                 })
-            podcastsResumeRecycler.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+            podcastsResumeRecycler.layoutManager =
+                LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             stopLoading()
         }
     }

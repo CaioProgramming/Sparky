@@ -42,7 +42,7 @@ class HomeViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 getAllData()
-                delay(3000)
+                delay(1000)
                 val podcastFilter = ArrayList<String>()
                 val preferencesPodcasts = preferencesService.getStringSetValue(PODCASTS_PREFERENCES)
                 if (preferencesPodcasts.isNullOrEmpty()) {
@@ -55,7 +55,7 @@ class HomeViewModel(
                 val sortedPodcasts = filteredPodcasts.sortedByDescending { it.subscribe }
                 val homeHeaders = ArrayList<PodcastHeader>()
                 sortedPodcasts.forEachIndexed { index, podcast ->
-                    val uploadsData = videoService.query(podcast.id, "podcastId", limit = 20)
+                    val uploadsData = videoService.query(podcast.id, "podcastId")
                     when (uploadsData) {
                         is ServiceResult.Error -> {
                             Log.e(
