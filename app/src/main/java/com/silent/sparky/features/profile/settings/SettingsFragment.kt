@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -14,12 +13,14 @@ import com.ilustris.ui.extensions.showSnackBar
 import com.silent.core.podcast.NEW_PODCAST
 import com.silent.core.podcast.Podcast
 import com.silent.core.users.User
+import com.silent.core.utils.WebUtils
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.sparky.R
 import com.silent.sparky.databinding.FragmentSettingsBinding
 import com.silent.sparky.features.profile.dialog.FlowLinkDialog
 import com.silent.sparky.features.profile.dialog.PreferencesDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 class SettingsFragment : Fragment() {
 
@@ -98,11 +99,20 @@ class SettingsFragment : Fragment() {
             Glide.with(requireContext()).load(user.profilePic)
                 .placeholder(R.drawable.ic_iconmonstr_flower).into(userPhoto)
             flowAccountButton.setOnClickListener {
-                FlowLinkDialog(user).show(requireActivity().supportFragmentManager, "FLOWLINKDIALOG")
+                FlowLinkDialog(user).show(
+                    requireActivity().supportFragmentManager,
+                    "FLOWLINKDIALOG"
+                )
             }
             signOutButton.setOnClickListener {
                 settingsViewModel.logout()
             }
+            nv99Button.setOnClickListener {
+                WebUtils(requireContext()).openNv99()
+            }
+            val date = GregorianCalendar.getInstance()
+            appInfo.text =
+                "Desenvolvido por silent systems\n2021 a ${date.get(GregorianCalendar.YEAR)}"
             settingsViewModel.loadSettings()
         }
     }

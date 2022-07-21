@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 
+
 class WebUtils(val context: Context) {
 
     fun openYoutubeVideo(videoID: String) {
@@ -28,14 +29,26 @@ class WebUtils(val context: Context) {
     }
 
     fun openTwitch(twitchID: String) {
-        val browserIntent = Intent(Intent.ACTION_VIEW,
-            Uri.parse(TWITCH_PREFIX + twitchID))
+        val browserIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse(TWITCH_PREFIX + twitchID)
+        )
         context.startActivity(browserIntent)
     }
 
     fun openTwitter(twitterID: String) {
-        val browserIntent = Intent(Intent.ACTION_VIEW,
-            Uri.parse(TWITTER_PREFIX + twitterID))
+        val browserIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse(TWITTER_PREFIX + twitterID)
+        )
+        context.startActivity(browserIntent)
+    }
+
+    fun openNv99() {
+        val browserIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse(NV99_URL)
+        )
         context.startActivity(browserIntent)
     }
 

@@ -62,10 +62,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/padding_default_16dp"
-                    android:drawableStart="@drawable/ic_baseline_flash_on_24"
                     android:padding="@dimen/padding_default_16dp"
                     android:text="Conta Flow"
-                    app:icon="@drawable/ic_baseline_flash_on_24" />
+                    app:icon="@drawable/ic_iconmonstr_connection_1" />
 
             </LinearLayout>
 
@@ -131,6 +130,31 @@
                 android:text="Desconectar"
                 android:textAlignment="center"
                 android:textColor="@color/material_red500" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/nv99_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_default_16dp"
+                android:background="@drawable/card_shape"
+                android:foreground="?attr/selectableItemBackground"
+                android:text="Estúdios Flow"
+                android:textAlignment="center"
+                android:textColor="@color/material_yellow700"
+                app:backgroundTint="@color/material_grey900"
+                app:icon="@drawable/ic_iconmonstr_connection_1"
+                app:iconTint="@color/material_yellow700" />
+
+            <TextView
+                android:id="@+id/app_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/margin_small_4dp"
+                android:alpha="0.5"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                tools:text="Desenvolvido por silent systems 2022" />
+
 
         </LinearLayout>
 
