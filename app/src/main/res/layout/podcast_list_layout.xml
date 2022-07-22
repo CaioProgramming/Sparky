@@ -18,7 +18,7 @@
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:visibility="gone"
-        tools:src="@drawable/ic_round_podcasts_24"
+        tools:src="@drawable/ic_iconmonstr_connection_1"
         tools:visibility="visible" />
 
     <TextView

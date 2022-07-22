@@ -49,7 +49,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/podcast_name"
-            tools:src="@drawable/ic_round_podcasts_24" />
+            tools:src="@drawable/ic_iconmonstr_connection_1" />
 
         <TextView
             android:id="@+id/podcast_name"

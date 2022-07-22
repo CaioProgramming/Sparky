@@ -18,7 +18,7 @@
         android:layout_height="32dp"
         android:layout_gravity="center"
         android:layout_margin="@dimen/padding_default_16dp"
-        android:src="@drawable/ic_iconmonstr_microphone_13"
+        android:src="@drawable/ic_iconmonstr_connection_1"
         app:tint="@color/material_white" />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator

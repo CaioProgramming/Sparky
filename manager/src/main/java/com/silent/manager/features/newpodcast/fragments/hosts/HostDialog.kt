@@ -15,8 +15,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ilustris.animations.fadeIn
 import com.silent.core.component.GroupType
 import com.silent.core.podcast.Host
-import com.silent.ilustriscore.core.utilities.DateFormats
-import com.silent.ilustriscore.core.utilities.format
 import com.silent.ilustriscore.core.utilities.formatDate
 import com.silent.manager.R
 import com.silent.manager.databinding.HostDialogBinding
@@ -40,7 +38,7 @@ class HostDialog : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         HostDialogBinding.bind(view).run {
             Glide.with(requireContext()).load(host.profilePic)
-                .error(R.drawable.ic_iconmonstr_microphone_13).into(hostIcon)
+                .error(R.drawable.ic_iconmonstr_connection_1).into(hostIcon)
             message.text =
                 if (groupType == GroupType.GUESTS) "Tem certeza que deseja adicionar esse convidado?" else "Tem certeza que deseja adicionar esse host?"
             username.setText(host.name)

@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.silent.core.stickers.response.Badge
-import com.silent.core.utils.ImageUtils
 import com.silent.sparky.R
 import com.silent.sparky.databinding.BadgeLayoutBinding
 
@@ -20,7 +19,7 @@ class BadgeAdapter(val selectedBadges: List<Badge>) :
             BadgeLayoutBinding.bind(itemView).run {
                 Glide.with(itemView.context)
                     .load(badge.src)
-                    .error(ImageUtils.getRandomIcon())
+                    .error(R.drawable.ic_iconmonstr_connection_1)
                     .into(badgeImage)
             }
 

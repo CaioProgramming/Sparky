@@ -44,7 +44,7 @@
                     android:layout_height="100dp"
                     android:layout_marginTop="@dimen/margin_default_10dp"
                     android:layout_marginBottom="?attr/actionBarSize"
-                    android:src="@drawable/ic_round_podcasts_24"
+                    android:src="@drawable/ic_iconmonstr_connection_1"
                     app:layout_collapseMode="parallax"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

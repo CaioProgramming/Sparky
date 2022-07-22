@@ -1,16 +1,10 @@
 package com.silent.core.utils
 
 import android.R.drawable
-import android.content.Context
 import com.silent.core.R
 
 
 object ImageUtils {
-
-    fun getRandomIcon(): Int {
-        val pics = listOf(com.silent.core.R.drawable.eye, com.silent.core.R.drawable.cat)
-        return pics.random()
-    }
 
     fun getRandomHostPlaceHolder(): Int {
         val pics = listOf(R.drawable.man, R.drawable.teacher, R.drawable.woman)

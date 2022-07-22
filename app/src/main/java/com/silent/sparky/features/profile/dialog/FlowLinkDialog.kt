@@ -7,18 +7,15 @@ import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
 import com.ilustris.animations.slideInBottom
+import com.ilustris.ui.extensions.gone
 import com.silent.core.flow.data.FlowProfile
 import com.silent.core.users.User
-import com.silent.core.utils.ImageUtils
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.sparky.R
-import com.ilustris.ui.extensions.gone
-import com.ilustris.ui.extensions.visible
 import com.silent.sparky.databinding.FlowLinkAlertBinding
 import com.silent.sparky.features.profile.viewmodel.ProfileState
 import com.silent.sparky.features.profile.viewmodel.ProfileViewModel
@@ -135,7 +132,7 @@ class FlowLinkDialog(private val user: User) : DialogFragment() {
             flowLinkAlertBinding?.saveLinkButton?.fadeIn()
             Glide.with(requireContext())
                 .load(fProfile.profile_picture)
-                .error(ImageUtils.getRandomIcon())
+                .error(R.drawable.ic_iconmonstr_connection_1)
                 .into(flowProfile.profilePic)
             flowProfile.username.text = fProfile.username
             flowProfile.realName.text = fProfile.bio

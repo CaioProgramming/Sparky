@@ -1,7 +1,7 @@
 package com.silent.sparky.features.profile
 
 import android.animation.ValueAnimator
-import android.graphics.Color
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +22,6 @@ import com.silent.core.component.showError
 import com.silent.core.flow.data.FlowProfile
 import com.silent.core.stickers.response.Badge
 import com.silent.core.users.User
-import com.silent.core.utils.ImageUtils
 import com.silent.ilustriscore.core.model.ErrorType
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.sparky.R
@@ -125,7 +124,12 @@ class ProfileFragment : Fragment() {
                 }
                 ProfileState.FlowUserError -> {
                     requireView().showSnackBar("Ocorreu um erro ao encontrar a conta Flow", backColor = ContextCompat.getColor(requireContext(), ERROR_COLOR))
-                    profileBinding?.linkFlow?.text = "Vincular conta flow"
+                    profileBinding?.flowLinkButton?.imageTintList = ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.material_grey500
+                        )
+                    )
 
                 }
             }
@@ -182,7 +186,7 @@ class ProfileFragment : Fragment() {
                     profileToolbar.alpha = percentage
                 }
             })
-            linkFlow.setOnClickListener {
+            flowLinkButton.setOnClickListener {
                 flowDialog = FlowLinkDialog(user)
                 flowDialog?.show(requireActivity().supportFragmentManager, "FLOWLINKDIALOG")
             }
@@ -208,7 +212,12 @@ class ProfileFragment : Fragment() {
             userNameTitle.text = flowProfile.username
             realName.text = user?.name
             userBio.text = flowProfile.bio
-            linkFlow.text = "Alterar conta flow"
+            profileBinding?.flowLinkButton?.imageTintList = ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.material_yellow700
+                )
+            )
             badgesLayout.slideInBottom()
             usernameCard.fadeIn()
         }

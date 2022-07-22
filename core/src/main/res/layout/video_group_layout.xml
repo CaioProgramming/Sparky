@@ -25,7 +25,7 @@
                 android:visibility="gone"
                 tools:visibility="visible"
                 style="@style/Theme.Sparky.ProgramIcon"
-                tools:src="@drawable/ic_round_podcasts_24" />
+                tools:src="@drawable/ic_iconmonstr_connection_1" />
 
             <LinearLayout
                 android:orientation="vertical"

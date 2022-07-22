@@ -27,7 +27,7 @@
         android:layout_alignParentEnd="true"
         android:layout_centerInParent="true"
         app:civ_border_color="?attr/colorPrimaryDark"
-        tools:src="@drawable/ic_baseline_tag_faces_24" />
+        tools:src="@drawable/ic_iconmonstr_connection_1" />
 
 </RelativeLayout>
 

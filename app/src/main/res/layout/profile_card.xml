@@ -35,7 +35,7 @@
             android:layout_height="match_parent"
             android:background="?android:colorBackground"
             android:scaleType="centerCrop"
-            tools:src="@drawable/eye" />
+            tools:src="@drawable/ic_iconmonstr_connection_1" />
 
     </com.google.android.material.card.MaterialCardView>
 

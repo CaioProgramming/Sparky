@@ -37,16 +37,7 @@
             android:layout_height="match_parent"
             android:background="@color/material_grey900"
             android:scaleType="centerCrop"
-            tools:src="@drawable/ic_iconmonstr_microphone_13" />
-
-        <ImageView
-            android:id="@+id/icon_place_holder"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:scaleType="centerCrop"
-            tools:src="@drawable/ic_iconmonstr_microphone_13" />
+            tools:src="@drawable/ic_iconmonstr_connection_1" />
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -93,7 +84,7 @@
         android:paddingHorizontal="@dimen/padding_default_16dp"
         android:paddingVertical="@dimen/padding_small_8dp"
         android:text="@string/app_name"
-        android:textAlignment="textStart"
+        android:textAlignment="textEnd"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
         android:textColor="@color/md_white"
         android:textStyle="italic|bold"

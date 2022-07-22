@@ -50,7 +50,7 @@
                     android:layout_height="200dp"
                     android:layout_gravity="center"
                     android:layout_marginVertical="@dimen/margin_default_10dp"
-                    android:src="@drawable/ic_round_podcasts_24" />
+                    android:src="@drawable/ic_iconmonstr_connection_1" />
 
                 <TextView
                     android:id="@+id/subscriber_count"

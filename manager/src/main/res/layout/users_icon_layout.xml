@@ -14,7 +14,7 @@
         android:layout_gravity="center"
         android:foreground="?attr/selectableItemBackground"
         android:layout_marginVertical="@dimen/margin_default_10dp"
-        android:src="@drawable/ic_round_podcasts_24"
+        android:src="@drawable/ic_iconmonstr_connection_1"
         app:civ_border_color="?android:textColorPrimary"
         app:civ_border_width="2dp"
         app:civ_circle_background_color="@color/material_grey900"
