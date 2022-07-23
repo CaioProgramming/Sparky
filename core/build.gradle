@@ -24,7 +24,6 @@ android {
         }
 
         release {
-            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -44,6 +43,7 @@ dependencies {
     api 'androidx.navigation:navigation-fragment-ktx:2.5.0'
     api 'androidx.navigation:navigation-ui-ktx:2.5.0'
     api 'com.android.support:multidex:1.0.3'
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
 
     api "io.insert-koin:koin-core:$koin_version"
     api "io.insert-koin:koin-android:$koin_version"
