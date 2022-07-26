@@ -32,12 +32,14 @@ import com.silent.sparky.features.home.viewmodel.HomeState
 import com.silent.sparky.features.home.viewmodel.HomeViewModel
 import com.silent.sparky.features.home.viewmodel.MainActViewModel
 import com.silent.sparky.features.home.viewmodel.PreferencesState
+import com.silent.sparky.features.profile.dialog.PREF_TAG
 import com.silent.sparky.features.profile.dialog.PreferencesDialogFragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
 
+    var preferencesDialogFragment: PreferencesDialogFragment? = null
     var homeFragmentBinding: HomeFragmentBinding? = null
     private val homeViewModel: HomeViewModel by viewModel()
     private val mainActViewModel by sharedViewModel<MainActViewModel>()
@@ -60,8 +62,9 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
         observeViewModel()
     }
 
-    override fun onStart() {
-        super.onStart()
+
+    override fun onResume() {
+        super.onResume()
         homeFragmentBinding?.showLoading()
         homeViewModel.getHome()
     }
@@ -121,9 +124,13 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
         homeViewModel.preferencesState.observe(viewLifecycleOwner) {
             when (it) {
                 PreferencesState.PreferencesNotSet -> {
-                    PreferencesDialogFragment.buildDialog(childFragmentManager) {
-                        homeViewModel.getHome()
+                    if (preferencesDialogFragment == null) {
+                        preferencesDialogFragment = PreferencesDialogFragment.buildDialog {
+                            homeViewModel.getHome()
+                        }
+                        preferencesDialogFragment?.show(childFragmentManager, PREF_TAG)
                     }
+
                 }
                 PreferencesState.WarningNotShowed -> {
                     homeFragmentBinding?.warningView?.root?.fadeIn()

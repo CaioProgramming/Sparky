@@ -21,16 +21,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/cuts_subtitle"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/cuts_title"
+        android:layout_width="match_parent"
+        tools:text="100 resultados" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/cuts_pager"
-        android:orientation="vertical"
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/cuts_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_default_16dp"
+        android:background="@drawable/input_round_retangle"
+        android:backgroundTint="@color/material_grey900"
+        app:iconifiedByDefault="false"
+        app:layout_constraintTop_toBottomOf="@id/cuts_subtitle"
+        app:queryBackground="@color/transparent"
+        app:queryHint="Pesquise por cortes..." />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cuts_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/cuts_title"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/padding_default_16dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/cuts_search"
+        app:spanCount="3"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"  />
+        tools:itemCount="10"
+        tools:listitem="@layout/cut_preview" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/cuts_animation"

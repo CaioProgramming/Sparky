@@ -18,5 +18,10 @@ data class Video(
     @SerializedName("ytId")
     var youtubeID: String = "",
     var title: String = "",
-    @Exclude var podcast: Podcast? = null
+    @Exclude var podcast: Podcast? = null,
+    @Exclude var videoType: VideoType = VideoType.DEFAULT
 ) : BaseBean(id)
+
+enum class VideoType {
+    DEFAULT, MEDIUM, BIG
+}

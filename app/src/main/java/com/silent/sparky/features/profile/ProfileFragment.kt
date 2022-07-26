@@ -123,19 +123,24 @@ class ProfileFragment : Fragment() {
                     setupFlowProfile(it.flowProfile)
                 }
                 ProfileState.FlowUserError -> {
-                    requireView().showSnackBar("Ocorreu um erro ao encontrar a conta Flow", backColor = ContextCompat.getColor(requireContext(), ERROR_COLOR))
-                    profileBinding?.flowLinkButton?.imageTintList = ColorStateList.valueOf(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.material_grey500
+                    profileBinding?.run {
+                        badgesErrorView.showError("Vincule sua conta flow para ver seus emblemas aqui.") {
+                            flowLinkButton.callOnClick()
+                        }
+                        flowLinkButton.imageTintList = ColorStateList.valueOf(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.material_grey500
+                            )
                         )
-                    )
+                    }
+
 
                 }
             }
         }
         viewModel.stickersState.observe(viewLifecycleOwner) {
-            when(it) {
+            when (it) {
                 StickersState.ErrorFetchingStickers -> {
                     requireView().showSnackBar(
                         "Ocorreu um erro ao obter os emblemas",
