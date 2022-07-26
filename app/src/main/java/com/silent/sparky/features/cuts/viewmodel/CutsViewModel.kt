@@ -11,7 +11,7 @@ import com.silent.core.preferences.PreferencesService
 import com.silent.core.utils.PODCASTS_PREFERENCES
 import com.silent.core.videos.CutService
 import com.silent.core.videos.Video
-import com.silent.core.videos.VideoService
+import com.silent.core.videos.VideoType
 import com.silent.ilustriscore.core.model.BaseViewModel
 import com.silent.ilustriscore.core.model.ServiceResult
 import com.silent.sparky.features.cuts.data.PodcastCutHeader
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 class CutsViewModel(
     application: Application,
     override val service: CutService,
-   private  val podcastService: PodcastService
+    private val podcastService: PodcastService
 ) : BaseViewModel<Podcast>(application) {
     private val preferencesService = PreferencesService(application)
     val cutsState = MutableLiveData<CutsState>()
@@ -33,10 +33,10 @@ class CutsViewModel(
                 val preferencesPodcasts = preferencesService.getStringSetValue(PODCASTS_PREFERENCES)
                 preferencesPodcasts?.let { podcastFilter.addAll(it) }
                 val podcasts = podcastService.getAllData().success.data as podcasts
+                val cuts = ArrayList<Video>()
                 if (preferencesPodcasts?.isNotEmpty() == true) {
                     val filteredPodcasts = podcasts.filter { podcastFilter.contains(it.id) }
                     val sortedPodcasts = filteredPodcasts.sortedByDescending { it.subscribe }
-                    val cutHeaders = ArrayList<PodcastCutHeader>()
                     sortedPodcasts.forEachIndexed { index, podcast ->
                         when (val cutsRequest = service.query(podcast.id, "podcastId")) {
                             is ServiceResult.Error -> {
@@ -44,13 +44,24 @@ class CutsViewModel(
                                 sendErrorState(cutsRequest.errorException)
                             }
                             is ServiceResult.Success -> {
-                                val channelUploads = cutsRequest.data as ArrayList<Video>
-                                channelUploads.map { it.podcast = podcast }
-                                cutHeaders.add(PodcastCutHeader(podcast, ArrayList(channelUploads.sortedByDescending { it.publishedAt })))
+                                val podcastCuts = cutsRequest.data as ArrayList<Video>
+                                podcastCuts.map { it.podcast = podcast }
+                                val sortedVideos = podcastCuts.sortedByDescending { it.publishedAt }
+                                val cutsArray = ArrayList(sortedVideos)
+                                cutsArray.forEachIndexed { index, video ->
+                                    if (index % 5 == 0) {
+                                        cutsArray[index].videoType = VideoType.MEDIUM
+                                    }
+                                    cutsArray.first().videoType = VideoType.BIG
+                                    if (cutsArray.lastIndex % 2 != 0 || index % 5 == 0) {
+                                        cutsArray.last().videoType = VideoType.BIG
+                                    }
+                                }
+                                cuts.addAll(sortedVideos)
                             }
                         }
                         if (index == sortedPodcasts.lastIndex) {
-                            cutsState.postValue(CutsState.CutsRetrieved(cutHeaders))
+                            cutsState.postValue(CutsState.CutsRetrieved(cuts))
                         }
                     }
                 } else {
@@ -61,9 +72,19 @@ class CutsViewModel(
                             "podcastId"
                         ).success.data as ArrayList<Video>
                         channelUploads.map { it.podcast = podcast }
-                        cutHeaders.add(PodcastCutHeader(podcast, ArrayList(channelUploads.sortedByDescending { it.publishedAt })))
+                        val sortedPodcasts =
+                            channelUploads.sortedByDescending { it.publishedAt }.apply {
+                                first().videoType = VideoType.BIG
+                            }
+                        cuts.addAll(sortedPodcasts)
+                        cutHeaders.add(
+                            PodcastCutHeader(
+                                podcast,
+                                ArrayList(channelUploads.sortedByDescending { it.publishedAt })
+                            )
+                        )
                         if (index == podcasts.lastIndex) {
-                            cutsState.postValue(CutsState.CutsRetrieved(cutHeaders))
+                            cutsState.postValue(CutsState.CutsRetrieved(cuts))
                         }
                     }
                 }

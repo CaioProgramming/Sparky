@@ -239,7 +239,6 @@
           />
 
     <com.airbnb.lottie.LottieAnimationView
-
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         android:id="@+id/loading_badges"
         android:visibility="gone"
@@ -249,8 +248,14 @@
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/cards"
-        app:lottie_repeatMode="reverse"
-         />
+        app:lottie_repeatMode="reverse" />
+
+    <include
+        android:id="@+id/badges_error_view"
+        layout="@layout/error_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
     <include
         android:id="@+id/error_view"

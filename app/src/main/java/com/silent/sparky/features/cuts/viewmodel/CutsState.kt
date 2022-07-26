@@ -1,9 +1,9 @@
 package com.silent.sparky.features.cuts.viewmodel
 
-import com.silent.sparky.features.cuts.data.PodcastCutHeader
+import com.silent.core.videos.Video
 
 sealed class CutsState {
-    data class CutsRetrieved(val cutHeader: ArrayList<PodcastCutHeader>) :
+    data class CutsRetrieved(val videos: ArrayList<Video>) :
         CutsState()
 
     object CutsError : CutsState()

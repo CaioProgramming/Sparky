@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ilustris.ui.extensions.showSnackBar
 import com.silent.core.podcast.Podcast
@@ -18,7 +17,7 @@ import com.silent.sparky.features.profile.adapter.PodcastAdapter
 import com.silent.sparky.features.profile.viewmodel.PreferencesViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-private const val TAG = "PREFERENCES_DIALOG"
+const val PREF_TAG = "PREFERENCES_DIALOG"
 
 class PreferencesDialogFragment : DialogInterface.OnDismissListener, BottomSheetDialogFragment() {
 
@@ -132,10 +131,10 @@ class PreferencesDialogFragment : DialogInterface.OnDismissListener, BottomSheet
 
 
     companion object {
-        fun buildDialog(fragmentManager: FragmentManager, onDismiss: () -> Unit) =
+        fun buildDialog(onDismiss: () -> Unit) =
             PreferencesDialogFragment().apply {
                 this.onDismiss = onDismiss
-            }.show(fragmentManager, TAG)
+            }
     }
 
 }

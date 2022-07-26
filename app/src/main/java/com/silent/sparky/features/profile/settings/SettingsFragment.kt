@@ -19,6 +19,7 @@ import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.silent.sparky.R
 import com.silent.sparky.databinding.FragmentSettingsBinding
 import com.silent.sparky.features.profile.dialog.FlowLinkDialog
+import com.silent.sparky.features.profile.dialog.PREF_TAG
 import com.silent.sparky.features.profile.dialog.PreferencesDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
@@ -81,9 +82,9 @@ class SettingsFragment : Fragment() {
             add(Podcast.newPodcast)
         }) { podcast, i ->
             if (podcast.id == NEW_PODCAST) {
-                PreferencesDialogFragment.buildDialog(childFragmentManager) {
+                PreferencesDialogFragment.buildDialog {
                     settingsViewModel.loadSettings()
-                }
+                }.show(childFragmentManager, PREF_TAG)
             } else {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Tem certeza?")

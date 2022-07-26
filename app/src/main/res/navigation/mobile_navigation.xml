@@ -36,15 +36,17 @@
         android:id="@+id/navigation_cuts"
         android:name="com.silent.sparky.features.cuts.ui.CutsFragment"
         android:label="@string/title_cuts"
-        tools:layout="@layout/fragment_cuts" >
+        tools:layout="@layout/fragment_cuts">
         <action
             android:id="@+id/action_navigation_cuts_to_podcastFragment"
             app:destination="@id/podcastFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/slide_in_right"
-            app:popExitAnim="@anim/nav_default_exit_anim"
-              />
+            app:popExitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_navigation_cuts_to_liveFragment"
+            app:destination="@id/liveFragment" />
     </fragment>
     <fragment
         android:id="@+id/podcastFragment"
