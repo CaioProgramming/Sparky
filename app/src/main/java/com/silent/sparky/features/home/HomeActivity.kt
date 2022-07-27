@@ -17,6 +17,8 @@ import com.ilustris.ui.extensions.ERROR_COLOR
 import com.ilustris.ui.extensions.WARNING_COLOR
 import com.ilustris.ui.extensions.getView
 import com.ilustris.ui.extensions.showSnackBar
+import com.silent.core.podcast.Podcast
+import com.silent.core.videos.Video
 import com.silent.sparky.BuildConfig
 import com.silent.sparky.R
 import com.silent.sparky.databinding.ActivityHomeBinding
@@ -30,15 +32,27 @@ import org.koin.core.context.loadKoinModules
 
 class HomeActivity : AuthActivity() {
 
-    private val mainActViewModel : MainActViewModel by viewModel()
+    private val mainActViewModel: MainActViewModel by viewModel()
     private lateinit var notificationPermissionRequest: ActivityResultLauncher<String>
-    private val podcastExtra: String? by lazy { intent.extras?.getString("podcastId") }
+    private val podcastExtra: Podcast? by lazy {
+        intent.getSerializableExtra(
+            "podcast",
+            Podcast::class.java
+        )
+    }
+    private val videoExtra: Video? by lazy {
+        intent.getSerializableExtra(
+            "video",
+            Video::class.java
+        )
+    }
     var homeBinding: ActivityHomeBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        notificationPermissionRequest = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            mainActViewModel.updateNotificationPermission(it)
-        }
+        notificationPermissionRequest =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+                mainActViewModel.updateNotificationPermission(it)
+            }
         loadKoinModules(listOf(homeModule, profileModule, podcastModule, cutsModule))
         homeBinding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(homeBinding?.root)
@@ -52,7 +66,7 @@ class HomeActivity : AuthActivity() {
         }
         observeViewModel()
         mainActViewModel.checkNotifications()
-        mainActViewModel.validatePush(podcastExtra)
+        mainActViewModel.validatePush(podcastExtra, videoExtra)
         mainActViewModel.checkUser()
     }
 

@@ -1,12 +1,12 @@
 package com.silent.manager.features.newpodcast.fragments
 
 import android.animation.Animator
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.ilustris.animations.fadeIn
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.ilustriscore.core.utilities.delayedFunction
@@ -14,6 +14,7 @@ import com.silent.manager.R
 import com.silent.manager.databinding.FragmentCreateCompleteBinding
 import com.silent.manager.features.newpodcast.NewPodcastViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.util.*
 
 class CompleteFragment : Fragment() {
 
@@ -37,7 +38,15 @@ class CompleteFragment : Fragment() {
         completeFragmentBinding?.run {
             saveSlogan.setOnClickListener {
                 newPodcastViewModel.podcast.slogan = podcastSlogan.text.toString()
-                newPodcastViewModel.saveData(newPodcastViewModel.podcast)
+                val calendar = GregorianCalendar.getInstance()
+                TimePickerDialog(requireContext(), { view, hour, minute ->
+                    newPodcastViewModel.podcast.liveTime = hour
+                    saveSlogan.isEnabled = false
+                    podcastSlogan.isEnabled = false
+                    newPodcastViewModel.saveData(newPodcastViewModel.podcast)
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).apply {
+                    setTitle("Horário das lives do programa")
+                }.show()
             }
         }
     }

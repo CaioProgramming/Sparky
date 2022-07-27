@@ -1,5 +1,6 @@
 package com.silent.manager.features.podcast
 
+import android.app.TimePickerDialog
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -35,6 +36,7 @@ import com.silent.manager.features.newpodcast.fragments.hosts.HostDialog
 import com.silent.manager.features.newpodcast.fragments.hosts.HostInstagramDialog
 import com.silent.manager.features.podcast.adapter.VideoHeaderAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 class PodcastEditingFragment : Fragment() {
 
@@ -96,10 +98,18 @@ class PodcastEditingFragment : Fragment() {
                 }.show(parentFragmentManager, HIGHLIGHT_TAG)
             }
             podcastNotificationIcon.setOnClickListener {
-               NotificationIconFragment.getInstance(Color.parseColor(podcast.highLightColor)) {
+                NotificationIconFragment.getInstance(Color.parseColor(podcast.highLightColor)) {
                     podcast.notificationIcon = it
                     setupPodcast(podcast)
                 }.show(parentFragmentManager, NOTIFICATION_ICON_TAG)
+            }
+            liveTime.setOnClickListener {
+                val calendar = GregorianCalendar.getInstance()
+                TimePickerDialog(requireContext(), { view, hour, minute ->
+                    podcast.liveTime = hour
+                    liveTime.text = "Horário das lives ${hour}h"
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show()
+
             }
 
         }
@@ -163,6 +173,8 @@ class PodcastEditingFragment : Fragment() {
             podcastNotificationIcon.setImageDrawable(requireContext().getDrawable(ImageUtils.getNotificationIcon(podcast.notificationIcon).drawable))
             podcastNotificationIcon.circleBackgroundColor = Color.parseColor(podcast.highLightColor)
             podcastSlogan.setText(podcast.slogan)
+            liveTime.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor(podcast.highLightColor))
         }
         updateHosts()
         podcastViewModel.getVideosAndCuts(argPodcast.id)
@@ -176,7 +188,6 @@ class PodcastEditingFragment : Fragment() {
         } else {
             when (type) {
                 GroupType.HOSTS -> podcast.hosts.remove(host)
-                GroupType.GUESTS -> podcast.weeklyGuests.remove(host)
             }
             updateHosts()
         }
@@ -185,13 +196,11 @@ class PodcastEditingFragment : Fragment() {
 
 
     private fun updateHosts() {
-
         podcastFragmentBinding?.run {
             programIcon.invalidate()
             podcastFragmentBinding?.hostsRecyclerview?.adapter = HostGroupAdapter(
                 listOf(
-                    HostGroup("Hosts", podcast.hosts),
-                    HostGroup("Convidados da semana", podcast.weeklyGuests, GroupType.GUESTS)
+                    HostGroup("Hosts", podcast.hosts)
                 ),
                 true, ::selectHost,
                 podcast.highLightColor
@@ -209,7 +218,6 @@ class PodcastEditingFragment : Fragment() {
         HostDialog.getInstance(type, host) {
             when (type) {
                 GroupType.HOSTS -> podcast.hosts.add(host)
-                GroupType.GUESTS -> podcast.weeklyGuests.add(host)
             }
             updateHosts()
         }.show(childFragmentManager, "CONFIRMHOST")

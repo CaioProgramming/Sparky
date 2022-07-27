@@ -1,5 +1,6 @@
 package com.silent.core.youtube
 
+import com.silent.core.youtube.response.SearchResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

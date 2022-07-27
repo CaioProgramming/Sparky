@@ -6,22 +6,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.silent.core.firebase.FirebaseService
-import com.silent.core.podcast.Host
 import com.silent.core.podcast.Podcast
+import com.silent.core.podcast.PodcastHeader
 import com.silent.core.podcast.PodcastService
 import com.silent.core.preferences.PreferencesService
 import com.silent.core.utils.PODCASTS_PREFERENCES
 import com.silent.core.videos.CutService
 import com.silent.core.videos.Video
 import com.silent.core.videos.VideoService
+import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
 import com.silent.ilustriscore.core.model.DataException
 import com.silent.ilustriscore.core.model.ServiceResult
-import com.silent.core.podcast.PodcastHeader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class PodcastViewModel(
@@ -30,7 +28,8 @@ class PodcastViewModel(
     private val videoService: VideoService,
     private val cutService: CutService,
     private val preferencesService: PreferencesService,
-    private val firebaseService: FirebaseService
+    private val firebaseService: FirebaseService,
+    private val youtubeService: YoutubeService
 ) : BaseViewModel<Podcast>(application) {
 
     sealed class PodcastState {
@@ -50,9 +49,7 @@ class PodcastViewModel(
 
     sealed class ScheduleState {
         data class TodayGuestState(
-            val guests: List<Host>,
-            val position: Int,
-            val podcast: Podcast
+            val video: Video
         ) : ScheduleState()
     }
 
@@ -98,9 +95,12 @@ class PodcastViewModel(
     }
 
     private fun handleServiceResult(serviceResult: ServiceResult<DataException, String>) {
-        when(serviceResult) {
+        when (serviceResult) {
             is ServiceResult.Error -> {
-                Log.e(javaClass.simpleName, "handleServiceResult: Error -> ${serviceResult.errorException}", )
+                Log.e(
+                    javaClass.simpleName,
+                    "handleServiceResult: Error -> ${serviceResult.errorException}",
+                )
             }
             is ServiceResult.Success -> {
                 Log.i(javaClass.simpleName, "handleServiceResult: Success -> ${serviceResult.data}")
@@ -108,7 +108,7 @@ class PodcastViewModel(
         }
     }
 
-    fun getPodcastData(podcastID: String) {
+    fun getPodcastData(podcastID: String, video: Video? = null) {
         clearState()
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -144,10 +144,7 @@ class PodcastViewModel(
                         )
                     )
                 }
-                val sortedGuests = podcast.weeklyGuests.sortedBy { it.comingDate }
-                podcast.weeklyGuests = ArrayList(sortedGuests)
                 val preferencesPodcasts = preferencesService.getStringSetValue(PODCASTS_PREFERENCES)
-
                 podcastState.postValue(
                     PodcastState.PodcastDataRetrieved(
                         podcast,
@@ -155,6 +152,7 @@ class PodcastViewModel(
                         preferencesPodcasts?.contains(podcastID) == true
                     )
                 )
+                checkLive(video)
             } catch (e: Exception) {
                 e.printStackTrace()
                 podcastState.postValue(PodcastState.PodcastFailedState)
@@ -162,20 +160,9 @@ class PodcastViewModel(
         }
     }
 
-    fun checkSchedule(podcast: Podcast) {
-        val calendar = Calendar.getInstance()
-        podcast.weeklyGuests.forEachIndexed { index, host ->
-            val hostCalendar = Calendar.getInstance()
-            hostCalendar.time = host.comingDate
-            if (hostCalendar[Calendar.DAY_OF_MONTH] == calendar[Calendar.DAY_OF_MONTH]) {
-                scheduleState.postValue(
-                    ScheduleState.TodayGuestState(
-                        podcast.weeklyGuests,
-                        index,
-                        podcast
-                    )
-                )
-            }
+    fun checkLive(video: Video?) {
+        video?.let {
+            scheduleState.postValue(ScheduleState.TodayGuestState(it))
         }
     }
 
@@ -194,17 +181,46 @@ class PodcastViewModel(
             val videoRequest = videoService.getPodcastVideos(podcast.id)
             if (videoRequest is ServiceResult.Success) {
                 val videos = videoRequest.data as ArrayList<Video>
-                val queryVideos =  videos.filter { it.title.contains(query, true) || it.description.contains(query, true) }
+                val queryVideos = videos.filter {
+                    it.title.contains(query, true) || it.description.contains(
+                        query,
+                        true
+                    )
+                }
                 if (queryVideos.isNotEmpty()) {
-                    headers.add(0, getHeader("Episódios encontrados", podcast.uploads, queryVideos, RecyclerView.VERTICAL, podcast.highLightColor, "${queryVideos.size} resultados."))
+                    headers.add(
+                        0,
+                        getHeader(
+                            "Episódios encontrados",
+                            podcast.uploads,
+                            queryVideos,
+                            RecyclerView.VERTICAL,
+                            podcast.highLightColor,
+                            "${queryVideos.size} resultados."
+                        )
+                    )
                 }
             }
             val cutRequest = cutService.getPodcastCuts(podcast.id)
             if (cutRequest is ServiceResult.Success) {
                 val cuts = cutRequest.data as ArrayList<Video>
-                val queryCuts =  cuts.filter { it.title.contains(query, true) || it.description.contains(query, true) }
+                val queryCuts = cuts.filter {
+                    it.title.contains(query, true) || it.description.contains(
+                        query,
+                        true
+                    )
+                }
                 if (queryCuts.isNotEmpty()) {
-                    headers.add( getHeader("Cortes encontrados", podcast.cuts, queryCuts, RecyclerView.VERTICAL, podcast.highLightColor, "${queryCuts.size} resultados."))
+                    headers.add(
+                        getHeader(
+                            "Cortes encontrados",
+                            podcast.cuts,
+                            queryCuts,
+                            RecyclerView.VERTICAL,
+                            podcast.highLightColor,
+                            "${queryCuts.size} resultados."
+                        )
+                    )
                 }
             }
             podcastState.postValue(PodcastState.RetrieveSearch(headers))

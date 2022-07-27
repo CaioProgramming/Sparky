@@ -14,7 +14,6 @@ import com.silent.core.databinding.NewHostLayoutBinding
 import com.silent.core.podcast.Host
 import com.silent.core.podcast.NEW_HOST
 import com.silent.core.utils.ImageUtils
-import com.silent.ilustriscore.core.utilities.*
 
 
 class HostAdapter(
@@ -37,8 +36,7 @@ class HostAdapter(
     inner class NewHostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind() {
             NewHostLayoutBinding.bind(itemView).run {
-                addHostButton.text =
-                    if (groupType == GroupType.GUESTS) "Adicionar novo convidado" else "Adicionar novo Host"
+                addHostButton.text = "Adicionar novo Host"
                 Glide.with(itemView.context).load(ImageUtils.getRandomHostPlaceHolder())
                     .into(hostPlaceHolder)
                 addHostButton.setOnClickListener {
@@ -69,9 +67,6 @@ class HostAdapter(
                 Glide.with(itemView.context).load(host.profilePic).error(R.drawable.ic_iconmonstr_connection_1).into(hostPhoto)
                 hostName.text = host.name
                 hostDescription.text = host.description
-                host.comingDate?.let {
-                    if (groupType == GroupType.GUESTS) eventDate.text = it.formatDate("dd.MM - HH") + "H"
-                }
                 if (!highLightColor.isNullOrEmpty()) {
                     hostNameCard.strokeColor = Color.parseColor(highLightColor)
                     hostCard.strokeColor = Color.parseColor(highLightColor)
@@ -94,9 +89,6 @@ class HostAdapter(
                     .load(host.profilePic)
                     .error(R.drawable.ic_iconmonstr_connection_1)
                     .into(hostPhoto)
-                host.comingDate?.let {
-                    if (groupType == GroupType.GUESTS) eventDate.text = it.formatDate("dd.MM - HH") + "H"
-                }
                 hostName.text = host.name
                 hostDescription.text = host.description
                 if (!highLightColor.isNullOrEmpty()) {

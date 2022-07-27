@@ -119,7 +119,7 @@ class HomeViewModel(
             val queryPodcasts = podcasts.filter { podcast ->
                 podcast.name.contains(query, true) || podcast.hosts.any { host ->
                     host.name.contains(query, true)
-                } || podcast.weeklyGuests.any { guest -> guest.name.contains(query, true) }
+                }
             }
             if (queryPodcasts.isNotEmpty()) {
                 headers.add(
@@ -168,23 +168,6 @@ class HomeViewModel(
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 val lives = ArrayList<Podcast>()
-                podcasts.forEachIndexed { index, it ->
-                    if (it.weeklyGuests.any { guest -> guest.isComingToday() && guest.isLiveHour() }) {
-                        val searchLive = youtubeService.getChannelLiveStatus(it.youtubeID)
-                        if (searchLive.items.isNotEmpty()) {
-                            val liveItem = searchLive.items.first()
-                            it.liveVideo = videoMapper.mapLiveSnippet(
-                                liveItem.id.videoId,
-                                liveItem.snippet,
-                                it.id
-                            )
-                            lives.add(it)
-                        }
-                    }
-                    if (index == podcasts.lastIndex && lives.isNotEmpty()) {
-                        homeState.postValue(HomeState.HomeLivesRetrieved(lives))
-                    }
-                }
                 homeState.postValue(HomeState.HomeFetched)
             }
         } catch (e: Exception) {

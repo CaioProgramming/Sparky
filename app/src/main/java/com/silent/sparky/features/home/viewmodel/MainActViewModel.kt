@@ -10,8 +10,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.silent.core.firebase.FirebaseService
+import com.silent.core.podcast.Podcast
 import com.silent.core.preferences.PreferencesService
 import com.silent.core.utils.TOKEN_PREFERENCES
+import com.silent.core.videos.Video
 import com.silent.ilustriscore.core.model.ServiceResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,7 +26,7 @@ class MainActViewModel(
 
     sealed class MainActState {
         data class RetrieveToken(val token: String) : MainActState()
-        data class NavigateToPodcast(val podcastId: String) : MainActState()
+        data class NavigateToPodcast(val podcastId: String, val liveVideo: Video?) : MainActState()
         object RequireLoginState : MainActState()
         object LoginSuccessState : MainActState()
         object LoginErrorState : MainActState()
@@ -86,9 +88,9 @@ class MainActViewModel(
         }
     }
 
-    fun validatePush(podcastExtra: String?) {
+    fun validatePush(podcastExtra: Podcast?, videoExtra: Video?) {
         podcastExtra?.let {
-            actState.value = MainActState.NavigateToPodcast(it)
+            actState.value = MainActState.NavigateToPodcast(it.id, videoExtra)
         }
     }
 
