@@ -166,15 +166,25 @@ class PodcastEditingFragment : Fragment() {
         podcast = argPodcast
         podcastFragmentBinding?.run {
             podcastEditText.setText(podcast.name)
-            Glide.with(requireContext()).load(podcast.cover).error(R.drawable.ic_iconmonstr_connection_1).into(podcastCover)
-            Glide.with(requireContext()).load(podcast.iconURL).error(R.drawable.ic_iconmonstr_connection_1).into(programIcon)
+            Glide.with(requireContext()).load(podcast.cover)
+                .error(R.drawable.ic_iconmonstr_connection_1).into(podcastCover)
+            Glide.with(requireContext()).load(podcast.iconURL)
+                .error(R.drawable.ic_iconmonstr_connection_1).into(programIcon)
             loading.setIndicatorColor(Color.parseColor(podcast.highLightColor))
-            highlightColor.backgroundTintList = ColorStateList.valueOf(Color.parseColor(podcast.highLightColor))
-            podcastNotificationIcon.setImageDrawable(requireContext().getDrawable(ImageUtils.getNotificationIcon(podcast.notificationIcon).drawable))
+            highlightColor.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor(podcast.highLightColor))
+            podcastNotificationIcon.setImageDrawable(
+                requireContext().getDrawable(
+                    ImageUtils.getNotificationIcon(
+                        podcast.notificationIcon
+                    ).drawable
+                )
+            )
             podcastNotificationIcon.circleBackgroundColor = Color.parseColor(podcast.highLightColor)
             podcastSlogan.setText(podcast.slogan)
             liveTime.backgroundTintList =
                 ColorStateList.valueOf(Color.parseColor(podcast.highLightColor))
+            liveTime.text = "Horário das lives ${argPodcast.liveTime}h"
         }
         updateHosts()
         podcastViewModel.getVideosAndCuts(argPodcast.id)

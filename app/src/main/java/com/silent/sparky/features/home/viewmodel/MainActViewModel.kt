@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import com.google.gson.Gson
 import com.silent.core.firebase.FirebaseService
 import com.silent.core.podcast.Podcast
 import com.silent.core.preferences.PreferencesService
@@ -88,9 +89,11 @@ class MainActViewModel(
         }
     }
 
-    fun validatePush(podcastExtra: Podcast?, videoExtra: Video?) {
+    fun validatePush(podcastExtra: String?, videoExtra: String?) {
         podcastExtra?.let {
-            actState.value = MainActState.NavigateToPodcast(it.id, videoExtra)
+            val podcast = Gson().fromJson(it, Podcast::class.java)
+            val video: Video? = videoExtra?.let { Gson().fromJson(videoExtra, Video::class.java) }
+            actState.value = MainActState.NavigateToPodcast(podcast.id, video)
         }
     }
 

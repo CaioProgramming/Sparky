@@ -11,18 +11,16 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.google.gson.Gson
 import com.silent.core.BuildConfig
 import com.silent.core.R
-import com.silent.core.podcast.Podcast
 import com.silent.core.preferences.PreferencesService
 import com.silent.core.utils.HOME_ACT
 import com.silent.core.utils.ImageUtils
 import com.silent.core.utils.TOKEN_PREFERENCES
-import com.silent.core.videos.Video
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import kotlin.random.Random
 
 
@@ -38,20 +36,36 @@ class SparkyMessagingService : FirebaseMessagingService() {
             val icon = ImageUtils.getNotificationIcon(notification.icon)
             var defaultColor = baseContext.getColor(R.color.material_yellow700)
             if (BuildConfig.DEBUG) Log.i(
-                javaClass.simpleName,
-                "handleNotification:  metadata ${message.data}"
+                "SPARKY MESSAGING SERVICE",
+                "Received metadata ${message.data}"
             )
-            val podcast = Gson().fromJson(message.data["podcast"], Podcast::class.java)
-            val video = Gson().fromJson<Video>(message.data["video"], Video::class.java)
+            var podcast: JSONObject? = null
+            var video: JSONObject? = null
+            if (message.data.containsKey("podcast")) {
+                val podcastMap = message.data["podcast"]
+                Log.i("SPARKY MESSAGING SERVICE", "podcast data founded -> $podcastMap")
+                Log.i("SPARKY MESSAGING SERVICE", "parsing json data -> ${podcastMap.toString()}")
+                podcast = podcastMap?.let { JSONObject(it) }
+            }
+            if (message.data.containsKey("video")) {
+                val videoMap = message.data["video"]
+                Log.i("SPARKY MESSAGING SERVICE", "video data founded -> $videoMap")
+                Log.i("SPARKY MESSAGING SERVICE", "parsing json data -> ${videoMap.toString()}")
+                video = videoMap?.let { JSONObject(it) }
+            }
             notification.color?.let {
                 defaultColor = Color.parseColor(it)
             }
             val homeIntent = Intent(this, Class.forName(HOME_ACT)).apply {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                putExtra("podcast", podcast)
-                putExtra("video", video)
+                podcast?.let {
+                    putExtra("podcast", podcast.toString())
+                }
+                video?.let {
+                    putExtra("video", video.toString())
+                }
             }
-            val notificationId = Random.nextInt(podcast.id.length)
+            val notificationId = Random.nextInt(podcast?.getString("name")?.length ?: 0)
             val flag =
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_CANCEL_CURRENT
             val pendingIntent = PendingIntent.getActivity(this, 0, homeIntent, flag)

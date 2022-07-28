@@ -83,14 +83,16 @@ class HomeViewModel(
                     }
                     if (index == filteredPodcasts.lastIndex) {
                         val remainingPodcasts = podcasts.filter { !podcastFilter.contains(it.id) }
-                        homeHeaders.add(
-                            PodcastHeader(
-                                "Veja mais podcasts",
-                                type = HeaderType.PODCASTS,
-                                podcasts = remainingPodcasts,
-                                orientation = RecyclerView.HORIZONTAL
+                        if (remainingPodcasts.isNotEmpty()) {
+                            homeHeaders.add(
+                                PodcastHeader(
+                                    "Veja mais podcasts",
+                                    type = HeaderType.PODCASTS,
+                                    podcasts = remainingPodcasts,
+                                    orientation = RecyclerView.HORIZONTAL
+                                )
                             )
-                        )
+                        }
                         homeState.postValue(HomeState.HomeChannelsRetrieved(homeHeaders))
                     }
                 }

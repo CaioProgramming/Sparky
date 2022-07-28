@@ -17,8 +17,6 @@ import com.ilustris.ui.extensions.ERROR_COLOR
 import com.ilustris.ui.extensions.WARNING_COLOR
 import com.ilustris.ui.extensions.getView
 import com.ilustris.ui.extensions.showSnackBar
-import com.silent.core.podcast.Podcast
-import com.silent.core.videos.Video
 import com.silent.sparky.BuildConfig
 import com.silent.sparky.R
 import com.silent.sparky.databinding.ActivityHomeBinding
@@ -34,17 +32,11 @@ class HomeActivity : AuthActivity() {
 
     private val mainActViewModel: MainActViewModel by viewModel()
     private lateinit var notificationPermissionRequest: ActivityResultLauncher<String>
-    private val podcastExtra: Podcast? by lazy {
-        intent.getSerializableExtra(
-            "podcast",
-            Podcast::class.java
-        )
+    private val podcastExtra: String? by lazy {
+        intent.extras?.getString("podcast")
     }
-    private val videoExtra: Video? by lazy {
-        intent.getSerializableExtra(
-            "video",
-            Video::class.java
-        )
+    private val videoExtra: String? by lazy {
+        intent.extras?.getString("video")
     }
     var homeBinding: ActivityHomeBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
