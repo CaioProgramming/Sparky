@@ -40,8 +40,8 @@
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/program_icon"
                     style="@style/Theme.Sparky.ProgramIcon"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     android:layout_marginTop="@dimen/margin_default_10dp"
                     android:layout_marginBottom="?attr/actionBarSize"
                     android:src="@drawable/ic_iconmonstr_connection_1"
@@ -78,6 +78,7 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <EditText
                         android:id="@+id/podcast_slogan"
                         android:layout_width="match_parent"
@@ -88,6 +89,17 @@
                         android:padding="@dimen/padding_default_16dp"
                         android:textAlignment="center"
                         app:layout_constraintTop_toBottomOf="@id/highlight_color" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/live_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/padding_default_16dp"
+                        android:padding="@dimen/padding_default_16dp"
+                        android:text="Horário das lives"
+                        app:cornerRadius="@dimen/radius_default_10dp"
+                        app:icon="@drawable/zzz_clock" />
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/hosts_recyclerview"
                         android:layout_width="match_parent"
@@ -152,10 +164,12 @@
                 android:id="@+id/loading"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
+                android:layout_gravity="top"
                 android:indeterminate="true"
                 android:padding="0dp"
                 android:visibility="gone"
+                android:layout_marginTop="?attr/actionBarSize"
+                tools:visibility="visible"
                 app:trackColor="@color/transparent"
                 app:trackCornerRadius="@dimen/radius_small_5dp"
                 tools:indeterminate="false"

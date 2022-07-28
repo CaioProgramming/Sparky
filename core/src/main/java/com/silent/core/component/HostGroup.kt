@@ -9,5 +9,5 @@ data class HostGroup(
 )
 
 enum class GroupType {
-    HOSTS, GUESTS
+    HOSTS
 }

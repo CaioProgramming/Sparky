@@ -1,4 +1,4 @@
-package com.silent.core.youtube
+package com.silent.core.youtube.response
 
 data class SearchResponse(
     val items: List<SearchItem>

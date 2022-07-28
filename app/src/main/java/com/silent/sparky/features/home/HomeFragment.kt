@@ -15,10 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
 import com.ilustris.animations.slideInBottom
-import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastHeader
 import com.silent.core.podcast.podcasts
 import com.silent.core.utils.WebUtils
+import com.silent.core.videos.Video
 import com.silent.ilustriscore.core.model.ErrorType
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.navigation.ModuleNavigator
@@ -27,7 +27,6 @@ import com.silent.sparky.R
 import com.silent.sparky.databinding.HomeFragmentBinding
 import com.silent.sparky.features.home.adapter.PodcastsLiveAdapter
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
-import com.silent.sparky.features.home.data.LiveHeader
 import com.silent.sparky.features.home.viewmodel.HomeState
 import com.silent.sparky.features.home.viewmodel.HomeViewModel
 import com.silent.sparky.features.home.viewmodel.MainActViewModel
@@ -69,8 +68,8 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
         homeViewModel.getHome()
     }
 
-    private fun openPodcast(id: String) {
-        val bundle = bundleOf("podcast_id" to id)
+    private fun openPodcast(id: String, video: Video? = null) {
+        val bundle = bundleOf("podcast_id" to id, "live_video" to video)
         findNavController().navigate(R.id.action_navigation_home_to_podcastFragment, bundle)
     }
 
@@ -152,9 +151,6 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                     }
                 }
 
-                is HomeState.HomeLivesRetrieved -> {
-                    setupLive(it.podcasts)
-                }
                 HomeState.InvalidManager -> {
                     setMenuVisibility(false)
                 }
@@ -228,7 +224,7 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
         mainActViewModel.actState.observe(viewLifecycleOwner) {
             when (it) {
                 is MainActViewModel.MainActState.NavigateToPodcast -> {
-                    openPodcast(it.podcastId)
+                    openPodcast(it.podcastId, it.liveVideo)
                     mainActViewModel.notificationOpen()
                 }
                 is MainActViewModel.MainActState.LoginSuccessState -> {
@@ -277,23 +273,6 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
             podcastsResumeRecycler.layoutManager =
                 LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             stopLoading()
-        }
-    }
-
-    private fun setupLive(livePodcasts: ArrayList<Podcast>) {
-        homeFragmentBinding?.livesRecyclerView?.run {
-            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-            adapter = PodcastsLiveAdapter(livePodcasts, true) { podcast, i ->
-                podcast.liveVideo?.let { live ->
-                    val liveHeader = LiveHeader(podcast, live.title, live.youtubeID)
-                    val bundle = bundleOf("live_object" to liveHeader)
-                    findNavController().navigate(
-                        R.id.action_navigation_home_to_liveFragment,
-                        bundle
-                    )
-                }
-            }
-            slideInBottom()
         }
     }
 

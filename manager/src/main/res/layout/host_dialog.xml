@@ -36,17 +36,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/divider" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/guest_date_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_default_10dp"
-        android:padding="@dimen/padding_default_16dp"
-        android:text="Data do convidado"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/host_social_link"
-        tools:visibility="visible" />
-
     <EditText
         android:id="@+id/host_social_link"
         android:layout_width="match_parent"

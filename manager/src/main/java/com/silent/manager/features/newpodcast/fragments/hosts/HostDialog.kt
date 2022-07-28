@@ -1,7 +1,5 @@
 package com.silent.manager.features.newpodcast.fragments.hosts
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.os.Bundle
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -12,13 +10,10 @@ import androidx.core.widget.addTextChangedListener
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.ilustris.animations.fadeIn
 import com.silent.core.component.GroupType
 import com.silent.core.podcast.Host
-import com.silent.ilustriscore.core.utilities.formatDate
 import com.silent.manager.R
 import com.silent.manager.databinding.HostDialogBinding
-import java.util.*
 
 class HostDialog : BottomSheetDialogFragment() {
 
@@ -39,8 +34,7 @@ class HostDialog : BottomSheetDialogFragment() {
         HostDialogBinding.bind(view).run {
             Glide.with(requireContext()).load(host.profilePic)
                 .error(R.drawable.ic_iconmonstr_connection_1).into(hostIcon)
-            message.text =
-                if (groupType == GroupType.GUESTS) "Tem certeza que deseja adicionar esse convidado?" else "Tem certeza que deseja adicionar esse host?"
+            message.text = "Tem certeza que deseja adicionar esse host?"
             username.setText(host.name)
             hostSocialLink.addTextChangedListener {
 
@@ -76,42 +70,7 @@ class HostDialog : BottomSheetDialogFragment() {
                     dialog?.dismiss()
                 }
             }
-            guestDateButton.setOnClickListener {
-                openDatePicker()
-            }
-            if (groupType == GroupType.GUESTS) {
-                guestDateButton.fadeIn()
-            }
         }
-
-    }
-
-    private fun HostDialogBinding.openDatePicker() {
-        val c = Calendar.getInstance()
-        val year = c.get(Calendar.YEAR)
-        val month = c.get(Calendar.MONTH)
-        val day = c.get(Calendar.DAY_OF_MONTH)
-        val hour = c.get(Calendar.HOUR_OF_DAY)
-        val minute = c.get(Calendar.MINUTE)
-
-        DatePickerDialog(
-            requireContext(),
-            { view, year, month, dayOfMonth ->
-                val hostDate = Calendar.getInstance()
-                hostDate.set(year, month, dayOfMonth)
-                TimePickerDialog(
-                    requireContext(),
-                    { view, hourOfDay, minute ->
-                        hostDate.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                        hostDate.set(Calendar.MINUTE, minute)
-                        hostDate.set(Calendar.SECOND, 0)
-                        val dateFormatted = hostDate.time.formatDate("dd.MM - HH") + "H"
-                        guestDateButton.text = dateFormatted
-                        host.comingDate = hostDate.time
-                    }, hour, minute, android.text.format.DateFormat.is24HourFormat(requireContext())
-                ).show()
-            }, year, month, day
-        ).show()
 
     }
 

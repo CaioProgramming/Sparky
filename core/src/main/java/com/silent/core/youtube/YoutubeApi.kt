@@ -1,6 +1,8 @@
 package com.silent.core.youtube
 
 import com.silent.core.BuildConfig
+import com.silent.core.youtube.response.PlaylistItemResponse
+import com.silent.core.youtube.response.SearchResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

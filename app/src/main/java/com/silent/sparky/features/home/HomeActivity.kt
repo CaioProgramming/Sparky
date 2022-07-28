@@ -30,15 +30,21 @@ import org.koin.core.context.loadKoinModules
 
 class HomeActivity : AuthActivity() {
 
-    private val mainActViewModel : MainActViewModel by viewModel()
+    private val mainActViewModel: MainActViewModel by viewModel()
     private lateinit var notificationPermissionRequest: ActivityResultLauncher<String>
-    private val podcastExtra: String? by lazy { intent.extras?.getString("podcastId") }
+    private val podcastExtra: String? by lazy {
+        intent.extras?.getString("podcast")
+    }
+    private val videoExtra: String? by lazy {
+        intent.extras?.getString("video")
+    }
     var homeBinding: ActivityHomeBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        notificationPermissionRequest = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            mainActViewModel.updateNotificationPermission(it)
-        }
+        notificationPermissionRequest =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+                mainActViewModel.updateNotificationPermission(it)
+            }
         loadKoinModules(listOf(homeModule, profileModule, podcastModule, cutsModule))
         homeBinding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(homeBinding?.root)
@@ -52,7 +58,7 @@ class HomeActivity : AuthActivity() {
         }
         observeViewModel()
         mainActViewModel.checkNotifications()
-        mainActViewModel.validatePush(podcastExtra)
+        mainActViewModel.validatePush(podcastExtra, videoExtra)
         mainActViewModel.checkUser()
     }
 

@@ -6,111 +6,77 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/host_card"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        app:cardBackgroundColor="@color/md_black"
+        app:cardCornerRadius="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/event_date"
+        app:strokeColor="?android:textColorPrimary"
+        app:strokeWidth="2dp">
+
+        <ImageView
+            android:id="@+id/host_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/md_black"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/ic_iconmonstr_connection_1" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/host_name_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_marginVertical="@dimen/margin_default_10dp"
+        app:cardBackgroundColor="@color/md_black"
+        app:cardCornerRadius="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/host_card"
+        app:layout_constraintTop_toTopOf="@id/host_card"
+        app:strokeWidth="2dp"
+        tools:strokeColor="@color/material_yellow800">
 
         <TextView
-            android:id="@+id/event_date"
-            android:layout_width="match_parent"
-            android:textAlignment="center"
-            android:layout_height="wrap_content"
-            android:paddingVertical="@dimen/padding_small_8dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/host_name_card"
-            app:layout_constraintStart_toStartOf="@id/host_card"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="20.05 - 20h" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/host_card"
-            android:layout_width="match_parent"
-            android:layout_height="350dp"
-            app:cardBackgroundColor="@color/md_black"
-            app:cardCornerRadius="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/event_date"
-            app:strokeColor="?android:textColorPrimary"
-            app:strokeWidth="2dp">
-
-            <ImageView
-                android:id="@+id/host_photo"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/md_black"
-                android:scaleType="center"
-                tools:src="@drawable/ic_iconmonstr_connection_1" />
-
-            <ImageView
-                android:id="@+id/icon_place_holder"
-                android:layout_width="@dimen/padding_big_24"
-                android:layout_height="@dimen/padding_big_24"
-                android:layout_gravity="center"
-                android:scaleType="centerCrop"
-                tools:src="@drawable/ic_iconmonstr_connection_1"
-                app:tint="?attr/colorPrimary" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/host_name_card"
+            android:id="@+id/host_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/margin_default_10dp"
-            app:cardBackgroundColor="@color/md_black"
-            app:cardCornerRadius="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/host_card"
-            app:layout_constraintTop_toTopOf="@id/host_card"
-            app:strokeWidth="2dp"
-            tools:strokeColor="@color/material_yellow800">
-
-            <TextView
-                android:id="@+id/host_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:lines="2"
-                android:maxWidth="150dp"
-                android:paddingHorizontal="@dimen/padding_default_16dp"
-                android:paddingVertical="@dimen/padding_small_8dp"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-                android:textStyle="bold"
-                tools:text="Igor 3k"  />
-        </com.google.android.material.card.MaterialCardView>
-
-
-        <TextView
-            android:id="@+id/host_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/host_name_card"
-            android:backgroundTint="@color/material_yellow800"
             android:gravity="center"
             android:lines="2"
+            android:maxWidth="150dp"
             android:paddingHorizontal="@dimen/padding_default_16dp"
             android:paddingVertical="@dimen/padding_small_8dp"
-            android:text="@string/app_name"
             android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-            android:textColor="@color/md_white"
-            android:textStyle="italic|bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@id/host_name_card"
-            app:layout_constraintTop_toBottomOf="@id/host_name_card" />
+            android:textAllCaps="true"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:textStyle="bold"
+            tools:text="Igor 3k" />
+    </com.google.android.material.card.MaterialCardView>
 
 
-    </LinearLayout>
-
-
+    <TextView
+        android:id="@+id/host_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/host_name_card"
+        android:backgroundTint="@color/material_yellow800"
+        android:gravity="center"
+        android:lines="2"
+        android:paddingHorizontal="@dimen/padding_default_16dp"
+        android:paddingVertical="@dimen/padding_small_8dp"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:textColor="@color/md_white"
+        android:textStyle="italic|bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/host_name_card"
+        app:layout_constraintTop_toBottomOf="@id/host_name_card" />
 
 
 </LinearLayout>

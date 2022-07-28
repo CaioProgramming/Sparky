@@ -56,6 +56,12 @@
         <argument
             android:name="podcast_id"
             app:argType="string" />
+
+        <argument
+            android:name="live_video"
+            app:argType="com.silent.core.videos.Video"
+            app:nullable="true" />
+
         <action
             android:id="@+id/action_podcastFragment_to_podcastTodayGuest"
             app:enterAnim="@anim/slide_in_bottom"
@@ -134,7 +140,7 @@
     <fragment
         android:id="@+id/podcastTodayGuest"
         tools:layout="@layout/fragment_today_guest"
-        android:name="com.silent.sparky.features.podcast.schedule.PodcastScheduleDialog"
+        android:name="com.silent.sparky.features.podcast.schedule.TodayLiveDialog"
         android:label="PodcastTodayGuest" >
 
         <argument android:name="highlightColor" app:argType="string"/>

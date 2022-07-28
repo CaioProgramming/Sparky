@@ -1,7 +1,7 @@
 package com.silent.core.videos
 
 import com.silent.core.utils.ImageUtils
-import com.silent.core.youtube.VideoSnippet
+import com.silent.core.youtube.response.VideoSnippet
 
 class VideoMapper {
 
@@ -14,7 +14,8 @@ class VideoMapper {
         title = videoItem.title,
         podcastId = podcastId
     )
-    fun mapLiveSnippet(videoId: String,  videoItem: VideoSnippet, podcastId: String) = Video(
+
+    fun mapLiveSnippet(videoId: String, videoItem: VideoSnippet, podcastId: String) = Video(
         id = videoId,
         description = videoItem.description,
         publishedAt = videoItem.publishedAt,

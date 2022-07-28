@@ -1,6 +1,5 @@
-package com.silent.core.youtube
+package com.silent.core.youtube.response
 
-import com.google.type.DateTime
 import java.util.*
 
 data class PlaylistItemResponse(val items: List<PlaylistResource>)
