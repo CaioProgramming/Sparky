@@ -103,4 +103,14 @@ class LiveFragment : Fragment() {
             }
         })
     }
+
+    override fun onDetach() {
+        super.onDetach()
+        podcastLiveFragmentBinding?.livePlayer?.release()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        podcastLiveFragmentBinding?.livePlayer?.release()
+    }
 }
