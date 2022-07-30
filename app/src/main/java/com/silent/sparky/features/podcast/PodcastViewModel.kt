@@ -13,6 +13,7 @@ import com.silent.core.preferences.PreferencesService
 import com.silent.core.utils.PODCASTS_PREFERENCES
 import com.silent.core.videos.CutService
 import com.silent.core.videos.Video
+import com.silent.core.videos.VideoMapper
 import com.silent.core.videos.VideoService
 import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
@@ -20,6 +21,10 @@ import com.silent.ilustriscore.core.model.DataException
 import com.silent.ilustriscore.core.model.ServiceResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.chrono.IsoChronology
+import java.time.format.DateTimeFormatterBuilder
+import java.time.format.FormatStyle
+import java.util.*
 
 
 class PodcastViewModel(
@@ -152,7 +157,7 @@ class PodcastViewModel(
                         preferencesPodcasts?.contains(podcastID) == true
                     )
                 )
-                checkLive(video)
+                checkLive(video, podcast)
             } catch (e: Exception) {
                 e.printStackTrace()
                 podcastState.postValue(PodcastState.PodcastFailedState)
@@ -160,11 +165,38 @@ class PodcastViewModel(
         }
     }
 
-    fun checkLive(video: Video?) {
+    suspend fun checkLive(video: Video?, podcast: Podcast) {
         video?.let {
             scheduleState.postValue(ScheduleState.TodayGuestState(it))
+        } ?: run {
+            val locale = Locale.forLanguageTag("pt-BR")
+            val pattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
+                FormatStyle.LONG,
+                FormatStyle.LONG,
+                IsoChronology.INSTANCE,
+                locale
+            )
+            val calendar = Calendar.getInstance(locale)
+
+            val hour = calendar.get(Calendar.HOUR)
+            if (podcast.liveTime == hour || possibleLive(hour, podcast.liveTime)) {
+                val liveRequest = youtubeService.getChannelLiveStatus(podcast.youtubeID)
+                if (liveRequest.items.isNotEmpty()) {
+                    val mapper = VideoMapper()
+                    val snippetItem = liveRequest.items.first()
+                    val video = mapper.mapLiveSnippet(
+                        snippetItem.id.videoId,
+                        snippetItem.snippet,
+                        podcast.id
+                    )
+                    scheduleState.postValue(ScheduleState.TodayGuestState(video))
+                }
+            }
         }
     }
+
+    fun possibleLive(hour: Int, liveHour: Int) =
+        (liveHour + 1) == hour || (liveHour + 2) == hour || (liveHour + 3 == hour)
 
     fun clearState() {
         podcastState.value = null

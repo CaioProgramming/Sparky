@@ -25,6 +25,7 @@ import com.silent.core.component.HostGroupAdapter
 import com.silent.core.component.showError
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastHeader
+import com.silent.core.utils.ImageUtils
 import com.silent.core.utils.WebUtils
 import com.silent.core.videos.Video
 import com.silent.ilustriscore.core.model.ViewModelBaseState
@@ -100,11 +101,10 @@ class PodcastFragment : Fragment() {
                 }
             }
             programName.text = podcast.name
-            if (podcast.highLightColor.isNotEmpty()) {
-                programIcon.borderColor = Color.parseColor(podcast.highLightColor)
-            }
             Glide.with(requireContext()).load(podcast.iconURL).into(programIcon)
-            Glide.with(requireContext()).load(podcast.cover).into(podcastCover)
+            Glide.with(requireContext()).load(podcast.cover)
+                .error(ImageUtils.getNotificationIcon(podcast.notificationIcon).drawable)
+                .into(podcastCover)
             programIcon.setOnLongClickListener { _ ->
                 WebUtils(requireContext()).openYoutubeChannel(podcast.youtubeID)
                 false
@@ -126,10 +126,10 @@ class PodcastFragment : Fragment() {
 
 
             }, podcast.highLightColor)
-
             animateSubscriberCount(podcast.subscribe)
             setupHeaders(headers)
-
+            podcastLiveProgress.rimColor = Color.parseColor(podcast.highLightColor)
+            podcastLiveProgress.progress = 100
             favoritePodcast.backgroundTintList =
                 ColorStateList.valueOf(Color.parseColor(podcast.highLightColor))
             favoritePodcast.isChecked = isFavorite
@@ -206,6 +206,12 @@ class PodcastFragment : Fragment() {
                                 navigateToLive(podcast, video)
                             }
                         }.buildDialog()
+                        podcastFragmentBinding?.run {
+                            podcastLiveProgress.indeterminate = true
+                            programIcon.setOnClickListener { _ ->
+                                navigateToLive(podcast, it.video)
+                            }
+                        }
                     }
 
                 }

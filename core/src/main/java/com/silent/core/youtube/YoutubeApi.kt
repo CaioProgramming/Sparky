@@ -24,8 +24,6 @@ interface YoutubeApi {
         @Query("eventType") eventType: String? = DATA_EVENT_TYPE_LIVE_QUERY,
         @Query("maxResults") maxResults: Int = 1,
         @Query("key") apiKey: String? = BuildConfig.YOUTUBE_KEY,
-
-
     ): SearchResponse
 
     @GET("channels")
