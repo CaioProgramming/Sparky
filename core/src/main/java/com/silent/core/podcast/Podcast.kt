@@ -11,7 +11,8 @@ typealias podcasts = ArrayList<Podcast>
 
 @IgnoreExtraProperties
 data class Podcast(
-    override var id: String = "",
+    @Exclude
+    var key: String = "",
     var name: String = "",
     var subscribe: Int = 0,
     @SerializedName("thumbnail_url")
@@ -26,12 +27,16 @@ data class Podcast(
     var notificationIcon: String = "",
     var slogan: String = "",
     var liveTime: Int = 0,
-    @Exclude var updating: Boolean = false
-) : BaseBean(id) {
+    @Exclude
+    var updating: Boolean = false
+) : BaseBean(key) {
 
+    init {
+        key = id
+    }
 
     companion object {
-        val newPodcast = Podcast(id = NEW_PODCAST, name = "Adicionar podcast")
+        val newPodcast = Podcast(key = NEW_PODCAST, name = "Adicionar podcast")
     }
 }
 

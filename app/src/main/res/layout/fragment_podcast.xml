@@ -69,6 +69,7 @@
                         android:layout_margin="@dimen/margin_default_10dp"
                         android:layout_marginVertical="@dimen/margin_default_10dp"
                         android:src="@drawable/ic_iconmonstr_connection_1"
+                        app:civ_border_color="@color/transparent"
                         app:layout_constraintBottom_toBottomOf="@id/podcast_live_progress"
                         app:layout_constraintEnd_toEndOf="@id/podcast_live_progress"
                         app:layout_constraintStart_toStartOf="@id/podcast_live_progress"

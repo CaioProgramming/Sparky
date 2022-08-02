@@ -42,13 +42,13 @@ class LiveFragment : Fragment() {
             liveTitle.text = live.title
             channelName.text = live.podcast.name
             channelName.setOnClickListener {
-                val bundle = bundleOf("podcast_id" to live.podcast.id)
+                val bundle = bundleOf("podcast_id" to live.podcast.id, "live_video" to null)
                 findNavController().navigate(R.id.action_liveFragment_to_podcastFragment, bundle)
             }
             collapseButton.setOnClickListener {
                 findNavController().popBackStack()
             }
-            livePlayer.getPlayerUiController().enableLiveVideoUi(true)
+            livePlayer.getPlayerUiController().enableLiveVideoUi(live.isLiveVideo)
         }
 
     }

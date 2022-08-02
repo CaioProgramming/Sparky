@@ -5,7 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.silent.core.podcast.*
-import com.silent.core.videos.*
+import com.silent.core.videos.CutService
+import com.silent.core.videos.Video
+import com.silent.core.videos.VideoMapper
+import com.silent.core.videos.VideoService
 import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
 import com.silent.ilustriscore.core.model.ServiceResult
@@ -22,11 +25,12 @@ class PodcastManagerViewModel(
     private val videoMapper: VideoMapper
 ) : BaseViewModel<Podcast>(application) {
 
-    sealed class PodcastManagerState() {
-        data class CutsAndUploadsRetrieved(val sections: programSections): PodcastManagerState()
+    sealed class PodcastManagerState {
+        data class CutsAndUploadsRetrieved(val sections: programSections) : PodcastManagerState()
         object PodcastUpdateRequest : PodcastManagerState()
         data class EpisodesUpdated(var count: Int) : PodcastManagerState()
         data class CutsUpdated(var count: Int) : PodcastManagerState()
+        data class PlayslitDeleted(var message: String) : PodcastManagerState()
     }
 
     val podcastManagerState = MutableLiveData<PodcastManagerState>()
@@ -128,15 +132,47 @@ class PodcastManagerViewModel(
             val uploads = videoService.getPodcastVideos(id)
             val cuts = cutService.getPodcastCuts(id)
             if (uploads.isSuccess) {
-                val uploadList = (uploads.success.data as ArrayList<Video>).sortedByDescending { it.publishedAt }
-                headers.add(PodcastHeader("Episódios", subTitle = "${uploadList.size} episódios salvos.", type = HeaderType.VIDEOS, videos = ArrayList(uploadList), orientation = RecyclerView.HORIZONTAL))
+                val uploadList =
+                    (uploads.success.data as ArrayList<Video>).sortedByDescending { it.publishedAt }
+                headers.add(
+                    PodcastHeader(
+                        "Episódios",
+                        subTitle = "${uploadList.size} episódios salvos.",
+                        type = HeaderType.VIDEOS,
+                        videos = ArrayList(uploadList),
+                        orientation = RecyclerView.HORIZONTAL
+                    )
+                )
             }
             if (uploads.isSuccess) {
-                val cutsList = (cuts.success.data as ArrayList<Video>).sortedByDescending { it.publishedAt }
-                headers.add(PodcastHeader("Cortes", subTitle = "${cutsList.size} cortes salvos." , type = HeaderType.VIDEOS, videos =  ArrayList(cutsList), orientation = RecyclerView.HORIZONTAL))
+                val cutsList =
+                    (cuts.success.data as ArrayList<Video>).sortedByDescending { it.publishedAt }
+                headers.add(
+                    PodcastHeader(
+                        "Cortes",
+                        subTitle = "${cutsList.size} cortes salvos.",
+                        type = HeaderType.VIDEOS,
+                        videos = ArrayList(cutsList),
+                        orientation = RecyclerView.HORIZONTAL
+                    )
+                )
             }
 
             podcastManagerState.postValue(PodcastManagerState.CutsAndUploadsRetrieved(headers))
         }
+    }
+
+    fun deletePlaylist(videos: ArrayList<Video>?, playlistName: String, isCuts: Boolean = false) {
+        viewModelScope.launch(Dispatchers.IO) {
+            videos?.forEach {
+                if (!isCuts) {
+                    videoService.deleteData(it.id)
+                } else {
+                    cutService.deleteData(it.id)
+                }
+            }
+            podcastManagerState.postValue(PodcastManagerState.PlayslitDeleted(if (isCuts) "${videos?.size} removidos" else "${videos?.size} uploads removidos"))
+        }
+
     }
 }

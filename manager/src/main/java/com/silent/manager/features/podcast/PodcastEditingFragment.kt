@@ -70,11 +70,15 @@ class PodcastEditingFragment : Fragment() {
                     .setPositiveButton("Sim") { dialog, which ->
 
                         MaterialAlertDialogBuilder(requireContext()).setMessage("Deseja os vídeos recentes (Últimos 100 vídeos) ou vídeos mais antigos?")
-                            .setNegativeButton("Vídeos recentes"){ dialog, which ->
+                            .setNegativeButton("Vídeos recentes") { dialog, which ->
                                 podcastViewModel.updatePodcastData(podcast, true)
                             }
-                            .setPositiveButton("Vídeos mais antigos") {dialog, which ->
-                                podcastViewModel.updatePodcastData(podcast, updateClips = true, requireOldVideos =  true)
+                            .setPositiveButton("Vídeos mais antigos") { dialog, which ->
+                                podcastViewModel.updatePodcastData(
+                                    podcast,
+                                    updateClips = true,
+                                    requireOldVideos = true
+                                )
                             }.show()
 
                     }.show()
@@ -138,25 +142,47 @@ class PodcastEditingFragment : Fragment() {
                     }
 
                 }
+                is ViewModelBaseState.DataRetrievedState -> {
+                    setupPodcast(it.data as Podcast)
+                }
                 else -> {
 
                 }
             }
         }
         podcastViewModel.podcastManagerState.observe(viewLifecycleOwner) {
-            when(it) {
+            when (it) {
                 is PodcastManagerViewModel.PodcastManagerState.CutsUpdated -> {
                     requireView().showSnackBar("${it.count} cortes atualizados")
+                    podcastViewModel.getSingleData(args.podcast.id)
                 }
                 is PodcastManagerViewModel.PodcastManagerState.EpisodesUpdated -> {
                     requireView().showSnackBar("${it.count} episódios atualizados")
-
+                    podcastViewModel.getSingleData(args.podcast.id)
                 }
                 PodcastManagerViewModel.PodcastManagerState.PodcastUpdateRequest -> {
                     podcastFragmentBinding?.loading?.fadeIn()
                 }
                 is PodcastManagerViewModel.PodcastManagerState.CutsAndUploadsRetrieved -> {
-                    podcastFragmentBinding?.videosRecyclerview?.adapter = VideoHeaderAdapter(it.sections, {})
+                    podcastFragmentBinding?.videosRecyclerview?.adapter =
+                        VideoHeaderAdapter(it.sections, headerSelected = { header ->
+                            MaterialAlertDialogBuilder(requireContext()).setTitle("Atenção")
+                                .setMessage("Deseja remover essa playlist ${header.title}?")
+                                .setPositiveButton("Confirmar") { d, _ ->
+                                    podcastViewModel.deletePlaylist(
+                                        header.videos,
+                                        header.title,
+                                        header.title.contains("Cortes")
+                                    )
+                                    d.dismiss()
+                                }.setNegativeButton("Cancelar") { d, _ ->
+                                    d.dismiss()
+                                }.show()
+                        })
+                }
+                is PodcastManagerViewModel.PodcastManagerState.PlayslitDeleted -> {
+                    requireView().showSnackBar(it.message)
+                    podcastViewModel.getSingleData(args.podcast.id)
                 }
             }
         }

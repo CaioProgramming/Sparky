@@ -6,7 +6,7 @@ import com.silent.core.youtube.response.VideoSnippet
 class VideoMapper {
 
     fun mapVideoSnippet(videoItem: VideoSnippet, podcastId: String) = Video(
-        id = videoItem.resourceId.videoId,
+        key = videoItem.resourceId.videoId,
         description = videoItem.description,
         publishedAt = videoItem.publishedAt,
         thumbnailUrl = ImageUtils.getYoutubeThumb(videoItem.resourceId.videoId),
@@ -16,7 +16,7 @@ class VideoMapper {
     )
 
     fun mapLiveSnippet(videoId: String, videoItem: VideoSnippet, podcastId: String) = Video(
-        id = videoId,
+        key = videoId,
         description = videoItem.description,
         publishedAt = videoItem.publishedAt,
         thumbnailUrl = ImageUtils.getYoutubeThumb(videoId),

@@ -1,76 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/faded_gradient"
-    android:backgroundTint="@color/material_yellow700"
+    android:background="@drawable/double_faded_gradient"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_default_16dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/fragment_title"
-        android:layout_height="wrap_content"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/podcast_icon"
+        style="@style/Theme.Sparky.ProgramIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        app:civ_border_width="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="?attr/actionBarSize"
         android:text="Ao vivo agora!"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.Material3.HeadlineLarge"
         android:textColor="@color/md_white"
-        android:layout_width="match_parent"
+        tools:src="@drawable/ic_iconmonstr_connection_1"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/host_card"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="32dp"
-        app:cardBackgroundColor="@color/md_black"
-        app:cardCornerRadius="0dp"
-        app:layout_constraintBottom_toTopOf="@id/fragment_subtitle"
-        app:layout_constraintEnd_toEndOf="@id/see_guest_button"
-        app:layout_constraintStart_toStartOf="@id/see_guest_button"
-        app:layout_constraintTop_toBottomOf="@id/fragment_title"
-        app:strokeColor="?android:textColorPrimary"
-        app:strokeWidth="2dp">
+        android:id="@+id/live_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_default_10dp"
+        app:cardBackgroundColor="?attr/colorPrimaryDark"
+        app:cardCornerRadius="@dimen/radius_default_10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/podcast_icon">
 
-        <ImageView
-            android:id="@+id/video_thumb"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/md_black"
-            android:scaleType="centerCrop"
-            tools:src="@drawable/ic_iconmonstr_connection_1" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_default_16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ao vivo agora!"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/video_thumb"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/padding_big_24"
+                android:background="@color/md_black"
+                android:elevation="4dp"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/ic_iconmonstr_connection_1" />
+
+            <TextView
+                android:id="@+id/fragment_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/margin_default_10dp"
+                android:text="Extra Flow!"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/see_guest_button" />
+
+            <TextView
+                android:id="@+id/fragment_caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha="0.7"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                tools:text="Flow podcast!" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/see_guest_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/radius_default_10dp"
+                android:padding="@dimen/padding_default_16dp"
+                android:text="Ver agora"
+                android:textColor="@color/md_white"
+                app:backgroundTint="@color/material_black"
+                app:cornerRadius="@dimen/radius_small_5dp"
+                app:elevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </LinearLayout>
+
 
     </com.google.android.material.card.MaterialCardView>
 
 
-    <TextView
-        android:id="@+id/fragment_subtitle"
-        app:layout_constraintBottom_toTopOf="@id/see_guest_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/margin_default_10dp"
-        android:text="Ao vivo agora!"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
-        android:textStyle="bold" />
-
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/see_guest_button"
-        android:visibility="gone"
-        android:layout_margin="@dimen/radius_default_10dp"
-        android:textColor="@color/md_white"
-        app:backgroundTint="@color/material_black"
-        app:elevation="0dp"
-        tools:visibility="visible"
-        android:padding="@dimen/padding_default_16dp"
-        android:text="Ver agora"
-        app:cornerRadius="@dimen/radius_small_5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
 
 

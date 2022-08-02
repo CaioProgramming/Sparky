@@ -9,12 +9,12 @@ import androidx.core.os.bundleOf
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
 import com.ilustris.animations.slideInBottom
+import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastHeader
 import com.silent.core.podcast.podcasts
 import com.silent.core.utils.WebUtils
@@ -27,6 +27,7 @@ import com.silent.sparky.R
 import com.silent.sparky.databinding.HomeFragmentBinding
 import com.silent.sparky.features.home.adapter.PodcastsLiveAdapter
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
+import com.silent.sparky.features.home.data.LiveHeader
 import com.silent.sparky.features.home.viewmodel.HomeState
 import com.silent.sparky.features.home.viewmodel.HomeViewModel
 import com.silent.sparky.features.home.viewmodel.MainActViewModel
@@ -198,13 +199,11 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
 
                 }
                 is ViewModelBaseState.DataListRetrievedState -> {
-                    homeFragmentBinding?.podcastsResumeRecycler?.run {
+                    homeFragmentBinding?.livesRecyclerView?.run {
                         adapter =
                             PodcastsLiveAdapter((it.dataList as podcasts).sortedByDescending { p -> p.subscribe }) { podcast, index ->
                                 openPodcast(podcast.id)
                             }
-                        layoutManager = GridLayoutManager(requireContext(), 4, RecyclerView.VERTICAL, false)
-                        homeFragmentBinding?.mainContent?.fadeIn()
                     }
                 }
                 is ViewModelBaseState.ErrorState -> {
@@ -269,11 +268,19 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                     header.playlistId?.let { id -> openPodcast(id) }
                 }, ::openChannel, selectPodcast = {
                     openPodcast(it.id)
+                }, { video, podcast ->
+                    navigateToLive(podcast, video, false)
                 })
             podcastsResumeRecycler.layoutManager =
                 LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             stopLoading()
         }
+    }
+
+    private fun navigateToLive(podcast: Podcast, video: Video, isLive: Boolean) {
+        val liveHeader = LiveHeader(podcast, video.title, video.youtubeID, isLive)
+        val bundle = bundleOf("live_object" to liveHeader)
+        findNavController().navigate(R.id.action_navigation_home_to_liveFragment, bundle)
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {

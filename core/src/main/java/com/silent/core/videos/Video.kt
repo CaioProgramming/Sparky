@@ -9,7 +9,7 @@ import java.util.*
 
 @IgnoreExtraProperties
 data class Video(
-    override var id: String = "",
+    var key: String = "",
     var description: String = "",
     var podcastId: String = "",
     var publishedAt: Date = Date(),
@@ -20,7 +20,11 @@ data class Video(
     var title: String = "",
     @Exclude var podcast: Podcast? = null,
     @Exclude var videoType: VideoType = VideoType.DEFAULT
-) : BaseBean(id)
+) : BaseBean(key) {
+    init {
+        key = id
+    }
+}
 
 enum class VideoType {
     DEFAULT, MEDIUM, BIG

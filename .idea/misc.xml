@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/cacai/.gradle/caches/transforms-3/a7d6419d9f01cf0f53acfb28d1f773df/transformed/jetified-ui-2.5.4/res/drawable/bottom_line.xml" value="0.262" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/drawable/corner_shape.xml" value="0.1765" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/activity_home.xml" value="0.16770833333333332" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/badge_layout.xml" value="0.16770833333333332" />
@@ -15,12 +16,14 @@
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/fragment_podcast.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/fragment_profile.xml" value="0.25" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/fragment_settings.xml" value="0.33" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/fragment_today_guest.xml" value="0.22" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/home_fragment.xml" value="0.22" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/live_podcasts_layout.xml" value="0.1634963768115942" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/podcast_list_layout.xml" value="0.16770833333333332" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/podcast_live_fragment.xml" value="0.21557971014492755" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/podcast_live_layout.xml" value="0.16770833333333332" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/profile_card.xml" value="0.1634963768115942" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/today_guest_layout.xml" value="0.2164855072463768" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/video_preview.xml" value="0.21557971014492755" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/warning_layout.xml" value="0.42063492063492064" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/menu/bottom_nav_menu.xml" value="0.16770833333333332" />
@@ -37,9 +40,10 @@
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/manager/src/main/res/layout/activity_manager.xml" value="0.19202898550724637" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/manager/src/main/res/layout/color_card.xml" value="0.19202898550724637" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/manager/src/main/res/layout/fragment_create_complete.xml" value="0.16770833333333332" />
-        <entry key="..\:/Users/cacai/StudioProjects/Sparky/manager/src/main/res/layout/fragment_manage_podcast.xml" value="0.10801744381080175" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/manager/src/main/res/layout/fragment_manage_podcast.xml" value="0.25" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/manager/src/main/res/layout/fragment_manager.xml" value="0.19202898550724637" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/manager/src/main/res/layout/highlight_color_dialog.xml" value="0.16770833333333332" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/manager/src/main/res/layout/host_dialog.xml" value="0.184375" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/manager/src/main/res/layout/host_insta_dialog.xml" value="0.16770833333333332" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/manager/src/main/res/layout/host_layout.xml" value="0.1634963768115942" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/manager/src/main/res/layout/host_layout_reverse.xml" value="0.1634963768115942" />

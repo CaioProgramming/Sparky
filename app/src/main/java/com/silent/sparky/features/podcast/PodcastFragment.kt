@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,6 +64,7 @@ class PodcastFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
+        Log.i(javaClass.simpleName, "podcast args: $args")
         podcastViewModel.getPodcastData(args.podcastId, args.liveVideo)
         podcastFragmentBinding?.run {
             errorView.run {
@@ -162,8 +164,8 @@ class PodcastFragment : Fragment() {
         }
     }
 
-    private fun navigateToLive(podcast: Podcast, video: Video) {
-        val liveHeader = LiveHeader(podcast, video.title, video.youtubeID)
+    private fun navigateToLive(podcast: Podcast, video: Video, isLive: Boolean) {
+        val liveHeader = LiveHeader(podcast, video.title, video.youtubeID, isLive)
         val bundle = bundleOf("live_object" to liveHeader)
         findNavController().navigate(R.id.action_podcastFragment_to_liveFragment, bundle)
     }
@@ -203,13 +205,13 @@ class PodcastFragment : Fragment() {
                             it.video
                         ) { video ->
                             program?.let { podcast ->
-                                navigateToLive(podcast, video)
+                                navigateToLive(podcast, video, true)
                             }
                         }.buildDialog()
                         podcastFragmentBinding?.run {
                             podcastLiveProgress.indeterminate = true
                             programIcon.setOnClickListener { _ ->
-                                navigateToLive(podcast, it.video)
+                                navigateToLive(podcast, it.video, true)
                             }
                         }
                     }
@@ -234,7 +236,9 @@ class PodcastFragment : Fragment() {
 
     private fun setupHeaders(headers: ArrayList<PodcastHeader>) {
         podcastFragmentBinding?.channelVideos?.adapter =
-            VideoHeaderAdapter(headers, ::onSelectHeader)
+            VideoHeaderAdapter(headers, ::onSelectHeader, onVideoClick = { video, podcast ->
+                navigateToLive(podcast, video, false)
+            })
     }
 
 

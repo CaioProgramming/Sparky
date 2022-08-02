@@ -21,9 +21,6 @@ import com.silent.ilustriscore.core.model.DataException
 import com.silent.ilustriscore.core.model.ServiceResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.chrono.IsoChronology
-import java.time.format.DateTimeFormatterBuilder
-import java.time.format.FormatStyle
 import java.util.*
 
 
@@ -67,7 +64,8 @@ class PodcastViewModel(
         videos: List<Video>,
         orientation: Int,
         highlightColor: String,
-        subtitle: String
+        subtitle: String,
+        podcast: Podcast
     ) = PodcastHeader(
         title = title,
         playlistId = playlistId,
@@ -75,7 +73,8 @@ class PodcastViewModel(
         orientation = orientation,
         highLightColor = highlightColor,
         subTitle = subtitle,
-        seeMore = true
+        seeMore = true,
+        podcast = podcast
     )
 
     fun favoritePodcast(podcastID: String, isFavorite: Boolean) {
@@ -132,7 +131,8 @@ class PodcastViewModel(
                             uploads.sortedByDescending { it.publishedAt },
                             if (cuts.isEmpty()) RecyclerView.VERTICAL else RecyclerView.HORIZONTAL,
                             podcast.highLightColor,
-                            "${uploads.size} episódios disponíveis."
+                            "${uploads.size} episódios disponíveis.",
+                            podcast
                         )
                     )
                 }
@@ -146,6 +146,7 @@ class PodcastViewModel(
                             RecyclerView.VERTICAL,
                             podcast.highLightColor,
                             "${cuts.size} cortes disponíveis.",
+                            podcast
                         )
                     )
                 }
@@ -170,15 +171,9 @@ class PodcastViewModel(
             scheduleState.postValue(ScheduleState.TodayGuestState(it))
         } ?: run {
             val locale = Locale.forLanguageTag("pt-BR")
-            val pattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
-                FormatStyle.LONG,
-                FormatStyle.LONG,
-                IsoChronology.INSTANCE,
-                locale
-            )
-            val calendar = Calendar.getInstance(locale)
-
-            val hour = calendar.get(Calendar.HOUR)
+            val timezone = TimeZone.getTimeZone("GMT-3:00")
+            val calendar = Calendar.getInstance(timezone)
+            val hour = calendar.get(Calendar.HOUR_OF_DAY)
             if (podcast.liveTime == hour || possibleLive(hour, podcast.liveTime)) {
                 val liveRequest = youtubeService.getChannelLiveStatus(podcast.youtubeID)
                 if (liveRequest.items.isNotEmpty()) {
@@ -228,7 +223,8 @@ class PodcastViewModel(
                             queryVideos,
                             RecyclerView.VERTICAL,
                             podcast.highLightColor,
-                            "${queryVideos.size} resultados."
+                            "${queryVideos.size} resultados.",
+                            podcast
                         )
                     )
                 }
@@ -250,7 +246,8 @@ class PodcastViewModel(
                             queryCuts,
                             RecyclerView.VERTICAL,
                             podcast.highLightColor,
-                            "${queryCuts.size} resultados."
+                            "${queryCuts.size} resultados.",
+                            podcast
                         )
                     )
                 }

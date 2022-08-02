@@ -19,18 +19,20 @@ import com.ilustris.ui.extensions.gone
 import com.ilustris.ui.extensions.visible
 import com.silent.core.component.PodcastAdapter
 import com.silent.core.databinding.VideoGroupLayoutBinding
-import com.silent.core.podcast.Podcast
-import com.silent.sparky.R
 import com.silent.core.podcast.HeaderType
+import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastHeader
 import com.silent.core.podcast.programSections
+import com.silent.core.videos.Video
+import com.silent.sparky.R
 import com.silent.sparky.features.podcast.adapter.VideosAdapter
 
 class VideoHeaderAdapter(
     val programSections: programSections,
     val headerSelected: (PodcastHeader) -> Unit,
     val iconClick: ((String) -> Unit)? = null,
-    val selectPodcast: ((Podcast) -> Unit)? = null
+    val selectPodcast: ((Podcast) -> Unit)? = null,
+    val onVideoClick: (Video, Podcast) -> Unit
 ) : RecyclerView.Adapter<VideoHeaderAdapter.HeaderViewHolder>() {
 
     inner class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -40,9 +42,17 @@ class VideoHeaderAdapter(
                 val section = programSections[bindingAdapterPosition]
                 setupHeader(section)
                 if (section.type == HeaderType.VIDEOS) {
-                    val layoutManager = LinearLayoutManager(itemView.context, section.orientation, false)
+                    val layoutManager =
+                        LinearLayoutManager(itemView.context, section.orientation, false)
                     val maxLimit = if (section.videos!!.size > 20) 20 else section.videos!!.size
-                    videosRecycler.adapter = VideosAdapter(section.videos!!.subList(0, maxLimit), section.highLightColor)
+                    videosRecycler.adapter = VideosAdapter(
+                        section.videos!!.subList(0, maxLimit),
+                        section.highLightColor
+                    ) { video ->
+                        section.podcast?.let {
+                            onVideoClick(video, it)
+                        }
+                    }
                     videosRecycler.layoutManager = layoutManager
                     section.referenceIndex?.let {
                         videosRecycler.scrollToPosition(it)

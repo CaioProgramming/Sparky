@@ -18,7 +18,8 @@ data class PodcastHeader(
     var referenceIndex: Int? = null,
     var subTitle: String? = null,
     val podcasts: List<Podcast>? = null,
-    val type: HeaderType = HeaderType.VIDEOS
+    val type: HeaderType = HeaderType.VIDEOS,
+    val podcast: Podcast? = null
 ): Serializable
 
 enum class HeaderType {

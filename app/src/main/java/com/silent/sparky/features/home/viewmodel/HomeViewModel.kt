@@ -208,7 +208,8 @@ class HomeViewModel(
             videos = ArrayList(uploads),
             playlistId = playlistID,
             orientation = RecyclerView.HORIZONTAL,
-            seeMore = true
+            seeMore = true,
+            podcast = podcast
         )
 
     }

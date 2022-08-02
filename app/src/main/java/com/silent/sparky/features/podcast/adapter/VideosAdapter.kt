@@ -12,7 +12,6 @@ import com.ilustris.animations.fadeIn
 import com.ilustris.ui.extensions.gone
 import com.ilustris.ui.extensions.visible
 import com.silent.core.utils.ImageUtils
-import com.silent.core.utils.WebUtils
 import com.silent.core.videos.Video
 import com.silent.ilustriscore.core.utilities.DateFormats
 import com.silent.ilustriscore.core.utilities.format
@@ -21,7 +20,8 @@ import com.silent.sparky.databinding.VideoPreviewBinding
 
 class VideosAdapter(
     val playlistVideos: List<Video>,
-    private val highlightColor: String? = null
+    private val highlightColor: String? = null,
+    private val onClickVideo: (Video) -> Unit
 ) : RecyclerView.Adapter<VideosAdapter.VideoViewHolder>() {
 
     inner class VideoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -33,7 +33,7 @@ class VideosAdapter(
                     videoCard.setStrokeColor(ColorStateList.valueOf(Color.parseColor(it)))
                 }
                 videoCard.setOnClickListener {
-                    WebUtils(itemView.context).openYoutubeVideo(video.youtubeID)
+                    onClickVideo(video)
                 }
                 Glide.with(itemView.context).load(ImageUtils.getYoutubeThumb(video.youtubeID))
                     .error(video.podcast?.iconURL).into(videoThumb)
