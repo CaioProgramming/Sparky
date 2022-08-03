@@ -21,7 +21,9 @@ import com.silent.ilustriscore.core.model.DataException
 import com.silent.ilustriscore.core.model.ServiceResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 
 class PodcastViewModel(
@@ -170,10 +172,11 @@ class PodcastViewModel(
         video?.let {
             scheduleState.postValue(ScheduleState.TodayGuestState(it))
         } ?: run {
-            val locale = Locale.forLanguageTag("pt-BR")
-            val timezone = TimeZone.getTimeZone("GMT-3:00")
-            val calendar = Calendar.getInstance(timezone)
-            val hour = calendar.get(Calendar.HOUR_OF_DAY)
+            val zone = ZoneId.of("America/Sao_Paulo")
+            val localDateTime = LocalDateTime.now()
+            val zonedDateTime = ZonedDateTime.of(localDateTime, zone)
+            val hour = zonedDateTime.hour
+            Log.i(javaClass.simpleName, "checkLive: now hour -> $hour")
             if (podcast.liveTime == hour || possibleLive(hour, podcast.liveTime)) {
                 val liveRequest = youtubeService.getChannelLiveStatus(podcast.youtubeID)
                 if (liveRequest.items.isNotEmpty()) {
@@ -190,10 +193,10 @@ class PodcastViewModel(
         }
     }
 
-    fun possibleLive(hour: Int, liveHour: Int) =
+    private fun possibleLive(hour: Int, liveHour: Int) =
         (liveHour + 1) == hour || (liveHour + 2) == hour || (liveHour + 3 == hour)
 
-    fun clearState() {
+    private fun clearState() {
         podcastState.value = null
         viewModelState.value = null
         scheduleState.value = null
