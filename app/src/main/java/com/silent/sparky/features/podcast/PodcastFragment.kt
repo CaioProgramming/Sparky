@@ -4,7 +4,6 @@ import android.animation.ValueAnimator
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
-import com.ilustris.animations.popOut
 import com.ilustris.animations.slideInBottom
 import com.ilustris.ui.extensions.gone
 import com.silent.core.component.GroupType
@@ -30,6 +28,7 @@ import com.silent.core.utils.ImageUtils
 import com.silent.core.utils.WebUtils
 import com.silent.core.videos.Video
 import com.silent.ilustriscore.core.model.ViewModelBaseState
+import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.silent.sparky.R
 import com.silent.sparky.databinding.FragmentPodcastBinding
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
@@ -64,8 +63,9 @@ class PodcastFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
-        Log.i(javaClass.simpleName, "podcast args: $args")
-        podcastViewModel.getPodcastData(args.podcastId, args.liveVideo)
+        delayedFunction {
+            podcastViewModel.getPodcastData(args.podcastId, args.liveVideo)
+        }
         podcastFragmentBinding?.run {
             errorView.run {
                 errorAnimation.setAnimationFromUrl("https://assets3.lottiefiles.com/packages/lf20_txli4cbw.json")
@@ -94,7 +94,7 @@ class PodcastFragment : Fragment() {
     ) {
         program = podcast
         podcastFragmentBinding?.run {
-            loading.popOut()
+            loading.fadeOut()
             (activity as AppCompatActivity?)?.run {
                 setSupportActionBar(programToolbar)
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)

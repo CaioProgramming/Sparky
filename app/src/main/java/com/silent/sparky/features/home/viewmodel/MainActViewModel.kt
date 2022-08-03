@@ -3,7 +3,6 @@ package com.silent.sparky.features.home.viewmodel
 import android.Manifest
 import android.app.Application
 import android.content.pm.PackageManager
-import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -13,9 +12,7 @@ import com.google.gson.Gson
 import com.silent.core.firebase.FirebaseService
 import com.silent.core.podcast.Podcast
 import com.silent.core.preferences.PreferencesService
-import com.silent.core.utils.TOKEN_PREFERENCES
 import com.silent.core.videos.Video
-import com.silent.ilustriscore.core.model.ServiceResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -52,9 +49,7 @@ class MainActViewModel(
         if (permissionStatus) {
             notificationState.value = NotificationState.NotificationGranted
             viewModelScope.launch {
-                firebaseService.subscribeToTopic {
-                    Log.i(javaClass.simpleName, "All users topic result -> $it")
-                }
+                firebaseService.subscribeToTopic {}
             }
         } else {
             notificationState.value = NotificationState.NotificationRevoked
@@ -74,19 +69,7 @@ class MainActViewModel(
     }
 
     fun checkToken() {
-        viewModelScope.launch(Dispatchers.IO) {
-            when (val token = firebaseService.generateFirebaseToken()) {
-                is ServiceResult.Error -> {
-                    Log.e(
-                        this@MainActViewModel.javaClass.simpleName,
-                        "checkToken: Error getting token \n ${token.errorException} "
-                    )
-                }
-                is ServiceResult.Success -> {
-                    preferencesService.editPreference(TOKEN_PREFERENCES, token.data)
-                }
-            }
-        }
+        viewModelScope.launch(Dispatchers.IO) { firebaseService.generateFirebaseToken() }
     }
 
     fun validatePush(podcastExtra: String?, videoExtra: String?) {

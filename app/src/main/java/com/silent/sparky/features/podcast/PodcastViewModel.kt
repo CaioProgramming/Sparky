@@ -1,7 +1,6 @@
 package com.silent.sparky.features.podcast
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +16,6 @@ import com.silent.core.videos.VideoMapper
 import com.silent.core.videos.VideoService
 import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
-import com.silent.ilustriscore.core.model.DataException
 import com.silent.ilustriscore.core.model.ServiceResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -89,10 +87,10 @@ class PodcastViewModel(
 
             if (isFavorite) {
                 userPodcasts.add(podcastID)
-                firebaseService.subscribeToTopic(podcastID, ::handleServiceResult)
+                firebaseService.subscribeToTopic(podcastID) { }
             } else {
                 userPodcasts.remove(podcastID)
-                firebaseService.unsubscribeTopic(podcastID, ::handleServiceResult)
+                firebaseService.unsubscribeTopic(podcastID) { }
             }
 
             preferencesService.editPreference(PODCASTS_PREFERENCES, userPodcasts.toSet())
@@ -100,19 +98,6 @@ class PodcastViewModel(
         }
     }
 
-    private fun handleServiceResult(serviceResult: ServiceResult<DataException, String>) {
-        when (serviceResult) {
-            is ServiceResult.Error -> {
-                Log.e(
-                    javaClass.simpleName,
-                    "handleServiceResult: Error -> ${serviceResult.errorException}",
-                )
-            }
-            is ServiceResult.Success -> {
-                Log.i(javaClass.simpleName, "handleServiceResult: Success -> ${serviceResult.data}")
-            }
-        }
-    }
 
     fun getPodcastData(podcastID: String, video: Video? = null) {
         clearState()
@@ -176,7 +161,6 @@ class PodcastViewModel(
             val localDateTime = LocalDateTime.now()
             val zonedDateTime = ZonedDateTime.of(localDateTime, zone)
             val hour = zonedDateTime.hour
-            Log.i(javaClass.simpleName, "checkLive: now hour -> $hour")
             if (podcast.liveTime == hour || possibleLive(hour, podcast.liveTime)) {
                 val liveRequest = youtubeService.getChannelLiveStatus(podcast.youtubeID)
                 if (liveRequest.items.isNotEmpty()) {
