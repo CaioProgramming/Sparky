@@ -1,5 +1,6 @@
 package com.silent.core.videos
 
+import com.silent.core.podcast.Podcast
 import com.silent.core.utils.ImageUtils
 import com.silent.core.youtube.response.VideoSnippet
 
@@ -15,14 +16,20 @@ class VideoMapper {
         podcastId = podcastId
     )
 
-    fun mapLiveSnippet(videoId: String, videoItem: VideoSnippet, podcastId: String) = Video(
+    fun mapLiveSnippet(
+        videoId: String,
+        videoItem: VideoSnippet,
+        podcastId: String,
+        podcast: Podcast? = null
+    ) = Video(
         key = videoId,
         description = videoItem.description,
         publishedAt = videoItem.publishedAt,
         thumbnailUrl = ImageUtils.getYoutubeThumb(videoId),
         youtubeID = videoId,
         title = videoItem.title,
-        podcastId = podcastId
+        podcastId = podcastId,
+        podcast = podcast
     )
 
 

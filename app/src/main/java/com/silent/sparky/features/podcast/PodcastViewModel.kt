@@ -169,7 +169,8 @@ class PodcastViewModel(
                     val video = mapper.mapLiveSnippet(
                         snippetItem.id.videoId,
                         snippetItem.snippet,
-                        podcast.id
+                        podcast.id,
+                        podcast = podcast
                     )
                     scheduleState.postValue(ScheduleState.TodayGuestState(video))
                 }

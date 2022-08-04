@@ -27,7 +27,6 @@ class TodayLiveDialog(
         video.podcast?.let {
             fragmentCaption.text = it.name
             Glide.with(context).load(it.iconURL).into(podcastIcon)
-
         }
         seeGuestButton.setTextColor(highLightColor)
         seeGuestButton.setOnClickListener {
