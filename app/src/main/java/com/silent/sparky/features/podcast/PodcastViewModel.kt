@@ -153,26 +153,28 @@ class PodcastViewModel(
         }
     }
 
-    suspend fun checkLive(video: Video?, podcast: Podcast) {
+    private fun checkLive(video: Video?, podcast: Podcast) {
         video?.let {
             scheduleState.postValue(ScheduleState.TodayGuestState(it))
         } ?: run {
-            val zone = ZoneId.of("America/Sao_Paulo")
-            val localDateTime = LocalDateTime.now()
-            val zonedDateTime = ZonedDateTime.of(localDateTime, zone)
-            val hour = zonedDateTime.hour
-            if (podcast.liveTime == hour || possibleLive(hour, podcast.liveTime)) {
-                val liveRequest = youtubeService.getChannelLiveStatus(podcast.youtubeID)
-                if (liveRequest.items.isNotEmpty()) {
-                    val mapper = VideoMapper()
-                    val snippetItem = liveRequest.items.first()
-                    val video = mapper.mapLiveSnippet(
-                        snippetItem.id.videoId,
-                        snippetItem.snippet,
-                        podcast.id,
-                        podcast = podcast
-                    )
-                    scheduleState.postValue(ScheduleState.TodayGuestState(video))
+            viewModelScope.launch(Dispatchers.IO) {
+                val zone = ZoneId.of("America/Sao_Paulo")
+                val localDateTime = LocalDateTime.now()
+                val zonedDateTime = ZonedDateTime.of(localDateTime, zone)
+                val hour = zonedDateTime.hour
+                if (podcast.liveTime == hour || possibleLive(hour, podcast.liveTime)) {
+                    val liveRequest = youtubeService.getChannelLiveStatus(podcast.youtubeID)
+                    if (liveRequest.items.isNotEmpty()) {
+                        val mapper = VideoMapper()
+                        val snippetItem = liveRequest.items.first()
+                        val video = mapper.mapLiveSnippet(
+                            snippetItem.id.videoId,
+                            snippetItem.snippet,
+                            podcast.id,
+                            podcast = podcast
+                        )
+                        scheduleState.postValue(ScheduleState.TodayGuestState(video))
+                    }
                 }
             }
         }
