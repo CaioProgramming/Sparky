@@ -102,6 +102,17 @@ class PodcastManagerViewModel(
                             )
                         }
                     }
+                    val cuts = youtubeService.getPlaylistVideos(podcast.cuts, 100, fetchDate)
+                    cuts.items.forEachIndexed { index, playlistResource ->
+                        cutService.editData(video)
+                        if (index == uploads.items.lastIndex) {
+                            podcastManagerState.postValue(
+                                PodcastManagerState.CutsUpdated(
+                                    uploads.items.size
+                                )
+                            )
+                        }
+                    }
 
                 }
             }

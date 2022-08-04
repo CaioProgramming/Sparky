@@ -50,7 +50,7 @@ interface YoutubeApi {
         @Query("part") snippet: String? = DATA_SNIPPET_QUERY,
         @Query("playlistId") playlistId: String,
         @Query("maxResults") maxResults: Int = MAX_UPLOADS_REQUIRED,
-        @Query("publishedAfter") beforeDate: String? = null,
+        @Query("publishedBefore") beforeDate: String? = null,
         @Query("key") apiKey: String? = BuildConfig.YOUTUBE_KEY
     ): PlaylistItemResponse
 

@@ -14,7 +14,9 @@ class VideoMapper {
         youtubeID = videoItem.resourceId.videoId,
         title = videoItem.title,
         podcastId = podcastId
-    )
+    ).apply {
+        id = videoItem.resourceId.videoId
+    }
 
     fun mapLiveSnippet(
         videoId: String,
