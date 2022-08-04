@@ -65,12 +65,10 @@ class HomeViewModel(
                 val sortedPodcasts = filteredPodcasts.sortedByDescending { it.subscribe }
                 val homeHeaders = ArrayList<PodcastHeader>()
                 sortedPodcasts.forEachIndexed { index, podcast ->
-                    val uploadsData = videoService.query(podcast.id, "podcastId")
-                    when (uploadsData) {
+                    when (val uploadsData = videoService.getHomeVideos(podcast.id)) {
                         is ServiceResult.Error -> {}
                         is ServiceResult.Success -> {
-                            val sortedVideos =
-                                (uploadsData.data as ArrayList<Video>).sortedByDescending { it.publishedAt }
+                            val sortedVideos = (uploadsData.data as ArrayList<Video>)
                             sortedVideos.map { it.podcast = podcast }
                             homeHeaders.add(
                                 createHeader(

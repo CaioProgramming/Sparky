@@ -17,11 +17,11 @@ import com.silent.core.preferences.PreferencesService
 import com.silent.core.utils.HOME_ACT
 import com.silent.core.utils.ImageUtils
 import com.silent.core.utils.TOKEN_PREFERENCES
+import com.silent.core.utils.toAlphabetInt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
-import kotlin.random.Random
 
 
 class SparkyMessagingService : FirebaseMessagingService() {
@@ -65,7 +65,7 @@ class SparkyMessagingService : FirebaseMessagingService() {
                     putExtra("video", video.toString())
                 }
             }
-            val notificationId = Random.nextInt(podcast?.getString("name")?.length ?: 0)
+            val notificationId = podcast?.getString("name")?.toAlphabetInt() ?: 0
             val flag =
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_CANCEL_CURRENT
             val pendingIntent = PendingIntent.getActivity(this, 0, homeIntent, flag)

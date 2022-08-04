@@ -135,9 +135,4 @@ class VideoHeaderAdapter(
 
     override fun getItemCount() = programSections.size
 
-    fun clearAdapter() {
-        programSections.clear()
-        notifyDataSetChanged()
-    }
-
 }

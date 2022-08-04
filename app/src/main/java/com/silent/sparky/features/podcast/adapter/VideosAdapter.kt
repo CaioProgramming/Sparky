@@ -35,7 +35,7 @@ class VideosAdapter(
                 videoCard.setOnClickListener {
                     onClickVideo(video)
                 }
-                Glide.with(itemView.context).load(ImageUtils.getYoutubeThumb(video.youtubeID))
+                Glide.with(itemView.context).load(ImageUtils.getYoutubeThumb(video.id))
                     .error(video.podcast?.iconURL).into(videoThumb)
                 title.text = video.title
                 try {
