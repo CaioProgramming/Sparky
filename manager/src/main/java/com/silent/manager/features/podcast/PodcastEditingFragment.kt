@@ -134,11 +134,8 @@ class PodcastEditingFragment : Fragment() {
                     podcastFragmentBinding?.programIcon?.let { imageView ->
                         requireView().showSnackBar(
                             "Podcast Atualizado com sucesso!",
-                            snackColor,
-                            actionText = "Ok",
-                            action = {
-                                findNavController().popBackStack()
-                            })
+                            snackColor
+                        )
                     }
 
                 }

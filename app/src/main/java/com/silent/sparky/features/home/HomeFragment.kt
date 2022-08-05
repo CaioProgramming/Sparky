@@ -57,15 +57,12 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        homeFragmentBinding?.showLoading()
         setupView()
         observeViewModel()
     }
 
-
-    override fun onResume() {
-        super.onResume()
-        homeFragmentBinding?.showLoading()
+    override fun onStart() {
+        super.onStart()
         homeViewModel.getHome()
     }
 
@@ -242,9 +239,8 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
 
     private fun HomeFragmentBinding.stopLoading() {
         homeAnimation.updateLayoutParams<ConstraintLayout.LayoutParams> { horizontalBias = 0.0f }
-        homeTitle.fadeIn()
-        homeToolbar.fadeIn()
         mainContent.slideInBottom()
+        homeAnimation.repeatCount = 0
     }
 
     private fun HomeFragmentBinding.showError(message: String, tryAgainClick: () -> Unit) {

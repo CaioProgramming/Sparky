@@ -7,6 +7,11 @@
         <item name="colorPrimaryDark">@color/material_yellow800</item>
         <item name="colorAccent">@color/material_yellowA700</item>
         <item name="android:statusBarColor">?android:colorBackground</item>
+        <item name="android:textViewStyle">@style/Theme.Sparky.TextViewStyle</item>
+    </style>
+
+    <style name="Theme.Sparky.TextViewStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:fontFamily">@font/lato</item>
     </style>
 
     <style name="Theme.Sparky.ProgramIcon">

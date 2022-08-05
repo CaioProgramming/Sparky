@@ -11,9 +11,7 @@ import com.silent.core.users.UsersService
 import com.silent.core.utils.PODCASTS_PREFERENCES
 import com.silent.core.utils.WARNING_PREFERENCE
 import com.silent.core.videos.Video
-import com.silent.core.videos.VideoMapper
 import com.silent.core.videos.VideoService
-import com.silent.core.youtube.YoutubeService
 import com.silent.ilustriscore.core.model.BaseViewModel
 import com.silent.ilustriscore.core.model.ServiceResult
 import com.silent.ilustriscore.core.model.ViewModelBaseState
@@ -29,9 +27,7 @@ class HomeViewModel(
     myApplication: Application,
     override val service: PodcastService,
     private val videoService: VideoService,
-    private val youtubeService: YoutubeService,
     private val usersService: UsersService,
-    private val videoMapper: VideoMapper,
     private val preferencesService: PreferencesService
 ) : BaseViewModel<Podcast>(myApplication) {
 
@@ -51,7 +47,8 @@ class HomeViewModel(
                     preferencesState.postValue(PreferencesState.WarningNotShowed)
                     return@launch
                 }
-                getAllData()
+                val podcasts = service.getAllData().success.data
+                updateViewState(ViewModelBaseState.DataListRetrievedState(podcasts))
                 delay(FETCH_DELAY_TIME)
                 val podcastFilter = ArrayList<String>()
                 val preferencesPodcasts = preferencesService.getStringSetValue(PODCASTS_PREFERENCES)
@@ -60,8 +57,8 @@ class HomeViewModel(
                 } else {
                     podcastFilter.addAll(preferencesPodcasts)
                 }
-                val podcasts = service.getAllData().success.data as podcasts
-                val filteredPodcasts = podcasts.filter { podcastFilter.contains(it.id) }
+                val filteredPodcasts =
+                    (podcasts as podcasts).filter { podcastFilter.contains(it.id) }
                 val sortedPodcasts = filteredPodcasts.sortedByDescending { it.subscribe }
                 val homeHeaders = ArrayList<PodcastHeader>()
                 sortedPodcasts.forEachIndexed { index, podcast ->
@@ -91,13 +88,11 @@ class HomeViewModel(
                                 )
                             )
                         }
-                        homeState.postValue(HomeState.HomeChannelsRetrieved(homeHeaders))
                     }
+                    homeState.postValue(HomeState.HomeChannelsRetrieved(homeHeaders))
                 }
                 checkLives(sortedPodcasts)
-                service.currentUser()?.let {
-                    checkManager(it.uid)
-                }
+                checkManager()
 
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -175,21 +170,26 @@ class HomeViewModel(
         }
     }
 
-    suspend fun checkManager(uid: String) {
-        try {
-            when (val userRequest = usersService.getSingleData(uid)) {
-                is ServiceResult.Error -> homeState.postValue(HomeState.InvalidManager)
-                is ServiceResult.Success -> {
-                    val user = userRequest.data as User
-                    if (user.admin) {
-                        homeState.postValue(HomeState.ValidManager)
+    private fun checkManager() {
+        viewModelScope.launch(Dispatchers.IO) {
+            service.currentUser()?.let {
+                try {
+                    when (val userRequest = usersService.getSingleData(it.uid)) {
+                        is ServiceResult.Error -> homeState.postValue(HomeState.InvalidManager)
+                        is ServiceResult.Success -> {
+                            val user = userRequest.data as User
+                            if (user.admin) {
+                                homeState.postValue(HomeState.ValidManager)
+                            }
+                        }
                     }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    homeState.postValue(HomeState.InvalidManager)
                 }
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            homeState.postValue(HomeState.InvalidManager)
         }
+
     }
 
 

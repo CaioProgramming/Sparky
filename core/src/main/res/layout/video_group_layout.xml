@@ -37,12 +37,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="@dimen/padding_default_16dp"
-                    android:textAppearance="@style/Ilustris.Title"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                    android:textStyle="bold"
                     tools:text="Últimos episódios" />
 
                 <TextView
+                    android:layout_marginVertical="@dimen/margin_small_4dp"
                     android:paddingHorizontal="@dimen/padding_default_16dp"
                     android:id="@+id/group_subtitle"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                     tools:text="Só conversa fiada!"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>

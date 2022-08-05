@@ -6,7 +6,7 @@
     tools:visibility="visible"
     android:visibility="gone"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="190dp"
     android:layout_weight=".20"
     android:animateLayoutChanges="true"
     android:layout_margin="@dimen/padding_small_8dp"
@@ -42,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="2"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textColor="@color/md_white"
             android:textStyle="bold"
             tools:text="Flows podcre #1" />
