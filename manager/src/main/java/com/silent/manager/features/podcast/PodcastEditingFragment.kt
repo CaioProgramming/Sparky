@@ -168,8 +168,7 @@ class PodcastEditingFragment : Fragment() {
                                 .setPositiveButton("Confirmar") { d, _ ->
                                     podcastViewModel.deletePlaylist(
                                         header.videos,
-                                        header.title,
-                                        header.title.contains("Cortes")
+                                        header.title ?: ""
                                     )
                                     d.dismiss()
                                 }.setNegativeButton("Cancelar") { d, _ ->

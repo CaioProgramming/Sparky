@@ -35,7 +35,22 @@ class HomeViewModel(
     val homeState = MutableLiveData<HomeState>()
     val preferencesState = MutableLiveData<PreferencesState>()
 
-    fun getHome() {
+    private fun createTopHeader(podcasts: podcasts, liveVideoId: String? = null): PodcastHeader {
+        val topHeaderPodcasts = podcasts.toList().apply {
+            map {
+                it.isLive = liveVideoId == it.id
+            }
+        }.sortedByDescending { it.subscribe }
+        return PodcastHeader(
+            type = HeaderType.PODCASTS,
+            showDivider = true,
+            showTitle = false,
+            podcasts = ArrayList(topHeaderPodcasts),
+            orientation = RecyclerView.HORIZONTAL
+        )
+    }
+
+    fun getHome(notificationLive: Video? = null) {
         if (getUser() == null) {
             viewModelState.postValue(ViewModelBaseState.RequireAuth)
             return
@@ -47,20 +62,16 @@ class HomeViewModel(
                     preferencesState.postValue(PreferencesState.WarningNotShowed)
                     return@launch
                 }
-                val podcasts = service.getAllData().success.data
-                updateViewState(ViewModelBaseState.DataListRetrievedState(podcasts))
-                delay(FETCH_DELAY_TIME)
-                val podcastFilter = ArrayList<String>()
-                val preferencesPodcasts = preferencesService.getStringSetValue(PODCASTS_PREFERENCES)
-                if (preferencesPodcasts.isNullOrEmpty()) {
+                val homeHeaders = ArrayList<PodcastHeader>()
+                val podcasts = (service.getAllData().success.data as podcasts)
+                homeHeaders.add(createTopHeader(podcasts, notificationLive?.podcastId))
+                val podcastFilter = preferencesService.getStringSetValue(PODCASTS_PREFERENCES)
+                if (podcastFilter.isNullOrEmpty()) {
                     preferencesState.postValue(PreferencesState.PreferencesNotSet)
-                } else {
-                    podcastFilter.addAll(preferencesPodcasts)
                 }
                 val filteredPodcasts =
-                    (podcasts as podcasts).filter { podcastFilter.contains(it.id) }
+                    if (podcastFilter != null) podcasts.filter { podcastFilter.contains(it.id) } else podcasts
                 val sortedPodcasts = filteredPodcasts.sortedByDescending { it.subscribe }
-                val homeHeaders = ArrayList<PodcastHeader>()
                 sortedPodcasts.forEachIndexed { index, podcast ->
                     when (val uploadsData = videoService.getHomeVideos(podcast.id)) {
                         is ServiceResult.Error -> {}
@@ -77,16 +88,20 @@ class HomeViewModel(
                         }
                     }
                     if (index == filteredPodcasts.lastIndex) {
-                        val remainingPodcasts = podcasts.filter { !podcastFilter.contains(it.id) }
-                        if (remainingPodcasts.isNotEmpty()) {
-                            homeHeaders.add(
-                                PodcastHeader(
-                                    "Veja mais podcasts",
-                                    type = HeaderType.PODCASTS,
-                                    podcasts = remainingPodcasts,
-                                    orientation = RecyclerView.HORIZONTAL
+                        podcastFilter?.let {
+                            val remainingPodcasts =
+                                podcasts.filter { !podcastFilter.contains(it.id) }
+                            if (remainingPodcasts.isNotEmpty()) {
+                                homeHeaders.add(
+                                    PodcastHeader(
+                                        "Veja mais podcasts",
+                                        "Conheça a família Flow!",
+                                        type = HeaderType.PODCASTS,
+                                        podcasts = remainingPodcasts,
+                                        orientation = RecyclerView.HORIZONTAL
+                                    )
                                 )
-                            )
+                            }
                         }
                     }
                     homeState.postValue(HomeState.HomeChannelsRetrieved(homeHeaders))
@@ -146,10 +161,10 @@ class HomeViewModel(
 
                 if (index == podcasts.lastIndex) {
                     val queryHeaders = headers.filter { header ->
-                        header.title.contains(
+                        header.title?.contains(
                             query,
                             true
-                        ) || header.videos?.isNotEmpty() == true || header.podcasts?.isNotEmpty() == true
+                        ) == true || header.videos?.isNotEmpty() == true || header.podcasts?.isNotEmpty() == true
                     }
                     homeState.postValue(HomeState.HomeSearchRetrieved(ArrayList(queryHeaders)))
                 }

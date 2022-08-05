@@ -59,15 +59,18 @@ class VideoHeaderAdapter(
                         section.referenceIndex = null
                     }
                 } else {
-                    videosRecycler.layoutManager = LinearLayoutManager(itemView.context, section.orientation, false)
-                    videosRecycler.adapter =  PodcastAdapter(ArrayList(section.podcasts!!)) {
-                        selectPodcast?.invoke(it)
-                    }
+                    videosRecycler.layoutManager =
+                        LinearLayoutManager(itemView.context, section.orientation, false)
+                    videosRecycler.adapter =
+                        PodcastAdapter(ArrayList(section.podcasts!!), section.showTitle) {
+                            selectPodcast?.invoke(it)
+                        }
                 }
             }
         }
 
         private fun VideoGroupLayoutBinding.setupHeader(section: PodcastHeader) {
+
             section.highLightColor?.let {
                 seeMoreButton.imageTintList =
                     ColorStateList.valueOf(Color.parseColor(it))
@@ -119,6 +122,10 @@ class VideoHeaderAdapter(
                     }
                 })
                 .into(programIcon)
+            if (section.showDivider) root.setBackgroundResource(R.drawable.bottom_line)
+            root.backgroundTintList =
+                ColorStateList.valueOf(root.context.getColor(R.color.material_grey900))
+            if (section.showTitle) headerInfo.visible() else headerInfo.gone()
         }
 
     }
