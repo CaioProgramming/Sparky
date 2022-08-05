@@ -14,7 +14,8 @@ import kotlinx.coroutines.tasks.await
 class VideoService : BaseService() {
 
     override val dataPath = VIDEOS_PATH
-    override var isDebug = true
+    override var offlineEnabled = true
+
 
     override fun deserializeDataSnapshot(dataSnapshot: DocumentSnapshot): BaseBean? {
         return dataSnapshot.toObject(Video::class.java)?.apply {

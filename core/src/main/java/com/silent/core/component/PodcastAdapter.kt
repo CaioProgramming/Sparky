@@ -1,17 +1,25 @@
 package com.silent.core.component
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.ilustris.animations.popIn
 import com.ilustris.animations.slideInBottom
+import com.ilustris.ui.extensions.gone
+import com.ilustris.ui.extensions.visible
 import com.silent.core.R
 import com.silent.core.databinding.PodcastIconLayoutBinding
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.podcasts
 
-class PodcastAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcast) -> Unit) :
+class PodcastAdapter(
+    val podcasts: podcasts,
+    val showTitle: Boolean = true,
+    val onSelectPodcast: (Podcast) -> Unit
+) :
     RecyclerView.Adapter<PodcastAdapter.PodcastViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PodcastViewHolder {
@@ -39,7 +47,12 @@ class PodcastAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcast) -> U
                     onSelectPodcast(podcast)
                 }
                 programIcon.slideInBottom()
-
+                liveStatus.visible()
+                liveStatus.rimColor = Color.parseColor(podcast.highLightColor)
+                liveStatus.indeterminate = podcast.isLive
+                liveStatus.progress = 100
+                itemView.popIn()
+                if (showTitle) podcastTitle.visible() else podcastTitle.gone()
             }
         }
 

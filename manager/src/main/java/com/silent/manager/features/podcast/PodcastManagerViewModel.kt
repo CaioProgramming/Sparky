@@ -173,7 +173,8 @@ class PodcastManagerViewModel(
         }
     }
 
-    fun deletePlaylist(videos: ArrayList<Video>?, playlistName: String, isCuts: Boolean = false) {
+    fun deletePlaylist(videos: ArrayList<Video>?, playlistName: String) {
+        val isCuts = playlistName.contains("Cortes")
         viewModelScope.launch(Dispatchers.IO) {
             videos?.forEach {
                 if (!isCuts) {

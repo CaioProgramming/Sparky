@@ -2,13 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="@dimen/padding_default_16dp"
+    android:paddingHorizontal="@dimen/padding_default_16dp"
+    android:paddingVertical="@dimen/padding_small_8dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <RelativeLayout
-        android:layout_marginVertical="@dimen/margin_default_10dp"
+        android:id="@+id/header_info"
+        android:layout_marginTop="@dimen/margin_small_4dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -37,22 +39,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="@dimen/padding_default_16dp"
-                    android:textAppearance="@style/Ilustris.Title"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                    android:textStyle="bold"
                     tools:text="Últimos episódios" />
 
                 <TextView
+                    android:layout_marginVertical="@dimen/margin_small_4dp"
                     android:paddingHorizontal="@dimen/padding_default_16dp"
                     android:id="@+id/group_subtitle"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                     tools:text="Só conversa fiada!"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
             </LinearLayout>
 
-
-
         </LinearLayout>
-
 
         <ImageButton
             android:id="@+id/see_more_button"
@@ -74,6 +76,6 @@
         android:clipToPadding="false"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        tools:listitem="@layout/video_preview" />
+        tools:listitem="@layout/podcast_icon_layout" />
 
 </LinearLayout>

@@ -134,11 +134,8 @@ class PodcastEditingFragment : Fragment() {
                     podcastFragmentBinding?.programIcon?.let { imageView ->
                         requireView().showSnackBar(
                             "Podcast Atualizado com sucesso!",
-                            snackColor,
-                            actionText = "Ok",
-                            action = {
-                                findNavController().popBackStack()
-                            })
+                            snackColor
+                        )
                     }
 
                 }
@@ -171,8 +168,7 @@ class PodcastEditingFragment : Fragment() {
                                 .setPositiveButton("Confirmar") { d, _ ->
                                     podcastViewModel.deletePlaylist(
                                         header.videos,
-                                        header.title,
-                                        header.title.contains("Cortes")
+                                        header.title ?: ""
                                     )
                                     d.dismiss()
                                 }.setNegativeButton("Cancelar") { d, _ ->

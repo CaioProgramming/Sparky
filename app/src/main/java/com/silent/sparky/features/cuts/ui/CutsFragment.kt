@@ -13,13 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ilustris.animations.fadeOut
 import com.ilustris.animations.slideInBottom
 import com.silent.core.component.showError
-import com.silent.core.podcast.Podcast
 import com.silent.core.videos.Video
 import com.silent.core.videos.VideoType
 import com.silent.sparky.R
 import com.silent.sparky.databinding.FragmentCutsBinding
 import com.silent.sparky.features.cuts.ui.adapter.CutGridAdapter
-import com.silent.sparky.features.cuts.ui.adapter.PodcastCutPageAdapter
 import com.silent.sparky.features.cuts.viewmodel.CutsState
 import com.silent.sparky.features.cuts.viewmodel.CutsViewModel
 import com.silent.sparky.features.home.data.LiveHeader
@@ -29,7 +27,6 @@ class CutsFragment : Fragment() {
 
     private var cutsBinding: FragmentCutsBinding? = null
     private val cutsViewModel by viewModel<CutsViewModel>()
-    lateinit var cutsAdapter: PodcastCutPageAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,11 +34,6 @@ class CutsFragment : Fragment() {
     ): View? {
         cutsBinding = FragmentCutsBinding.inflate(inflater)
         return cutsBinding?.root
-    }
-
-    private fun navigateToPodcast(podcast: Podcast) {
-        val bundle = bundleOf("podcast_id" to podcast.id)
-        findNavController().navigate(R.id.action_navigation_cuts_to_podcastFragment, bundle)
     }
 
     override fun onStart() {

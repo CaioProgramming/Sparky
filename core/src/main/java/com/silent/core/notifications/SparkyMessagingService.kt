@@ -4,8 +4,10 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -65,21 +67,26 @@ class SparkyMessagingService : FirebaseMessagingService() {
                     putExtra("video", video.toString())
                 }
             }
+            val sound = Uri.parse("android.resource://" + packageName + "/" + notification.sound)
             val notificationId = podcast?.getString("name")?.toAlphabetInt() ?: 0
+            val iconURl = podcast?.getString("iconURL")
             val flag =
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_CANCEL_CURRENT
             val pendingIntent = PendingIntent.getActivity(this, 0, homeIntent, flag)
             val channelId = getString(R.string.channel_id)
-            val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+            val defaultSoundUri = RingtoneManager.getRingtone(baseContext, sound)
+            val iconBitmap: Bitmap? = ImageUtils.getBitmap(notification.icon, baseContext)
             val notificationBuilder = NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(icon.drawable)
+                .setLargeIcon(iconBitmap)
                 .setContentTitle(notification.title)
                 .setContentText(notification.body)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setColor(defaultColor)
+                .setOnlyAlertOnce(true)
                 .setColorized(true)
                 .setAutoCancel(true)
-                .setSound(defaultSoundUri)
+                .setSound(sound)
                 .setContentIntent(pendingIntent)
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.notify(notificationId, notificationBuilder.build())

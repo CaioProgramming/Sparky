@@ -11,12 +11,12 @@ import com.bumptech.glide.Glide
 import com.ilustris.animations.fadeIn
 import com.ilustris.ui.extensions.gone
 import com.ilustris.ui.extensions.visible
+import com.silent.core.databinding.VideoPreviewBinding
 import com.silent.core.utils.ImageUtils
 import com.silent.core.videos.Video
 import com.silent.ilustriscore.core.utilities.DateFormats
 import com.silent.ilustriscore.core.utilities.format
 import com.silent.sparky.R
-import com.silent.sparky.databinding.VideoPreviewBinding
 
 class VideosAdapter(
     val playlistVideos: List<Video>,

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cut_fragment"
@@ -7,51 +7,88 @@
     android:layout_height="match_parent"
     tools:context=".features.cuts.ui.CutsFragment">
 
-    <TextView
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/kaushan_script"
-        android:gravity="center"
-        android:padding="@dimen/padding_default_16dp"
-        android:text="@string/title_cuts"
-        android:id="@+id/cuts_title"
-        android:textAlignment="center"
-        android:textAppearance="@style/Ilustris.Title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="?android:colorBackground">
 
-    <TextView
-        android:id="@+id/cuts_subtitle"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        app:layout_constraintTop_toBottomOf="@id/cuts_title"
-        android:layout_width="match_parent"
-        tools:text="100 resultados" />
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/cuts_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/padding_default_16dp"
-        android:background="@drawable/input_round_retangle"
-        android:backgroundTint="@color/material_grey900"
-        app:iconifiedByDefault="false"
-        app:layout_constraintTop_toBottomOf="@id/cuts_subtitle"
-        app:queryBackground="@color/transparent"
-        app:queryHint="Pesquise por cortes..." />
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="?attr/actionBarSize"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/cuts_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/kaushan_script"
+                    android:gravity="center"
+                    android:paddingHorizontal="@dimen/padding_default_16dp"
+                    android:text="@string/title_cuts"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/Ilustris.Title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/cuts_subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    app:layout_constraintTop_toBottomOf="@id/cuts_title"
+                    tools:text="100 resultados" />
+
+
+            </LinearLayout>
+
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin" />
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/cuts_search"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="bottom"
+                android:layout_marginHorizontal="@dimen/margin_default_10dp"
+                android:layout_marginTop="?attr/actionBarSize"
+                android:layout_marginBottom="@dimen/margin_default_10dp"
+
+                android:background="@drawable/input_round_retangle"
+                android:backgroundTint="@color/material_grey900"
+                app:iconifiedByDefault="false"
+                app:layout_constraintTop_toBottomOf="@id/cuts_subtitle"
+                app:queryBackground="@color/transparent"
+                app:queryHint="Pesquise por cortes..." />
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+
+    </com.google.android.material.appbar.AppBarLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cuts_recycler"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingTop="@dimen/padding_default_16dp"
+        android:paddingBottom="?attr/actionBarSize"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cuts_search"
         app:spanCount="3"
-        app:layout_constraintBottom_toBottomOf="parent"
         tools:itemCount="10"
         tools:listitem="@layout/cut_preview" />
 
@@ -59,6 +96,7 @@
         android:id="@+id/cuts_animation"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:layout_gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -73,4 +111,4 @@
         layout="@layout/error_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

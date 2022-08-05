@@ -28,7 +28,9 @@ data class Podcast(
     var slogan: String = "",
     var liveTime: Int = 0,
     @Exclude
-    var updating: Boolean = false
+    var updating: Boolean = false,
+    @Exclude
+    var isLive: Boolean = false
 ) : BaseBean(key) {
 
     init {

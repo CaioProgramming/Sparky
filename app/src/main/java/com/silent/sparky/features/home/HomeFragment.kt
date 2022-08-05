@@ -16,7 +16,6 @@ import com.ilustris.animations.fadeOut
 import com.ilustris.animations.slideInBottom
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastHeader
-import com.silent.core.podcast.podcasts
 import com.silent.core.utils.WebUtils
 import com.silent.core.videos.Video
 import com.silent.ilustriscore.core.model.ErrorType
@@ -25,7 +24,6 @@ import com.silent.navigation.ModuleNavigator
 import com.silent.navigation.NavigationUtils
 import com.silent.sparky.R
 import com.silent.sparky.databinding.HomeFragmentBinding
-import com.silent.sparky.features.home.adapter.PodcastsLiveAdapter
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
 import com.silent.sparky.features.home.data.LiveHeader
 import com.silent.sparky.features.home.viewmodel.HomeState
@@ -57,15 +55,12 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        homeFragmentBinding?.showLoading()
         setupView()
         observeViewModel()
     }
 
-
-    override fun onResume() {
-        super.onResume()
-        homeFragmentBinding?.showLoading()
+    override fun onStart() {
+        super.onStart()
         homeViewModel.getHome()
     }
 
@@ -199,12 +194,7 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
 
                 }
                 is ViewModelBaseState.DataListRetrievedState -> {
-                    homeFragmentBinding?.livesRecyclerView?.run {
-                        adapter =
-                            PodcastsLiveAdapter((it.dataList as podcasts).sortedByDescending { p -> p.subscribe }) { podcast, index ->
-                                openPodcast(podcast.id)
-                            }
-                    }
+
                 }
                 is ViewModelBaseState.ErrorState -> {
                     if (it.dataException.code == ErrorType.AUTH) {
@@ -237,14 +227,13 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
     private fun HomeFragmentBinding.showLoading() {
         homeAnimation.updateLayoutParams<ConstraintLayout.LayoutParams> { horizontalBias = 0.5f }
         homeToolbar.fadeOut()
-        mainContent.fadeOut()
+        podcastsResumeRecycler.fadeOut()
     }
 
     private fun HomeFragmentBinding.stopLoading() {
         homeAnimation.updateLayoutParams<ConstraintLayout.LayoutParams> { horizontalBias = 0.0f }
-        homeTitle.fadeIn()
-        homeToolbar.fadeIn()
-        mainContent.slideInBottom()
+        podcastsResumeRecycler.slideInBottom()
+        homeAnimation.repeatCount = 1
     }
 
     private fun HomeFragmentBinding.showError(message: String, tryAgainClick: () -> Unit) {

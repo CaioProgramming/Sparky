@@ -28,7 +28,7 @@ class PodcastHeaderAdapter(
                 val header = podcastHeaders[bindingAdapterPosition]
                 groupTitle.text = header.title
                 groupTitle.setTextColor(titleColor)
-                channelsRecycler.adapter = PodcastAdapter(header.podcasts, onSelectPodcast)
+                channelsRecycler.adapter = PodcastAdapter(header.podcasts, true, onSelectPodcast)
             }
         }
 
