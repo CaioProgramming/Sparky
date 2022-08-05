@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ilustris.animations.fadeOut
 import com.ilustris.animations.slideInBottom
 import com.silent.core.component.showError
-import com.silent.core.podcast.Podcast
 import com.silent.core.videos.Video
 import com.silent.core.videos.VideoType
 import com.silent.sparky.R
@@ -35,11 +34,6 @@ class CutsFragment : Fragment() {
     ): View? {
         cutsBinding = FragmentCutsBinding.inflate(inflater)
         return cutsBinding?.root
-    }
-
-    private fun navigateToPodcast(podcast: Podcast) {
-        val bundle = bundleOf("podcast_id" to podcast.id)
-        findNavController().navigate(R.id.action_navigation_cuts_to_podcastFragment, bundle)
     }
 
     override fun onStart() {
