@@ -1,7 +1,12 @@
 package com.silent.core.utils
 
 import android.R.drawable
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import com.silent.core.R
+import java.io.IOException
+import java.net.URL
 
 
 object ImageUtils {
@@ -41,8 +46,16 @@ object ImageUtils {
         )
     }
 
+    fun getBitmap(url: String?, context: Context): Bitmap? {
+        return try {
+            val url = URL(url)
+            BitmapFactory.decodeStream(url.openConnection().getInputStream())
+        } catch (e: IOException) {
+            return null
+        }
+    }
+
 }
 
 
-
-data class IconData(val name:String, val drawable: Int)
+data class IconData(val name: String, val drawable: Int)

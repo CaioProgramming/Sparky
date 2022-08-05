@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.silent.core.firebase.FirebaseService
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastService
+import com.silent.core.podcast.podcasts
 import com.silent.core.preferences.PreferencesService
 import com.silent.core.utils.PODCASTS_PREFERENCES
 import com.silent.ilustriscore.core.model.BaseViewModel
@@ -26,12 +27,12 @@ class PreferencesViewModel(
         data class PodcastAdded(val podcast: String) : PreferencesViewState()
         data class PodcastRemoved(val podcast: String) : PreferencesViewState()
         data class PodcastPreferencesRetrieved(val favorites: List<String>) : PreferencesViewState()
+        data class PodcastsRetrieved(val podcasts: podcasts) : PreferencesViewState()
         object PreferencesSaved : PreferencesViewState()
         object PreferencesError : PreferencesViewState()
     }
 
     var preferencesViewState = MutableLiveData<PreferencesViewState>()
-
 
     fun savePodcastPreferences(selectedPodcasts: ArrayList<String>) {
         viewModelScope.launch {
@@ -58,14 +59,40 @@ class PreferencesViewModel(
             }
         }
     }
+
     private fun handleServiceResult(serviceResult: ServiceResult<DataException, String>) {
-        when(serviceResult) {
+        when (serviceResult) {
             is ServiceResult.Error -> {
-                Log.e(javaClass.simpleName, "handleServiceResult: Error -> ${serviceResult.errorException}", )
+                Log.e(
+                    javaClass.simpleName,
+                    "handleServiceResult: Error -> ${serviceResult.errorException}",
+                )
             }
             is ServiceResult.Success -> {
                 Log.i(javaClass.simpleName, "handleServiceResult: Success -> ${serviceResult.data}")
             }
+        }
+    }
+
+    override fun getAllData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val podcasts = service.getAllData().success.data as podcasts
+                val preferedPodcasts = preferencesService.getStringSetValue(PODCASTS_PREFERENCES)
+                val sortedPodcasts = podcasts.sortedByDescending { it.subscribe }
+                    .sortedByDescending { preferedPodcasts?.contains(it.id) }
+                preferencesViewState.postValue(
+                    PreferencesViewState.PodcastsRetrieved(
+                        ArrayList(
+                            sortedPodcasts
+                        )
+                    )
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+                sendErrorState(DataException.UNKNOWN)
+            }
+
         }
     }
 }

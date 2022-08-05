@@ -98,6 +98,12 @@ class PreferencesDialogFragment : DialogInterface.OnDismissListener, BottomSheet
                     onDismiss()
                     dismiss()
                 }
+
+                is PreferencesViewModel.PreferencesViewState.PodcastsRetrieved -> {
+                    setupPodcasts(it.podcasts)
+                    preferencesViewModel.getPodcastPreferences()
+                }
+
                 is PreferencesViewModel.PreferencesViewState.PodcastPreferencesRetrieved -> {
                     it.favorites.forEach { id ->
                         podcastAdapter.selectPodcast(id)

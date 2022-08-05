@@ -83,7 +83,7 @@ class SettingsFragment : Fragment() {
         }) { podcast, i ->
             if (podcast.id == NEW_PODCAST) {
                 PreferencesDialogFragment.buildDialog {
-                    settingsViewModel.loadSettings()
+                    setupUser(args.userObject)
                 }.show(childFragmentManager, PREF_TAG)
             } else {
                 MaterialAlertDialogBuilder(requireContext())
