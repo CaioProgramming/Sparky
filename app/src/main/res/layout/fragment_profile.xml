@@ -33,7 +33,7 @@
                 <androidx.coordinatorlayout.widget.CoordinatorLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/padding_default_16dp"
+                    android:layout_margin="@dimen/padding_big_24"
                     android:orientation="horizontal">
 
                     <View
@@ -185,6 +185,7 @@
                 app:layout_collapseMode="pin" />
 
             <LinearLayout
+                android:layout_marginHorizontal="@dimen/padding_default_16dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_width="wrap_content"
@@ -207,8 +208,9 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_default_10dp"
                     android:background="@color/transparent"
+                    android:src="@drawable/zzz_settings"
                     android:foreground="?attr/selectableItemBackground"
-                    android:src="@drawable/ic_round_more_horiz_24" />
+                    app:tint="@color/material_white" />
 
 
             </LinearLayout>
@@ -232,9 +234,10 @@
         android:id="@+id/user_badges"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="?attr/actionBarSize"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        app:spanCount="3"
+        app:spanCount="2"
         tools:listitem="@layout/badge_layout"
           />
 

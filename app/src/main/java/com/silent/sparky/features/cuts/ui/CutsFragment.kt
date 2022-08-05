@@ -19,7 +19,6 @@ import com.silent.core.videos.VideoType
 import com.silent.sparky.R
 import com.silent.sparky.databinding.FragmentCutsBinding
 import com.silent.sparky.features.cuts.ui.adapter.CutGridAdapter
-import com.silent.sparky.features.cuts.ui.adapter.PodcastCutPageAdapter
 import com.silent.sparky.features.cuts.viewmodel.CutsState
 import com.silent.sparky.features.cuts.viewmodel.CutsViewModel
 import com.silent.sparky.features.home.data.LiveHeader
@@ -29,7 +28,6 @@ class CutsFragment : Fragment() {
 
     private var cutsBinding: FragmentCutsBinding? = null
     private val cutsViewModel by viewModel<CutsViewModel>()
-    lateinit var cutsAdapter: PodcastCutPageAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
