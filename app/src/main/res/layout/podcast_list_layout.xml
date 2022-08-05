@@ -6,7 +6,7 @@
     android:layout_centerInParent="true"
     android:layout_toStartOf="@id/see_more_button"
     android:background="@drawable/bottom_line"
-    android:backgroundTint="@color/material_grey900"
+    android:backgroundTint="@color/material_grey800"
     android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal"

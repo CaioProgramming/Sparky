@@ -33,7 +33,7 @@ class PreferencesDialogFragment : DialogInterface.OnDismissListener, BottomSheet
 
     fun isEnable() = selectedPodcasts.size >= 3
 
-    fun addOrRemovePodcast(podcast: Podcast) {
+    private fun addOrRemovePodcast(podcast: Podcast) {
         if (!selectedPodcasts.contains(podcast.id)) {
             selectedPodcasts.add(podcast.id)
             podcastAdapter.selectPodcast(podcast.id)
@@ -107,7 +107,9 @@ class PreferencesDialogFragment : DialogInterface.OnDismissListener, BottomSheet
                 is PreferencesViewModel.PreferencesViewState.PodcastPreferencesRetrieved -> {
                     it.favorites.forEach { id ->
                         podcastAdapter.selectPodcast(id)
+                        checkSaveButton()
                     }
+                    selectedPodcasts.addAll(it.favorites)
                 }
             }
         }

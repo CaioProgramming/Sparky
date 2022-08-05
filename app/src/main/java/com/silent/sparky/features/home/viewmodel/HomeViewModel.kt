@@ -69,8 +69,9 @@ class HomeViewModel(
                 if (podcastFilter.isNullOrEmpty()) {
                     preferencesState.postValue(PreferencesState.PreferencesNotSet)
                 }
-                val filteredPodcasts =
-                    if (podcastFilter != null) podcasts.filter { podcastFilter.contains(it.id) } else podcasts
+                val filteredPodcasts = if (podcastFilter?.isNotEmpty() == true) podcasts.filter {
+                    podcastFilter.contains(it.id)
+                } else podcasts
                 val sortedPodcasts = filteredPodcasts.sortedByDescending { it.subscribe }
                 sortedPodcasts.forEachIndexed { index, podcast ->
                     when (val uploadsData = videoService.getHomeVideos(podcast.id)) {
