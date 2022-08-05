@@ -8,11 +8,12 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.ilustris.animations.fadeIn
+import com.ilustris.ui.extensions.gone
+import com.ilustris.ui.extensions.visible
 import com.silent.core.podcast.NEW_PODCAST
 import com.silent.core.podcast.Podcast
 import com.silent.sparky.R
-import com.ilustris.ui.extensions.gone
-import com.ilustris.ui.extensions.visible
 import com.silent.sparky.databinding.PodcastListLayoutBinding
 
 class PodcastListAdapter(
@@ -59,7 +60,7 @@ class PodcastListAdapter(
                 if (bindingAdapterPosition == podcasts.size - 1) {
                     root.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
                 }
-
+                root.fadeIn()
             }
         }
     }
