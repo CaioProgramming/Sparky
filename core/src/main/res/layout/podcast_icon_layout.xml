@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_marginHorizontal="@dimen/margin_default_10dp"
+    android:layout_marginHorizontal="@dimen/padding_default_16dp"
     android:orientation="vertical"
     android:layout_height="wrap_content"
     android:paddingVertical="@dimen/padding_small_8dp">
@@ -12,25 +12,24 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/program_icon"
         style="@style/Theme.Sparky.ProgramIcon"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_margin="@dimen/margin_default_10dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:src="@mipmap/ic_launcher"
         app:civ_border_width="0dp"
         app:civ_circle_background_color="@color/transparent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_margin="@dimen/margin_small_4dp"
+        app:layout_constraintBottom_toBottomOf="@id/live_status"
+        app:layout_constraintEnd_toEndOf="@id/live_status"
+        app:layout_constraintStart_toStartOf="@id/live_status"
+        app:layout_constraintTop_toTopOf="@id/live_status" />
 
     <com.hmomeni.progresscircula.ProgressCircula
         android:id="@+id/live_status"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:pgc_indeterminate="true"
         app:pgc_progress="100"
         app:pgc_rimColor="@color/material_red500"
@@ -43,12 +42,12 @@
         android:id="@+id/podcast_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/padding_default_16dp"
-        android:text="Flow podcast"
+        android:paddingVertical="@dimen/padding_small_8dp"
+        android:text="@string/app_name"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-        app:layout_constraintEnd_toEndOf="@id/program_icon"
-        app:layout_constraintStart_toStartOf="@id/program_icon"
-        app:layout_constraintTop_toBottomOf="@id/program_icon" />
+        app:layout_constraintEnd_toEndOf="@id/live_status"
+        app:layout_constraintStart_toStartOf="@id/live_status"
+        app:layout_constraintTop_toBottomOf="@id/live_status" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

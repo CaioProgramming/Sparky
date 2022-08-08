@@ -9,7 +9,7 @@
     android:layout_height="190dp"
     android:layout_weight=".20"
     android:animateLayoutChanges="true"
-    android:layout_margin="@dimen/padding_small_8dp"
+    android:layout_margin="@dimen/padding_default_16dp"
     android:stateListAnimator="@animator/scale_down_animator"
     app:cardBackgroundColor="?android:colorBackground"
     app:cardCornerRadius="0dp"

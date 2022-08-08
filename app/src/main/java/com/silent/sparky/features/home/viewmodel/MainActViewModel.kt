@@ -3,6 +3,7 @@ package com.silent.sparky.features.home.viewmodel
 import android.Manifest
 import android.app.Application
 import android.content.pm.PackageManager
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -74,6 +75,10 @@ class MainActViewModel(
 
     fun validatePush(podcastExtra: String?, videoExtra: String?) {
         podcastExtra?.let {
+            Log.i(
+                javaClass.simpleName,
+                "validatePush: \n podcastObject -> ${podcastExtra}\nVideoObject -> $videoExtra"
+            )
             val podcast = Gson().fromJson(it, Podcast::class.java)
             val video: Video? = videoExtra?.let { Gson().fromJson(videoExtra, Video::class.java) }
             actState.value = MainActState.NavigateToPodcast(podcast.id, video)
