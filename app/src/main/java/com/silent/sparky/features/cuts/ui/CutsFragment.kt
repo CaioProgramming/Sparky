@@ -108,6 +108,7 @@ class CutsFragment : Fragment() {
         }
         val closeButton: View? = cutsSearch.findViewById(androidx.appcompat.R.id.search_close_btn)
         closeButton?.setOnClickListener {
+            cutsSearch.setQuery("", false)
             cutsRecycler.adapter = CutGridAdapter(videos, ::selectVideo)
             cutsSubtitle.text = "${videos.size} resultados"
         }

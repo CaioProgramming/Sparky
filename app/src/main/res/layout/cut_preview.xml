@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/video_card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="150dp"
     android:animateLayoutChanges="true"
     android:stateListAnimator="@animator/scale_down_animator"
     android:visibility="gone"
@@ -18,7 +18,7 @@
     <ImageView
         android:id="@+id/video_thumb"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         android:layout_gravity="center"
         android:background="@color/md_black"
         android:scaleType="centerCrop"
