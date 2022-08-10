@@ -12,7 +12,7 @@ data class Video(
     var key: String = "",
     var description: String = "",
     var podcastId: String = "",
-    var publishedAt: Date = Date(),
+    var publishedAt: Date? = Date(),
     @SerializedName("thumbnail_url")
     var thumbnailUrl: String = "",
     @SerializedName("ytId")

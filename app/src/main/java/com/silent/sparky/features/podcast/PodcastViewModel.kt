@@ -1,6 +1,7 @@
 package com.silent.sparky.features.podcast
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
@@ -145,6 +146,7 @@ class PodcastViewModel(
                         preferencesPodcasts?.contains(podcastID) == true
                     )
                 )
+                Log.i(javaClass.simpleName, "getPodcastData: podcastData -> $podcast\n$headers")
                 checkLive(video, podcast)
             } catch (e: Exception) {
                 e.printStackTrace()

@@ -15,7 +15,7 @@ class VideoService : BaseService() {
 
     override val dataPath = VIDEOS_PATH
     override var offlineEnabled = true
-
+    override var isDebug = true
 
     override fun deserializeDataSnapshot(dataSnapshot: DocumentSnapshot): BaseBean? {
         return dataSnapshot.toObject(Video::class.java)?.apply {
