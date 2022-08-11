@@ -35,7 +35,8 @@ class VideosAdapter(
                     .error(video.podcast?.iconURL).into(videoThumb)
                 title.text = video.title
                 try {
-                    publishDate.text = video.publishedAt.format(DateFormats.DD_OF_MM_FROM_YYYY)
+                    publishDate.text =
+                        video.publishedAt.toDate().format(DateFormats.DD_OF_MM_FROM_YYYY)
                     publishDate.visible()
                 } catch (e: Exception) {
                     publishDate.gone()

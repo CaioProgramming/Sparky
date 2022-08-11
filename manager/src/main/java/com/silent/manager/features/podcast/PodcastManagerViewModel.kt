@@ -67,7 +67,8 @@ class PodcastManagerViewModel(
                 val lastVideo =
                     (videoRequest.data as ArrayList<Video>).minByOrNull { it.publishedAt }
                 lastVideo?.let { video ->
-                    val fetchDate = video.publishedAt.formatDate("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ")
+                    val fetchDate =
+                        video.publishedAt.toDate().formatDate("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ")
                     val uploads = youtubeService.getPlaylistVideos(podcast.uploads, 100, fetchDate)
                     uploads.items.forEachIndexed { index, playlistResource ->
                         val video =
@@ -88,7 +89,8 @@ class PodcastManagerViewModel(
             if (cutRequest is ServiceResult.Success) {
                 val lastVideo = (cutRequest.data as ArrayList<Video>).minByOrNull { it.publishedAt }
                 lastVideo?.let { video ->
-                    val fetchDate = video.publishedAt.formatDate("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ")
+                    val fetchDate =
+                        video.publishedAt.toDate().formatDate("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ")
                     val uploads = youtubeService.getPlaylistVideos(podcast.uploads, 100, fetchDate)
                     uploads.items.forEachIndexed { index, playlistResource ->
                         val video =
