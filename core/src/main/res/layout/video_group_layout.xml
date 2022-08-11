@@ -24,8 +24,6 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/program_icon"
-                android:visibility="gone"
-                tools:visibility="visible"
                 style="@style/Theme.Sparky.ProgramIcon"
                 tools:src="@drawable/ic_iconmonstr_connection_1" />
 
@@ -49,6 +47,7 @@
                     android:id="@+id/group_subtitle"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                     tools:text="Só conversa fiada!"
+                    android:alpha="0.6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 

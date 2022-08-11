@@ -5,10 +5,8 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.ilustris.animations.fadeIn
 import com.ilustris.ui.extensions.gone
 import com.ilustris.ui.extensions.visible
 import com.silent.core.databinding.VideoPreviewBinding
@@ -46,9 +44,6 @@ class VideosAdapter(
                     publishDate.visible()
                 } catch (e: Exception) {
                     publishDate.gone()
-                }
-                if (!root.isVisible) {
-                    root.fadeIn()
                 }
             }
         }

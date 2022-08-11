@@ -54,10 +54,6 @@ class VideoHeaderAdapter(
                         }
                     }
                     videosRecycler.layoutManager = layoutManager
-                    section.referenceIndex?.let {
-                        videosRecycler.scrollToPosition(it)
-                        section.referenceIndex = null
-                    }
                 } else {
                     videosRecycler.layoutManager =
                         LinearLayoutManager(itemView.context, section.orientation, false)

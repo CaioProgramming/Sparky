@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
-import com.ilustris.animations.slideInBottom
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastHeader
 import com.silent.core.utils.WebUtils
@@ -231,9 +230,7 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
     }
 
     private fun HomeFragmentBinding.stopLoading() {
-        homeAnimation.updateLayoutParams<ConstraintLayout.LayoutParams> { horizontalBias = 0.0f }
-        podcastsResumeRecycler.slideInBottom()
-        homeAnimation.repeatCount = 1
+        homeAnimation.repeatCount = 5
     }
 
     private fun HomeFragmentBinding.showError(message: String, tryAgainClick: () -> Unit) {
