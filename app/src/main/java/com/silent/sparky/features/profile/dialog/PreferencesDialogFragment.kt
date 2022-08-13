@@ -25,7 +25,7 @@ class PreferencesDialogFragment : DialogInterface.OnDismissListener, BottomSheet
     private var fragmentPreferencesBinding: FragmentPreferencesBinding? = null
     private var podcastAdapter = PodcastAdapter(ArrayList(), ::selectPodcast)
     private val selectedPodcasts = ArrayList<String>()
-    private lateinit var onDismiss: () -> Unit
+    private var onDismiss: (() -> Unit)? = null
 
     private fun selectPodcast(podcast: Podcast) {
         addOrRemovePodcast(podcast)
@@ -95,7 +95,7 @@ class PreferencesDialogFragment : DialogInterface.OnDismissListener, BottomSheet
                     )
                 }
                 PreferencesViewModel.PreferencesViewState.PreferencesSaved -> {
-                    onDismiss()
+                    onDismiss?.invoke()
                     dismiss()
                 }
 
@@ -134,7 +134,7 @@ class PreferencesDialogFragment : DialogInterface.OnDismissListener, BottomSheet
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        onDismiss()
+        onDismiss?.invoke()
     }
 
 

@@ -1,11 +1,10 @@
 package com.silent.core.podcast
 
-import android.os.Parcelable
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.IgnoreExtraProperties
 import com.google.gson.annotations.SerializedName
 import com.silent.ilustriscore.core.bean.BaseBean
-import kotlinx.parcelize.Parcelize
+import java.io.Serializable
 
 typealias podcasts = ArrayList<Podcast>
 
@@ -45,14 +44,13 @@ data class Podcast(
 const val NEW_PODCAST = "NEWPODCAST"
 const val NEW_HOST = "NEWHOST"
 
-@Parcelize
 data class Host(
     var name: String = "",
     var profilePic: String = "",
     @SerializedName("user")
     var description: String = "",
     var socialUrl: String = "",
-) : Parcelable {
+) : Serializable {
 
     companion object {
         val NEWHOST = Host(NEW_HOST)

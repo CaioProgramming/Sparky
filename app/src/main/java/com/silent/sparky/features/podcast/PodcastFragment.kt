@@ -32,7 +32,7 @@ import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.silent.sparky.R
 import com.silent.sparky.databinding.FragmentPodcastBinding
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
-import com.silent.sparky.features.home.data.LiveHeader
+import com.silent.sparky.features.live.data.LiveHeader
 import com.silent.sparky.features.podcast.schedule.TodayLiveDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.NumberFormat
@@ -165,7 +165,8 @@ class PodcastFragment : Fragment() {
     }
 
     private fun navigateToLive(podcast: Podcast, video: Video, isLive: Boolean) {
-        val liveHeader = LiveHeader(podcast, video.title, video.youtubeID, isLive)
+        val liveHeader =
+            LiveHeader(podcast, video.title, video.description, video.youtubeID, isLive)
         val bundle = bundleOf("live_object" to liveHeader)
         findNavController().navigate(R.id.action_podcastFragment_to_liveFragment, bundle)
     }
