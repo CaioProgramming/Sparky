@@ -44,9 +44,6 @@ class PodcastViewModel(
             val isFavorite: Boolean
         ) : PodcastState()
 
-        data class UpdateHeader(val position: Int, val videos: List<Video>, val lastIndex: Int) :
-            PodcastState()
-
         data class UpdateFavorite(val isFavorite: Boolean) : PodcastState()
     }
 
@@ -148,7 +145,7 @@ class PodcastViewModel(
                     )
                 )
                 Log.i(javaClass.simpleName, "getPodcastData: podcastData -> $podcast\n$headers")
-                checkLive(uploads.first(), podcast)
+                checkLive(video, podcast)
             } catch (e: Exception) {
                 e.printStackTrace()
                 podcastState.postValue(PodcastState.PodcastFailedState)

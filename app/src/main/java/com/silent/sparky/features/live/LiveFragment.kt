@@ -1,6 +1,7 @@
 package com.silent.sparky.features.live
 
 import android.animation.ValueAnimator
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,10 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
 import com.silent.core.podcast.Podcast
 import com.silent.core.utils.ImageUtils
@@ -24,7 +23,7 @@ import com.silent.sparky.features.live.components.SparkyPlayerController
 import java.text.NumberFormat
 
 
-class LiveFragment : YouTubePlayerListener, Fragment() {
+class LiveFragment : Fragment() {
 
     private var podcastLiveFragmentBinding: PodcastLiveFragmentBinding? = null
     private val args by navArgs<LiveFragmentArgs>()
@@ -46,13 +45,13 @@ class LiveFragment : YouTubePlayerListener, Fragment() {
     }
 
     private fun setupView() {
-
         podcastLiveFragmentBinding?.run {
             val live = args.liveObject
             initializePlayer(
                 Color.parseColor(live.podcast.highLightColor),
                 live.videoID,
-                ImageUtils.getNotificationIcon(live.podcast.notificationIcon).drawable
+                ImageUtils.getNotificationIcon(live.podcast.notificationIcon).drawable,
+                args.liveObject.isLiveVideo
             )
             setupPodcast(live.podcast)
             liveTitle.text = live.title
@@ -60,8 +59,10 @@ class LiveFragment : YouTubePlayerListener, Fragment() {
             collapseButton.setOnClickListener {
                 findNavController().popBackStack()
             }
+            if (live.isLiveVideo) {
+                liveCard.setStrokeColor(ColorStateList.valueOf(Color.parseColor(live.podcast.highLightColor)))
+            }
         }
-
     }
 
     private fun PodcastLiveFragmentBinding.setupPodcast(podcast: Podcast) {
@@ -87,12 +88,14 @@ class LiveFragment : YouTubePlayerListener, Fragment() {
             duration = 2000
             start()
         }
+        podcastIcon.borderColor = Color.parseColor(podcast.highLightColor)
     }
 
     private fun PodcastLiveFragmentBinding.initializePlayer(
         highlightColor: Int,
         videoId: String,
-        podcastIcon: Int
+        podcastIcon: Int,
+        isLive: Boolean
     ) {
         val playerUi = livePlayer.inflateCustomPlayerUi(R.layout.custom_player_layout)
         val listener = object : AbstractYouTubePlayerListener() {
@@ -104,12 +107,14 @@ class LiveFragment : YouTubePlayerListener, Fragment() {
                     youTubePlayer,
                     highlightColor,
                     podcastIcon,
-                    videoId
+                    videoId,
+                    isLive
                 )
                 youTubePlayer.addListener(customplayerUiController)
             }
         }
-        val options: IFramePlayerOptions = IFramePlayerOptions.Builder().controls(0).build()
+        val options: IFramePlayerOptions = IFramePlayerOptions.Builder()
+            .controls(0).build()
         livePlayer.initialize(listener, false, options)
     }
 
@@ -121,53 +126,5 @@ class LiveFragment : YouTubePlayerListener, Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         podcastLiveFragmentBinding?.livePlayer?.release()
-    }
-
-    override fun onApiChange(youTubePlayer: YouTubePlayer) {
-
-    }
-
-    override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
-
-    }
-
-    override fun onError(youTubePlayer: YouTubePlayer, error: PlayerConstants.PlayerError) {
-
-    }
-
-    override fun onPlaybackQualityChange(
-        youTubePlayer: YouTubePlayer,
-        playbackQuality: PlayerConstants.PlaybackQuality
-    ) {
-
-
-    }
-
-    override fun onPlaybackRateChange(
-        youTubePlayer: YouTubePlayer,
-        playbackRate: PlayerConstants.PlaybackRate
-    ) {
-
-
-    }
-
-    override fun onReady(youTubePlayer: YouTubePlayer) {
-        youTubePlayer.loadVideo(args.liveObject.videoID, 0f)
-    }
-
-    override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {
-
-    }
-
-    override fun onVideoDuration(youTubePlayer: YouTubePlayer, duration: Float) {
-
-    }
-
-    override fun onVideoId(youTubePlayer: YouTubePlayer, videoId: String) {
-
-    }
-
-    override fun onVideoLoadedFraction(youTubePlayer: YouTubePlayer, loadedFraction: Float) {
-
     }
 }

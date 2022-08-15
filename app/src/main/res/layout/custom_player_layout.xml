@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/player_root"
+    android:background="@color/md_black"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,7 +11,7 @@
         android:id="@+id/player_loading"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:tint="?attr/colorAccent"
+        app:lottie_colorFilter="?attr/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,70 +20,69 @@
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/lightning" />
 
-    <TextView
-        android:id="@+id/video_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/padding_default_16dp"
-        android:layout_marginVertical="@dimen/margin_small_4dp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-        app:layout_constraintBottom_toTopOf="@id/player_seekbar"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="0:00 / 30:00" />
-
-    <androidx.appcompat.widget.AppCompatSeekBar
-        android:id="@+id/player_seekbar"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/player_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/padding_default_16dp"
-        android:backgroundTint="@color/material_red500"
-        android:progressBackgroundTint="@color/material_grey900"
-        android:thumb="@drawable/ic_iconmonstr_connection_1"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/see_on_youtube"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_default_10dp"
-        android:background="@color/md_white"
-        android:text="ver no youtube"
-        android:textSize="12sp"
-        android:theme="@style/Widget.MaterialComponents.Button"
+        android:paddingHorizontal="@dimen/padding_default_16dp"
         android:visibility="gone"
-        app:backgroundTint="@color/md_white"
-        app:cornerRadius="@dimen/radius_default_10dp"
-        app:icon="@drawable/zzz_youtube_play"
-        app:iconTint="@color/material_red500"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <ImageView
-        android:id="@+id/play_pause_button"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:src="@drawable/zzz_play"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/md_white" />
+        <TextView
+            android:id="@+id/video_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/margin_small_4dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+            app:layout_constraintBottom_toTopOf="@id/player_seekbar"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="0:00 / 30:00" />
 
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/player_seekbar"
 
-    <TextView
-        android:id="@+id/error_message"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/double_faded_gradient"
-        android:gravity="center"
-        android:padding="@dimen/padding_default_16dp"
-        android:text="Não conseguimos reproduzir esse vídeo"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-        android:textStyle="bold"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/margin_default_10dp"
+            android:backgroundTint="@color/material_red500"
+            android:maxHeight="50dp"
+            android:minHeight="40dp"
+            android:progressBackgroundTint="@color/material_grey900"
+            android:thumb="@drawable/ic_iconmonstr_connection_1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/play_pause_button" />
+
+        <ImageButton
+            android:id="@+id/play_pause_button"
+            android:layout_width="32dp"
+            android:layout_height="0dp"
+            android:background="@color/transparent"
+            android:foreground="?attr/selectableItemBackground"
+            android:src="@drawable/zzz_play"
+            app:layout_constraintBottom_toBottomOf="@id/player_seekbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/player_seekbar"
+            app:tint="@color/md_white"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/error_message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/double_faded_gradient"
+            android:gravity="center"
+            android:padding="@dimen/padding_default_16dp"
+            android:text="Não conseguimos reproduzir esse vídeo"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
