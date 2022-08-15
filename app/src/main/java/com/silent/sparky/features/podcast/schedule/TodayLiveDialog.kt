@@ -1,11 +1,12 @@
 package com.silent.sparky.features.podcast.schedule
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.View
 import com.bumptech.glide.Glide
-import com.ilustris.animations.fadeIn
+import com.ilustris.animations.slideInBottom
 import com.ilustris.ui.alert.BaseAlert
 import com.ilustris.ui.alert.DialogStyles
 import com.silent.core.utils.ImageUtils
@@ -33,11 +34,11 @@ class TodayLiveDialog(
             dialog.dismiss()
             videoClick(video)
         }
-        liveCard.setCardBackgroundColor(highLightColor)
+        liveCard.setStrokeColor(ColorStateList.valueOf(highLightColor))
         Glide.with(context)
             .load(ImageUtils.getYoutubeThumb(video.youtubeID, ImageUtils.Quality.MAX))
             .error(placeHolder).into(videoThumb)
-        root.fadeIn()
+        root.slideInBottom()
     }
 
     override fun View.configure() {

@@ -44,9 +44,6 @@ class PodcastViewModel(
             val isFavorite: Boolean
         ) : PodcastState()
 
-        data class UpdateHeader(val position: Int, val videos: List<Video>, val lastIndex: Int) :
-            PodcastState()
-
         data class UpdateFavorite(val isFavorite: Boolean) : PodcastState()
     }
 
@@ -107,8 +104,9 @@ class PodcastViewModel(
                 val headers = ArrayList<PodcastHeader>()
                 val podcast = service.getSingleData(podcastID).success.data as Podcast
                 val uploads =
-                    videoService.getPodcastVideos(podcastID).success.data as ArrayList<Video>
-                val cuts = cutService.getPodcastCuts(podcastID).success.data as ArrayList<Video>
+                    (videoService.getPodcastVideos(podcastID).success.data as ArrayList<Video>).sortedByDescending { it.publishedAt }
+                val cuts =
+                    (cutService.getPodcastCuts(podcastID).success.data as ArrayList<Video>).sortedByDescending { it.publishedAt }
 
                 if (uploads.isNotEmpty()) {
                     uploads.map { it.podcast = podcast }
@@ -116,7 +114,7 @@ class PodcastViewModel(
                         getHeader(
                             "Episódios",
                             podcast.uploads,
-                            uploads.sortedByDescending { it.publishedAt },
+                            uploads,
                             if (cuts.isEmpty()) RecyclerView.VERTICAL else RecyclerView.HORIZONTAL,
                             podcast.highLightColor,
                             "${uploads.size} episódios disponíveis.",

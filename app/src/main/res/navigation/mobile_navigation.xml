@@ -61,14 +61,6 @@
             android:name="live_video"
             app:argType="com.silent.core.videos.Video"
             app:nullable="true" />
-
-        <action
-            android:id="@+id/action_podcastFragment_to_podcastTodayGuest"
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/slide_out"
-            app:popEnterAnim="@anim/slide_in_bottom"
-            app:popExitAnim="@anim/slide_out"
-            app:destination="@id/podcastTodayGuest" />
         <action
             android:id="@+id/action_podcastFragment_to_liveFragment"
             app:destination="@id/liveFragment" />
@@ -83,7 +75,7 @@
         tools:layout="@layout/podcast_live_fragment">
         <argument
             android:name="live_object"
-            app:argType="com.silent.sparky.features.home.data.LiveHeader" />
+            app:argType="com.silent.sparky.features.live.data.LiveHeader" />
         <action
             android:id="@+id/action_liveFragment_to_podcastFragment"
             app:destination="@id/podcastFragment"
@@ -137,16 +129,6 @@
         android:name="com.silent.sparky.features.profile.dialog.FlowLinkDialog"
         android:label="FlowLinkDialog"
         tools:layout="@layout/flow_link_alert" />
-    <fragment
-        android:id="@+id/podcastTodayGuest"
-        tools:layout="@layout/fragment_today_guest"
-        android:name="com.silent.sparky.features.podcast.schedule.TodayLiveDialog"
-        android:label="PodcastTodayGuest" >
-
-        <argument android:name="highlightColor" app:argType="string"/>
-        <argument android:name="guestList" app:argType="com.silent.core.podcast.Host[]"/>
-        <argument android:name="position" app:argType="integer"/>
-    </fragment>
     <fragment
         android:id="@+id/playlistFragment"
         tools:layout="@layout/fragment_playlist"

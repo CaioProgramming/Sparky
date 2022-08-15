@@ -16,7 +16,7 @@ import com.silent.core.podcast.PodcastHeader
 import com.silent.core.videos.Video
 import com.silent.sparky.R
 import com.silent.sparky.databinding.FragmentPlaylistBinding
-import com.silent.sparky.features.home.data.LiveHeader
+import com.silent.sparky.features.live.data.LiveHeader
 import com.silent.sparky.features.podcast.adapter.VideosAdapter
 
 class PlaylistFragment: Fragment() {
@@ -34,7 +34,7 @@ class PlaylistFragment: Fragment() {
     }
 
     private fun navigateToLive(podcast: Podcast, video: Video) {
-        val liveHeader = LiveHeader(podcast, video.title, video.youtubeID)
+        val liveHeader = LiveHeader(podcast, video.title, video.description, video.youtubeID)
         val bundle = bundleOf("live_object" to liveHeader)
         findNavController().navigate(R.id.action_playlistFragment_to_liveFragment, bundle)
     }
