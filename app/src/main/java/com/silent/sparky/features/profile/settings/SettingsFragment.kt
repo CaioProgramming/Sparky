@@ -102,7 +102,7 @@ class SettingsFragment : Fragment() {
         settingsBinding?.run {
             username.text = user.name
             flowname.text = user.flowUserName
-            Glide.with(requireContext()).load(user.profilePic)
+            Glide.with(root).load(user.profilePic)
                 .placeholder(R.drawable.ic_iconmonstr_flower).into(userPhoto)
             flowAccountButton.setOnClickListener {
                 FlowLinkDialog(user).show(

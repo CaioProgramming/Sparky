@@ -202,6 +202,8 @@ class ProfileFragment : Fragment() {
                     bundle
                 )
             }
+            usernameCard.fadeIn()
+            realName.fadeIn()
             loading.fadeOut()
         }
     }
