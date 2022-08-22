@@ -82,7 +82,7 @@ class HomeActivity : AuthActivity() {
         mainActViewModel.notificationState.observe(this) {
             when(it) {
                 MainActViewModel.NotificationState.RequestNotification -> {
-                    notificationPermissionRequest.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    notificationPermissionRequest.launch(Manifest.permission.ACCESS_NOTIFICATION_POLICY)
                 }
 
                 else -> {}

@@ -7,31 +7,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.airbnb.lottie.LottieAnimationView
+    <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/player_loading"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        app:lottie_colorFilter="?attr/colorPrimaryDark"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/lightning" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="true"
+        app:shimmer_base_color="@color/material_grey900"
+        app:shimmer_colored="true"
+        app:shimmer_duration="1500"
+        app:shimmer_highlight_color="?attr/colorPrimaryDark">
+
+        <ImageView
+            android:id="@+id/podcast_not_iccon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            tools:src="@drawable/ic_iconmonstr_connection_1" />
+
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/player_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/padding_default_16dp"
         android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
             android:id="@+id/video_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_default_10dp"
             android:layout_marginVertical="@dimen/margin_small_4dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             app:layout_constraintBottom_toTopOf="@id/player_seekbar"

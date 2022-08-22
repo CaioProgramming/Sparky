@@ -1,7 +1,6 @@
 package com.silent.sparky.features.live
 
 import android.animation.ValueAnimator
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -60,7 +59,6 @@ class LiveFragment : Fragment() {
                 findNavController().popBackStack()
             }
             if (live.isLiveVideo) {
-                liveCard.setStrokeColor(ColorStateList.valueOf(Color.parseColor(live.podcast.highLightColor)))
             }
         }
     }

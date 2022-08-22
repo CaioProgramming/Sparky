@@ -6,6 +6,9 @@ import android.text.format.DateUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import com.facebook.shimmer.Shimmer.ColorHighlightBuilder
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
 import com.ilustris.ui.extensions.gone
@@ -18,6 +21,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.silent.sparky.R
 import com.silent.sparky.databinding.CustomPlayerLayoutBinding
+
 
 class SparkyPlayerController(
     playerUI: View,
@@ -43,7 +47,9 @@ class SparkyPlayerController(
             playerSeekbar.visible()
         }
         root.setOnClickListener {
-            playerBottom.fadeIn()
+            if (!playerBottom.isVisible) {
+                playerBottom.fadeIn()
+            }
             hideBottom()
         }
         playerBottom.gone()
@@ -74,21 +80,32 @@ class SparkyPlayerController(
         playerSeekbar.thumbTintList = ColorStateList.valueOf(highlightColor)
         playerSeekbar.progressTintList = ColorStateList.valueOf(highlightColor)
         playerSeekbar.thumb = root.context.getDrawable(podcastIcon)
+        podcastNotIccon.setImageResource(podcastIcon)
+        val shimmerBuilder = ColorHighlightBuilder()
+            .setBaseColor(ContextCompat.getColor(root.context, R.color.md_grey900))
+            .setHighlightColor(highlightColor)
+            .setDuration(2500)
+            .setIntensity(0.9f)
+            .setDropoff(0.9f)
+            .setBaseAlpha(0.5f)
+            .setHighlightAlpha(1f)
+        val shimmer = shimmerBuilder.build()
+        playerLoading.setShimmer(shimmer)
         youTubePlayerView.enterFullScreen()
         youTubePlayer.loadVideo(videoId, 0f)
     }
 
     private fun CustomPlayerLayoutBinding.showLoading() {
         playerBottom.fadeOut()
-        playerLoading.playAnimation()
-        playerLoading.fadeIn()
+        playerLoading.visible()
+        playerLoading.startShimmer()
         errorMessage.gone()
         root.setBackgroundColor(Color.BLACK)
     }
 
 
     private fun CustomPlayerLayoutBinding.stopLoading() {
-        playerLoading.cancelAnimation()
+        playerLoading.stopShimmer()
         playerLoading.fadeOut()
         root.setBackgroundResource(R.drawable.faded_gradient)
         videoTime.visible()
