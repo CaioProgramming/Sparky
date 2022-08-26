@@ -28,6 +28,7 @@ import com.silent.sparky.features.home.viewmodel.HomeViewModel
 import com.silent.sparky.features.home.viewmodel.MainActViewModel
 import com.silent.sparky.features.home.viewmodel.PreferencesState
 import com.silent.sparky.features.live.data.LiveHeader
+import com.silent.sparky.features.live.data.VideoMedia
 import com.silent.sparky.features.profile.dialog.PREF_TAG
 import com.silent.sparky.features.profile.dialog.PreferencesDialogFragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -266,7 +267,13 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
 
     private fun navigateToLive(podcast: Podcast, video: Video, isLive: Boolean) {
         val liveHeader =
-            LiveHeader(podcast, video.title, video.description, video.youtubeID, isLive)
+            LiveHeader(
+                podcast,
+                video.title,
+                video.description,
+                video.youtubeID,
+                if (isLive) VideoMedia.LIVE else VideoMedia.EPISODE
+            )
         val bundle = bundleOf("live_object" to liveHeader)
         findNavController().navigate(R.id.action_navigation_home_to_liveFragment, bundle)
     }

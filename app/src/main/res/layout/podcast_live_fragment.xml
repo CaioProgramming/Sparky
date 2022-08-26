@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:paddingBottom="?attr/actionBarSize"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -52,6 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingVertical="@dimen/padding_small_8dp"
+                android:fontFamily="@font/kaushan_script"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                 android:textStyle="bold"
                 tools:text="Flow especial" />
@@ -66,11 +68,23 @@
         </LinearLayout>
 
 
+        <ImageButton
+            android:id="@+id/shareButton"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@color/transparent"
+            android:contentDescription="Compartilhar"
+            android:foreground="?attr/selectableItemBackground"
+            android:src="@drawable/ic_round_ios_share_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/live_card"
-        android:layout_width="350dp"
+        android:layout_width="355dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         app:cardCornerRadius="0dp"
@@ -96,8 +110,7 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="?attr/actionBarSize">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -114,17 +127,23 @@
                 android:textStyle="bold"
                 tools:text="Extra Flow" />
 
-            <TextView
+            <kr.co.prnd.readmore.ReadMoreTextView
                 android:id="@+id/live_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:readMoreColor="@color/material_grey900"
+                app:readMoreMaxLine="4"
+                app:readMoreText=" ...ver mais"
                 android:background="@drawable/bottom_line"
                 android:backgroundTint="@color/material_grey900"
                 android:paddingHorizontal="@dimen/padding_default_16dp"
                 android:paddingVertical="@dimen/padding_small_8dp"
                 android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
+
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/related_videos"
+                android:layout_marginTop="@dimen/margin_default_10dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:listitem="@layout/video_group_layout" />

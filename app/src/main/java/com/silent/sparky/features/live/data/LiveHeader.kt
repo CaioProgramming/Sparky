@@ -5,8 +5,16 @@ import java.io.Serializable
 
 data class LiveHeader(
     val podcast: Podcast,
-    val title: String,
-    val description: String,
-    val videoID: String,
-    val isLiveVideo: Boolean = false
-) : Serializable
+    var title: String,
+    var description: String,
+    var videoID: String,
+    val type: VideoMedia
+) : Serializable {
+
+    val isLiveVideo = type == VideoMedia.LIVE
+
+}
+
+enum class VideoMedia {
+    LIVE, EPISODE, CUT
+}

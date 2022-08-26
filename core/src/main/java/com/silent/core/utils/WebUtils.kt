@@ -7,6 +7,8 @@ import android.net.Uri
 
 class WebUtils(val context: Context) {
 
+    fun getYoutubeLink(videoID: String) = YOUTUBE_WATCH_PREFIX + videoID
+
     fun openYoutubeVideo(videoID: String) {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(YOUTUBE_WATCH_PREFIX + videoID))
         context.startActivity(browserIntent)
