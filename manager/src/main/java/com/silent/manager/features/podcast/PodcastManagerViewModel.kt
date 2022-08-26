@@ -10,11 +10,12 @@ import com.silent.core.videos.Video
 import com.silent.core.videos.VideoMapper
 import com.silent.core.videos.VideoService
 import com.silent.core.youtube.YoutubeService
+import com.silent.core.youtube.response.PlaylistResource
 import com.silent.ilustriscore.core.model.BaseViewModel
 import com.silent.ilustriscore.core.model.ServiceResult
-import com.silent.ilustriscore.core.utilities.formatDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 class PodcastManagerViewModel(
     application: Application,
@@ -28,6 +29,7 @@ class PodcastManagerViewModel(
     sealed class PodcastManagerState {
         data class CutsAndUploadsRetrieved(val sections: programSections) : PodcastManagerState()
         object PodcastUpdateRequest : PodcastManagerState()
+        object VideoDeleted : PodcastManagerState()
         data class EpisodesUpdated(var count: Int) : PodcastManagerState()
         data class CutsUpdated(var count: Int) : PodcastManagerState()
         data class PlayslitDeleted(var message: String) : PodcastManagerState()
@@ -38,7 +40,6 @@ class PodcastManagerViewModel(
     fun updatePodcastData(
         podcast: Podcast,
         updateClips: Boolean = false,
-        requireOldVideos: Boolean = false
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             podcastManagerState.postValue(PodcastManagerState.PodcastUpdateRequest)
@@ -53,91 +54,84 @@ class PodcastManagerViewModel(
             if (!updateClips) {
                 editData(podcast)
             } else {
-                updateEpisodesAndCuts(podcast, requireOldVideos)
+                updateEpisodesAndCuts(podcast)
                 editData(podcast)
             }
         }
     }
 
 
-    private suspend fun updateEpisodesAndCuts(podcast: Podcast, requireOldVideos: Boolean = false) {
-        if (requireOldVideos) {
-            val videoRequest = videoService.getPodcastVideos(podcast.id)
-            if (videoRequest is ServiceResult.Success) {
-                val lastVideo =
-                    (videoRequest.data as ArrayList<Video>).minByOrNull { it.publishedAt }
-                lastVideo?.let { video ->
-                    val fetchDate =
-                        video.publishedAt.toDate().formatDate("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ")
-                    val uploads = youtubeService.getPlaylistVideos(podcast.uploads, 100, fetchDate)
-                    uploads.items.forEachIndexed { index, playlistResource ->
-                        val video =
-                            videoMapper.mapVideoSnippet(playlistResource.snippet, podcast.id)
-                        videoService.editData(video)
+    private fun isVideoOlder(lastVideoDate: Date, lastItemDate: Date) = lastVideoDate < lastItemDate
 
-                        if (index == uploads.items.lastIndex) {
-                            podcastManagerState.postValue(
-                                PodcastManagerState.EpisodesUpdated(
-                                    uploads.items.size
-                                )
-                            )
-                        }
-                    }
-                }
-            }
-            val cutRequest = cutService.getPodcastCuts(podcast.id)
-            if (cutRequest is ServiceResult.Success) {
-                val lastVideo = (cutRequest.data as ArrayList<Video>).minByOrNull { it.publishedAt }
-                lastVideo?.let { video ->
-                    val fetchDate =
-                        video.publishedAt.toDate().formatDate("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ")
-                    val uploads = youtubeService.getPlaylistVideos(podcast.uploads, 100, fetchDate)
-                    uploads.items.forEachIndexed { index, playlistResource ->
-                        val video =
-                            videoMapper.mapVideoSnippet(playlistResource.snippet, podcast.id)
-                        videoService.editData(video)
-                        if (index == uploads.items.lastIndex) {
-                            podcastManagerState.postValue(
-                                PodcastManagerState.EpisodesUpdated(
-                                    uploads.items.size
-                                )
-                            )
-                        }
-                    }
-                    val cuts = youtubeService.getPlaylistVideos(podcast.cuts, 100, fetchDate)
-                    cuts.items.forEachIndexed { index, playlistResource ->
-                        cutService.editData(video)
-                        if (index == uploads.items.lastIndex) {
-                            podcastManagerState.postValue(
-                                PodcastManagerState.CutsUpdated(
-                                    uploads.items.size
-                                )
-                            )
-                        }
-                    }
 
-                }
+    private fun updatePlaylist(
+        playlistId: String,
+        lastVideoDate: Date,
+        nextPageToken: String? = null,
+        retrievePlaylist: (List<PlaylistResource>) -> Unit
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            var youtubeRequest =
+                youtubeService.getPlaylistVideos(playlistId, pageToken = nextPageToken)
+            var lastItemResource = youtubeRequest.items.last()
+            if (isVideoOlder(lastVideoDate, lastItemResource.snippet.publishedAt)) {
+                updatePlaylist(
+                    playlistId,
+                    lastVideoDate,
+                    nextPageToken = youtubeRequest.nextPageToken,
+                    retrievePlaylist
+                )
+            } else {
+                retrievePlaylist(youtubeRequest.items)
             }
-        } else {
-            val uploads = youtubeService.getPlaylistVideos(podcast.uploads, 100)
-            val cuts = youtubeService.getPlaylistVideos(podcast.cuts, 100)
-            uploads.items.forEachIndexed { index, playlistResource ->
-                val video = videoMapper.mapVideoSnippet(playlistResource.snippet, podcast.id)
-                videoService.editData(video)
+        }
+    }
 
-                if (index == uploads.items.lastIndex) {
-                    podcastManagerState.postValue(PodcastManagerState.EpisodesUpdated(uploads.items.size))
+    private fun saveVideos(
+        podcastId: String,
+        isCuts: Boolean,
+        playlistResources: List<PlaylistResource>
+    ) {
+        viewModelScope.launch {
+            playlistResources.forEachIndexed { index, playlistResource ->
+                val video = videoMapper.mapVideoSnippet(playlistResource.snippet, podcastId)
+                if (isCuts) {
+                    cutService.editData(video)
+                } else {
+                    videoService.editData(video)
                 }
-            }
-            cuts.items.forEachIndexed { index, playlistResource ->
-                val video = videoMapper.mapVideoSnippet(playlistResource.snippet, podcast.id)
-                cutService.editData(video)
-                if (index == uploads.items.lastIndex) {
-                    podcastManagerState.postValue(PodcastManagerState.CutsUpdated(uploads.items.size))
+                if (index == playlistResources.lastIndex) {
+                    podcastManagerState.postValue(
+                        if (!isCuts) PodcastManagerState.EpisodesUpdated(
+                            playlistResources.size
+                        ) else PodcastManagerState.CutsUpdated(playlistResources.size)
+                    )
                 }
             }
         }
     }
+
+    private fun updateEpisodesAndCuts(podcast: Podcast) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val videos = videoService.getPodcastVideos(podcast.id) as ServiceResult.Success
+            val lastVideo = (videos.data as ArrayList<Video>).minByOrNull { it.publishedAt }
+            lastVideo?.let {
+                updatePlaylist(podcast.uploads, lastVideo.publishedAt.toDate()) {
+                    saveVideos(podcast.id, false, it)
+                }
+            }
+
+            val cuts = cutService.getPodcastCuts(podcast.id) as ServiceResult.Success
+            val lastCut = (cuts.data as ArrayList<Video>).minByOrNull { it.publishedAt }
+            lastCut?.let {
+                updatePlaylist(podcast.cuts, lastCut.publishedAt.toDate()) {
+                    saveVideos(podcast.id, true, it)
+                }
+            }
+        }
+
+    }
+
 
     fun getVideosAndCuts(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -188,5 +182,16 @@ class PodcastManagerViewModel(
             podcastManagerState.postValue(PodcastManagerState.PlayslitDeleted(if (isCuts) "${videos?.size} removidos" else "${videos?.size} uploads removidos"))
         }
 
+    }
+
+    fun deleteVideo(id: String, isCuts: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (!isCuts) {
+                videoService.deleteData(id)
+            } else {
+                cutService.deleteData(id)
+            }
+            podcastManagerState.postValue(PodcastManagerState.VideoDeleted)
+        }
     }
 }

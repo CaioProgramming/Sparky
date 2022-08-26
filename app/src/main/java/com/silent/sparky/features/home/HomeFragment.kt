@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +17,7 @@ import com.silent.core.utils.WebUtils
 import com.silent.core.videos.Video
 import com.silent.ilustriscore.core.model.ErrorType
 import com.silent.ilustriscore.core.model.ViewModelBaseState
+import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.silent.navigation.ModuleNavigator
 import com.silent.navigation.NavigationUtils
 import com.silent.sparky.R
@@ -224,13 +223,15 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
     }
 
     private fun HomeFragmentBinding.showLoading() {
-        homeAnimation.updateLayoutParams<ConstraintLayout.LayoutParams> { horizontalBias = 0.5f }
-        homeToolbar.fadeOut()
-        podcastsResumeRecycler.fadeOut()
+        homeAnimation.playAnimation()
+        homeShimmer.showShimmer(true)
     }
 
     private fun HomeFragmentBinding.stopLoading() {
-        homeAnimation.repeatCount = 5
+        delayedFunction(5000) {
+            homeShimmer.hideShimmer()
+            homeShimmer.stopShimmer()
+        }
     }
 
     private fun HomeFragmentBinding.showError(message: String, tryAgainClick: () -> Unit) {

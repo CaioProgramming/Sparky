@@ -68,19 +68,10 @@ class PodcastEditingFragment : Fragment() {
                         podcastViewModel.updatePodcastData(podcast)
                     }
                     .setPositiveButton("Sim") { dialog, which ->
-
-                        MaterialAlertDialogBuilder(requireContext()).setMessage("Deseja os vídeos recentes (Últimos 100 vídeos) ou vídeos mais antigos?")
-                            .setNegativeButton("Vídeos recentes") { dialog, which ->
-                                podcastViewModel.updatePodcastData(podcast, true)
-                            }
-                            .setPositiveButton("Vídeos mais antigos") { dialog, which ->
-                                podcastViewModel.updatePodcastData(
-                                    podcast,
-                                    updateClips = true,
-                                    requireOldVideos = true
-                                )
-                            }.show()
-
+                        podcastViewModel.updatePodcastData(
+                            podcast,
+                            updateClips = true
+                        )
                     }.show()
             }
             removePodcast.setOnClickListener {
@@ -157,8 +148,12 @@ class PodcastEditingFragment : Fragment() {
                     requireView().showSnackBar("${it.count} episódios atualizados")
                     podcastViewModel.getSingleData(args.podcast.id)
                 }
+                PodcastManagerViewModel.PodcastManagerState.VideoDeleted -> {
+                    podcastViewModel.getSingleData(args.podcast.id)
+                }
                 PodcastManagerViewModel.PodcastManagerState.PodcastUpdateRequest -> {
                     podcastFragmentBinding?.loading?.fadeIn()
+
                 }
                 is PodcastManagerViewModel.PodcastManagerState.CutsAndUploadsRetrieved -> {
                     podcastFragmentBinding?.videosRecyclerview?.adapter =
@@ -170,6 +165,15 @@ class PodcastEditingFragment : Fragment() {
                                         header.videos,
                                         header.title ?: ""
                                     )
+                                    d.dismiss()
+                                }.setNegativeButton("Cancelar") { d, _ ->
+                                    d.dismiss()
+                                }.show()
+                        }, selectVideo = { video, isCuts ->
+                            MaterialAlertDialogBuilder(requireContext()).setTitle("Atenção")
+                                .setMessage("Deseja remover esse vídeo  ${video.title}?")
+                                .setPositiveButton("Confirmar") { d, _ ->
+                                    podcastViewModel.deleteVideo(video.id, isCuts)
                                     d.dismiss()
                                 }.setNegativeButton("Cancelar") { d, _ ->
                                     d.dismiss()

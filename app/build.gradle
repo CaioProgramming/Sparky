@@ -69,7 +69,6 @@ dependencies {
     implementation project(':core')
     implementation project(':navigation')
     implementation 'com.github.PierfrancescoSoffritti:AndroidYouTubePlayer:10.0.5'
-    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

@@ -19,17 +19,19 @@ import com.ilustris.ui.extensions.gone
 import com.ilustris.ui.extensions.visible
 import com.silent.core.component.PodcastAdapter
 import com.silent.core.databinding.VideoGroupLayoutBinding
-import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.HeaderType
+import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastHeader
 import com.silent.core.podcast.programSections
+import com.silent.core.videos.Video
 import com.silent.manager.R
 
 class VideoHeaderAdapter(
     val programSections: programSections,
     val headerSelected: (PodcastHeader) -> Unit,
     val iconClick: ((String) -> Unit)? = null,
-    val selectPodcast: ((Podcast) -> Unit)? = null
+    val selectPodcast: ((Podcast) -> Unit)? = null,
+    val selectVideo: ((Video, Boolean) -> Unit)? = null
 ) : RecyclerView.Adapter<VideoHeaderAdapter.HeaderViewHolder>() {
 
     inner class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -42,7 +44,11 @@ class VideoHeaderAdapter(
                     val layoutManager =
                         LinearLayoutManager(itemView.context, section.orientation, false)
                     val maxLimit = if (section.videos!!.size > 20) 20 else section.videos!!.size
-                    videosRecycler.adapter = VideosAdapter(section.videos!!.subList(0, maxLimit), section.highLightColor)
+                    videosRecycler.adapter = VideosAdapter(
+                        section.videos!!.subList(0, maxLimit), section.highLightColor
+                    ) {
+                        selectVideo?.invoke(it, section.title?.contains("Cortes") == true)
+                    }
                     videosRecycler.layoutManager = layoutManager
                     section.referenceIndex?.let {
                         videosRecycler.scrollToPosition(it)

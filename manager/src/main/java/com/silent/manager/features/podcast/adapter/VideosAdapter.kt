@@ -20,7 +20,8 @@ import com.silent.manager.databinding.VideoPreviewStackedBinding
 
 class VideosAdapter(
     val playlistVideos: List<Video>,
-    private val highlightColor: String? = null
+    private val highlightColor: String? = null,
+    val onSelectVideo: ((Video) -> Unit)? = null
 ) : RecyclerView.Adapter<VideosAdapter.VideoViewHolder>() {
 
     inner class VideoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -43,6 +44,9 @@ class VideosAdapter(
                 }
                 if (!root.isVisible) {
                     root.fadeIn()
+                }
+                root.setOnClickListener {
+                    onSelectVideo?.invoke(video)
                 }
             }
         }

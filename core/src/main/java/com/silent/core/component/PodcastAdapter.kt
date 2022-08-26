@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.ilustris.animations.popIn
 import com.ilustris.animations.slideInBottom
 import com.ilustris.ui.extensions.gone
 import com.ilustris.ui.extensions.visible
@@ -51,7 +50,7 @@ class PodcastAdapter(
                 liveStatus.rimColor = Color.parseColor(podcast.highLightColor)
                 liveStatus.indeterminate = podcast.isLive
                 liveStatus.progress = 100
-                itemView.popIn()
+                itemView.slideInBottom()
                 if (showTitle) podcastTitle.visible() else podcastTitle.gone()
             }
         }

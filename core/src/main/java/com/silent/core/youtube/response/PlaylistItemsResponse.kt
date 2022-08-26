@@ -2,7 +2,7 @@ package com.silent.core.youtube.response
 
 import java.util.*
 
-data class PlaylistItemResponse(val items: List<PlaylistResource>)
+data class PlaylistItemResponse(val items: List<PlaylistResource>, val nextPageToken: String)
 
 data class PlaylistResource(val snippet: VideoSnippet, val id: String)
 
