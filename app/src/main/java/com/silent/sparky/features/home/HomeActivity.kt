@@ -23,6 +23,7 @@ import com.silent.sparky.databinding.ActivityHomeBinding
 import com.silent.sparky.features.cuts.di.cutsModule
 import com.silent.sparky.features.home.di.homeModule
 import com.silent.sparky.features.home.viewmodel.MainActViewModel
+import com.silent.sparky.features.live.di.liveModule
 import com.silent.sparky.features.podcast.di.podcastModule
 import com.silent.sparky.features.profile.di.profileModule
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -45,7 +46,7 @@ class HomeActivity : AuthActivity() {
             registerForActivityResult(ActivityResultContracts.RequestPermission()) {
                 mainActViewModel.updateNotificationPermission(it)
             }
-        loadKoinModules(listOf(homeModule, profileModule, podcastModule, cutsModule))
+        loadKoinModules(listOf(homeModule, profileModule, podcastModule, cutsModule, liveModule))
         homeBinding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(homeBinding?.root)
         homeBinding?.run {

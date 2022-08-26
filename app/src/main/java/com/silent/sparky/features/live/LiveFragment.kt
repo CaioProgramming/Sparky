@@ -1,6 +1,8 @@
 package com.silent.sparky.features.live
 
 import android.animation.ValueAnimator
+import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,23 +12,36 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.ilustris.animations.slideInBottom
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
 import com.silent.core.podcast.Podcast
+import com.silent.core.podcast.PodcastHeader
 import com.silent.core.utils.ImageUtils
+import com.silent.core.utils.WebUtils
+import com.silent.core.videos.Video
 import com.silent.sparky.R
 import com.silent.sparky.databinding.PodcastLiveFragmentBinding
+import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
 import com.silent.sparky.features.live.components.SparkyPlayerController
+import com.silent.sparky.features.live.data.LiveHeader
+import com.silent.sparky.features.live.data.VideoMedia
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.NumberFormat
 
 
 class LiveFragment : Fragment() {
 
+
+    private var liveYouTubePlayer: YouTubePlayer? = null
     private var podcastLiveFragmentBinding: PodcastLiveFragmentBinding? = null
     private val args by navArgs<LiveFragmentArgs>()
-
+    private val liveViewModel: LiveViewModel by viewModel()
+    private lateinit var live: LiveHeader
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,11 +56,12 @@ class LiveFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         podcastLiveFragmentBinding = PodcastLiveFragmentBinding.bind(view)
         setupView()
+        observeViewModel()
     }
 
     private fun setupView() {
         podcastLiveFragmentBinding?.run {
-            val live = args.liveObject
+            live = args.liveObject
             initializePlayer(
                 Color.parseColor(live.podcast.highLightColor),
                 live.videoID,
@@ -53,26 +69,63 @@ class LiveFragment : Fragment() {
                 args.liveObject.isLiveVideo
             )
             setupPodcast(live.podcast)
-            liveTitle.text = live.title
-            liveDescription.text = live.description
+            setupVideoInfo(live)
             collapseButton.setOnClickListener {
                 findNavController().popBackStack()
             }
-            if (live.isLiveVideo) {
+        }
+    }
+
+    private fun PodcastLiveFragmentBinding.setupVideoInfo(liveHeader: LiveHeader) {
+        liveTitle.text = liveHeader.title
+        liveDescription.text = liveHeader.description
+        collapseButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun observeViewModel() {
+        liveViewModel.liveState.observe(viewLifecycleOwner) {
+            when (it) {
+                is LiveViewModel.LiveState.RelatedVideosRetrieved -> podcastLiveFragmentBinding?.setupRelatedVideos(
+                    it.header
+                )
             }
         }
+    }
+
+    private fun PodcastLiveFragmentBinding.setupRelatedVideos(header: PodcastHeader) {
+        relatedVideos.layoutManager =
+            LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        relatedVideos.adapter = VideoHeaderAdapter(ArrayList(listOf(header)), headerSelected = {
+            it.playlistId?.let { id -> openPodcast(id) }
+        }, onVideoClick = { video, podcast ->
+            loadVideo(video, podcast)
+            shareButton.setOnClickListener {
+                val message = getShareMessage(podcast.name, args.liveObject.type, video.id)
+                val sendIntent = Intent()
+                sendIntent.action = Intent.ACTION_SEND
+                sendIntent.putExtra(Intent.EXTRA_TEXT, message)
+                sendIntent.type = "text/plain"
+                startActivity(sendIntent)
+            }
+        })
+        relatedVideos.slideInBottom()
+    }
+
+    private fun openPodcast(podcastId: String) {
+        val bundle = bundleOf("podcast_id" to podcastId, "live_video" to null)
+        findNavController().navigate(R.id.action_liveFragment_to_podcastFragment, bundle)
     }
 
     private fun PodcastLiveFragmentBinding.setupPodcast(podcast: Podcast) {
         podcastName.text = podcast.name
         Glide.with(requireContext()).load(podcast.iconURL).into(podcastIcon)
         podcastName.setOnClickListener {
-            val bundle = bundleOf("podcast_id" to podcast.id, "live_video" to null)
-            findNavController().navigate(R.id.action_liveFragment_to_podcastFragment, bundle)
+            openPodcast(podcast.id)
         }
         podcastIcon.setOnClickListener {
-            val bundle = bundleOf("podcast_id" to podcast.id, "live_video" to null)
-            findNavController().navigate(R.id.action_liveFragment_to_podcastFragment, bundle)
+            openPodcast(podcast.id)
         }
         podcastSubscribers.text = "${podcast.subscribe} inscritos."
         val animator = ValueAnimator()
@@ -87,6 +140,48 @@ class LiveFragment : Fragment() {
             start()
         }
         podcastIcon.borderColor = Color.parseColor(podcast.highLightColor)
+        shareButton.imageTintList = ColorStateList.valueOf(Color.parseColor(podcast.highLightColor))
+        shareButton.setOnClickListener {
+            val message =
+                getShareMessage(podcast.name, args.liveObject.type, args.liveObject.videoID)
+            val sendIntent = Intent()
+            sendIntent.action = Intent.ACTION_SEND
+            sendIntent.putExtra(Intent.EXTRA_TEXT, message)
+            sendIntent.type = "text/plain"
+            startActivity(sendIntent)
+        }
+        when (args.liveObject.type) {
+            VideoMedia.LIVE -> {
+                shareButton.contentDescription = "Compartilhar live"
+                shareButton.tooltipText = "Compartilhar live"
+            }
+            VideoMedia.EPISODE -> {
+                shareButton.contentDescription = "Compartilhar episódio"
+                shareButton.tooltipText = "Compartilhar episódio"
+            }
+            VideoMedia.CUT -> {
+                shareButton.contentDescription = "Compartilhar corte"
+                shareButton.tooltipText = "Compartilhar corte"
+            }
+        }
+        liveViewModel.getRelatedVideos(args.liveObject.videoID, podcast, args.liveObject.type)
+    }
+
+    private fun getShareMessage(podcastName: String, media: VideoMedia, videoId: String): String {
+        val youtubeLink = WebUtils(requireContext()).getYoutubeLink(videoId)
+        return when (media) {
+            VideoMedia.LIVE -> "Ta rolando live do $podcastName, da uma olhada!\n$youtubeLink"
+            VideoMedia.EPISODE -> "Olha só esse episódio do $podcastName!\n$youtubeLink"
+            VideoMedia.CUT -> "Da uma olhada nesse corte do $podcastName!\n$youtubeLink"
+        }
+    }
+
+    private fun loadVideo(video: Video, podcast: Podcast) {
+        live.title = video.title
+        live.description = video.description
+        liveYouTubePlayer?.loadVideo(video.id, 0f)
+        liveViewModel.getRelatedVideos(video.id, podcast, args.liveObject.type)
+        podcastLiveFragmentBinding?.setupVideoInfo(live)
     }
 
     private fun PodcastLiveFragmentBinding.initializePlayer(
@@ -99,6 +194,7 @@ class LiveFragment : Fragment() {
         val listener = object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
                 super.onReady(youTubePlayer)
+                liveYouTubePlayer = youTubePlayer
                 val customplayerUiController = SparkyPlayerController(
                     playerUi,
                     livePlayer,
@@ -116,13 +212,4 @@ class LiveFragment : Fragment() {
         livePlayer.initialize(listener, false, options)
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        podcastLiveFragmentBinding?.livePlayer?.release()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        podcastLiveFragmentBinding?.livePlayer?.release()
-    }
 }

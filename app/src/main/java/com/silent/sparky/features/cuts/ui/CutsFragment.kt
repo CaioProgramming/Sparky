@@ -21,6 +21,7 @@ import com.silent.sparky.features.cuts.ui.adapter.CutGridAdapter
 import com.silent.sparky.features.cuts.viewmodel.CutsState
 import com.silent.sparky.features.cuts.viewmodel.CutsViewModel
 import com.silent.sparky.features.live.data.LiveHeader
+import com.silent.sparky.features.live.data.VideoMedia
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CutsFragment : Fragment() {
@@ -46,7 +47,8 @@ class CutsFragment : Fragment() {
 
     private fun selectVideo(video: Video) {
         video.podcast?.let {
-            val liveObject = LiveHeader(it, video.title, video.description, video.youtubeID)
+            val liveObject =
+                LiveHeader(it, video.title, video.description, video.youtubeID, VideoMedia.CUT)
             val bundle = bundleOf("live_object" to liveObject)
             findNavController().navigate(R.id.action_navigation_cuts_to_liveFragment, bundle)
         }
