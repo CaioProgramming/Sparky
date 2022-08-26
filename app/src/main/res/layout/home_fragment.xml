@@ -1,108 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.facebook.shimmer.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/home_container"
+    android:id="@+id/home_shimmer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    app:shimmer_auto_start="true"
+    app:shimmer_base_alpha="0.3"
+    app:shimmer_base_color="@color/material_grey900"
+    app:shimmer_clip_to_children="true"
+    app:shimmer_colored="true"
+    app:shimmer_duration="1500"
+    app:shimmer_highlight_color="?attr/colorPrimaryDark"
+    app:shimmer_repeat_mode="reverse"
+    tools:shimmer_colored="false">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/home_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:colorBackground"
-        app:elevation="3dp">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?android:colorBackground"
-            app:contentScrim="?android:colorBackground"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:scrimAnimationDuration="100">
+            app:elevation="3dp">
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/home_search"
-                android:layout_gravity="bottom"
+            <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/padding_default_16dp"
-                android:layout_marginTop="?attr/actionBarSize"
-                android:background="@drawable/input_round_retangle"
-                android:backgroundTint="@color/material_grey900"
-                app:iconifiedByDefault="false"
-                app:layout_constraintTop_toTopOf="parent"
-                app:queryBackground="@color/transparent"
-                app:queryHint="Busque podcasts e episódios" />
+                android:background="?android:colorBackground"
+                app:contentScrim="?android:colorBackground"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:scrimAnimationDuration="100">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/home_toolbar"
-                android:background="@drawable/faded_gradient_inverse"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_gravity="top"
-                app:layout_collapseMode="pin" />
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/home_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginHorizontal="@dimen/padding_default_16dp"
+                    android:layout_marginTop="?attr/actionBarSize"
+                    android:background="@drawable/input_round_retangle"
+                    android:backgroundTint="@color/material_grey900"
+                    app:iconifiedByDefault="false"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:queryBackground="@color/transparent"
+                    app:queryHint="Busque podcasts e episódios" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:orientation="horizontal"
-                app:layout_collapseMode="pin">
-
-                <TextView
-                    android:id="@+id/home_title"
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/home_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:fontFamily="@font/kaushan_script"
-                    android:gravity="center"
-                    android:text="@string/app_name"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_gravity="top"
+                    android:background="@drawable/faded_gradient_inverse"
+                    app:layout_collapseMode="pin" />
 
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/home_animation"
-                    android:layout_width="64dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:layout_marginHorizontal="@dimen/padding_default_16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:lottie_autoPlay="true"
-                    app:lottie_colorFilter="?attr/colorPrimaryDark"
-                    app:lottie_loop="true"
-                    app:lottie_rawRes="@raw/lightning"
-                    app:lottie_repeatMode="restart" />
+                    android:orientation="horizontal"
+                    app:layout_collapseMode="pin">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/home_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:fontFamily="@font/kaushan_script"
+                        android:gravity="center"
+                        android:text="@string/app_name"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/home_animation"
+                        android:layout_width="64dp"
+                        android:layout_height="?attr/actionBarSize"
+                        android:layout_marginHorizontal="@dimen/padding_default_16dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:lottie_autoPlay="true"
+                        app:lottie_colorFilter="?attr/colorPrimaryDark"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/lightning"
+                        app:lottie_repeatMode="restart" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-    </com.google.android.material.appbar.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/podcasts_resume_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:foreground="?attr/selectableItemBackground"
-        android:orientation="vertical"
-        android:paddingBottom="?attr/actionBarSize"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        tools:itemCount="4"
-        tools:listitem="@layout/video_group_layout" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/podcasts_resume_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="vertical"
+            android:paddingBottom="?attr/actionBarSize"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            tools:itemCount="4"
+            tools:listitem="@layout/video_group_layout" />
 
-    <include
-        android:id="@+id/error_view"
-        layout="@layout/error_view" />
+        <include
+            android:id="@+id/error_view"
+            layout="@layout/error_view" />
 
-    <include
-        android:id="@+id/warning_view"
-        layout="@layout/warning_layout" />
+        <include
+            android:id="@+id/warning_view"
+            layout="@layout/warning_layout" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+</com.facebook.shimmer.ShimmerFrameLayout>

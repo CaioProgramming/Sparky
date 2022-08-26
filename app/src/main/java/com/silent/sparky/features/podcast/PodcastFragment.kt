@@ -113,11 +113,10 @@ class PodcastFragment : Fragment() {
             }
             val hostHeaders = ArrayList<HostGroup>()
             if (podcast.hosts.isNotEmpty()) {
-                hostHeaders.add(HostGroup("Hosts", podcast.hosts))
+                hostHeaders.add(HostGroup("Apresentado por", podcast.hosts))
             }
 
             hostsRecyclerView.adapter = HostGroupAdapter(hostHeaders, false, { host, groupType ->
-
                 when (groupType) {
                     GroupType.HOSTS -> {
                         if (host.socialUrl.isNotEmpty()) {
@@ -125,8 +124,6 @@ class PodcastFragment : Fragment() {
                         }
                     }
                 }
-
-
             }, podcast.highLightColor)
             animateSubscriberCount(podcast.subscribe)
             setupHeaders(headers)

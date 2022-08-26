@@ -19,9 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private const val FETCH_DELAY_TIME = 500L
 private const val WARNING_HIDE_TIME = 5000L
-private const val SHOW_PODCAST_PREFERENCE_DELAY = 2000L
 
 class HomeViewModel(
     myApplication: Application,
@@ -62,6 +60,7 @@ class HomeViewModel(
                     preferencesState.postValue(PreferencesState.WarningNotShowed)
                     return@launch
                 }
+                viewModelState.postValue(ViewModelBaseState.LoadingState)
                 val homeHeaders = ArrayList<PodcastHeader>()
                 val podcasts = (service.getAllData().success.data as podcasts)
                 homeHeaders.add(createTopHeader(podcasts, notificationLive?.podcastId))
@@ -88,6 +87,7 @@ class HomeViewModel(
                             )
                         }
                     }
+                    viewModelState.postValue(ViewModelBaseState.LoadCompleteState)
                     if (index == filteredPodcasts.lastIndex) {
                         podcastFilter?.let {
                             val remainingPodcasts =
@@ -117,59 +117,64 @@ class HomeViewModel(
         }
     }
 
-
     fun searchPodcastAndEpisodes(query: String) {
         if (query.isBlank()) {
             getHome()
             return
         }
         viewModelScope.launch(Dispatchers.IO) {
-            homeState.postValue(HomeState.LoadingSearch)
+            viewModelState.postValue(ViewModelBaseState.LoadingState)
             val headers = ArrayList<PodcastHeader>()
-            val podcasts = service.getAllData().success.data as ArrayList<Podcast>
-            val queryPodcasts = podcasts.filter { podcast ->
-                podcast.name.contains(query, true) || podcast.hosts.any { host ->
-                    host.name.contains(query, true)
+            val podcastsRequest = service.getAllData()
+            when (podcastsRequest) {
+                is ServiceResult.Error -> sendErrorState(podcastsRequest.error.errorException)
+                is ServiceResult.Success -> {
+                    val podcasts = podcastsRequest.success.data as ArrayList<Podcast>
+                    val queryPodcasts = podcasts.filter { podcast ->
+                        podcast.name.contains(query, true) || podcast.hosts.any { host ->
+                            host.name.contains(query, true)
+                        }
+                    }.sortedByDescending { it.subscribe }
+                    if (queryPodcasts.isNotEmpty()) {
+                        headers.add(
+                            PodcastHeader(
+                                "Podcasts encontrados",
+                                orientation = RecyclerView.HORIZONTAL,
+                                seeMore = false,
+                                type = HeaderType.PODCASTS,
+                                podcasts = queryPodcasts
+                            )
+                        )
+                    }
+                    podcasts.forEachIndexed { index, podcast ->
+                        when (val videoRequest = videoService.getPodcastVideos(podcast.id)) {
+                            is ServiceResult.Success -> {
+                                val videos = videoRequest.success.data as ArrayList<Video>
+                                val queryVideos = ArrayList(videos.filter {
+                                    it.title.contains(
+                                        query,
+                                        true
+                                    ) || it.description.contains(query, true)
+                                }.sortedByDescending { it.publishedAt })
+                                val header = createHeader(podcast, queryVideos, podcast.uploads)
+                                headers.add(header)
+                            }
+                            else -> {}
+                        }
+
+                        if (index == podcasts.lastIndex) {
+                            val queryHeaders = headers.filter { header ->
+                                header.title?.contains(
+                                    query,
+                                    true
+                                ) == true || header.videos?.isNotEmpty() == true || header.podcasts?.isNotEmpty() == true
+                            }
+                            homeState.postValue(HomeState.HomeSearchRetrieved(ArrayList(queryHeaders)))
+                        }
+                    }
                 }
-            }
-            if (queryPodcasts.isNotEmpty()) {
-                headers.add(
-                    PodcastHeader(
-                        "Podcasts encontrados",
-                        orientation = RecyclerView.HORIZONTAL,
-                        seeMore = false,
-                        type = HeaderType.PODCASTS,
-                        podcasts = queryPodcasts
-                    )
-                )
             }
 
-            podcasts.forEachIndexed { index, podcast ->
-                when (val videoRequest = videoService.getPodcastVideos(podcast.id)) {
-                    is ServiceResult.Success -> {
-                        val videos = videoRequest.success.data as ArrayList<Video>
-                        val queryVideos = ArrayList(videos.filter {
-                            it.title.contains(
-                                query,
-                                true
-                            ) || it.description.contains(query, true)
-                        })
-                        val header = createHeader(podcast, queryVideos, podcast.uploads)
-                        headers.add(header)
-                    }
-                    else -> {}
-                }
-
-                if (index == podcasts.lastIndex) {
-                    val queryHeaders = headers.filter { header ->
-                        header.title?.contains(
-                            query,
-                            true
-                        ) == true || header.videos?.isNotEmpty() == true || header.podcasts?.isNotEmpty() == true
-                    }
-                    homeState.postValue(HomeState.HomeSearchRetrieved(ArrayList(queryHeaders)))
-                }
-            }
         }
 
 
