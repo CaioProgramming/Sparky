@@ -9,7 +9,10 @@ import com.silent.core.videos.VideoMapper
 import com.silent.core.videos.VideoService
 import com.silent.core.youtube.SectionItem
 import com.silent.core.youtube.YoutubeService
-import com.silent.ilustriscore.core.model.*
+import com.silent.ilustriscore.core.model.BaseViewModel
+import com.silent.ilustriscore.core.model.DataException
+import com.silent.ilustriscore.core.model.ErrorType
+import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.manager.features.newpodcast.fragments.youtube.PodcastsHeader
 import com.silent.manager.states.HostState
 import com.silent.manager.states.NewPodcastState
@@ -139,16 +142,16 @@ class NewPodcastViewModel(
     }
 
     private suspend fun updateEpisodesAndCuts(podcast: Podcast) {
-            val uploads = youtubeService.getPlaylistVideos(podcast.uploads, 100)
-            val cuts = youtubeService.getPlaylistVideos(podcast.cuts, 100)
-            uploads.items.forEachIndexed { index, playlistResource ->
-                val video = videoMapper.mapVideoSnippet(playlistResource.snippet, podcast.id)
-                videoService.editData(video)
-            }
-            cuts.items.forEachIndexed { index, playlistResource ->
-                val video = videoMapper.mapVideoSnippet(playlistResource.snippet, podcast.id)
-                cutService.editData(video)
-            }
+        val uploads = youtubeService.getPlaylistVideos(podcast.uploads)
+        val cuts = youtubeService.getPlaylistVideos(podcast.cuts)
+        uploads.items.forEachIndexed { index, playlistResource ->
+            val video = videoMapper.mapVideoSnippet(playlistResource.snippet, podcast.id)
+            videoService.editData(video)
+        }
+        cuts.items.forEachIndexed { index, playlistResource ->
+            val video = videoMapper.mapVideoSnippet(playlistResource.snippet, podcast.id)
+            cutService.editData(video)
+        }
     }
 
 }
