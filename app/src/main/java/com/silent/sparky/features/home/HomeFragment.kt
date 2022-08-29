@@ -230,7 +230,7 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
     }
 
     private fun HomeFragmentBinding.stopLoading() {
-        delayedFunction(3000) {
+        delayedFunction(2500) {
             homeShimmer.stopShimmer()
             homeShimmer.hideShimmer()
         }

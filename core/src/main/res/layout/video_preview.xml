@@ -11,7 +11,7 @@
     android:stateListAnimator="@animator/scale_down_animator"
     app:cardBackgroundColor="?android:colorBackground"
     app:cardCornerRadius="0dp"
-    app:strokeColor="@color/md_grey900"
+    app:strokeColor="@color/md_white"
     app:strokeWidth="1dp">
 
 
