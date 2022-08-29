@@ -2,6 +2,7 @@ package com.silent.sparky.features.home
 
 import android.Manifest
 import android.app.Activity
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,6 +18,8 @@ import com.ilustris.ui.extensions.ERROR_COLOR
 import com.ilustris.ui.extensions.WARNING_COLOR
 import com.ilustris.ui.extensions.getView
 import com.ilustris.ui.extensions.showSnackBar
+import com.silent.core.podcast.Podcast
+import com.silent.core.videos.Video
 import com.silent.sparky.BuildConfig
 import com.silent.sparky.R
 import com.silent.sparky.databinding.ActivityHomeBinding
@@ -33,12 +36,7 @@ class HomeActivity : AuthActivity() {
 
     private val mainActViewModel: MainActViewModel by viewModel()
     private lateinit var notificationPermissionRequest: ActivityResultLauncher<String>
-    private val podcastExtra: String? by lazy {
-        intent.extras?.getString("podcast")
-    }
-    private val videoExtra: String? by lazy {
-        intent.extras?.getString("video")
-    }
+
     var homeBinding: ActivityHomeBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +57,8 @@ class HomeActivity : AuthActivity() {
         }
         observeViewModel()
         mainActViewModel.checkNotifications()
+        val podcastExtra = intent.getSerializableExtra("podcast") as Podcast?
+        val videoExtra = intent.getSerializableExtra("video") as Video?
         mainActViewModel.validatePush(podcastExtra, videoExtra)
         mainActViewModel.checkUser()
     }
@@ -83,7 +83,11 @@ class HomeActivity : AuthActivity() {
         mainActViewModel.notificationState.observe(this) {
             when(it) {
                 MainActViewModel.NotificationState.RequestNotification -> {
-                    notificationPermissionRequest.launch(Manifest.permission.ACCESS_NOTIFICATION_POLICY)
+                    if (Build.VERSION.SDK_INT >= 33) {
+                        notificationPermissionRequest.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    } else {
+                        notificationPermissionRequest.launch(android.Manifest.permission.ACCESS_NOTIFICATION_POLICY)
+                    }
                 }
 
                 else -> {}

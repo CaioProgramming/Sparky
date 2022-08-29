@@ -16,8 +16,8 @@ import com.google.firebase.messaging.RemoteMessage
 import com.silent.core.BuildConfig
 import com.silent.core.R
 import com.silent.core.preferences.PreferencesService
-import com.silent.core.utils.HOME_ACT
 import com.silent.core.utils.ImageUtils
+import com.silent.core.utils.NOTIFICATION_ACT
 import com.silent.core.utils.TOKEN_PREFERENCES
 import com.silent.core.utils.toAlphabetInt
 import kotlinx.coroutines.Dispatchers
@@ -58,7 +58,7 @@ class SparkyMessagingService : FirebaseMessagingService() {
             notification.color?.let {
                 defaultColor = Color.parseColor(it)
             }
-            val homeIntent = Intent(this, Class.forName(HOME_ACT)).apply {
+            val homeIntent = Intent(this, Class.forName(NOTIFICATION_ACT)).apply {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 podcast?.let {
                     putExtra("podcast", podcast.toString())
@@ -69,7 +69,6 @@ class SparkyMessagingService : FirebaseMessagingService() {
             }
             val sound = Uri.parse("android.resource://" + packageName + "/" + notification.sound)
             val notificationId = podcast?.getString("name")?.toAlphabetInt() ?: 0
-            val iconURl = podcast?.getString("iconURL")
             val flag =
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_CANCEL_CURRENT
             val pendingIntent = PendingIntent.getActivity(this, 0, homeIntent, flag)
