@@ -144,6 +144,7 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                     homeFragmentBinding?.showError("Ocorreu um erro inesperado ao carregar.") {
                         homeViewModel.getAllData()
                     }
+
                 }
 
                 HomeState.InvalidManager -> {
@@ -229,14 +230,14 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
     }
 
     private fun HomeFragmentBinding.stopLoading() {
-        delayedFunction(5000) {
-            homeShimmer.hideShimmer()
+        delayedFunction(3000) {
             homeShimmer.stopShimmer()
+            homeShimmer.hideShimmer()
         }
     }
 
     private fun HomeFragmentBinding.showError(message: String, tryAgainClick: () -> Unit) {
-
+        stopLoading()
         errorView.run {
             errorAnimation.playAnimation()
             errorMessage.text = message

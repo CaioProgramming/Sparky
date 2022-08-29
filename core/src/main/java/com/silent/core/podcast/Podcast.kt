@@ -30,7 +30,7 @@ data class Podcast(
     var updating: Boolean = false,
     @Exclude
     var isLive: Boolean = false
-) : BaseBean(key) {
+) : Serializable, BaseBean(key) {
 
     init {
         key = id

@@ -3,13 +3,12 @@ package com.silent.sparky.features.home.viewmodel
 import android.Manifest
 import android.app.Application
 import android.content.pm.PackageManager
-import android.util.Log
+import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.google.gson.Gson
 import com.silent.core.firebase.FirebaseService
 import com.silent.core.podcast.Podcast
 import com.silent.core.preferences.PreferencesService
@@ -58,10 +57,17 @@ class MainActViewModel(
     }
 
     fun checkNotifications() {
-        val permissionStatus = ContextCompat.checkSelfPermission(
-            getApplication<Application>().applicationContext,
-            Manifest.permission.POST_NOTIFICATIONS
-        ) != PackageManager.PERMISSION_GRANTED
+        val permissionStatus = if (Build.VERSION.SDK_INT >= 33) {
+            ContextCompat.checkSelfPermission(
+                getApplication<Application>().applicationContext,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        } else {
+            ContextCompat.checkSelfPermission(
+                getApplication<Application>().applicationContext,
+                Manifest.permission.ACCESS_NOTIFICATION_POLICY
+            ) != PackageManager.PERMISSION_GRANTED
+        }
         if (!permissionStatus) {
             notificationState.value = NotificationState.RequestNotification
         } else {
@@ -73,15 +79,9 @@ class MainActViewModel(
         viewModelScope.launch(Dispatchers.IO) { firebaseService.generateFirebaseToken() }
     }
 
-    fun validatePush(podcastExtra: String?, videoExtra: String?) {
+    fun validatePush(podcastExtra: Podcast?, videoExtra: Video?) {
         podcastExtra?.let {
-            Log.i(
-                javaClass.simpleName,
-                "validatePush: \n podcastObject -> ${podcastExtra}\nVideoObject -> $videoExtra"
-            )
-            val podcast = Gson().fromJson(it, Podcast::class.java)
-            val video: Video? = videoExtra?.let { Gson().fromJson(videoExtra, Video::class.java) }
-            actState.value = MainActState.NavigateToPodcast(podcast.id, video)
+            actState.value = MainActState.NavigateToPodcast(podcastExtra.id, videoExtra)
         }
     }
 
