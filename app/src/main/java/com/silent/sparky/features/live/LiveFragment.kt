@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,7 @@ import com.silent.core.podcast.PodcastHeader
 import com.silent.core.utils.ImageUtils
 import com.silent.core.utils.WebUtils
 import com.silent.core.videos.Video
+import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.silent.sparky.R
 import com.silent.sparky.databinding.PodcastLiveFragmentBinding
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
@@ -59,6 +61,17 @@ class LiveFragment : Fragment() {
         observeViewModel()
     }
 
+    private fun PodcastLiveFragmentBinding.startLoading() {
+        liveShimmer.showShimmer(true)
+    }
+
+    private fun PodcastLiveFragmentBinding.stopLoading() {
+        delayedFunction(2000) {
+            liveShimmer.stopShimmer()
+            liveShimmer.hideShimmer()
+        }
+    }
+
     private fun setupView() {
         podcastLiveFragmentBinding?.run {
             live = args.liveObject
@@ -88,29 +101,43 @@ class LiveFragment : Fragment() {
         liveViewModel.liveState.observe(viewLifecycleOwner) {
             when (it) {
                 is LiveViewModel.LiveState.RelatedVideosRetrieved -> podcastLiveFragmentBinding?.setupRelatedVideos(
-                    it.header
+                    it.headers
                 )
+            }
+        }
+        liveViewModel.videoTitleState.observe(viewLifecycleOwner) {
+            when (it) {
+                is LiveViewModel.VideoTitleState.UpdateTitleStyle -> podcastLiveFragmentBinding?.run {
+                    liveTitle.text = Html.fromHtml(it.newTitle)
+                }
             }
         }
     }
 
-    private fun PodcastLiveFragmentBinding.setupRelatedVideos(header: PodcastHeader) {
+    private fun PodcastLiveFragmentBinding.setupRelatedVideos(header: List<PodcastHeader>) {
         relatedVideos.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        relatedVideos.adapter = VideoHeaderAdapter(ArrayList(listOf(header)), headerSelected = {
-            it.playlistId?.let { id -> openPodcast(id) }
-        }, onVideoClick = { video, podcast ->
-            loadVideo(video, podcast)
-            shareButton.setOnClickListener {
-                val message = getShareMessage(podcast.name, args.liveObject.type, video.id)
-                val sendIntent = Intent()
-                sendIntent.action = Intent.ACTION_SEND
-                sendIntent.putExtra(Intent.EXTRA_TEXT, message)
-                sendIntent.type = "text/plain"
-                startActivity(sendIntent)
-            }
-        })
+        relatedVideos.adapter = VideoHeaderAdapter(ArrayList(header),
+            headerSelected = { it.playlistId?.let { id -> openPodcast(id) } },
+            onVideoClick = { video, podcast ->
+                startLoading()
+                loadVideo(video, podcast)
+                shareButton.setOnClickListener {
+                    val message = getShareMessage(podcast.name, args.liveObject.type, video.id)
+                    val sendIntent = Intent()
+                    sendIntent.action = Intent.ACTION_SEND
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, message)
+                    sendIntent.type = "text/plain"
+                    startActivity(sendIntent)
+                }
+                relatedVideos.smoothScrollToPosition(0)
+            }, selectPodcast = { openPodcast(it.id) })
         relatedVideos.slideInBottom()
+        liveViewModel.formatCoHostName(
+            args.liveObject.title,
+            args.liveObject.podcast.highLightColor
+        )
+        stopLoading()
     }
 
     private fun openPodcast(podcastId: String) {
@@ -164,7 +191,12 @@ class LiveFragment : Fragment() {
                 shareButton.tooltipText = "Compartilhar corte"
             }
         }
-        liveViewModel.getRelatedVideos(args.liveObject.videoID, podcast, args.liveObject.type)
+        liveViewModel.getRelatedVideos(
+            args.liveObject.videoID,
+            podcast,
+            args.liveObject.type,
+            args.liveObject.title
+        )
     }
 
     private fun getShareMessage(podcastName: String, media: VideoMedia, videoId: String): String {
@@ -180,7 +212,7 @@ class LiveFragment : Fragment() {
         live.title = video.title
         live.description = video.description
         liveYouTubePlayer?.loadVideo(video.id, 0f)
-        liveViewModel.getRelatedVideos(video.id, podcast, args.liveObject.type)
+        liveViewModel.getRelatedVideos(video.id, podcast, args.liveObject.type, video.title)
         podcastLiveFragmentBinding?.setupVideoInfo(live)
     }
 

@@ -68,9 +68,7 @@ class HostAdapter(
                 hostName.text = host.name
                 hostDescription.text = host.description
                 if (!highLightColor.isNullOrEmpty()) {
-                    hostNameCard.strokeColor = Color.parseColor(highLightColor)
-                    hostCard.strokeColor = Color.parseColor(highLightColor)
-                    hostName.setTextColor(Color.parseColor(highLightColor))
+                    hostPhoto.borderColor = Color.parseColor(highLightColor)
                 }
             }
 
@@ -104,7 +102,6 @@ class HostAdapter(
     override fun getItemViewType(position: Int): Int {
         return when {
             hosts[position].name == NEW_HOST -> NEW_HOST_VIEW
-            position % 2 == 0 -> REVERSE_VIEW
             else -> NORMAL_VIEW
         }
     }

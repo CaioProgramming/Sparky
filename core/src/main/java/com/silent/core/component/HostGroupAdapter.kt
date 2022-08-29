@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.silent.core.R
 import com.silent.core.databinding.HostGroupCardBinding
@@ -25,14 +26,29 @@ class HostGroupAdapter(
         fun bind() {
             val hostGroup = groups[bindingAdapterPosition]
             HostGroupCardBinding.bind(itemView).run {
+                val gridLayoutManager =
+                    GridLayoutManager(root.context, 2, RecyclerView.VERTICAL, false)
+                gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                    override fun getSpanSize(position: Int): Int {
+                        return if (hostGroup.hosts.size % 2 == 0) {
+                            1
+                        } else {
+                            if (position == hostGroup.hosts.lastIndex) {
+                                2
+                            } else {
+                                1
+                            }
+                        }
+                    }
+                }
                 groupTitle.text = hostGroup.title
                 highLightColor?.let {
                     groupTitle.backgroundTintList = ColorStateList.valueOf(Color.parseColor(it))
                 }
-                guestsRecycler.adapter =
-                    HostAdapter(ArrayList(hostGroup.hosts), isEdit, {
-                        hostSelected(it, hostGroup.groupType)
-                    }, groupType = hostGroup.groupType, highLightColor = highLightColor)
+                guestsRecycler.adapter = HostAdapter(ArrayList(hostGroup.hosts), isEdit, {
+                    hostSelected(it, hostGroup.groupType)
+                }, groupType = hostGroup.groupType, highLightColor = highLightColor)
+                guestsRecycler.layoutManager = gridLayoutManager
             }
         }
 

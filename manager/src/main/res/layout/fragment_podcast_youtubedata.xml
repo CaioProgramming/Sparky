@@ -24,4 +24,8 @@
         app:spanCount="1"
         tools:listitem="@layout/podcasts_header" />
 
+    <include
+        android:id="@+id/error_view"
+        layout="@layout/error_view" />
+
 </LinearLayout>
