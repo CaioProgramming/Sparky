@@ -124,16 +124,21 @@ class NewPodcastViewModel(
             channels.forEach { podcastID ->
                 val channel = youtubeService.getChannelDetails(podcastID).items.first()
                 val podcast = podcastMapper.mapChannelResponse(channel)
-                if (!podcastsList.any { it.youtubeID == podcast.youtubeID }) relatedPodcasts.add(podcast)
+                if (!podcastsList.any { it.youtubeID == podcast.youtubeID }) relatedPodcasts.add(
+                    podcast
+                )
             }
-            podcastHeaders.add(PodcastsHeader(sectionItem.snippet.title, relatedPodcasts))
+            if (relatedPodcasts.isNotEmpty()) {
+                podcastHeaders.add(PodcastsHeader(sectionItem.snippet.title, relatedPodcasts))
+            }
             if (index == multipleChannelsList.lastIndex) {
                 if (podcast.id.isNotEmpty()) {
                     newPodcastState.postValue(NewPodcastState.RelatedCutsRetrieved(podcastHeaders))
                 } else {
+
                     newPodcastState.postValue(
                         NewPodcastState.RelatedPodcastsRetrieved(
-                            podcastHeaders
+                            podcastHeaders.filter { it.podcasts.isNotEmpty() }
                         )
                     )
                 }

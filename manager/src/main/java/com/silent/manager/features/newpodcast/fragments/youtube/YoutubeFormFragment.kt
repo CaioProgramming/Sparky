@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.ilustris.ui.extensions.ERROR_COLOR
 import com.ilustris.ui.extensions.showSnackBar
@@ -52,7 +51,17 @@ class YoutubeFormFragment : Fragment() {
         newPodcastViewModel.newPodcastState.observe(viewLifecycleOwner) {
             when (it) {
                 is NewPodcastState.RelatedPodcastsRetrieved -> {
-                    relatedChannelsAdapter.updateHeaders(ArrayList(it.podcastsHeader))
+                    if (it.podcastsHeader.isNotEmpty()) {
+                        relatedChannelsAdapter.updateHeaders(ArrayList(it.podcastsHeader))
+                    } else {
+                        view?.showSnackBar(
+                            "Todos os podcasts foram cadastrados.",
+                            backColor = ContextCompat.getColor(
+                                requireContext(),
+                                ERROR_COLOR
+                            )
+                        )
+                    }
                 }
 
                 NewPodcastState.InvalidPodcast -> {
