@@ -98,7 +98,6 @@ class PodcastViewModel(
 
 
     fun getPodcastData(podcastID: String, video: Video? = null) {
-        clearState()
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val headers = ArrayList<PodcastHeader>()
@@ -183,11 +182,6 @@ class PodcastViewModel(
     private fun possibleLive(hour: Int, liveHour: Int) =
         (liveHour + 1) == hour || (liveHour + 2) == hour || (liveHour + 3 == hour)
 
-    private fun clearState() {
-        podcastState.value = null
-        viewModelState.value = null
-        scheduleState.value = null
-    }
 
     fun searchEpisodesAndCuts(podcast: Podcast, query: String) {
         if (query.isEmpty()) {
