@@ -38,14 +38,12 @@ class LiveViewModel(
         return try {
             val descriptionFormatting =
                 description.substring(description.indexOf("https://youtu.be/"))
-            //val descriptionYoutubeId = descriptionFormatting.subSequence(0, descriptionFormatting.indexOf(" "))
-            val videoId = descriptionFormatting.toString().replace("https://youtu.be/", "")
+            val videoId = descriptionFormatting.replace("https://youtu.be/", "")
             videoId
         } catch (e: Exception) {
             null
         }
     }
-
 
     fun getRelatedVideos(video: Video, podcast: Podcast, media: VideoMedia) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -121,7 +119,6 @@ class LiveViewModel(
                                     )
                                     headers.add(header)
                                 }
-
                             }
                         }
                     } else if (media == VideoMedia.EPISODE) {
@@ -131,17 +128,19 @@ class LiveViewModel(
                                 (podcastCutsRequest.success.data as ArrayList<Video>).filter {
                                     it.description.contains(video.youtubeID)
                                 }
-                            val header = PodcastHeader(
-                                "Cortes deste episódio",
-                                subTitle = "Veja os cortes deste episódio.",
-                                podcast = podcast,
-                                orientation = RecyclerView.HORIZONTAL,
-                                seeMore = false,
-                                highLightColor = podcast.highLightColor,
-                                videos = ArrayList(cuts),
-                                playlistId = podcast.id
-                            )
-                            headers.add(header)
+                            if (cuts.isNotEmpty()) {
+                                val header = PodcastHeader(
+                                    "Cortes deste episódio",
+                                    subTitle = "Veja os cortes deste episódio.",
+                                    podcast = podcast,
+                                    orientation = RecyclerView.HORIZONTAL,
+                                    seeMore = false,
+                                    highLightColor = podcast.highLightColor,
+                                    videos = ArrayList(cuts),
+                                    playlistId = podcast.id
+                                )
+                                headers.add(header)
+                            }
                         }
                     }
                     val videos =
