@@ -30,11 +30,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:pgc_indeterminate="true"
+        app:pgc_indeterminate="false"
         app:pgc_progress="100"
         app:pgc_rimColor="@color/material_red500"
         app:pgc_rimWidth="2dp"
-        app:pgc_showProgress="true"
+        app:pgc_showProgress="false"
         app:pgc_speed="1"
         tools:visibility="visible" />
 

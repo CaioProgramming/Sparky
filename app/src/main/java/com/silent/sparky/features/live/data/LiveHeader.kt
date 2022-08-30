@@ -1,13 +1,12 @@
 package com.silent.sparky.features.live.data
 
 import com.silent.core.podcast.Podcast
+import com.silent.core.videos.Video
 import java.io.Serializable
 
 data class LiveHeader(
     val podcast: Podcast,
-    var title: String,
-    var description: String,
-    var videoID: String,
+    var video: Video,
     val type: VideoMedia
 ) : Serializable {
 

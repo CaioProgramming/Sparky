@@ -20,6 +20,7 @@ import com.ilustris.animations.slideInBottom
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
+import com.silent.core.podcast.HeaderType
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastHeader
 import com.silent.core.utils.ImageUtils
@@ -77,7 +78,7 @@ class LiveFragment : Fragment() {
             live = args.liveObject
             initializePlayer(
                 Color.parseColor(live.podcast.highLightColor),
-                live.videoID,
+                live.video.id,
                 ImageUtils.getNotificationIcon(live.podcast.notificationIcon).drawable,
                 args.liveObject.isLiveVideo
             )
@@ -90,8 +91,8 @@ class LiveFragment : Fragment() {
     }
 
     private fun PodcastLiveFragmentBinding.setupVideoInfo(liveHeader: LiveHeader) {
-        liveTitle.text = liveHeader.title
-        liveDescription.text = liveHeader.description
+        liveTitle.text = liveHeader.video.title
+        liveDescription.text = liveHeader.video.description
         collapseButton.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -117,11 +118,14 @@ class LiveFragment : Fragment() {
     private fun PodcastLiveFragmentBinding.setupRelatedVideos(header: List<PodcastHeader>) {
         relatedVideos.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        relatedVideos.adapter = VideoHeaderAdapter(ArrayList(header),
+        relatedVideos.adapter = VideoHeaderAdapter(
+            ArrayList(header),
             headerSelected = { it.playlistId?.let { id -> openPodcast(id) } },
-            onVideoClick = { video, podcast ->
+            onVideoClick = { video, podcast, header ->
+                val type =
+                    if (header.type == HeaderType.VIDEOS) VideoMedia.EPISODE else VideoMedia.CUT
                 startLoading()
-                loadVideo(video, podcast)
+                loadVideo(video, podcast, type)
                 shareButton.setOnClickListener {
                     val message = getShareMessage(podcast.name, args.liveObject.type, video.id)
                     val sendIntent = Intent()
@@ -130,11 +134,10 @@ class LiveFragment : Fragment() {
                     sendIntent.type = "text/plain"
                     startActivity(sendIntent)
                 }
-                relatedVideos.smoothScrollToPosition(0)
             }, selectPodcast = { openPodcast(it.id) })
         relatedVideos.slideInBottom()
         liveViewModel.formatCoHostName(
-            args.liveObject.title,
+            args.liveObject.video.title,
             args.liveObject.podcast.highLightColor
         )
         stopLoading()
@@ -170,7 +173,7 @@ class LiveFragment : Fragment() {
         shareButton.imageTintList = ColorStateList.valueOf(Color.parseColor(podcast.highLightColor))
         shareButton.setOnClickListener {
             val message =
-                getShareMessage(podcast.name, args.liveObject.type, args.liveObject.videoID)
+                getShareMessage(podcast.name, args.liveObject.type, args.liveObject.video.youtubeID)
             val sendIntent = Intent()
             sendIntent.action = Intent.ACTION_SEND
             sendIntent.putExtra(Intent.EXTRA_TEXT, message)
@@ -192,10 +195,9 @@ class LiveFragment : Fragment() {
             }
         }
         liveViewModel.getRelatedVideos(
-            args.liveObject.videoID,
+            args.liveObject.video,
             podcast,
-            args.liveObject.type,
-            args.liveObject.title
+            args.liveObject.type
         )
     }
 
@@ -208,11 +210,15 @@ class LiveFragment : Fragment() {
         }
     }
 
-    private fun loadVideo(video: Video, podcast: Podcast) {
-        live.title = video.title
-        live.description = video.description
+    private fun loadVideo(
+        video: Video,
+        podcast: Podcast,
+        media: VideoMedia = args.liveObject.type
+    ) {
+        live.video.title = video.title
+        live.video.description = video.description
         liveYouTubePlayer?.loadVideo(video.id, 0f)
-        liveViewModel.getRelatedVideos(video.id, podcast, args.liveObject.type, video.title)
+        liveViewModel.getRelatedVideos(video, podcast, media)
         podcastLiveFragmentBinding?.setupVideoInfo(live)
     }
 

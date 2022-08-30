@@ -32,7 +32,7 @@ class VideoHeaderAdapter(
     val headerSelected: (PodcastHeader) -> Unit,
     val iconClick: ((String) -> Unit)? = null,
     val selectPodcast: ((Podcast) -> Unit)? = null,
-    val onVideoClick: (Video, Podcast) -> Unit
+    val onVideoClick: (Video, Podcast, PodcastHeader) -> Unit
 ) : RecyclerView.Adapter<VideoHeaderAdapter.HeaderViewHolder>() {
 
     inner class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -41,7 +41,7 @@ class VideoHeaderAdapter(
             VideoGroupLayoutBinding.bind(itemView).run {
                 val section = programSections[bindingAdapterPosition]
                 setupHeader(section)
-                if (section.type == HeaderType.VIDEOS) {
+                if (section.type == HeaderType.VIDEOS || section.type == HeaderType.CUTS) {
                     val layoutManager =
                         LinearLayoutManager(itemView.context, section.orientation, false)
                     val maxLimit = if (section.videos!!.size > 20) 20 else section.videos!!.size
@@ -50,7 +50,7 @@ class VideoHeaderAdapter(
                         section.highLightColor
                     ) { video ->
                         section.podcast?.let {
-                            onVideoClick(video, it)
+                            onVideoClick(video, it, section)
                         }
                     }
                     videosRecycler.layoutManager = layoutManager
@@ -73,7 +73,12 @@ class VideoHeaderAdapter(
                 programIcon.borderColor = Color.parseColor(it)
             }
             groupTitle.text = section.title
-            groupSubtitle.text = section.subTitle
+            section.subTitle?.let {
+                groupSubtitle.text = it
+                groupSubtitle.visible()
+
+            }
+
             groupTitle.setOnClickListener {
                 headerSelected(section)
             }
