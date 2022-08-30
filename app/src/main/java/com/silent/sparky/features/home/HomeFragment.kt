@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
+import com.silent.core.podcast.HeaderType
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastHeader
 import com.silent.core.utils.WebUtils
@@ -257,7 +258,7 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                     header.playlistId?.let { id -> openPodcast(id) }
                 }, ::openChannel, selectPodcast = {
                     openPodcast(it.id)
-                }, { video, podcast ->
+                }, { video, podcast, header ->
                     navigateToLive(podcast, video, false)
                 })
             podcastsResumeRecycler.layoutManager =
@@ -266,14 +267,24 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
         }
     }
 
-    private fun navigateToLive(podcast: Podcast, video: Video, isLive: Boolean) {
+    private fun navigateToLive(
+        podcast: Podcast,
+        video: Video,
+        isLive: Boolean,
+        type: HeaderType = HeaderType.VIDEOS
+    ) {
+        val mediaType = if (isLive) VideoMedia.LIVE else {
+            when (type) {
+                HeaderType.VIDEOS -> VideoMedia.EPISODE
+                HeaderType.CUTS -> VideoMedia.CUT
+                else -> VideoMedia.EPISODE
+            }
+        }
         val liveHeader =
             LiveHeader(
                 podcast,
-                video.title,
-                video.description,
-                video.youtubeID,
-                if (isLive) VideoMedia.LIVE else VideoMedia.EPISODE
+                video,
+                mediaType
             )
         val bundle = bundleOf("live_object" to liveHeader)
         findNavController().navigate(R.id.action_navigation_home_to_liveFragment, bundle)

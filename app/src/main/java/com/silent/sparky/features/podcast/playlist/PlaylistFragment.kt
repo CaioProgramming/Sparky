@@ -37,7 +37,7 @@ class PlaylistFragment: Fragment() {
     private fun navigateToLive(podcast: Podcast, video: Video) {
         val type =
             if (args.header.title!!.contains("Cortes")) VideoMedia.CUT else VideoMedia.EPISODE
-        val liveHeader = LiveHeader(podcast, video.title, video.description, video.youtubeID, type)
+        val liveHeader = LiveHeader(podcast, video, type)
         val bundle = bundleOf("live_object" to liveHeader)
         findNavController().navigate(R.id.action_playlistFragment_to_liveFragment, bundle)
     }

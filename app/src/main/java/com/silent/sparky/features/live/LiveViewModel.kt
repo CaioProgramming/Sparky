@@ -34,7 +34,20 @@ class LiveViewModel(
     val liveState = MutableLiveData<LiveState>()
     val videoTitleState = MutableLiveData<VideoTitleState>()
 
-    fun getRelatedVideos(videoId: String, podcast: Podcast, media: VideoMedia, videoTitle: String) {
+    private fun getRelatedYoutubeEpId(description: String): String? {
+        return try {
+            val descriptionFormatting =
+                description.substring(description.indexOf("https://youtu.be/"))
+            //val descriptionYoutubeId = descriptionFormatting.subSequence(0, descriptionFormatting.indexOf(" "))
+            val videoId = descriptionFormatting.toString().replace("https://youtu.be/", "")
+            videoId
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+
+    fun getRelatedVideos(video: Video, podcast: Podcast, media: VideoMedia) {
         viewModelScope.launch(Dispatchers.IO) {
             val title = when (media) {
                 VideoMedia.LIVE,
@@ -42,27 +55,37 @@ class LiveViewModel(
                 VideoMedia.CUT -> "Mais cortes do ${podcast.name}"
             }
             val headers = ArrayList<PodcastHeader>()
-            val podcastsRequest = podcastService.getAllData()
-            if (podcastsRequest.isSuccess) {
-                val podcasts = podcastsRequest.success.data as podcasts
-                val titleFiltered =
-                    podcasts.filter { videoTitle.contains(it.name, true) && it.id != podcast.id }
-                if (titleFiltered.isNotEmpty()) {
-                    val header = PodcastHeader(
-                        "Podcasts nesse episódio",
-                        orientation = RecyclerView.HORIZONTAL,
-                        seeMore = false,
-                        type = HeaderType.PODCASTS,
-                        podcasts = titleFiltered,
-                        showDivider = true,
-                    )
-                    headers.add(header)
-                    titleFiltered.forEach {
-                        val formattedTitle = videoTitle.lowercase().replace(
-                            it.name.lowercase(),
-                            "<font color= '${it.highLightColor}'>${it.name}</font>"
+            if (video.title.contains("@", true)) {
+                val podcastsRequest = podcastService.getAllData()
+                if (podcastsRequest.isSuccess) {
+                    val podcasts = podcastsRequest.success.data as podcasts
+                    val titleFiltered = podcasts.filter {
+                        video.title.contains(
+                            it.name,
+                            true
+                        ) && it.id != podcast.id
+                    }
+                    if (titleFiltered.isNotEmpty()) {
+                        val header = PodcastHeader(
+                            "Podcasts nesse episódio",
+                            orientation = RecyclerView.HORIZONTAL,
+                            seeMore = false,
+                            type = HeaderType.PODCASTS,
+                            podcasts = titleFiltered,
+                            showDivider = true,
                         )
-                        videoTitleState.postValue(VideoTitleState.UpdateTitleStyle(formattedTitle.uppercase()))
+                        headers.add(header)
+                        titleFiltered.forEach {
+                            val formattedTitle = video.title.lowercase().replace(
+                                it.name.lowercase(),
+                                "<font color= '${it.highLightColor}'>${it.name}</font>"
+                            )
+                            videoTitleState.postValue(
+                                VideoTitleState.UpdateTitleStyle(
+                                    formattedTitle.uppercase()
+                                )
+                            )
+                        }
                     }
                 }
             }
@@ -74,8 +97,55 @@ class LiveViewModel(
             when (videosRequest) {
                 is ServiceResult.Error -> doNothing()
                 is ServiceResult.Success -> {
+                    if (media == VideoMedia.CUT) {
+                        getRelatedYoutubeEpId(video.description)?.let { videoId ->
+                            val podcastVideosRequest = service.getPodcastVideos(podcast.id)
+                            if (podcastVideosRequest.isSuccess) {
+                                val video =
+                                    (podcastVideosRequest.success.data as ArrayList<Video>).find {
+                                        videoId.contains(
+                                            it.youtubeID,
+                                            true
+                                        )
+                                    }
+                                video?.let {
+                                    val header = PodcastHeader(
+                                        "Episódio desse corte",
+                                        subTitle = "Veja o episódio completo.",
+                                        podcast = podcast,
+                                        orientation = RecyclerView.HORIZONTAL,
+                                        seeMore = false,
+                                        highLightColor = podcast.highLightColor,
+                                        videos = ArrayList(listOf(it)),
+                                        playlistId = podcast.id
+                                    )
+                                    headers.add(header)
+                                }
+
+                            }
+                        }
+                    } else if (media == VideoMedia.EPISODE) {
+                        val podcastCutsRequest = cutService.getPodcastCuts(podcast.id)
+                        if (podcastCutsRequest.isSuccess) {
+                            val cuts =
+                                (podcastCutsRequest.success.data as ArrayList<Video>).filter {
+                                    it.description.contains(video.youtubeID)
+                                }
+                            val header = PodcastHeader(
+                                "Cortes deste episódio",
+                                subTitle = "Veja os cortes deste episódio.",
+                                podcast = podcast,
+                                orientation = RecyclerView.HORIZONTAL,
+                                seeMore = false,
+                                highLightColor = podcast.highLightColor,
+                                videos = ArrayList(cuts),
+                                playlistId = podcast.id
+                            )
+                            headers.add(header)
+                        }
+                    }
                     val videos =
-                        ArrayList((videosRequest.data as ArrayList<Video>).filter { it.id != videoId }
+                        ArrayList((videosRequest.data as ArrayList<Video>).filter { it.id != video.id }
                             .sortedByDescending { it.publishedAt }.subList(0, 20))
                     val header = PodcastHeader(
                         title,
@@ -91,8 +161,6 @@ class LiveViewModel(
                 }
             }
         }
-
-
     }
 
     fun formatCoHostName(videoTitle: String, highlightColor: String) {

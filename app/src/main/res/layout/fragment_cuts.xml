@@ -20,11 +20,15 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:scrimAnimationDuration="500">
 
+
             <LinearLayout
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="top"
                 android:layout_marginBottom="?attr/actionBarSize"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingVertical="@dimen/padding_big_24"
+                android:layout_width="match_parent"
+                app:layout_collapseMode="pin">
 
 
                 <TextView
@@ -32,48 +36,53 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/kaushan_script"
-                    android:gravity="center"
-                    android:paddingHorizontal="@dimen/padding_default_16dp"
                     android:text="@string/title_cuts"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/Ilustris.Title"
+                    android:paddingHorizontal="@dimen/padding_default_16dp"
+                    android:textAppearance="@style/TextAppearance.Material3.HeadlineLarge"
+                    android:textColor="@color/md_white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:paddingHorizontal="@dimen/padding_default_16dp"
                     android:id="@+id/cuts_subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
                     app:layout_constraintTop_toBottomOf="@id/cuts_title"
-                    tools:text="100 resultados" />
-
-
-            </LinearLayout>
-
-
-            <androidx.appcompat.widget.Toolbar
-                android:layout_gravity="bottom"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin">
+                    android:text="Todos os cortes da família flow." />
 
                 <androidx.appcompat.widget.SearchView
                     android:id="@+id/cuts_search"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/padding_default_16dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="bottom"
-
-                    android:layout_marginHorizontal="@dimen/margin_default_10dp"
+                    android:layout_marginVertical="?attr/actionBarSize"
+                    app:layout_collapseMode="parallax"
                     android:background="@drawable/input_round_retangle"
                     android:backgroundTint="@color/material_grey900"
                     app:iconifiedByDefault="false"
                     app:queryBackground="@color/transparent"
                     app:queryHint="Pesquise por cortes..." />
 
-            </androidx.appcompat.widget.Toolbar>
+            </LinearLayout>
 
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_gravity="bottom" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/cuts_podcasts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@drawable/bottom_line"
+                android:backgroundTint="@color/material_grey900"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/podcast_icon_layout" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

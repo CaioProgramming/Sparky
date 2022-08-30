@@ -228,7 +228,8 @@ class HomeViewModel(
             playlistId = playlistID,
             orientation = RecyclerView.HORIZONTAL,
             seeMore = true,
-            podcast = podcast
+            podcast = podcast,
+            type = HeaderType.VIDEOS
         )
 
     }

@@ -26,5 +26,5 @@ data class PodcastHeader(
     ): Serializable
 
 enum class HeaderType {
-    VIDEOS, PODCASTS
+    VIDEOS, PODCASTS, CUTS
 }

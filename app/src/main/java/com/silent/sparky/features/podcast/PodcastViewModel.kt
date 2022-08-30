@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.silent.core.firebase.FirebaseService
+import com.silent.core.podcast.HeaderType
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastHeader
 import com.silent.core.podcast.PodcastService
@@ -63,7 +64,8 @@ class PodcastViewModel(
         orientation: Int,
         highlightColor: String,
         subtitle: String,
-        podcast: Podcast
+        podcast: Podcast,
+        type: HeaderType
     ) = PodcastHeader(
         title = title,
         playlistId = playlistId,
@@ -72,7 +74,7 @@ class PodcastViewModel(
         highLightColor = highlightColor,
         subTitle = subtitle,
         seeMore = true,
-        podcast = podcast
+        podcast = podcast,
     )
 
     fun favoritePodcast(podcastID: String, isFavorite: Boolean) {
@@ -117,7 +119,8 @@ class PodcastViewModel(
                             if (cuts.isEmpty()) RecyclerView.VERTICAL else RecyclerView.HORIZONTAL,
                             podcast.highLightColor,
                             "${uploads.size} episódios disponíveis.",
-                            podcast
+                            podcast,
+                            HeaderType.VIDEOS
                         )
                     )
                 }
@@ -131,7 +134,8 @@ class PodcastViewModel(
                             RecyclerView.VERTICAL,
                             podcast.highLightColor,
                             "${cuts.size} cortes disponíveis.",
-                            podcast
+                            podcast,
+                            HeaderType.CUTS
                         )
                     )
                 }
@@ -208,7 +212,8 @@ class PodcastViewModel(
                             RecyclerView.VERTICAL,
                             podcast.highLightColor,
                             "${queryVideos.size} resultados.",
-                            podcast
+                            podcast,
+                            HeaderType.VIDEOS
                         )
                     )
                 }
@@ -231,7 +236,8 @@ class PodcastViewModel(
                             RecyclerView.VERTICAL,
                             podcast.highLightColor,
                             "${queryCuts.size} resultados.",
-                            podcast
+                            podcast,
+                            HeaderType.CUTS
                         )
                     )
                 }

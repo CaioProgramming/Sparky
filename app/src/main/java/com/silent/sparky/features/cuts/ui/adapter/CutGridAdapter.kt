@@ -28,10 +28,8 @@ class CutGridAdapter(val cuts: ArrayList<Video>, val onSelectVideo: (Video) -> U
                     .error(cut.podcast?.iconURL)
                     .into(videoThumb)
                 cut.podcast?.let {
-                    Glide.with(itemView.context).load(it.iconURL).into(podcastIcon)
                     val highlightColor = Color.parseColor(it.highLightColor)
                     videoCard.strokeColor = highlightColor
-                    podcastIcon.borderColor = highlightColor
                 }
                 root.fadeIn()
             }
@@ -48,10 +46,8 @@ class CutGridAdapter(val cuts: ArrayList<Video>, val onSelectVideo: (Video) -> U
                     .error(cut.podcast?.iconURL)
                     .into(videoThumb)
                 cut.podcast?.let {
-                    Glide.with(itemView.context).load(it.iconURL).into(podcastIcon)
                     val highlightColor = Color.parseColor(it.highLightColor)
                     videoCard.strokeColor = highlightColor
-                    podcastIcon.borderColor = highlightColor
                 }
                 root.fadeIn()
             }
@@ -68,10 +64,8 @@ class CutGridAdapter(val cuts: ArrayList<Video>, val onSelectVideo: (Video) -> U
                     .error(cut.podcast?.iconURL)
                     .into(videoThumb)
                 cut.podcast?.let {
-                    Glide.with(itemView.context).load(it.iconURL).into(podcastIcon)
                     val highlightColor = Color.parseColor(it.highLightColor)
                     videoCard.strokeColor = highlightColor
-                    podcastIcon.borderColor = highlightColor
                 }
                 root.fadeIn()
             }

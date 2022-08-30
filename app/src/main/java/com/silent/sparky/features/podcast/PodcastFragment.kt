@@ -22,6 +22,7 @@ import com.silent.core.component.GroupType
 import com.silent.core.component.HostGroup
 import com.silent.core.component.HostGroupAdapter
 import com.silent.core.component.showError
+import com.silent.core.podcast.HeaderType
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastHeader
 import com.silent.core.utils.ImageUtils
@@ -162,14 +163,24 @@ class PodcastFragment : Fragment() {
         }
     }
 
-    private fun navigateToLive(podcast: Podcast, video: Video, isLive: Boolean) {
+    private fun navigateToLive(
+        podcast: Podcast,
+        video: Video,
+        isLive: Boolean,
+        type: HeaderType = HeaderType.VIDEOS
+    ) {
+        val mediaType = if (isLive) VideoMedia.LIVE else {
+            when (type) {
+                HeaderType.VIDEOS -> VideoMedia.EPISODE
+                HeaderType.CUTS -> VideoMedia.CUT
+                else -> VideoMedia.EPISODE
+            }
+        }
         val liveHeader =
             LiveHeader(
                 podcast,
-                video.title,
-                video.description,
-                video.youtubeID,
-                if (isLive) VideoMedia.LIVE else VideoMedia.EPISODE
+                video,
+                mediaType
             )
         val bundle = bundleOf("live_object" to liveHeader)
         findNavController().navigate(R.id.action_podcastFragment_to_liveFragment, bundle)
@@ -241,8 +252,8 @@ class PodcastFragment : Fragment() {
 
     private fun setupHeaders(headers: ArrayList<PodcastHeader>) {
         podcastFragmentBinding?.channelVideos?.adapter =
-            VideoHeaderAdapter(headers, ::onSelectHeader, onVideoClick = { video, podcast ->
-                navigateToLive(podcast, video, false)
+            VideoHeaderAdapter(headers, ::onSelectHeader, onVideoClick = { video, podcast, header ->
+                navigateToLive(podcast, video, false, header.type)
             })
     }
 
