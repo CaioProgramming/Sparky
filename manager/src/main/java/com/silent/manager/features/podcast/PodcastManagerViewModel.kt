@@ -116,7 +116,7 @@ class PodcastManagerViewModel(
             val videos = videoService.getPodcastVideos(podcast.id) as ServiceResult.Success
             val lastVideo = (videos.data as ArrayList<Video>).minByOrNull { it.publishedAt }
             lastVideo?.let {
-                updatePlaylist(podcast.uploads, lastVideo.publishedAt.toDate()) {
+                updatePlaylist(podcast.uploads, lastVideo.publishedAt) {
                     saveVideos(podcast.id, false, it)
                 }
             }
@@ -124,7 +124,7 @@ class PodcastManagerViewModel(
             val cuts = cutService.getPodcastCuts(podcast.id) as ServiceResult.Success
             val lastCut = (cuts.data as ArrayList<Video>).minByOrNull { it.publishedAt }
             lastCut?.let {
-                updatePlaylist(podcast.cuts, lastCut.publishedAt.toDate()) {
+                updatePlaylist(podcast.cuts, lastCut.publishedAt) {
                     saveVideos(podcast.id, true, it)
                 }
             }

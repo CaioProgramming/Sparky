@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.silent.core.podcast.Podcast
-import com.silent.core.videos.Video
+import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.silent.sparky.R
 import com.silent.sparky.features.home.HomeActivity
 
@@ -25,22 +25,23 @@ class NotificationActivity : AppCompatActivity() {
         parseNotification(::redirectNotification)
     }
 
-    private fun parseNotification(parseCallback: (Podcast?, Video?) -> Unit) {
+    private fun parseNotification(parseCallback: (Podcast?) -> Unit) {
         Log.i(
             javaClass.simpleName,
             "validatePush: \n podcastObject -> ${podcastExtra}\nVideoObject -> $videoExtra"
         )
         val podcast: Podcast? = podcastExtra?.let { Gson().fromJson(it, Podcast::class.java) }
-        val video: Video? = videoExtra?.let { Gson().fromJson(videoExtra, Video::class.java) }
-        parseCallback(podcast, video)
+        parseCallback(podcast)
     }
 
-    private fun redirectNotification(podcast: Podcast?, video: Video?) {
+    private fun redirectNotification(podcast: Podcast?) {
         val homeIntent = Intent(this, HomeActivity::class.java).apply {
             putExtra("podcast", podcast)
-            putExtra("video", video)
+            putExtra("video", videoExtra)
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
-        startActivity(homeIntent)
+        delayedFunction(2000) {
+            startActivity(homeIntent)
+        }
     }
 }

@@ -15,6 +15,7 @@
         app:navGraph="@navigation/mobile_navigation" />
 
     <View
+        android:id="@+id/gradient_fade"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/faded_gradient_navigation" />

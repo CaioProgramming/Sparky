@@ -102,6 +102,7 @@ class CutsViewModel(
             } catch (e: Exception) {
                 e.printStackTrace()
                 cutsState.postValue(CutsState.CutsError)
+
             }
         }
     }

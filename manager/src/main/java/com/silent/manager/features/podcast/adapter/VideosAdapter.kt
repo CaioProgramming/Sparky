@@ -37,7 +37,7 @@ class VideosAdapter(
                 title.text = video.title
                 try {
                     publishDate.text =
-                        video.publishedAt.toDate().format(DateFormats.DD_OF_MM_FROM_YYYY)
+                        video.publishedAt.format(DateFormats.DD_OF_MM_FROM_YYYY)
                     publishDate.visible()
                 } catch (e: Exception) {
                     publishDate.gone()
