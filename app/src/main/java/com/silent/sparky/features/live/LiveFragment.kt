@@ -2,6 +2,7 @@ package com.silent.sparky.features.live
 
 import android.animation.ValueAnimator
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -16,7 +18,10 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.facebook.shimmer.Shimmer
 import com.ilustris.animations.slideInBottom
+import com.ilustris.ui.extensions.gone
+import com.ilustris.ui.extensions.visible
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
@@ -30,9 +35,11 @@ import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.silent.sparky.R
 import com.silent.sparky.databinding.PodcastLiveFragmentBinding
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
+import com.silent.sparky.features.home.viewmodel.MainActViewModel
 import com.silent.sparky.features.live.components.SparkyPlayerController
 import com.silent.sparky.features.live.data.LiveHeader
 import com.silent.sparky.features.live.data.VideoMedia
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.NumberFormat
 
@@ -44,6 +51,7 @@ class LiveFragment : Fragment() {
     private var podcastLiveFragmentBinding: PodcastLiveFragmentBinding? = null
     private val args by navArgs<LiveFragmentArgs>()
     private val liveViewModel: LiveViewModel by viewModel()
+    private val mainActViewModel: MainActViewModel by sharedViewModel()
     private lateinit var live: LiveHeader
 
     override fun onCreateView(
@@ -89,6 +97,7 @@ class LiveFragment : Fragment() {
             }
         }
     }
+
 
     private fun PodcastLiveFragmentBinding.setupVideoInfo(liveHeader: LiveHeader) {
         liveTitle.text = liveHeader.video.title
@@ -149,6 +158,16 @@ class LiveFragment : Fragment() {
     }
 
     private fun PodcastLiveFragmentBinding.setupPodcast(podcast: Podcast) {
+        val shimmerBuilder = Shimmer.ColorHighlightBuilder()
+            .setBaseColor(ContextCompat.getColor(root.context, R.color.md_grey900))
+            .setHighlightColor(Color.parseColor(podcast.highLightColor))
+            .setDuration(1500)
+            .setIntensity(0.4f)
+            .setDropoff(0.9f)
+            .setBaseAlpha(0.3f)
+            .setHighlightAlpha(0.5f)
+        val shimmer = shimmerBuilder.build()
+        liveShimmer.setShimmer(shimmer)
         podcastName.text = podcast.name
         Glide.with(requireContext()).load(podcast.iconURL).into(podcastIcon)
         podcastName.setOnClickListener {
@@ -241,13 +260,56 @@ class LiveFragment : Fragment() {
                     podcastIcon,
                     videoId,
                     isLive
-                )
+                ) { isFullScreen ->
+                    enterFullScreen(isFullScreen)
+                }
                 youTubePlayer.addListener(customplayerUiController)
             }
         }
-        val options: IFramePlayerOptions = IFramePlayerOptions.Builder()
-            .controls(0).build()
+        val options: IFramePlayerOptions = IFramePlayerOptions.Builder().controls(0).build()
         livePlayer.initialize(listener, false, options)
+        livePlayer.enableBackgroundPlayback(true)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        podcastLiveFragmentBinding?.livePlayer?.release()
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    }
+
+    private fun PodcastLiveFragmentBinding.enterFullScreen(isFullScreen: Boolean) {
+        val orientation =
+            if (isFullScreen) ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE else ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        requireActivity().requestedOrientation = orientation
+        if (isFullScreen) {
+            liveCard.strokeColor = Color.TRANSPARENT
+            liveTop.gone()
+            liveBottom.gone()
+            liveCard.layoutParams = liveCard.layoutParams.apply {
+                width = ViewGroup.LayoutParams.MATCH_PARENT
+                height = ViewGroup.LayoutParams.MATCH_PARENT
+            }
+            livePlayer.layoutParams = livePlayer.layoutParams.apply {
+                width = ViewGroup.LayoutParams.MATCH_PARENT
+                height = ViewGroup.LayoutParams.MATCH_PARENT
+            }
+        } else {
+            liveCard.strokeColor = requireContext().getColor(R.color.md_grey900)
+            liveCard.layoutParams = liveCard.layoutParams.apply {
+                width =
+                    requireContext().resources.getDimensionPixelOffset(R.dimen.player_card_portrait_width)
+                height = ViewGroup.LayoutParams.WRAP_CONTENT
+            }
+            livePlayer.layoutParams = livePlayer.layoutParams.apply {
+                width =
+                    requireContext().resources.getDimensionPixelOffset(R.dimen.player_portrait_width)
+                height =
+                    requireContext().resources.getDimensionPixelOffset(R.dimen.player_portrait_height)
+            }
+            liveTop.visible()
+            liveBottom.visible()
+        }
+        mainActViewModel.updateState(MainActViewModel.MainActState.EnteredFullScreen(isFullScreen))
     }
 
 }

@@ -213,14 +213,16 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
         }
         mainActViewModel.actState.observe(viewLifecycleOwner) {
             when (it) {
-                is MainActViewModel.MainActState.NavigateToPodcast -> {
-                    openPodcast(it.podcastId, it.liveVideo)
-                    mainActViewModel.notificationOpen()
-                }
                 is MainActViewModel.MainActState.LoginSuccessState -> {
                     homeViewModel.getHome()
                 }
                 else -> {}
+            }
+        }
+
+        mainActViewModel.notificationState.observe(viewLifecycleOwner) {
+            if (it is MainActViewModel.NotificationState.NavigateToPodcastPush) {
+                openPodcast(it.podcastId, it.liveVideo)
             }
         }
     }

@@ -40,7 +40,7 @@ class VideosAdapter(
                     /*val date = LocalDate.parse(video.publishedAt, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
                             .format(DateTimeFormatter.ofPattern("YYYY-MM-DDThh:mm:ss.sZ"))*/
                     publishDate.text =
-                        video.publishedAt.toDate().format(DateFormats.DD_OF_MM_FROM_YYYY)
+                        video.publishedAt.format(DateFormats.DD_OF_MM_FROM_YYYY)
                     publishDate.visible()
                 } catch (e: Exception) {
                     publishDate.gone()

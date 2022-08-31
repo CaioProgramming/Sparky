@@ -30,9 +30,11 @@ class SparkyPlayerController(
     private val highlightColor: Int,
     private val podcastIcon: Int = R.drawable.ic_iconmonstr_connection_1,
     private val videoId: String,
-    private val isLive: Boolean
+    private val isLive: Boolean,
+    private val requestFullScreen: (Boolean) -> Unit
 ) : AbstractYouTubePlayerListener() {
     private var isPlaying = false
+    private var isFullScreen = false
     private val binding = CustomPlayerLayoutBinding.bind(playerUI.findViewById(R.id.player_root))
     var videoDuration = 0f
 
@@ -48,13 +50,26 @@ class SparkyPlayerController(
         }
         root.setOnClickListener {
             if (!playerBottom.isVisible) {
-                playerBottom.fadeIn()
+                showUI()
             }
-            hideBottom()
+            hideUI()
         }
-        playerBottom.gone()
         playPauseButton.setOnClickListener {
             if (isPlaying) youTubePlayer.pause() else youTubePlayer.play()
+        }
+        enterFullScreen.setOnClickListener {
+            isFullScreen = !isFullScreen
+            requestFullScreen(isFullScreen)
+            val icon =
+                if (isFullScreen) R.drawable.ic_iconmonstr_exit_fullscreen_11 else R.drawable.ic_iconmonstr_enter_fullscreen_10
+            enterFullScreen.setImageResource(icon)
+            root.layoutParams = root.layoutParams.apply {
+                val newWidth =
+                    if (isFullScreen) ViewGroup.LayoutParams.MATCH_PARENT else root.context.resources.getDimensionPixelOffset(
+                        R.dimen.player_card_portrait_width
+                    )
+                width = newWidth
+            }
         }
         playerSeekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -98,7 +113,7 @@ class SparkyPlayerController(
     private fun CustomPlayerLayoutBinding.showLoading() {
         playerBottom.fadeOut()
         playerLoading.visible()
-        playerLoading.startShimmer()
+        playerLoading.showShimmer(true)
         errorMessage.gone()
         root.setBackgroundColor(Color.BLACK)
     }
@@ -106,11 +121,12 @@ class SparkyPlayerController(
 
     private fun CustomPlayerLayoutBinding.stopLoading() {
         playerLoading.stopShimmer()
+        playerLoading.hideShimmer()
         playerLoading.fadeOut()
         root.setBackgroundResource(R.drawable.faded_gradient)
         videoTime.visible()
         playPauseButton.visible()
-        hideBottom()
+        hideUI()
     }
 
 
@@ -125,12 +141,16 @@ class SparkyPlayerController(
         binding.playerBottom.fadeIn()
     }
 
-    private fun CustomPlayerLayoutBinding.hideBottom() {
+    private fun CustomPlayerLayoutBinding.hideUI() {
         delayedFunction(10000) {
             if (isPlaying) {
                 playerBottom.fadeOut()
             }
         }
+    }
+
+    private fun CustomPlayerLayoutBinding.showUI() {
+        playerBottom.fadeIn()
     }
 
     override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {
@@ -158,7 +178,7 @@ class SparkyPlayerController(
             PlayerConstants.PlayerState.VIDEO_CUED -> {
                 binding.stopLoading()
                 binding.playerBottom.fadeIn()
-                binding.hideBottom()
+                binding.hideUI()
             }
         }
     }

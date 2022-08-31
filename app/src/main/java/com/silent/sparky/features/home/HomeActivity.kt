@@ -13,13 +13,15 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.android.gms.common.util.CollectionUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.ilustris.animations.fadeIn
+import com.ilustris.animations.fadeOut
+import com.ilustris.animations.slideInBottom
 import com.ilustris.ui.auth.AuthActivity
 import com.ilustris.ui.extensions.ERROR_COLOR
 import com.ilustris.ui.extensions.WARNING_COLOR
 import com.ilustris.ui.extensions.getView
 import com.ilustris.ui.extensions.showSnackBar
 import com.silent.core.podcast.Podcast
-import com.silent.core.videos.Video
 import com.silent.sparky.BuildConfig
 import com.silent.sparky.R
 import com.silent.sparky.databinding.ActivityHomeBinding
@@ -36,8 +38,14 @@ class HomeActivity : AuthActivity() {
 
     private val mainActViewModel: MainActViewModel by viewModel()
     private lateinit var notificationPermissionRequest: ActivityResultLauncher<String>
-
     var homeBinding: ActivityHomeBinding? = null
+    private val podcastExtra: Podcast? by lazy {
+        intent.extras?.getSerializable("podcast") as Podcast?
+    }
+    private val videoExtra: String? by lazy {
+        intent.extras?.getString("video")
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         notificationPermissionRequest =
@@ -51,14 +59,9 @@ class HomeActivity : AuthActivity() {
             val navView: BottomNavigationView = navView
             val navController = findNavController(R.id.nav_host_fragment_activity_home)
             navView.setupWithNavController(navController)
-            if (mainActViewModel.actState.value is MainActViewModel.MainActState.NotificationOpenedState) {
-                navController.navigate(R.id.navigation_home)
-            }
         }
         observeViewModel()
         mainActViewModel.checkNotifications()
-        val podcastExtra = intent.getSerializableExtra("podcast") as Podcast?
-        val videoExtra = intent.getSerializableExtra("video") as Video?
         mainActViewModel.validatePush(podcastExtra, videoExtra)
         mainActViewModel.checkUser()
     }
@@ -66,7 +69,7 @@ class HomeActivity : AuthActivity() {
 
     private fun observeViewModel() {
         mainActViewModel.actState.observe(this) {
-            when(it) {
+            when (it) {
                 MainActViewModel.MainActState.RequireLoginState -> login()
                 is MainActViewModel.MainActState.RetrieveToken -> {
                     if (BuildConfig.DEBUG) {
@@ -74,6 +77,13 @@ class HomeActivity : AuthActivity() {
                             "FCM Token retrieved ${it.token}",
                             backColor = ContextCompat.getColor(this, WARNING_COLOR)
                         )
+                    }
+                }
+                is MainActViewModel.MainActState.EnteredFullScreen -> {
+                    if (it.isFullScreen) {
+                        homeBinding?.hideBottom()
+                    } else {
+                        homeBinding?.showBottom()
                     }
                 }
                 else -> {}
@@ -84,7 +94,7 @@ class HomeActivity : AuthActivity() {
             when(it) {
                 MainActViewModel.NotificationState.RequestNotification -> {
                     if (Build.VERSION.SDK_INT >= 33) {
-                        notificationPermissionRequest.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        notificationPermissionRequest.launch(Manifest.permission.ACCESS_NOTIFICATION_POLICY)
                     } else {
                         notificationPermissionRequest.launch(android.Manifest.permission.ACCESS_NOTIFICATION_POLICY)
                     }
@@ -93,6 +103,16 @@ class HomeActivity : AuthActivity() {
                 else -> {}
             }
         }
+    }
+
+    private fun ActivityHomeBinding.hideBottom() {
+        navView.fadeOut()
+        gradientFade.fadeOut()
+    }
+
+    private fun ActivityHomeBinding.showBottom() {
+        navView.slideInBottom()
+        gradientFade.fadeIn()
     }
 
     private fun login() {
