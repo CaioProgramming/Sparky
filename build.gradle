@@ -2,8 +2,8 @@
 buildscript {
 
     ext {
-        ext.targetSdk = 32
-        ext.compileSdk = 32
+        ext.targetSdk = 33
+        ext.compileSdk = 33
         ext.minSdk = 26
         ext.kotlin_version = '1.7.10'
         ext.ilustris_version = '2.5.5'

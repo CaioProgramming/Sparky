@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.util.Log
@@ -70,10 +69,9 @@ class SparkyMessagingService : FirebaseMessagingService() {
             val sound = Uri.parse("android.resource://" + packageName + "/" + notification.sound)
             val notificationId = podcast?.getString("name")?.toAlphabetInt() ?: 0
             val flag =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_CANCEL_CURRENT
-            val pendingIntent = PendingIntent.getActivity(this, 0, homeIntent, flag)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else PendingIntent.FLAG_UPDATE_CURRENT
+            val pendingIntent = PendingIntent.getActivity(this, notificationId, homeIntent, flag)
             val channelId = getString(R.string.channel_id)
-            val defaultSoundUri = RingtoneManager.getRingtone(baseContext, sound)
             val iconBitmap: Bitmap? = ImageUtils.getBitmap(notification.icon, baseContext)
             val notificationBuilder = NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(icon.drawable)

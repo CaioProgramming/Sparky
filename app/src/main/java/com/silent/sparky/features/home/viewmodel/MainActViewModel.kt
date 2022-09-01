@@ -36,7 +36,9 @@ class MainActViewModel(
     sealed class NotificationState {
         data class NavigateToPodcastPush(val podcastId: String, val liveVideo: Video?) :
             NotificationState()
-        object RequestNotification : NotificationState()
+
+        object NotificationOpened : NotificationState()
+        data class RequestNotificationPermission(val permission: String) : NotificationState()
         object NotificationGranted : NotificationState()
         object NotificationRevoked : NotificationState()
     }
@@ -60,19 +62,17 @@ class MainActViewModel(
     }
 
     fun checkNotifications() {
-        val permissionStatus = if (Build.VERSION.SDK_INT >= 33) {
-            ContextCompat.checkSelfPermission(
-                getApplication<Application>().applicationContext,
-                Manifest.permission.ACCESS_NOTIFICATION_POLICY
-            ) != PackageManager.PERMISSION_GRANTED
+        val permission = if (Build.VERSION.SDK_INT >= 33) {
+            Manifest.permission.POST_NOTIFICATIONS
         } else {
-            ContextCompat.checkSelfPermission(
-                getApplication<Application>().applicationContext,
-                Manifest.permission.ACCESS_NOTIFICATION_POLICY
-            ) != PackageManager.PERMISSION_GRANTED
+            Manifest.permission.ACCESS_NOTIFICATION_POLICY
         }
+        val permissionStatus = ContextCompat.checkSelfPermission(
+            getApplication<Application>().applicationContext,
+            permission
+        ) != PackageManager.PERMISSION_GRANTED
         if (!permissionStatus) {
-            notificationState.value = NotificationState.RequestNotification
+            notificationState.value = NotificationState.RequestNotificationPermission(permission)
         } else {
             updateNotificationPermission(permissionStatus)
         }
@@ -102,7 +102,7 @@ class MainActViewModel(
     }
 
     fun notificationOpen() {
-        actState.value = MainActState.LoginSuccessState
+        notificationState.value = NotificationState.NotificationOpened
     }
 
     fun checkUser() {

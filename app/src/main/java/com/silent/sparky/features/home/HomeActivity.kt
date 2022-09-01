@@ -1,9 +1,8 @@
 package com.silent.sparky.features.home
 
-import android.Manifest
 import android.app.Activity
-import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -91,15 +90,10 @@ class HomeActivity : AuthActivity() {
         }
 
         mainActViewModel.notificationState.observe(this) {
-            when(it) {
-                MainActViewModel.NotificationState.RequestNotification -> {
-                    if (Build.VERSION.SDK_INT >= 33) {
-                        notificationPermissionRequest.launch(Manifest.permission.ACCESS_NOTIFICATION_POLICY)
-                    } else {
-                        notificationPermissionRequest.launch(android.Manifest.permission.ACCESS_NOTIFICATION_POLICY)
-                    }
+            when (it) {
+                is MainActViewModel.NotificationState.RequestNotificationPermission -> {
+                    notificationPermissionRequest.launch(it.permission)
                 }
-
                 else -> {}
             }
         }
@@ -108,11 +102,18 @@ class HomeActivity : AuthActivity() {
     private fun ActivityHomeBinding.hideBottom() {
         navView.fadeOut()
         gradientFade.fadeOut()
+        window.decorView.apply {
+            systemUiVisibility =
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
     }
 
     private fun ActivityHomeBinding.showBottom() {
         navView.slideInBottom()
         gradientFade.fadeIn()
+        window.decorView.apply {
+            systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+        }
     }
 
     private fun login() {

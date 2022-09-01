@@ -40,7 +40,7 @@ class NotificationActivity : AppCompatActivity() {
             putExtra("video", videoExtra)
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
-        delayedFunction(2000) {
+        delayedFunction(1500) {
             startActivity(homeIntent)
         }
     }
