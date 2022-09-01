@@ -67,7 +67,7 @@ class SparkyMessagingService : FirebaseMessagingService() {
                 }
             }
             val sound = Uri.parse("android.resource://" + packageName + "/" + notification.sound)
-            val notificationId = podcast?.getString("name")?.toAlphabetInt() ?: 0
+            val notificationId = podcast?.getString("id")?.toAlphabetInt() ?: 0
             val flag =
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else PendingIntent.FLAG_UPDATE_CURRENT
             val pendingIntent = PendingIntent.getActivity(this, notificationId, homeIntent, flag)

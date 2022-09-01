@@ -4,7 +4,7 @@ private const val alphabet = "abcdefghijklmnopqrstuvwxyz"
 
 fun String.toAlphabetInt(): Int {
     val regex = Regex("[^A-Za-z0-9 ]")
-    var char = this.lowercase().replace(regex, "")
+    val char = this.lowercase().replace(regex, "")
     var code = ""
     char.forEach {
         code += alphabet.indexOf(it, 0, true)

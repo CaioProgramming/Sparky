@@ -61,7 +61,6 @@ class PodcastFragment : Fragment() {
         podcastFragmentBinding = FragmentPodcastBinding.inflate(inflater)
         return podcastFragmentBinding?.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
@@ -99,7 +98,10 @@ class PodcastFragment : Fragment() {
             loading.fadeOut()
             (activity as AppCompatActivity?)?.run {
                 setSupportActionBar(programToolbar)
-                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                supportActionBar?.run {
+                    setHomeAsUpIndicator(R.drawable.ic_round_chevron_left_24)
+                    setDisplayHomeAsUpEnabled(true)
+                }
                 programToolbar.setNavigationOnClickListener {
                     findNavController().popBackStack()
                 }
