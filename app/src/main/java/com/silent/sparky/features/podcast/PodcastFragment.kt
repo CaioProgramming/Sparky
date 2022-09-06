@@ -35,7 +35,6 @@ import com.silent.sparky.databinding.FragmentPodcastBinding
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
 import com.silent.sparky.features.live.data.LiveHeader
 import com.silent.sparky.features.live.data.VideoMedia
-import com.silent.sparky.features.podcast.schedule.TodayLiveDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.NumberFormat
 
@@ -216,19 +215,13 @@ class PodcastFragment : Fragment() {
             when (it) {
                 is PodcastViewModel.ScheduleState.TodayGuestState -> {
                     program?.let { podcast ->
-                        TodayLiveDialog(
-                            requireContext(),
-                            podcast.iconURL,
-                            Color.parseColor(podcast.highLightColor),
-                            it.video
-                        ) { video ->
-                            program?.let { podcast ->
-                                navigateToLive(podcast, video, true)
-                            }
-                        }.buildDialog()
                         podcastFragmentBinding?.run {
                             podcastLiveProgress.indeterminate = true
                             programIcon.setOnClickListener { _ ->
+                                navigateToLive(podcast, it.video, true)
+                            }
+                            liveButton.slideInBottom()
+                            liveButton.setOnClickListener { _ ->
                                 navigateToLive(podcast, it.video, true)
                             }
                         }
