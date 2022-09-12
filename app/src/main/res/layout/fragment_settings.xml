@@ -64,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/padding_default_16dp"
                     android:padding="@dimen/padding_default_16dp"
-                    android:text="Conta Flow"
+                    android:text="@string/link_flow_account"
                     app:icon="@drawable/ic_iconmonstr_connection_1" />
 
             </LinearLayout>
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/kaushan_script"
                 android:padding="@dimen/padding_default_16dp"
-                android:text="Configurações"
+                android:text="@string/settings_button"
                 app:layout_collapseMode="pin" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -105,7 +105,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/padding_default_16dp"
-                android:text="Preferências por podcasts"
+                android:text="@string/podcasts_preferences_settings"
                 android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
                 android:textStyle="bold" />
 
@@ -142,7 +142,7 @@
                 android:background="@drawable/card_shape"
                 app:backgroundTint="@color/material_grey900"
                 android:foreground="?attr/selectableItemBackground"
-                android:text="Desconectar"
+                android:text="@string/disconnect_button"
                 android:textAlignment="center"
                 android:textColor="@color/material_red500" />
 
@@ -152,7 +152,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/padding_default_16dp"
                 android:background="@drawable/card_shape"
-                android:text="Excluir conta"
+                android:text="@string/delete_account"
                 android:foreground="?attr/selectableItemBackground"
                 android:textColor="@color/material_red500"
                 android:textAlignment="center"

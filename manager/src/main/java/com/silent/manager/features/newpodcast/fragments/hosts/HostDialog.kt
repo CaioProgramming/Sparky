@@ -19,7 +19,7 @@ class HostDialog : BottomSheetDialogFragment() {
 
     private lateinit var groupType: GroupType
     lateinit var host: Host
-    lateinit var continueClick: () -> Unit
+    lateinit var continueClick: (Host) -> Unit
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,7 +57,7 @@ class HostDialog : BottomSheetDialogFragment() {
                         MaterialAlertDialogBuilder(requireContext()).setTitle("Atenção")
                             .setMessage("O link que inseriu é inválido, deseja continuar mesmo assim?")
                             .setPositiveButton("Continuar") { i, _ ->
-                                continueClick.invoke()
+                                continueClick.invoke(host)
                                 i.dismiss()
                             }
                             .setNegativeButton("Cancelar") { i, _ ->
@@ -66,7 +66,7 @@ class HostDialog : BottomSheetDialogFragment() {
                             .show()
                     }
                 } else {
-                    continueClick.invoke()
+                    continueClick.invoke(host)
                     dialog?.dismiss()
                 }
             }
@@ -75,7 +75,7 @@ class HostDialog : BottomSheetDialogFragment() {
     }
 
     companion object {
-        fun getInstance(type: GroupType, host: Host, onContinue: () -> Unit): HostDialog {
+        fun getInstance(type: GroupType, host: Host, onContinue: (Host) -> Unit): HostDialog {
             return HostDialog().apply {
                 this.host = host
                 this.continueClick = onContinue

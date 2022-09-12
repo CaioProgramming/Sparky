@@ -59,6 +59,7 @@
 
                         <ImageView
                             android:id="@+id/profile_pic"
+                            android:importantForAccessibility="no"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="?android:colorBackground"
@@ -152,7 +153,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="emblemas"
+                        android:text="@string/badges_subtitle"
                         android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                         android:textColor="@color/md_white" />
@@ -196,6 +197,7 @@
                     android:background="@color/transparent"
                     android:foreground="?attr/selectableItemBackground"
                     android:src="@drawable/ic_iconmonstr_connection_1"
+                    android:contentDescription="@string/link_flow_account"
                     android:tooltipText="@string/link_flow_account"
                     app:tint="@color/material_grey500" />
 
@@ -204,6 +206,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_default_10dp"
+                    android:contentDescription="@string/settings_button"
                     android:background="@color/transparent"
                     android:src="@drawable/zzz_settings"
                     android:foreground="?attr/selectableItemBackground"

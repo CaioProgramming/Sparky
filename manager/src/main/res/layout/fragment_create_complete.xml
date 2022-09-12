@@ -30,7 +30,7 @@
 
     <EditText
         android:id="@+id/podcast_slogan"
-        android:hint="Bordão do podcast"
+        android:hint="@string/podcast_slogan_hint"
         android:textStyle="bold"
         android:gravity="center"
         android:textAlignment="center"
@@ -45,7 +45,7 @@
         android:id="@+id/save_slogan"
         app:layout_constraintTop_toBottomOf="@id/podcast_slogan"
         style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:text="Salvar"
+        android:text="@string/save_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

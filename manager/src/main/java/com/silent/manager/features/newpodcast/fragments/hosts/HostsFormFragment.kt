@@ -7,13 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.ilustris.ui.extensions.ERROR_COLOR
 import com.ilustris.ui.extensions.showSnackBar
 import com.silent.core.component.GroupType
 import com.silent.core.component.HostAdapter
-import com.silent.core.instagram.InstagramUserResponse
 import com.silent.core.podcast.Host
 import com.silent.core.podcast.NEW_HOST
 import com.silent.manager.R
@@ -35,22 +33,12 @@ class HostsFormFragment : Fragment() {
 
     private fun selectHost(host: Host) {
         if (host.name == NEW_HOST) {
-            HostInstagramDialog.getInstance(GroupType.HOSTS, this::confirmUser)
-                .show(childFragmentManager, "INSTAGRAMDIALOG")
+            HostDialog.getInstance(GroupType.HOSTS, Host()) {
+                newPodcastViewModel.updateHosts(it)
+            }.show(childFragmentManager, "CONFIRMHOST")
         } else {
             newPodcastViewModel.deleteHost(host)
         }
-    }
-
-    private fun confirmUser(instagramUser: InstagramUserResponse) {
-        val host = Host(
-            instagramUser.full_name,
-            instagramUser.profile_pic_url,
-            instagramUser.biography
-        )
-        HostDialog.getInstance(GroupType.HOSTS, host) {
-            newPodcastViewModel.updateHosts(host)
-        }.show(childFragmentManager, "CONFIRMHOST")
     }
 
     override fun onCreateView(

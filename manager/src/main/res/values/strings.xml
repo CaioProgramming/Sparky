@@ -2,4 +2,22 @@
     <string name="new_podcast_button">adicionar novo podcast</string>
     <string name="host_hint">Lembre-se que este é o @ do apresentador no instagram</string>
     <string name="guest_hint">Lembre-se que este é o @ do convidado no instagram</string>
+    <string name="select_cut_channel_title">Escolha o canal de cortes</string>
+    <string name="podcast_slogan_hint">Bordão do podcast</string>
+    <string name="continue_button">Continuar</string>
+    <string name="live_time_button">Horário das lives</string>
+    <string name="update_button">Atualizar</string>
+    <string name="delete_button">Excluir</string>
+    <string name="podcast_name_hint">Nome podcast</string>
+    <string name="managers_title">Administradores</string>
+    <string name="podcasts_manage_title">Podcasts</string>
+    <string name="flow_channels">Canais dos estúdios flow</string>
+    <string name="highlight_color_title">Escolha a cor de destaque</string>
+    <string name="confirm_host_title">Você tem certeza que deseja adicionar esse host?</string>
+    <string name="social_link_hint">link social(instagram/youtube)...</string>
+    <string name="host_name_hint">Nome do host</string>
+    <string name="host_description">Breve descrição</string>
+    <string name="confirm_podcast_title">Você tem certeza que deseja adicionar esse podcast?</string>
+    <string name="updating_podcasts_title">Atualizando podcasts</string>
+    <string name="notification_icon_description">notification icon</string>
 </resources>

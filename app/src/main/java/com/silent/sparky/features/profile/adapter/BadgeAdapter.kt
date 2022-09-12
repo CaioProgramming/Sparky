@@ -21,6 +21,7 @@ class BadgeAdapter(val selectedBadges: List<Badge>) :
                     .load(badge.src)
                     .error(R.drawable.ic_iconmonstr_connection_1)
                     .into(badgeImage)
+                root.contentDescription = badge.description
             }
 
         }

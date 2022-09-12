@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/padding_default_16dp"
-        android:text="Selecione seus podcasts favoritos"
+        android:text="@string/preferences_title"
         android:textAlignment="center"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,7 +42,7 @@
         android:layout_marginBottom="@dimen/padding_default_16dp"
         android:enabled="false"
         android:padding="@dimen/padding_default_16dp"
-        android:text="Salvar"
+        android:text="@string/save_button"
         android:textColor="@color/md_black"
         app:cornerRadius="@dimen/radius_small_5dp"
         app:layout_constraintBottom_toBottomOf="parent" />

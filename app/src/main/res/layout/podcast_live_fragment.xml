@@ -32,6 +32,7 @@
                 android:id="@+id/collapseButton"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:contentDescription="@string/back_button_description"
                 android:background="@color/transparent"
                 android:foreground="?attr/selectableItemBackground"
                 android:src="@drawable/ic_round_chevron_left_24"
@@ -84,7 +85,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="@color/transparent"
-                android:contentDescription="Compartilhar"
+                android:contentDescription="@string/share_description"
                 android:foreground="?attr/selectableItemBackground"
                 android:src="@drawable/ic_round_ios_share_24"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -150,7 +151,7 @@
                     android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                     app:readMoreColor="@color/material_grey900"
                     app:readMoreMaxLine="4"
-                    app:readMoreText=" ...ver mais" />
+                    app:readMoreText="@string/see_more" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/related_videos"

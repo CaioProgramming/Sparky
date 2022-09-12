@@ -26,6 +26,7 @@ class NotificationIconAdapter(val highlightColor: Int, private val onIconPick: (
                 root.setOnClickListener {
                     onIconPick(icon.name)
                 }
+                root.contentDescription = icon.name
                 root.slideInBottom()
             }
         }

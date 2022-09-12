@@ -62,7 +62,10 @@ class SparkyPlayerController(
             requestFullScreen(isFullScreen)
             val icon =
                 if (isFullScreen) R.drawable.ic_iconmonstr_exit_fullscreen_11 else R.drawable.ic_iconmonstr_enter_fullscreen_10
+            val description =
+                if (isFullScreen) R.string.enter_full_screen_description else R.string.exit_full_screen_description
             enterFullScreen.setImageResource(icon)
+            enterFullScreen.contentDescription = root.context.getString(description)
             root.layoutParams = root.layoutParams.apply {
                 val newWidth =
                     if (isFullScreen) ViewGroup.LayoutParams.MATCH_PARENT else root.context.resources.getDimensionPixelOffset(
@@ -95,7 +98,7 @@ class SparkyPlayerController(
         playerSeekbar.thumbTintList = ColorStateList.valueOf(highlightColor)
         playerSeekbar.progressTintList = ColorStateList.valueOf(highlightColor)
         playerSeekbar.thumb = root.context.getDrawable(podcastIcon)
-        podcastNotIccon.setImageResource(podcastIcon)
+        podcastNotIcon.setImageResource(podcastIcon)
         val shimmerBuilder = ColorHighlightBuilder()
             .setBaseColor(ContextCompat.getColor(root.context, R.color.md_grey900))
             .setHighlightColor(highlightColor)
@@ -165,12 +168,20 @@ class SparkyPlayerController(
             }
             PlayerConstants.PlayerState.PLAYING -> {
                 isPlaying = true
-                binding.stopLoading()
-                binding.playPauseButton.setImageResource(R.drawable.zzz_pause)
+                binding.run {
+                    stopLoading()
+                    playPauseButton.setImageResource(R.drawable.zzz_pause)
+                    playPauseButton.contentDescription =
+                        root.context.getString(R.string.pause_button)
+                }
+
+
             }
             PlayerConstants.PlayerState.PAUSED -> {
                 isPlaying = false
                 binding.playPauseButton.setImageResource(R.drawable.zzz_play)
+                binding.playPauseButton.contentDescription =
+                    binding.root.context.getString(R.string.play_button)
             }
             PlayerConstants.PlayerState.BUFFERING -> {
                 binding.showLoading()

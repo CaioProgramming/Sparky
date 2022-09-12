@@ -8,4 +8,25 @@
     <string name="auth_error_message">Você precisa estar logado para utilizar o app.</string>
     <string name="sparky_warning_message">Sparky foi desenvolvido de forma independente por fãs, não é um app oficial dos Estúdios Flow.</string>
     <string name="link_flow_account">Vincular conta flow</string>
+    <string name="share_description">Compartilhar</string>
+    <string name="back_button_description">Voltar</string>
+    <string name="see_more">...ver mais</string>
+    <string name="loading_player">carregando</string>
+    <string name="enter_full_screen_description">Entrar em tela cheia</string>
+    <string name="pause_button">pause video</string>
+    <string name="player_error_message">Não conseguimos reproduzir esse vídeo</string>
+    <string name="exit_full_screen_description">Sair da tela cheia</string>
+    <string name="play_button">play video</string>
+    <string name="badge_image_description">badge image</string>
+    <string name="cuts_fragment_subtitle">Todos os cortes da família flow.</string>
+    <string name="subscribers_subtitle">inscritos</string>
+    <string name="search_query_hint">Busque episódios e cortes</string>
+    <string name="preferences_title">Selecione seus podcasts favoritos</string>
+    <string name="badges_subtitle">emblemas</string>
+    <string name="settings_button">Configurações</string>
+    <string name="podcasts_preferences_settings">Podcasts favoritos</string>
+    <string name="disconnect_button">Desconectar</string>
+    <string name="delete_account">Excluir conta</string>
+    <string name="live_now_title">Ao vivo agora!</string>
+    <string name="see_now_button">Ver agora</string>
 </resources>

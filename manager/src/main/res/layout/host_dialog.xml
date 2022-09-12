@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/margin_big_16dp"
         android:gravity="center"
-        android:text="Você tem certeza que deseja adicionar esse host?"
+        android:text="@string/confirm_host_title"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
         android:textStyle="bold"
@@ -38,11 +38,13 @@
 
     <EditText
         android:id="@+id/host_social_link"
+        android:hint="@string/social_link_hint"
+        android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_default_10dp"
         android:background="@drawable/round_retangle"
-        android:hint="link social(instagram/youtube)..."
+        android:textAllCaps="false"
         android:padding="@dimen/padding_default_16dp"
         app:layout_constraintTop_toBottomOf="@id/message" />
 
@@ -69,7 +71,7 @@
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         android:textStyle="bold|italic"
-        android:hint="Nome do convidado "
+        android:hint="@string/host_name_hint"
         tools:text="Igor 3k" />
 
     <com.google.android.material.textfield.TextInputEditText
@@ -79,7 +81,7 @@
         android:background="@color/transparent"
         android:textAlignment="center"
         android:gravity="center"
-        android:hint="Breve descrição"
+        android:hint="@string/host_description"
         android:padding="@dimen/padding_default_16dp" />
 
 
@@ -88,7 +90,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/padding_default_16dp"
-        android:text="Continuar"
+        android:text="@string/continue_button"
         android:textColor="@color/md_black"
         app:backgroundTint="?attr/colorPrimaryDark"
         app:cornerRadius="@dimen/radius_default_10dp"

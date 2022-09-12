@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.silent.core.R
 import com.silent.core.databinding.HostCardBinding
-import com.silent.core.databinding.HostCardReverseBinding
 import com.silent.core.databinding.NewHostLayoutBinding
 import com.silent.core.podcast.Host
 import com.silent.core.podcast.NEW_HOST
@@ -26,7 +25,6 @@ class HostAdapter(
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val NORMAL_VIEW = 2
-    private val REVERSE_VIEW = 1
     val NEW_HOST_VIEW = 3
 
     init {
@@ -75,29 +73,6 @@ class HostAdapter(
         }
     }
 
-    inner class ReverseHostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind() {
-            HostCardReverseBinding.bind(itemView).run {
-                val context = itemView.context
-                val host = hosts[adapterPosition]
-                itemView.setOnClickListener {
-                    hostSelected(host)
-                }
-                Glide.with(context)
-                    .load(host.profilePic)
-                    .error(R.drawable.ic_iconmonstr_connection_1)
-                    .into(hostPhoto)
-                hostName.text = host.name
-                hostDescription.text = host.description
-                if (!highLightColor.isNullOrEmpty()) {
-                    hostNameCard.strokeColor = Color.parseColor(highLightColor)
-                    hostCard.strokeColor = Color.parseColor(highLightColor)
-                    hostName.setTextColor(Color.parseColor(highLightColor))
-                }
-            }
-        }
-
-    }
 
     override fun getItemViewType(position: Int): Int {
         return when {
@@ -110,10 +85,6 @@ class HostAdapter(
         return when (viewType) {
             NEW_HOST_VIEW -> NewHostViewHolder(
                 LayoutInflater.from(parent.context).inflate(R.layout.new_host_layout, parent, false)
-            )
-            REVERSE_VIEW -> ReverseHostViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.host_card_reverse, parent, false)
             )
             else -> HostViewHolder(
                 LayoutInflater.from(parent.context).inflate(R.layout.host_card, parent, false)
@@ -128,9 +99,6 @@ class HostAdapter(
                 holder.bind()
             }
             is HostViewHolder -> {
-                holder.bind()
-            }
-            is ReverseHostViewHolder -> {
                 holder.bind()
             }
         }

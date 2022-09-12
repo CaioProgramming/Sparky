@@ -30,7 +30,7 @@
                     android:layout_marginHorizontal="@dimen/margin_small_4dp"
                     android:padding="@dimen/padding_default_16dp"
                     android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
-                    android:text="Administradores"
+                    android:text="@string/managers_title"
                     android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
@@ -57,7 +57,7 @@
                 style="@style/Ilustris.Title"
                 android:gravity="center"
                 android:fontFamily="@font/kaushan_script"
-                android:text="Podcasts"
+                android:text="@string/podcasts_manage_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -65,7 +65,7 @@
             <com.google.android.material.button.MaterialButton
                 app:layout_collapseMode="pin"
                 android:id="@+id/update_episodes"
-                android:text="Atualizar"
+                android:text="@string/update_button"
                 android:layout_gravity="end"
                 android:textColor="@color/material_blue500"
                 style="@style/Widget.MaterialComponents.Button.TextButton"

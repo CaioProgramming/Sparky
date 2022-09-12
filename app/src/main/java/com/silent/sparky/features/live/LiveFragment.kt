@@ -176,7 +176,7 @@ class LiveFragment : Fragment() {
         podcastIcon.setOnClickListener {
             openPodcast(podcast.id)
         }
-        podcastSubscribers.text = "${podcast.subscribe} inscritos."
+        podcastSubscribers.contentDescription = "${podcast.subscribe} inscritos."
         val animator = ValueAnimator()
         animator.run {
             setObjectValues(0, podcast.subscribe)

@@ -27,6 +27,7 @@ class VideosAdapter(
         fun bind() {
             val video = playlistVideos[bindingAdapterPosition]
             VideoPreviewBinding.bind(itemView).run {
+                root.contentDescription = video.title
                 highlightColor?.let {
                     videoCard.setStrokeColor(ColorStateList.valueOf(Color.parseColor(it)))
                 }
