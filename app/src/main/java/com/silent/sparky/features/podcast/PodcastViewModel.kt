@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.util.*
 
 
 class PodcastViewModel(
@@ -75,6 +76,7 @@ class PodcastViewModel(
         subTitle = subtitle,
         seeMore = true,
         podcast = podcast,
+        type = type
     )
 
     fun favoritePodcast(podcastID: String, isFavorite: Boolean) {
@@ -130,7 +132,7 @@ class PodcastViewModel(
                         getHeader(
                             "Cortes do ${podcast.name}",
                             podcast.cuts,
-                            cuts.sortedByDescending { it.publishedAt },
+                            cuts,
                             RecyclerView.VERTICAL,
                             podcast.highLightColor,
                             "${cuts.size} cortes disponíveis.",
@@ -148,7 +150,17 @@ class PodcastViewModel(
                     )
                 )
                 Log.i(javaClass.simpleName, "getPodcastData: podcastData -> $podcast\n$headers")
-                checkLive(video, podcast)
+                var lastVideo = uploads.firstOrNull {
+                    val videoDate = Calendar.getInstance().apply {
+                        time = it.publishedAt
+                    }
+                    val todayDate = Calendar.getInstance()
+                    videoDate[Calendar.DAY_OF_YEAR] == todayDate[Calendar.DAY_OF_YEAR]
+                }
+                video?.let {
+                    lastVideo = it
+                }
+                checkLive(lastVideo, podcast)
             } catch (e: Exception) {
                 e.printStackTrace()
                 podcastState.postValue(PodcastState.PodcastFailedState)
@@ -158,7 +170,13 @@ class PodcastViewModel(
 
     private fun checkLive(video: Video?, podcast: Podcast) {
         video?.let {
-            scheduleState.postValue(ScheduleState.TodayGuestState(it))
+            val zone = ZoneId.of("America/Sao_Paulo")
+            val localDateTime = LocalDateTime.now()
+            val zonedDateTime = ZonedDateTime.of(localDateTime, zone)
+            val hour = zonedDateTime.hour
+            if (podcast.liveTime == hour || possibleLive(hour, podcast.liveTime)) {
+                scheduleState.postValue(ScheduleState.TodayGuestState(it))
+            }
         } ?: run {
             viewModelScope.launch(Dispatchers.IO) {
                 val zone = ZoneId.of("America/Sao_Paulo")
