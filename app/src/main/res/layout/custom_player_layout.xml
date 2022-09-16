@@ -19,7 +19,8 @@
         app:shimmer_highlight_color="?attr/colorPrimaryDark">
 
         <ImageView
-            android:id="@+id/podcast_not_iccon"
+            android:id="@+id/podcast_not_icon"
+            android:contentDescription="@string/loading_player"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_gravity="center"
@@ -50,6 +51,7 @@
 
         <ImageButton
             android:id="@+id/enter_full_screen"
+            android:contentDescription="@string/enter_full_screen_description"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginHorizontal="@dimen/margin_default_10dp"
@@ -65,7 +67,6 @@
 
         <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/player_seekbar"
-
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -83,6 +84,7 @@
             android:id="@+id/play_pause_button"
             android:layout_width="32dp"
             android:layout_height="0dp"
+            android:contentDescription="@string/pause_button"
             android:background="@color/transparent"
             android:foreground="?attr/selectableItemBackground"
             android:src="@drawable/zzz_play"
@@ -98,7 +100,7 @@
             android:background="@drawable/double_faded_gradient"
             android:gravity="center"
             android:padding="@dimen/padding_default_16dp"
-            android:text="Não conseguimos reproduzir esse vídeo"
+            android:text="@string/player_error_message"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             android:textStyle="bold"

@@ -15,6 +15,7 @@
     </style>
 
     <style name="Theme.Sparky.ProgramIcon">
+        <item name="android:importantForAccessibility">no</item>
         <item name="android:layout_width">60dp</item>
         <item name="android:layout_height">60dp</item>
         <item name="civ_circle_background_color">@color/material_grey900</item>

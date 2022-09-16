@@ -24,7 +24,7 @@
         app:backgroundTint="?attr/colorPrimaryDark"
         app:cornerRadius="@dimen/radius_small_5dp"
         android:layout_alignParentBottom="true"
-        android:text="Continuar"
+        android:text="@string/continue_button"
         app:icon="@drawable/ic_arrow_right_24"
         app:iconGravity="end"
         app:layout_constraintBottom_toBottomOf="parent"

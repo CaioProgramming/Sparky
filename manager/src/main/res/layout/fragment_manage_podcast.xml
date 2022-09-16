@@ -23,6 +23,7 @@
 
             <ImageView
                 android:id="@+id/podcast_cover"
+                android:importantForAccessibility="no"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
@@ -83,11 +84,13 @@
 
                     <EditText
                         android:id="@+id/podcast_slogan"
+                        android:hint="@string/podcast_slogan_hint"
+                        android:importantForAutofill="no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/transparent"
                         android:gravity="center"
-                        android:hint="Slogan do podcast"
+                        android:inputType="textAutoCorrect"
                         android:padding="@dimen/padding_default_16dp"
                         android:textAlignment="center"
                         app:layout_constraintTop_toBottomOf="@id/highlight_color" />
@@ -98,7 +101,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/padding_default_16dp"
                         android:padding="@dimen/padding_default_16dp"
-                        android:text="Horário das lives"
+                        android:text="@string/live_time_button"
                         app:cornerRadius="@dimen/radius_default_10dp"
                         app:icon="@drawable/zzz_clock" />
 
@@ -133,6 +136,7 @@
 
             <EditText
                 android:id="@+id/podcast_edit_text"
+                android:hint="@string/podcast_name_hint"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="top"
@@ -140,7 +144,7 @@
                 android:focusedByDefault="true"
                 android:fontFamily="@font/kaushan_script"
                 android:gravity="center"
-                android:hint="Nome podcast"
+                android:importantForAutofill="no"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                 app:layout_collapseMode="pin" />
@@ -154,7 +158,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:layout_above="@id/remove_podcast"
                 android:layout_gravity="end"
-                android:text="Atualizar"
+                android:text="@string/update_button"
                 android:textColor="@color/material_blue500" />
 
             <com.google.android.material.button.MaterialButton
@@ -164,7 +168,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="start"
-                android:text="Excluir"
+                android:text="@string/delete_button"
                 android:textColor="@color/material_red500" />
 
             <com.google.android.material.progressindicator.LinearProgressIndicator

@@ -31,6 +31,7 @@ class CutGridAdapter(val cuts: ArrayList<Video>, val onSelectVideo: (Video) -> U
                     val highlightColor = Color.parseColor(it.highLightColor)
                     videoCard.strokeColor = highlightColor
                 }
+                root.contentDescription = cut.title
                 root.fadeIn()
             }
         }
@@ -49,6 +50,7 @@ class CutGridAdapter(val cuts: ArrayList<Video>, val onSelectVideo: (Video) -> U
                     val highlightColor = Color.parseColor(it.highLightColor)
                     videoCard.strokeColor = highlightColor
                 }
+                root.contentDescription = cut.title
                 root.fadeIn()
             }
         }
@@ -67,6 +69,7 @@ class CutGridAdapter(val cuts: ArrayList<Video>, val onSelectVideo: (Video) -> U
                     val highlightColor = Color.parseColor(it.highLightColor)
                     videoCard.strokeColor = highlightColor
                 }
+                root.contentDescription = cut.title
                 root.fadeIn()
             }
         }

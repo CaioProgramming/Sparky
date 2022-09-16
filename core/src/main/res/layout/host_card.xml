@@ -10,6 +10,7 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/host_photo"
+        android:importantForAccessibility="no"
         android:layout_width="160dp"
         android:layout_height="160dp"
         android:layout_marginVertical="@dimen/margin_default_10dp"

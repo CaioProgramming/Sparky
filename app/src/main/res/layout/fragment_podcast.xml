@@ -24,6 +24,7 @@
             app:scrimAnimationDuration="200">
 
             <ImageView
+                android:importantForAccessibility="no"
                 android:id="@+id/podcast_cover"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -61,6 +62,7 @@
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/program_icon"
+                        android:importantForAccessibility="no"
                         style="@style/Theme.Sparky.ProgramIcon"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
@@ -123,7 +125,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:paddingTop="@dimen/padding_small_8dp"
-                    android:text="0"
+                    tools:text="0"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                     android:textColor="@color/md_white"
@@ -134,7 +136,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:paddingVertical="@dimen/padding_small_8dp"
-                    android:text="inscritos"
+                    android:text="@string/subscribers_subtitle"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                     android:textColor="@color/md_white" />
@@ -204,7 +206,7 @@
             app:iconifiedByDefault="false"
             app:layout_constraintTop_toTopOf="parent"
             app:queryBackground="@color/transparent"
-            app:queryHint="Busque episódios e cortes" />
+            app:queryHint="@string/search_query_hint" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/channel_videos"

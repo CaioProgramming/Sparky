@@ -21,6 +21,7 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/host_photo"
+        android:importantForAccessibility="no"
         style="@style/Theme.Sparky.ProgramIcon"
         android:layout_width="120dp"
         android:layout_height="120dp"

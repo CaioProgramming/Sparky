@@ -48,6 +48,7 @@ class VideosAdapter(
                 root.setOnClickListener {
                     onSelectVideo?.invoke(video)
                 }
+                root.contentDescription = video.title
             }
         }
     }

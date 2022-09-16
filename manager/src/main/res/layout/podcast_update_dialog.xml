@@ -10,7 +10,7 @@
 
     <TextView
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Atualizando podcasts"
+        android:text="@string/updating_podcasts_title"
         android:padding="@dimen/padding_default_16dp"
         android:textAlignment="center"
         android:gravity="center"

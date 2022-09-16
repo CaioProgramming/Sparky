@@ -4,4 +4,10 @@
     <string name="channel_name">Sparky Notifications</string>
     <string name="channel_description">Sparky podcasts notifications channel</string>
     <string name="channel_id">SparkyNotify</string>
+    <string name="fatal_error_message">Ocorreu um erro inesperado, sentimos muito por isso.</string>
+    <string name="unexpected_error_message">Ocorreu um erro inesperado tente novamente</string>
+    <string name="try_again_button">Tentar novamente</string>
+    <string name="new_host_text">Adicionar novo host</string>
+    <string name="see_more_description">Ver mais</string>
+    <string name="save_button">Salvar</string>
 </resources>

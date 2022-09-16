@@ -12,7 +12,7 @@
         android:layout_height="200dp"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/margin_default_10dp"
-        android:layout_marginRight="@dimen/margin_default_10dp"
+        android:layout_marginEnd="@dimen/margin_default_10dp"
         android:alpha="0.5"
         android:background="@drawable/faded_gradient"
         android:backgroundTint="?attr/colorPrimaryDark" />
@@ -31,6 +31,7 @@
 
         <ImageView
             android:id="@+id/profile_pic"
+            android:importantForAccessibility="no"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="?android:colorBackground"

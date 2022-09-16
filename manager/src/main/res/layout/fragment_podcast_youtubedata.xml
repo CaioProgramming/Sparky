@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/padding_default_16dp"
-        android:text="Canais dos estúdios flow"
+        android:text="@string/flow_channels"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
     <androidx.recyclerview.widget.RecyclerView
