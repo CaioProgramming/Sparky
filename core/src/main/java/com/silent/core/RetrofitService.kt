@@ -9,7 +9,7 @@ abstract class RetrofitService(private val apiUrl: String) {
     protected val retroFitService: Retrofit by lazy {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level =
-            if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+            if (BuildConfig.BUILD_TYPE != "Release") HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
         val client: OkHttpClient = OkHttpClient().newBuilder().addInterceptor(interceptor).build()
         Retrofit.Builder()
             .client(client)
