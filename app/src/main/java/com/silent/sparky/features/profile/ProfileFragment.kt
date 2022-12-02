@@ -171,6 +171,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun FragmentProfileBinding.setupStickers(badges: List<Badge>) {
+        animateBadgeCount(badges.size)
         userBadges.adapter = BadgeAdapter(badges)
         loadingBadges.fadeOut()
     }
@@ -228,7 +229,6 @@ class ProfileFragment : Fragment() {
             badgesLayout.slideInBottom()
             usernameCard.fadeIn()
         }
-        animateBadgeCount(flowProfile.total_badges)
         viewModel.getBadges(flowProfile.username)
     }
 

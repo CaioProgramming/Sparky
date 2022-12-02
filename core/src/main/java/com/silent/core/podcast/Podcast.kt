@@ -1,7 +1,7 @@
 package com.silent.core.podcast
 
-import com.google.firebase.firestore.Exclude
-import com.google.firebase.firestore.IgnoreExtraProperties
+import com.google.firebase.database.Exclude
+import com.google.firebase.database.IgnoreExtraProperties
 import com.google.gson.annotations.SerializedName
 import com.silent.ilustriscore.core.bean.BaseBean
 import java.io.Serializable
@@ -21,7 +21,7 @@ data class Podcast(
     var youtubeID: String = "",
     var cuts: String = "",
     var uploads: String = "",
-    var highLightColor: String = "#000",
+    var highLightColor: String = "#fff",
     var cover: String? = "",
     var notificationIcon: String = "",
     var slogan: String = "",

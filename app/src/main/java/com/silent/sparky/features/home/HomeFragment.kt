@@ -1,7 +1,9 @@
 package com.silent.sparky.features.home
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
@@ -47,20 +49,15 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        setHasOptionsMenu(true)
         setMenuVisibility(false)
         homeFragmentBinding = HomeFragmentBinding.inflate(inflater)
         return homeFragmentBinding?.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupView()
-        observeViewModel()
-    }
-
     override fun onStart() {
         super.onStart()
+        observeViewModel()
+        setupView()
         homeViewModel.getHome()
     }
 
@@ -101,19 +98,7 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
         NavigationUtils(requireContext()).startModule(ModuleNavigator.MANAGER)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.home_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.settings -> {
-                goToManager()
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
     private fun observeViewModel() {
         homeViewModel.preferencesState.observe(viewLifecycleOwner) {

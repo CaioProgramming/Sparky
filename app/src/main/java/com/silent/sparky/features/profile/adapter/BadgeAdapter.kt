@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.ilustris.animations.slideInBottom
 import com.silent.core.stickers.response.Badge
 import com.silent.sparky.R
 import com.silent.sparky.databinding.BadgeLayoutBinding
@@ -18,10 +19,11 @@ class BadgeAdapter(val selectedBadges: List<Badge>) :
             val badge = selectedBadges[absoluteAdapterPosition]
             BadgeLayoutBinding.bind(itemView).run {
                 Glide.with(itemView.context)
-                    .load(badge.src)
+                    .load(badge.high)
                     .error(R.drawable.ic_iconmonstr_connection_1)
                     .into(badgeImage)
                 root.contentDescription = badge.description
+                root.slideInBottom()
             }
 
         }

@@ -1,14 +1,17 @@
 package com.silent.sparky.features.profile.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.silent.core.flow.FlowService
 import com.silent.core.stickers.StickersService
+import com.silent.core.stickers.response.Badge
 import com.silent.core.users.User
 import com.silent.core.users.UsersService
-import com.silent.ilustriscore.core.model.*
+import com.silent.ilustriscore.core.model.BaseViewModel
+import com.silent.ilustriscore.core.model.DataException
+import com.silent.ilustriscore.core.model.ErrorType
+import com.silent.ilustriscore.core.model.ViewModelBaseState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -49,9 +52,12 @@ class ProfileViewModel(
         stickersState.postValue(StickersState.FetchingStickers)
         viewModelScope.launch(Dispatchers.IO) {
             try {
-               val stickersResponse = stickersService.getUserStickers(username)
-                Log.i(javaClass.simpleName, "getBadges: $stickersResponse")
-                stickersState.postValue(StickersState.StickersRetrieved(stickersResponse.badges))
+                val stickersResponse = stickersService.getUserStickers(username)
+                val stickers = ArrayList<Badge>()
+                stickersResponse.badges.forEach {
+                    stickers.addAll(it)
+                }
+                stickersState.postValue(StickersState.StickersRetrieved(stickers))
             } catch (e: Exception) {
                 e.printStackTrace()
                 stickersState.postValue(StickersState.ErrorFetchingStickers)
