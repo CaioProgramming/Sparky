@@ -158,9 +158,10 @@ class LiveFragment : Fragment() {
     }
 
     private fun PodcastLiveFragmentBinding.setupPodcast(podcast: Podcast) {
+        val highlightColor = Color.parseColor(podcast.highLightColor)
         val shimmerBuilder = Shimmer.ColorHighlightBuilder()
             .setBaseColor(ContextCompat.getColor(root.context, R.color.md_grey900))
-            .setHighlightColor(Color.parseColor(podcast.highLightColor))
+            .setHighlightColor(highlightColor)
             .setDuration(1500)
             .setIntensity(0.4f)
             .setDropoff(0.9f)
@@ -169,6 +170,7 @@ class LiveFragment : Fragment() {
         val shimmer = shimmerBuilder.build()
         liveShimmer.setShimmer(shimmer)
         podcastName.text = podcast.name
+        gradientBackground.backgroundTintList = ColorStateList.valueOf(highlightColor)
         Glide.with(requireContext()).load(podcast.iconURL).into(podcastIcon)
         podcastName.setOnClickListener {
             openPodcast(podcast.id)
@@ -189,7 +191,6 @@ class LiveFragment : Fragment() {
             start()
         }
         podcastIcon.borderColor = Color.parseColor(podcast.highLightColor)
-        shareButton.imageTintList = ColorStateList.valueOf(Color.parseColor(podcast.highLightColor))
         shareButton.setOnClickListener {
             val message =
                 getShareMessage(podcast.name, args.liveObject.type, args.liveObject.video.youtubeID)
