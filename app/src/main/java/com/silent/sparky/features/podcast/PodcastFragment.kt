@@ -60,11 +60,12 @@ class PodcastFragment : Fragment() {
         podcastFragmentBinding = FragmentPodcastBinding.inflate(inflater)
         return podcastFragmentBinding?.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
         delayedFunction {
-            podcastViewModel.getPodcastData(args.podcastId, args.liveVideo)
+            podcastViewModel.getPodcastData(args.podcastId, args.videoId)
         }
         podcastFragmentBinding?.run {
             errorView.run {
@@ -87,14 +88,13 @@ class PodcastFragment : Fragment() {
 
     }
 
+
     private fun setupPodcast(
         podcast: Podcast,
-        headers: ArrayList<PodcastHeader>,
-        isFavorite: Boolean
+        isFavorite: Boolean,
     ) {
         program = podcast
         podcastFragmentBinding?.run {
-            loading.fadeOut()
             (activity as AppCompatActivity?)?.run {
                 setSupportActionBar(programToolbar)
                 supportActionBar?.run {
@@ -129,14 +129,13 @@ class PodcastFragment : Fragment() {
                 }
             }, podcast.highLightColor)
             animateSubscriberCount(podcast.subscribe)
-            setupHeaders(headers)
             podcastLiveProgress.rimColor = Color.parseColor(podcast.highLightColor)
             podcastLiveProgress.progress = 100
             favoritePodcast.backgroundTintList =
                 ColorStateList.valueOf(Color.parseColor(podcast.highLightColor))
             favoritePodcast.isChecked = isFavorite
             favoritePodcast.setOnCheckedChangeListener { buttonView, isChecked ->
-                podcastViewModel.favoritePodcast(podcast.id, isChecked)
+                podcastViewModel.favoritePodcast(podcast, isChecked)
             }
             podcastSearch.setOnSearchClickListener {
                 podcastViewModel.searchEpisodesAndCuts(podcast, podcastSearch.query.toString())
@@ -159,6 +158,7 @@ class PodcastFragment : Fragment() {
                 podcastSearch.setQuery("", false)
                 podcastViewModel.getPodcastData(args.podcastId)
             }
+            loading.fadeOut()
             appBar.slideInBottom()
             mainContent.slideInBottom()
         }
@@ -198,7 +198,8 @@ class PodcastFragment : Fragment() {
         podcastViewModel.podcastState.observe(viewLifecycleOwner) {
             when (it) {
                 is PodcastViewModel.PodcastState.PodcastDataRetrieved -> {
-                    setupPodcast(it.podcast, it.headers, it.isFavorite)
+                    setupPodcast(it.podcast, it.isFavorite)
+                    setupHeaders(it.headers)
                 }
                 PodcastViewModel.PodcastState.PodcastFailedState -> {
                     podcastFragmentBinding?.errorView?.showError("Ocorreu um erro ao obter os dados desse podcast") {
@@ -239,6 +240,12 @@ class PodcastFragment : Fragment() {
                     podcastFragmentBinding?.errorView?.showError(it.dataException.code.message) {
                         findNavController().popBackStack()
                     }
+                }
+                is ViewModelBaseState.DataUpdateState -> {
+                    setupPodcast(
+                        it.data as Podcast,
+                        podcastFragmentBinding?.favoritePodcast?.isChecked ?: false
+                    )
                 }
                 else -> {}
             }

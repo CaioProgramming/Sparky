@@ -8,10 +8,22 @@
         <item name="colorAccent">@color/material_yellowA700</item>
         <item name="android:statusBarColor">?android:colorBackground</item>
         <item name="android:textViewStyle">@style/Theme.Sparky.TextViewStyle</item>
+        <item name="toolbarStyle">@style/Theme.Sparky.Toolbar</item>
     </style>
 
     <style name="Theme.Sparky.TextViewStyle" parent="Widget.AppCompat.TextView">
         <item name="android:fontFamily">@font/lato</item>
+    </style>
+
+    <style name="Theme.Sparky.Title" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="fontFamily">@font/kaushan_script</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Theme.Sparky.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="titleCentered">true</item>
+        <item name="titleTextAppearance">@style/Theme.Sparky.Title</item>
+        <item name="homeAsUpIndicator">@drawable/ic_round_chevron_left_24</item>
     </style>
 
     <style name="Theme.Sparky.ProgramIcon">

@@ -85,9 +85,24 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
                         app:lottie_colorFilter="?attr/colorPrimaryDark"
                         app:lottie_rawRes="@raw/lightning"
                         app:lottie_repeatMode="restart" />
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/notification_animation"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginHorizontal="@dimen/padding_default_16dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:lottie_autoPlay="false"
+                        app:lottie_colorFilter="@color/md_white"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/notification"
+                        app:lottie_repeatMode="reverse" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

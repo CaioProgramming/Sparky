@@ -320,8 +320,9 @@
                           <map>
                             <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_iconmonstr_exit_fullscreen_11" />
-                            <entry key="sourceFile" value="C:\Users\cacai\Downloads\iconmonstr-fullscreen-11.svg" />
+                            <entry key="opacityPercent" value="93" />
+                            <entry key="outputName" value="ic_iconmonstr_video_camera_9" />
+                            <entry key="sourceFile" value="C:\Users\cacai\Downloads\iconmonstr-video-camera-9.svg" />
                           </map>
                         </option>
                       </PersistentState>

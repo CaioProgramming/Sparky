@@ -14,14 +14,13 @@ data class Podcast(
     var key: String = "",
     var name: String = "",
     var subscribe: Int = 0,
-    @SerializedName("thumbnail_url")
     var iconURL: String = "",
     var views: Int = 0,
     var hosts: ArrayList<Host> = ArrayList(),
     var youtubeID: String = "",
     var cuts: String = "",
     var uploads: String = "",
-    var highLightColor: String = "#fff",
+    var highLightColor: String = "#ff212121",
     var cover: String? = "",
     var notificationIcon: String = "",
     var slogan: String = "",
@@ -29,7 +28,8 @@ data class Podcast(
     @Exclude
     var updating: Boolean = false,
     @Exclude
-    var isLive: Boolean = false
+    var isLive: Boolean = false,
+    var subscribers: ArrayList<String> = ArrayList()
 ) : Serializable, BaseBean(key) {
 
     init {

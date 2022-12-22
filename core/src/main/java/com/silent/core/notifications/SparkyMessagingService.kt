@@ -29,7 +29,6 @@ class SparkyMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         handleNotification(message)
-
     }
 
     private fun handleNotification(message: RemoteMessage) {
@@ -90,6 +89,7 @@ class SparkyMessagingService : FirebaseMessagingService() {
         }
 
     }
+
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)

@@ -25,6 +25,7 @@
     <string name="badges_subtitle">emblemas</string>
     <string name="settings_button">Configurações</string>
     <string name="podcasts_preferences_settings">Podcasts favoritos</string>
+    <string name="notifications_preferences_settings">Notificações</string>
     <string name="disconnect_button">Desconectar</string>
     <string name="delete_account">Excluir conta</string>
     <string name="live_now_title">Ao vivo agora!</string>

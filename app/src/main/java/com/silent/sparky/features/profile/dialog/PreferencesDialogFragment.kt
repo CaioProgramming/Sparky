@@ -24,7 +24,7 @@ class PreferencesDialogFragment : DialogInterface.OnDismissListener, BottomSheet
     private val preferencesViewModel by viewModel<PreferencesViewModel>()
     private var fragmentPreferencesBinding: FragmentPreferencesBinding? = null
     private var podcastAdapter = PodcastAdapter(ArrayList(), ::selectPodcast)
-    private val selectedPodcasts = ArrayList<String>()
+    private val selectedPodcasts = ArrayList<Podcast>()
     private var onDismiss: (() -> Unit)? = null
 
     private fun selectPodcast(podcast: Podcast) {
@@ -34,12 +34,12 @@ class PreferencesDialogFragment : DialogInterface.OnDismissListener, BottomSheet
     fun isEnable() = selectedPodcasts.size >= 3
 
     private fun addOrRemovePodcast(podcast: Podcast) {
-        if (!selectedPodcasts.contains(podcast.id)) {
-            selectedPodcasts.add(podcast.id)
-            podcastAdapter.selectPodcast(podcast.id)
+        if (!selectedPodcasts.contains(podcast)) {
+            selectedPodcasts.add(podcast)
+            podcastAdapter.selectPodcast(podcast)
         } else {
-            selectedPodcasts.remove(podcast.id)
-            podcastAdapter.removePodcast(podcast.id)
+            selectedPodcasts.remove(podcast)
+            podcastAdapter.removePodcast(podcast)
         }
         checkSaveButton()
     }
@@ -69,8 +69,7 @@ class PreferencesDialogFragment : DialogInterface.OnDismissListener, BottomSheet
             when (it) {
                 is ViewModelBaseState.DataListRetrievedState -> {
                     val podcasts = it.dataList as ArrayList<Podcast>
-                    setupPodcasts(ArrayList(podcasts.sortedByDescending { p -> p.subscribe }))
-                    preferencesViewModel.getPodcastPreferences()
+                    setupPodcasts(ArrayList(podcasts))
                 }
                 is ViewModelBaseState.ErrorState -> view?.showSnackBar(
                     it.dataException.code.message,
@@ -101,12 +100,11 @@ class PreferencesDialogFragment : DialogInterface.OnDismissListener, BottomSheet
 
                 is PreferencesViewModel.PreferencesViewState.PodcastsRetrieved -> {
                     setupPodcasts(it.podcasts)
-                    preferencesViewModel.getPodcastPreferences()
                 }
 
                 is PreferencesViewModel.PreferencesViewState.PodcastPreferencesRetrieved -> {
-                    it.favorites.forEach { id ->
-                        podcastAdapter.selectPodcast(id)
+                    it.favorites.forEach { podcast ->
+                        podcastAdapter.selectPodcast(podcast)
                         checkSaveButton()
                     }
                     selectedPodcasts.addAll(it.favorites)

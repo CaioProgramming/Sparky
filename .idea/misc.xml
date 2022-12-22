@@ -3,11 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/cacai/.gradle/caches/transforms-3/9743d2627601f4bd38d6e47b0b83b0c9/transformed/jetified-ui-2.5.5/res/drawable/bottom_line.xml" value="0.324" />
         <entry key="..\:/Users/cacai/.gradle/caches/transforms-3/a7d6419d9f01cf0f53acfb28d1f773df/transformed/jetified-ui-2.5.4/res/drawable/bottom_line.xml" value="0.262" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/drawable/corner_shape.xml" value="0.1765" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout-land/podcast_live_fragment.xml" value="0.15" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/activity_home.xml" value="0.1" />
-        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/activity_notification.xml" value="0.2164855072463768" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/activity_notification.xml" value="0.33" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/badge_layout.xml" value="0.16770833333333332" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/custom_player_layout.xml" value="0.22" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/cut__big_preview.xml" value="0.21557971014492755" />
@@ -27,8 +28,10 @@
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/home_fragment.xml" value="0.22" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/live_bottom_sheet.xml" value="0.2829059829059829" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/live_podcasts_layout.xml" value="0.1634963768115942" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/notification_group_layout.xml" value="0.2829059829059829" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/notification_layout.xml" value="0.33" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/podcast_list_layout.xml" value="0.16770833333333332" />
-        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/podcast_live_fragment.xml" value="0.22" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/podcast_live_fragment.xml" value="0.22816901408450704" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/podcast_live_layout.xml" value="0.16770833333333332" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/profile_card.xml" value="0.1634963768115942" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/see_more_layout.xml" value="0.2829059829059829" />
@@ -37,8 +40,11 @@
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/video_preview.xml" value="0.21557971014492755" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/warning_layout.xml" value="0.42063492063492064" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/menu/bottom_nav_menu.xml" value="0.16770833333333332" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/menu/home_menu.xml" value="0.2829059829059829" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/core/src/main/res/drawable/dot.xml" value="0.183" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/core/src/main/res/drawable/faded_gradient.xml" value="0.1775" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/core/src/main/res/drawable/faded_gradient_navigation.xml" value="0.1775" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/core/src/main/res/drawable/ic_iconmonstr_cut_3.xml" value="0.324" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/core/src/main/res/drawable/round_retangle.xml" value="0.262" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/core/src/main/res/layout-sw600dp/video_preview.xml" value="0.1" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/core/src/main/res/layout/activity_error.xml" value="0.33" />

@@ -10,19 +10,20 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.google.gson.Gson
 import com.silent.core.firebase.FirebaseService
-import com.silent.core.podcast.Podcast
 import com.silent.core.preferences.PreferencesService
+import com.silent.core.users.User
+import com.silent.core.users.UsersService
 import com.silent.core.utils.TOKEN_PREFERENCES
-import com.silent.core.videos.Video
+import com.silent.ilustriscore.core.model.ServiceResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActViewModel(
     application: Application,
     private val firebaseService: FirebaseService,
-    private val preferencesService: PreferencesService
+    private val preferencesService: PreferencesService,
+    private val usersService: UsersService
 ) : AndroidViewModel(application) {
 
     sealed class MainActState {
@@ -34,7 +35,7 @@ class MainActViewModel(
     }
 
     sealed class NotificationState {
-        data class NavigateToPodcastPush(val podcastId: String, val liveVideo: Video?) :
+        data class NavigateToPodcastPush(val podcastId: String, val liveVideo: String?) :
             NotificationState()
 
         object NotificationOpened : NotificationState()
@@ -83,21 +84,39 @@ class MainActViewModel(
             val token = firebaseService.generateFirebaseToken()
             if (token.isSuccess) {
                 preferencesService.editPreference(TOKEN_PREFERENCES, token.success.data)
+                updateUserToken(token.success.data)
             }
         }
     }
 
-    fun validatePush(podcastExtra: Podcast?, videoExtra: String?) {
-        podcastExtra?.let {
-            var video: Video? = null
-            try {
-                video = Gson().fromJson(videoExtra, Video::class.java)
-            } catch (e: Exception) {
-                e.printStackTrace()
+    private fun updateUserToken(token: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val user = usersService.currentUser()
+            user?.let {
+                val storedUser = usersService.getSingleData(it.uid)
+                if (storedUser.isSuccess) {
+                    (storedUser.success.data as User).apply {
+                        this.token = token
+                    }
+                    usersService.editData(storedUser.success.data)
+                }
+                when (storedUser) {
+                    is ServiceResult.Error -> {
+                        Log.e(javaClass.simpleName, "updateUser: Error updating user info")
+                    }
+                    is ServiceResult.Success -> {
+
+                    }
+                }
             }
+        }
+    }
+
+    fun validatePush(podcastExtra: String?, videoExtra: String?) {
+        podcastExtra?.let {
             Log.i(javaClass.simpleName, "validatePush: payload -> ${podcastExtra} $videoExtra")
             notificationState.value =
-                NotificationState.NavigateToPodcastPush(podcastExtra.id, video)
+                NotificationState.NavigateToPodcastPush(podcastExtra, videoExtra)
         }
     }
 

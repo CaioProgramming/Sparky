@@ -11,7 +11,7 @@ import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastHeader
 import com.silent.core.podcast.PodcastService
 import com.silent.core.preferences.PreferencesService
-import com.silent.core.utils.PODCASTS_PREFERENCES
+import com.silent.core.utils.TOKEN_PREFERENCES
 import com.silent.core.videos.CutService
 import com.silent.core.videos.Video
 import com.silent.core.videos.VideoMapper
@@ -45,8 +45,6 @@ class PodcastViewModel(
             val headers: ArrayList<PodcastHeader>,
             val isFavorite: Boolean
         ) : PodcastState()
-
-        data class UpdateFavorite(val isFavorite: Boolean) : PodcastState()
     }
 
     sealed class ScheduleState {
@@ -79,29 +77,20 @@ class PodcastViewModel(
         type = type
     )
 
-    fun favoritePodcast(podcastID: String, isFavorite: Boolean) {
+    fun favoritePodcast(podcast: Podcast, isFavorite: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            val userPodcasts = ArrayList<String>()
-            val preferedPodcasts = preferencesService.getStringSetValue(PODCASTS_PREFERENCES)
-            preferedPodcasts?.forEach {
-                userPodcasts.add(it)
+            getUser()?.let {
+                if (isFavorite) {
+                    podcast.subscribers.add(it.uid)
+                } else {
+                    podcast.subscribers.remove(it.uid)
+                }
+                editData(podcast)
             }
-
-            if (isFavorite) {
-                userPodcasts.add(podcastID)
-                firebaseService.subscribeToTopic(podcastID) { }
-            } else {
-                userPodcasts.remove(podcastID)
-                firebaseService.unsubscribeTopic(podcastID) { }
-            }
-
-            preferencesService.editPreference(PODCASTS_PREFERENCES, userPodcasts.toSet())
-            podcastState.postValue(PodcastState.UpdateFavorite(isFavorite))
         }
     }
 
-
-    fun getPodcastData(podcastID: String, video: Video? = null) {
+    fun getPodcastData(podcastID: String, video: String? = null) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val headers = ArrayList<PodcastHeader>()
@@ -141,12 +130,15 @@ class PodcastViewModel(
                         )
                     )
                 }
-                val preferencesPodcasts = preferencesService.getStringSetValue(PODCASTS_PREFERENCES)
                 podcastState.postValue(
                     PodcastState.PodcastDataRetrieved(
                         podcast,
                         headers,
-                        preferencesPodcasts?.contains(podcastID) == true
+                        podcast.subscribers.contains(
+                            preferencesService.getStringValue(
+                                TOKEN_PREFERENCES
+                            )
+                        )
                     )
                 )
                 Log.i(javaClass.simpleName, "getPodcastData: podcastData -> $podcast\n$headers")
@@ -157,8 +149,8 @@ class PodcastViewModel(
                     val todayDate = Calendar.getInstance()
                     videoDate[Calendar.DAY_OF_YEAR] == todayDate[Calendar.DAY_OF_YEAR]
                 }
-                video?.let {
-                    lastVideo = it
+                video?.let { videoId ->
+                    lastVideo = uploads.find { it.id == videoId }
                 }
                 checkLive(lastVideo, podcast)
             } catch (e: Exception) {
@@ -203,7 +195,6 @@ class PodcastViewModel(
 
     private fun possibleLive(hour: Int, liveHour: Int) =
         (liveHour + 1) == hour || (liveHour + 2) == hour || (liveHour + 3 == hour)
-
 
     fun searchEpisodesAndCuts(podcast: Podcast, query: String) {
         if (query.isEmpty()) {

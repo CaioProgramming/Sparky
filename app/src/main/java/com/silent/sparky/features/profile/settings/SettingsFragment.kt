@@ -72,6 +72,9 @@ class SettingsFragment : Fragment() {
                         requireActivity().finishAffinity()
                     }
                 }
+                is ViewModelBaseState.DataUpdateState -> {
+                    setupUser(it.data as User)
+                }
                 else -> {}
             }
         }
@@ -90,7 +93,7 @@ class SettingsFragment : Fragment() {
                     .setTitle("Tem certeza?")
                     .setMessage("Quer mesmo remover ${podcast.name} de seus favoritos?")
                     .setNegativeButton("Remover") { dialog, which ->
-                        settingsViewModel.removeFavorite(podcast.id)
+                        settingsViewModel.removeFavorite(podcast)
                     }.setPositiveButton("Cancelar") { dialog, which ->
                         dialog.dismiss()
                     }.show()
@@ -104,12 +107,14 @@ class SettingsFragment : Fragment() {
             flowname.text = user.flowUserName
             Glide.with(root).load(user.profilePic)
                 .placeholder(R.drawable.ic_iconmonstr_flower).into(userPhoto)
+
             flowAccountButton.setOnClickListener {
                 FlowLinkDialog(user).show(
                     requireActivity().supportFragmentManager,
                     "FLOWLINKDIALOG"
                 )
             }
+
             signOutButton.setOnClickListener {
                 settingsViewModel.logout()
             }
@@ -129,9 +134,49 @@ class SettingsFragment : Fragment() {
             nv99Button.setOnClickListener {
                 WebUtils(requireContext()).openNv99()
             }
+
+            episodesSwitch.isChecked = user.notificationSettings.episodesEnabled
+            cutsSwitch.isChecked = user.notificationSettings.cutsEnabled
+            weekEpisodesSwitch.isChecked = user.notificationSettings.weekEpisodes
+            livesSwitch.isChecked = user.notificationSettings.liveEnabled
+
+            episodesSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+                settingsViewModel.updateNotificationPreference(
+                    user,
+                    isChecked,
+                    PrefenceType.EPISODE
+                )
+                episodesSwitch.setOnCheckedChangeListener(null)
+            }
+            cutsSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+                settingsViewModel.updateNotificationPreference(
+                    user,
+                    isChecked,
+                    PrefenceType.CUT
+                )
+                episodesSwitch.setOnCheckedChangeListener(null)
+            }
+            weekEpisodesSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+                settingsViewModel.updateNotificationPreference(
+                    user,
+                    isChecked,
+                    PrefenceType.WEEKLY
+                )
+                episodesSwitch.setOnCheckedChangeListener(null)
+            }
+            livesSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+                settingsViewModel.updateNotificationPreference(
+                    user,
+                    isChecked,
+                    PrefenceType.LIVE
+                )
+                livesSwitch.setOnCheckedChangeListener(null)
+            }
+
             val date = GregorianCalendar.getInstance()
             appInfo.text =
                 "Desenvolvido por Silent systems\n2021 a ${date.get(GregorianCalendar.YEAR)}"
+
             settingsViewModel.loadSettings()
         }
     }
