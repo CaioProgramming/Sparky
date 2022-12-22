@@ -3,11 +3,11 @@ package com.silent.sparky.features.notifications
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.silent.core.notifications.Notification
 import com.silent.core.podcast.Podcast
 import com.silent.core.podcast.PodcastService
 import com.silent.core.users.User
 import com.silent.core.users.UsersService
-import com.silent.core.videos.VideoService
 import com.silent.ilustriscore.core.model.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,11 +16,15 @@ class NotificationViewModel(
     application: Application,
     override val service: UsersService,
     val podcastService: PodcastService,
-    val videoService: VideoService
 ) : BaseViewModel<User>(application) {
 
     sealed class NotificationState {
-        data class NotificationsFetched(val notificationsGroups: List<NotificationGroup>) :
+        data class NotificationsFetched(
+            val user: User,
+            val notificationsGroups: List<NotificationGroup>
+        ) : NotificationState()
+
+        data class RedirectNotification(val podcastId: String, val videoId: String? = null) :
             NotificationState()
 
         object EmptyNotifications : NotificationState()
@@ -47,11 +51,11 @@ class NotificationViewModel(
                                     notifications.sortedBy { it.sent_at })
                             )
                         }
-                        //notificationGroup.add(NotificationGroup(t!!, u))
                     }
                     if (groupedNotifications.isNotEmpty()) {
                         notificationState.postValue(
                             NotificationState.NotificationsFetched(
+                                user,
                                 notificationGroup.sortedByDescending { it.podcast.subscribe })
                         )
                     } else {
@@ -65,6 +69,17 @@ class NotificationViewModel(
                 notificationState.postValue(NotificationState.NotificationFetchError)
             }
         }
+    }
+
+    fun openNotification(user: User, notification: Notification) {
+        val notificationIndex = user.notifications.indexOf(notification)
+        user.notifications[notificationIndex] = notification.apply { open = true }
+        editData(user)
+        notificationState.postValue(notification.podcastId?.let {
+            NotificationState.RedirectNotification(
+                it, notification.videoId
+            )
+        })
     }
 
 }

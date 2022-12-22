@@ -2,12 +2,10 @@ package com.silent.sparky.features.notifications
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.Gson
 import com.ilustris.animations.fadeIn
-import com.silent.core.podcast.Podcast
-import com.silent.core.videos.Video
+import com.silent.core.users.User
+import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.silent.sparky.databinding.ActivityNotificationBinding
 import com.silent.sparky.features.home.HomeActivity
@@ -38,9 +36,22 @@ class NotificationActivity : AppCompatActivity() {
             when (it) {
                 NotificationViewModel.NotificationState.NotificationFetchError -> showError()
                 is NotificationViewModel.NotificationState.NotificationsFetched -> setupNotifications(
+                    it.user,
                     it.notificationsGroups
                 )
                 NotificationViewModel.NotificationState.EmptyNotifications -> showError()
+                is NotificationViewModel.NotificationState.RedirectNotification -> redirectNotification(
+                    it.podcastId,
+                    it.videoId
+                )
+            }
+        }
+        notificationViewModel.viewModelState.observe(this) {
+            when (it) {
+                is ViewModelBaseState.DataUpdateState -> notificationViewModel.fetchNotifications()
+                else -> {
+
+                }
             }
         }
     }
@@ -62,43 +73,31 @@ class NotificationActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupNotifications(notificationsGroups: List<NotificationGroup>) {
+    private fun setupNotifications(user: User, notificationsGroups: List<NotificationGroup>) {
         stopLoading()
         activityNotificationBinding?.run {
-            podcastExtra?.let {
-                parseNotification { podcast, video ->
-                    redirectNotification(podcast, video)
-                }
-            }
             setSupportActionBar(notificationsToolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             notificationsToolbar.setNavigationOnClickListener {
                 this@NotificationActivity.finish()
             }
             notificationsRecycler.adapter = NotificationGroupAdapter(notificationsGroups) {
-                //redirectNotification(it.podcast, it.video)
+                notificationViewModel.openNotification(user, it)
+            }
+            delayedFunction(1000) {
+                redirectNotification(podcastExtra, videoExtra)
             }
         }
 
     }
 
-    private fun parseNotification(parseCallback: (Podcast?, Video?) -> Unit) {
-        Log.i(
-            javaClass.simpleName,
-            "validatePush: \n podcastObject -> ${podcastExtra}\nVideoObject -> $videoExtra"
-        )
-        val podcast: Podcast? = podcastExtra?.let { Gson().fromJson(it, Podcast::class.java) }
-        val video: Video? = videoExtra?.let { Gson().fromJson(it, Video::class.java) }
-        parseCallback(podcast, video)
-    }
-
-    private fun redirectNotification(podcast: Podcast?, video: Video?) {
-        val homeIntent = Intent(this, HomeActivity::class.java).apply {
-            putExtra("podcast", podcast)
-            putExtra("video", video)
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        }
-        delayedFunction(1500) {
+    private fun redirectNotification(podcastId: String?, videoId: String?) {
+        podcastId?.let {
+            val homeIntent = Intent(this, HomeActivity::class.java).apply {
+                putExtra("podcast", podcastId)
+                putExtra("video", videoId)
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            }
             startActivity(homeIntent)
         }
     }

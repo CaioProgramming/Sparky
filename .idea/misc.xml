@@ -29,7 +29,7 @@
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/live_bottom_sheet.xml" value="0.2829059829059829" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/live_podcasts_layout.xml" value="0.1634963768115942" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/notification_group_layout.xml" value="0.2829059829059829" />
-        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/notification_layout.xml" value="0.25" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/notification_layout.xml" value="0.33" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/podcast_list_layout.xml" value="0.16770833333333332" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/podcast_live_fragment.xml" value="0.22816901408450704" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/podcast_live_layout.xml" value="0.16770833333333332" />
@@ -41,6 +41,7 @@
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/layout/warning_layout.xml" value="0.42063492063492064" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/menu/bottom_nav_menu.xml" value="0.16770833333333332" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/app/src/main/res/menu/home_menu.xml" value="0.2829059829059829" />
+        <entry key="..\:/Users/cacai/StudioProjects/Sparky/core/src/main/res/drawable/dot.xml" value="0.183" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/core/src/main/res/drawable/faded_gradient.xml" value="0.1775" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/core/src/main/res/drawable/faded_gradient_navigation.xml" value="0.1775" />
         <entry key="..\:/Users/cacai/StudioProjects/Sparky/core/src/main/res/drawable/ic_iconmonstr_cut_3.xml" value="0.324" />

@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bottom_line"
-    android:backgroundTint="?android:textColorHint"
-    android:padding="@dimen/padding_default_16dp">
+    android:backgroundTint="?android:textColorHint">
 
     <include
         android:id="@+id/podcast_top"
@@ -19,7 +18,6 @@
         android:id="@+id/notification_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/padding_default_16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/podcast_top"
         tools:itemCount="2"

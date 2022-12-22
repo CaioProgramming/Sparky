@@ -21,6 +21,6 @@ val appModule = module {
     single { UsersService() }
     factory { PodcastService() }
     viewModel { MainActViewModel(androidApplication(), get(), get(), get()) }
-    viewModel { NotificationViewModel(androidApplication(), get(), get(), get()) }
+    viewModel { NotificationViewModel(androidApplication(), get(), get()) }
 }
 

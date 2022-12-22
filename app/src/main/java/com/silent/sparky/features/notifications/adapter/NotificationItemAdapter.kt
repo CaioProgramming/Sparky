@@ -5,7 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.ilustris.animations.fadeIn
 import com.ilustris.ui.extensions.gone
+import com.ilustris.ui.extensions.visible
 import com.silent.core.notifications.Notification
 import com.silent.ilustriscore.core.utilities.formatDate
 import com.silent.sparky.R
@@ -30,10 +33,17 @@ class NotificationItemAdapter(
                     onSelectNotification(notification)
                 }
                 videoThumb.root.gone()
-                /*notification.video?.let {
-                    videoThumb.root.visible()
-                    Glide.with(itemView.context).load(it.thumbnailUrl).into(videoThumb.videoThumb)
-                }*/
+                notification.videoThumbnail?.let {
+                    if (it.isNotEmpty()) {
+                        Glide.with(root.context).load(it).into(videoThumb.videoThumb)
+                        videoThumb.root.fadeIn()
+                    }
+
+                }
+                if (!notification.open) {
+                    notificationDot.visible()
+                    notificationDot.imageTintList = ColorStateList.valueOf(highlightColor)
+                } else notificationDot.gone()
             }
         }
     }

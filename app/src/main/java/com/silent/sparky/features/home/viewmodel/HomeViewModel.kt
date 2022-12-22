@@ -200,7 +200,7 @@ class HomeViewModel(
                             if (user.admin) {
                                 homeState.postValue(HomeState.ValidManager)
                             }
-                            if (user.notifications.any { notification -> !notification.isOpen }) {
+                            if (user.notifications.any { notification -> !notification.open }) {
                                 userState.postValue(UserState.NewNotificationsState)
                             }
                         }

@@ -8,6 +8,7 @@
     android:padding="@dimen/padding_default_16dp">
 
 
+
     <ImageView
         android:id="@+id/notification_icon"
         android:layout_width="12dp"
@@ -21,22 +22,22 @@
         android:id="@+id/notification_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/padding_small_8dp"
+        android:paddingVertical="@dimen/margin_small_4dp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Sex, 10 de Novembro de 2022" />
+        app:layout_constraintStart_toStartOf="@+id/notification_message"
+        app:layout_constraintTop_toBottomOf="@id/notification_message"
+        tools:text="Sex, 10 de Nov" />
 
     <TextView
         android:id="@+id/notification_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_default_10dp"
-        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/notification_icon"
-        app:layout_constraintTop_toBottomOf="@id/notification_date"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Novos episódios" />
 
     <kr.co.prnd.readmore.ReadMoreTextView
@@ -44,7 +45,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/margin_small_4dp"
-        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
         app:layout_constraintEnd_toEndOf="@+id/notification_title"
         app:layout_constraintStart_toStartOf="@+id/notification_title"
         app:layout_constraintTop_toBottomOf="@+id/notification_title"
@@ -62,5 +63,13 @@
         app:layout_constraintTop_toBottomOf="@id/notification_message"
         tools:visibility="gone" />
 
+    <ImageView
+        android:id="@+id/notification_dot"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:src="@drawable/dot"
+        app:layout_constraintBottom_toBottomOf="@id/notification_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/notification_title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

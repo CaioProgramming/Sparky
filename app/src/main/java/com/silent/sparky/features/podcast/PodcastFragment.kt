@@ -65,7 +65,7 @@ class PodcastFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
         delayedFunction {
-            podcastViewModel.getPodcastData(args.podcastId, args.liveVideo)
+            podcastViewModel.getPodcastData(args.podcastId, args.videoId)
         }
         podcastFragmentBinding?.run {
             errorView.run {

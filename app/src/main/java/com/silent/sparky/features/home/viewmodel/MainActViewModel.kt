@@ -10,14 +10,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.google.gson.Gson
 import com.silent.core.firebase.FirebaseService
-import com.silent.core.podcast.Podcast
 import com.silent.core.preferences.PreferencesService
 import com.silent.core.users.User
 import com.silent.core.users.UsersService
 import com.silent.core.utils.TOKEN_PREFERENCES
-import com.silent.core.videos.Video
 import com.silent.ilustriscore.core.model.ServiceResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,7 +35,7 @@ class MainActViewModel(
     }
 
     sealed class NotificationState {
-        data class NavigateToPodcastPush(val podcastId: String, val liveVideo: Video?) :
+        data class NavigateToPodcastPush(val podcastId: String, val liveVideo: String?) :
             NotificationState()
 
         object NotificationOpened : NotificationState()
@@ -115,17 +112,11 @@ class MainActViewModel(
         }
     }
 
-    fun validatePush(podcastExtra: Podcast?, videoExtra: String?) {
+    fun validatePush(podcastExtra: String?, videoExtra: String?) {
         podcastExtra?.let {
-            var video: Video? = null
-            try {
-                video = Gson().fromJson(videoExtra, Video::class.java)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
             Log.i(javaClass.simpleName, "validatePush: payload -> ${podcastExtra} $videoExtra")
             notificationState.value =
-                NotificationState.NavigateToPodcastPush(podcastExtra.id, video)
+                NotificationState.NavigateToPodcastPush(podcastExtra, videoExtra)
         }
     }
 

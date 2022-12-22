@@ -58,8 +58,9 @@
             app:argType="string" />
 
         <argument
-            android:name="live_video"
-            app:argType="com.silent.core.videos.Video"
+            android:name="video_id"
+            android:defaultValue="null"
+            app:argType="string"
             app:nullable="true" />
         <action
             android:id="@+id/action_podcastFragment_to_liveFragment"

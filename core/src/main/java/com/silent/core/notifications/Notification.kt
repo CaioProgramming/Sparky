@@ -8,7 +8,8 @@ data class Notification(
     val message: String? = "",
     val podcastId: String? = "",
     val videoId: String? = "",
-    val isOpen: Boolean = false,
+    val videoThumbnail: String? = "",
+    var open: Boolean = false,
     val type: String = NotificationType.EPISODE.name,
     val sent_at: Date = Date()
 ) {

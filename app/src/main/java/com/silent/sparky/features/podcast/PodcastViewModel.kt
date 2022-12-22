@@ -90,7 +90,7 @@ class PodcastViewModel(
         }
     }
 
-    fun getPodcastData(podcastID: String, video: Video? = null) {
+    fun getPodcastData(podcastID: String, video: String? = null) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val headers = ArrayList<PodcastHeader>()
@@ -149,8 +149,8 @@ class PodcastViewModel(
                     val todayDate = Calendar.getInstance()
                     videoDate[Calendar.DAY_OF_YEAR] == todayDate[Calendar.DAY_OF_YEAR]
                 }
-                video?.let {
-                    lastVideo = it
+                video?.let { videoId ->
+                    lastVideo = uploads.find { it.id == videoId }
                 }
                 checkLive(lastVideo, podcast)
             } catch (e: Exception) {

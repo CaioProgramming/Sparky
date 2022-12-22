@@ -60,8 +60,8 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
         homeViewModel.getHome()
     }
 
-    private fun openPodcast(id: String, video: Video? = null) {
-        val bundle = bundleOf("podcast_id" to id, "live_video" to video)
+    private fun openPodcast(id: String, video: String? = null) {
+        val bundle = bundleOf("podcast_id" to id, "video_id" to video)
         findNavController().navigate(R.id.action_navigation_home_to_podcastFragment, bundle)
     }
 
