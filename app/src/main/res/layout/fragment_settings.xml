@@ -52,10 +52,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/margin_small_4dp"
-                    android:fontFamily="@font/kaushan_script"
                     android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
-                    android:textStyle="italic"
+                    style="@style/Theme.Sparky.Title"
+                    android:textAppearance="@style/Theme.Sparky.Title"
                     tools:text="Caioxdr" />
 
                 <com.google.android.material.button.MaterialButton

@@ -33,6 +33,7 @@
 
         <include
             android:id="@+id/error_view"
+            tools:visibility="gone"
             layout="@layout/error_view" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
