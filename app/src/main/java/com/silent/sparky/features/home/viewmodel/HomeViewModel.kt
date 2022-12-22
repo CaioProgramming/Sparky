@@ -8,7 +8,6 @@ import com.silent.core.podcast.*
 import com.silent.core.preferences.PreferencesService
 import com.silent.core.users.User
 import com.silent.core.users.UsersService
-import com.silent.core.utils.PODCASTS_PREFERENCES
 import com.silent.core.utils.WARNING_PREFERENCE
 import com.silent.core.videos.Video
 import com.silent.core.videos.VideoService
@@ -31,6 +30,7 @@ class HomeViewModel(
 
 
     val homeState = MutableLiveData<HomeState>()
+    val userState = MutableLiveData<UserState>()
     val preferencesState = MutableLiveData<PreferencesState>()
 
     private fun createTopHeader(podcasts: podcasts, liveVideoId: String? = null): PodcastHeader {
@@ -64,12 +64,12 @@ class HomeViewModel(
                 val homeHeaders = ArrayList<PodcastHeader>()
                 val podcasts = (service.getAllData().success.data as podcasts)
                 homeHeaders.add(createTopHeader(podcasts, notificationLive?.podcastId))
-                val podcastFilter = preferencesService.getStringSetValue(PODCASTS_PREFERENCES)
-                if (podcastFilter.isNullOrEmpty()) {
+                val subscribed = podcasts.any { it.subscribers.contains(getUser()!!.uid) }
+                if (!subscribed) {
                     preferencesState.postValue(PreferencesState.PreferencesNotSet)
                 }
-                val filteredPodcasts = if (podcastFilter?.isNotEmpty() == true) podcasts.filter {
-                    podcastFilter.contains(it.id)
+                val filteredPodcasts = if (subscribed) podcasts.filter {
+                    it.subscribers.contains(getUser()!!.uid)
                 } else podcasts
                 val sortedPodcasts = filteredPodcasts.sortedByDescending { it.subscribe }
                 sortedPodcasts.forEachIndexed { index, podcast ->
@@ -89,20 +89,18 @@ class HomeViewModel(
                     }
                     viewModelState.postValue(ViewModelBaseState.LoadCompleteState)
                     if (index == filteredPodcasts.lastIndex) {
-                        podcastFilter?.let {
-                            val remainingPodcasts =
-                                podcasts.filter { !podcastFilter.contains(it.id) }
-                            if (remainingPodcasts.isNotEmpty()) {
-                                homeHeaders.add(
-                                    PodcastHeader(
-                                        "Veja mais podcasts",
-                                        "Conheça a família Flow!",
-                                        type = HeaderType.PODCASTS,
-                                        podcasts = remainingPodcasts,
-                                        orientation = RecyclerView.HORIZONTAL
-                                    )
+                        val remainingPodcasts =
+                            podcasts.filter { !it.subscribers.contains(getUser()!!.uid) }
+                        if (remainingPodcasts.isNotEmpty()) {
+                            homeHeaders.add(
+                                PodcastHeader(
+                                    "Veja mais podcasts",
+                                    "Conheça a família Flow!",
+                                    type = HeaderType.PODCASTS,
+                                    podcasts = remainingPodcasts,
+                                    orientation = RecyclerView.HORIZONTAL
                                 )
-                            }
+                            )
                         }
                     }
                     homeState.postValue(HomeState.HomeChannelsRetrieved(homeHeaders))
@@ -201,6 +199,9 @@ class HomeViewModel(
                             val user = userRequest.data as User
                             if (user.admin) {
                                 homeState.postValue(HomeState.ValidManager)
+                            }
+                            if (user.notifications.any { notification -> !notification.isOpen }) {
+                                userState.postValue(UserState.NewNotificationsState)
                             }
                         }
                     }

@@ -14,15 +14,19 @@ import com.google.gson.Gson
 import com.silent.core.firebase.FirebaseService
 import com.silent.core.podcast.Podcast
 import com.silent.core.preferences.PreferencesService
+import com.silent.core.users.User
+import com.silent.core.users.UsersService
 import com.silent.core.utils.TOKEN_PREFERENCES
 import com.silent.core.videos.Video
+import com.silent.ilustriscore.core.model.ServiceResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActViewModel(
     application: Application,
     private val firebaseService: FirebaseService,
-    private val preferencesService: PreferencesService
+    private val preferencesService: PreferencesService,
+    private val usersService: UsersService
 ) : AndroidViewModel(application) {
 
     sealed class MainActState {
@@ -83,6 +87,30 @@ class MainActViewModel(
             val token = firebaseService.generateFirebaseToken()
             if (token.isSuccess) {
                 preferencesService.editPreference(TOKEN_PREFERENCES, token.success.data)
+                updateUserToken(token.success.data)
+            }
+        }
+    }
+
+    private fun updateUserToken(token: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val user = usersService.currentUser()
+            user?.let {
+                val storedUser = usersService.getSingleData(it.uid)
+                if (storedUser.isSuccess) {
+                    (storedUser.success.data as User).apply {
+                        this.token = token
+                    }
+                    usersService.editData(storedUser.success.data)
+                }
+                when (storedUser) {
+                    is ServiceResult.Error -> {
+                        Log.e(javaClass.simpleName, "updateUser: Error updating user info")
+                    }
+                    is ServiceResult.Success -> {
+
+                    }
+                }
             }
         }
     }

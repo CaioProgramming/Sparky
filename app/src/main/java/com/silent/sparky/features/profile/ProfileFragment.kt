@@ -16,8 +16,7 @@ import com.ilustris.animations.fadeIn
 import com.ilustris.animations.fadeOut
 import com.ilustris.animations.popIn
 import com.ilustris.animations.slideInBottom
-import com.ilustris.ui.extensions.ERROR_COLOR
-import com.ilustris.ui.extensions.showSnackBar
+import com.ilustris.ui.extensions.gone
 import com.silent.core.component.showError
 import com.silent.core.flow.data.FlowProfile
 import com.silent.core.stickers.response.Badge
@@ -142,10 +141,17 @@ class ProfileFragment : Fragment() {
         viewModel.stickersState.observe(viewLifecycleOwner) {
             when (it) {
                 StickersState.ErrorFetchingStickers -> {
-                    requireView().showSnackBar(
-                        "Ocorreu um erro ao obter os emblemas",
-                        backColor = ContextCompat.getColor(requireContext(), ERROR_COLOR)
-                    )
+                    profileBinding?.badgesErrorView?.run {
+                        errorMessage.text = "Não foi possível carregar os emblemas."
+                        errorButton.gone()
+                        errorAnimation.playAnimation()
+                        root.fadeIn()
+                    }
+                    profileBinding?.run {
+                        badgesLayout.gone()
+                        loadingBadges.gone()
+                        userBadges.gone()
+                    }
                 }
                 StickersState.FetchingStickers -> {
                     profileBinding?.loadingBadges?.popIn()
@@ -196,6 +202,7 @@ class ProfileFragment : Fragment() {
                 flowDialog = FlowLinkDialog(user)
                 flowDialog?.show(requireActivity().supportFragmentManager, "FLOWLINKDIALOG")
             }
+            flowLinkButton.gone()
             settingsButton.setOnClickListener {
                 val bundle = bundleOf("user_object" to user)
                 findNavController().navigate(

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground"
+    android:padding="@dimen/padding_default_16dp">
+
+
+    <ImageView
+        android:id="@+id/notification_icon"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:src="@drawable/ic_iconmonstr_microphone_13"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/notification_title"
+        app:tint="?attr/colorPrimaryDark" />
+
+    <TextView
+        android:id="@+id/notification_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_small_8dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Sex, 10 de Novembro de 2022" />
+
+    <TextView
+        android:id="@+id/notification_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_default_10dp"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/notification_icon"
+        app:layout_constraintTop_toBottomOf="@id/notification_date"
+        tools:text="Novos episódios" />
+
+    <kr.co.prnd.readmore.ReadMoreTextView
+        android:id="@+id/notification_message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_small_4dp"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        app:layout_constraintEnd_toEndOf="@+id/notification_title"
+        app:layout_constraintStart_toStartOf="@+id/notification_title"
+        app:layout_constraintTop_toBottomOf="@+id/notification_title"
+        app:readMoreColor="@color/material_grey800"
+        app:readMoreMaxLine="2"
+        app:readMoreText="... ver mais"
+        tools:text="Nova resenha da galera do flow! Vem com a gente " />
+
+    <include
+        android:id="@+id/video_thumb"
+        layout="@layout/video_preview"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginVertical="@dimen/margin_default_10dp"
+        app:layout_constraintTop_toBottomOf="@id/notification_message"
+        tools:visibility="gone" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

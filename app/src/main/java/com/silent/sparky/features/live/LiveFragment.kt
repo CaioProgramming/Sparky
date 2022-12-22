@@ -171,6 +171,7 @@ class LiveFragment : Fragment() {
         liveShimmer.setShimmer(shimmer)
         podcastName.text = podcast.name
         gradientBackground.backgroundTintList = ColorStateList.valueOf(highlightColor)
+        liveCard.strokeColor = highlightColor
         Glide.with(requireContext()).load(podcast.iconURL).into(podcastIcon)
         podcastName.setOnClickListener {
             openPodcast(podcast.id)

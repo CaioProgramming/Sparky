@@ -1,5 +1,6 @@
 package com.silent.sparky.features.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,12 +27,10 @@ import com.silent.navigation.NavigationUtils
 import com.silent.sparky.R
 import com.silent.sparky.databinding.HomeFragmentBinding
 import com.silent.sparky.features.home.adapter.VideoHeaderAdapter
-import com.silent.sparky.features.home.viewmodel.HomeState
-import com.silent.sparky.features.home.viewmodel.HomeViewModel
-import com.silent.sparky.features.home.viewmodel.MainActViewModel
-import com.silent.sparky.features.home.viewmodel.PreferencesState
+import com.silent.sparky.features.home.viewmodel.*
 import com.silent.sparky.features.live.data.LiveHeader
 import com.silent.sparky.features.live.data.VideoMedia
+import com.silent.sparky.features.notifications.NotificationActivity
 import com.silent.sparky.features.profile.dialog.PREF_TAG
 import com.silent.sparky.features.profile.dialog.PreferencesDialogFragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -90,6 +89,11 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
             closeButton?.setOnClickListener {
                 homeSearch.setQuery("", false)
                 homeViewModel.getHome()
+            }
+
+            notificationAnimation.setOnClickListener {
+                val intent = Intent(requireContext(), NotificationActivity::class.java)
+                requireActivity().startActivity(intent)
             }
         }
     }
@@ -196,6 +200,13 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                 else -> {}
             }
         }
+        homeViewModel.userState.observe(viewLifecycleOwner) {
+            when (it) {
+                UserState.NewNotificationsState -> {
+                    homeFragmentBinding?.notificationAnimation?.playAnimation()
+                }
+            }
+        }
         mainActViewModel.actState.observe(viewLifecycleOwner) {
             when (it) {
                 is MainActViewModel.MainActState.LoginSuccessState -> {
@@ -204,13 +215,13 @@ class HomeFragment : SearchView.OnQueryTextListener, Fragment() {
                 else -> {}
             }
         }
-
         mainActViewModel.notificationState.observe(viewLifecycleOwner) {
             if (it is MainActViewModel.NotificationState.NavigateToPodcastPush) {
                 openPodcast(it.podcastId, it.liveVideo)
                 mainActViewModel.notificationOpen()
             }
         }
+
     }
 
     private fun HomeFragmentBinding.showLoading() {

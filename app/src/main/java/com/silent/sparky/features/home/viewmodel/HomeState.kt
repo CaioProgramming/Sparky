@@ -15,6 +15,10 @@ sealed class HomeState {
     object LoadingSearch : HomeState()
 }
 
+sealed class UserState {
+    object NewNotificationsState : UserState()
+}
+
 sealed class PreferencesState {
     object PreferencesNotSet : PreferencesState()
     object WarningNotShowed : PreferencesState()

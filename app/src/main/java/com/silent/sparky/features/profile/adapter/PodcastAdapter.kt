@@ -14,19 +14,19 @@ import com.silent.sparky.R
 class PodcastAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcast) -> Unit) :
     RecyclerView.Adapter<PodcastAdapter.PodcastViewHolder>() {
 
-    var checkedPodcasts = ArrayList<String>()
+    var checkedPodcasts = ArrayList<Podcast>()
 
     fun updatePodcasts(podcsts: podcasts) {
         podcasts.addAll(podcsts)
         notifyDataSetChanged()
     }
 
-    fun selectPodcast(podcast: String) {
+    fun selectPodcast(podcast: Podcast) {
         checkedPodcasts.add(podcast)
         notifyDataSetChanged()
     }
 
-    fun removePodcast(podcast: String) {
+    fun removePodcast(podcast: Podcast) {
         checkedPodcasts.remove(podcast)
         notifyDataSetChanged()
     }
@@ -41,7 +41,7 @@ class PodcastAdapter(val podcasts: podcasts, val onSelectPodcast: (Podcast) -> U
                 podcastCard.setOnClickListener {
                     onSelectPodcast(podcast)
                 }
-                if (podcast.highLightColor.isNotEmpty() && checkedPodcasts.contains(podcast.id)) {
+                if (podcast.highLightColor.isNotEmpty() && checkedPodcasts.contains(podcast)) {
                     podcastIcon.borderColor = Color.parseColor(podcast.highLightColor)
                 } else {
                     podcastIcon.borderColor = Color.WHITE

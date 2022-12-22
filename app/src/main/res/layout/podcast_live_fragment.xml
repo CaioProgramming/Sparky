@@ -107,11 +107,12 @@
             android:id="@+id/live_card"
             app:cardCornerRadius="@dimen/radius_default_10dp"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="@dimen/player_card_portrait_width"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:layout_constraintStart_toStartOf="parent"
             app:cardElevation="0dp"
+            android:layout_margin="@dimen/padding_default_16dp"
             app:layout_constraintTop_toBottomOf="@id/live_top"
             app:strokeColor="@color/md_white"
             app:strokeWidth="1dp">

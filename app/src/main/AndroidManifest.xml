@@ -16,7 +16,7 @@
         android:theme="@style/Theme.Sparky"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".features.NotificationActivity"
+            android:name=".features.notifications.NotificationActivity"
             android:clearTaskOnLaunch="true"
             android:exported="true">
             <intent-filter>

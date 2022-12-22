@@ -64,6 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/padding_default_16dp"
                     android:padding="@dimen/padding_default_16dp"
+                    android:visibility="gone"
                     android:text="@string/link_flow_account"
                     app:icon="@drawable/ic_iconmonstr_connection_1" />
 
@@ -92,6 +93,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:paddingBottom="@dimen/margin_default_10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
@@ -101,13 +103,137 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_height="wrap_content"
-                android:padding="@dimen/padding_default_16dp"
-                android:text="@string/podcasts_preferences_settings"
-                android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
-                android:textStyle="bold" />
+                android:layout_margin="@dimen/padding_default_16dp"
+                android:layout_width="match_parent"
+                app:cardCornerRadius="@dimen/radius_default_10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="@dimen/margin_default_10dp"
+                            android:background="@drawable/card_shape"
+                            android:backgroundTint="@color/material_red800"
+                            android:padding="@dimen/margin_small_4dp"
+                            android:src="@drawable/ic_iconmonstr_video_camera_9"
+                            app:layout_constraintBottom_toBottomOf="@id/lives_switch"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/lives_switch"
+                            app:tint="@color/md_white" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/lives_switch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/padding_default_16dp"
+                            android:text="Lives"
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/imageView"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="@dimen/margin_default_10dp"
+                            android:background="@drawable/card_shape"
+                            android:backgroundTint="@color/material_yellow800"
+                            android:padding="@dimen/margin_small_4dp"
+                            android:src="@drawable/ic_iconmonstr_video_8"
+                            app:tint="@color/md_white" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/episodes_switch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/padding_default_16dp"
+                            android:text="Novos episódios"
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="@dimen/margin_default_10dp"
+                            android:background="@drawable/card_shape"
+                            android:backgroundTint="@color/material_blue800"
+                            android:padding="@dimen/margin_small_4dp"
+                            android:src="@drawable/zzz_content_cut"
+                            app:tint="@color/md_white" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/cuts_switch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/padding_default_16dp"
+                            android:text="Novos cortes"
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="@dimen/margin_default_10dp"
+                            android:background="@drawable/card_shape"
+                            android:backgroundTint="@color/material_purple800"
+                            android:padding="@dimen/margin_small_4dp"
+                            android:src="@drawable/ic_iconmonstr_calendar_3"
+                            app:tint="@color/md_white" />
+
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/week_episodes_switch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/padding_default_16dp"
+                            android:text="Episódios da semana"
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/prefered_podcasts_recycler"
@@ -120,19 +246,20 @@
                 tools:itemCount="2"
                 tools:listitem="@layout/podcast_list_layout" />
 
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/nv99_button"
+                android:layout_margin="@dimen/padding_default_16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/padding_default_16dp"
-                android:background="@drawable/card_shape"
                 android:foreground="?attr/selectableItemBackground"
                 android:text="Estúdios Flow"
-                android:textAlignment="center"
-                android:textColor="@color/material_yellow700"
-                app:backgroundTint="@color/material_grey900"
+                android:background="@drawable/card_shape"
+                android:textColor="@color/md_black"
+                app:backgroundTint="@color/material_yellow700"
                 app:icon="@drawable/ic_iconmonstr_connection_1"
-                app:iconTint="@color/material_yellow700" />
+                app:iconTint="@color/material_black" />
+
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/sign_out_button"
