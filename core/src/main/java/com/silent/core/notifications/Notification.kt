@@ -19,5 +19,6 @@ data class Notification(
 enum class NotificationType(val icon: Int) {
     EPISODE(R.drawable.ic_iconmonstr_microphone_13),
     CUT(R.drawable.ic_iconmonstr_cut_3),
-    WEEK(R.drawable.ic_sparky_notify)
+    LIVE(R.drawable.ic_iconmonstr_video_camera_9),
+    WEEK(R.drawable.ic_sparky_notify),
 }
