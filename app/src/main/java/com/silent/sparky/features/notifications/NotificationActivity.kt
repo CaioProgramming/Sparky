@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ilustris.animations.fadeIn
 import com.silent.core.users.User
 import com.silent.ilustriscore.core.model.ViewModelBaseState
-import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.silent.sparky.databinding.ActivityNotificationBinding
 import com.silent.sparky.features.home.HomeActivity
 import com.silent.sparky.features.notifications.adapter.NotificationGroupAdapter
@@ -72,7 +71,6 @@ class NotificationActivity : AppCompatActivity() {
             errorButton.text = "Voltar"
         }
     }
-
     private fun setupNotifications(user: User, notificationsGroups: List<NotificationGroup>) {
         stopLoading()
         activityNotificationBinding?.run {
@@ -84,11 +82,7 @@ class NotificationActivity : AppCompatActivity() {
             notificationsRecycler.adapter = NotificationGroupAdapter(notificationsGroups) {
                 notificationViewModel.openNotification(user, it)
             }
-            delayedFunction(1000) {
-                redirectNotification(podcastExtra, videoExtra)
-            }
         }
-
     }
 
     private fun redirectNotification(podcastId: String?, videoId: String?) {
